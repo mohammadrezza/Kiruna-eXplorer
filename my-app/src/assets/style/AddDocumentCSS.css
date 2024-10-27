@@ -1,0 +1,164 @@
+
+body {
+    font-family: 'Times New Roman', Times, serif;
+    background-color: #f9f9f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+
+.form-container {
+    background-color: white;
+    padding: 30px;
+    margin-top: 20px;
+    width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+form label {
+    font-weight: 500;
+    color: #555;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.form-control, .form-select {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+    font-size: 14px;
+    color: #333;
+    width: 100%;
+    background-color: #f8f8f8;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #666;
+    box-shadow: none;
+}
+
+textarea.form-control {
+    min-height: 250px;
+    resize: vertical;
+}
+
+
+button.show-map {
+    border: 1px solid #888;
+    background-color: #eee;
+    color: #333;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.show-map:hover {
+    background-color: #ddd;
+}
+
+
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+table thead {
+    background-color: #f0f0f0;
+}
+
+table th, table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+table th {
+    font-weight: bold;
+    color: #444;
+}
+
+table td {
+    color: #555;
+}
+
+
+table td:first-child {
+    width: 40px;
+    text-align: center;
+}
+
+
+.connections-section {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: relative;
+}
+
+.table-container {
+    display: flex;
+    flex-direction: column;
+}
+
+button.add-button {
+    align-self: flex-end;
+    background-color: #fff;
+    color: #000;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+button.add-button:hover {
+    background-color: #000;
+}
+
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.col-md-6 {
+    flex: 1;
+    padding-right: 10px;
+    padding-left: 10px;
+    min-width: 280px;
+}
+
+.mb-3 {
+    margin-bottom: 20px;
+}
+
+
+.container .form-group {
+    margin-bottom: 16px;
+}
+
