@@ -1,9 +1,9 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Routes, Route } from 'react-router-dom';
-import AddDocument from './components/FormDocument';
+import CreateDocument from './pages/FormDocument';
 import { FaUserCircle } from 'react-icons/fa';
-import { Navbar,Container } from 'react-bootstrap';
-import './assets/style/AppCSS.css'
+import { Navbar, Container } from 'react-bootstrap';
+import './style/AppCSS.css'
 
 function App() {
   return (
@@ -13,8 +13,8 @@ function App() {
         <FaUserCircle className="profile-icon" />
     </Navbar>
     <Routes>
-      <Route path='/newdoc' element={
-          <AddDocument/>
+      <Route path='/documents/create' element={
+          <CreateDocument/>
       } />
       
    </Routes>

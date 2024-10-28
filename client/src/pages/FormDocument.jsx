@@ -1,9 +1,9 @@
 import React from 'react';
 import { Form, Button, Row, Col, InputGroup, Table, FormControl } from 'react-bootstrap';
-import '../assets/style/FormDocumentCSS.css'
+import '../style/FormDocumentCSS.css'
 import { useState } from 'react';
-import Document from '../obj/Document.mjs';
-import API from '../API.mjs';
+import Document from '../mocks/Document.mjs';
+import API from '../services/API.mjs';
 import dayjs from 'dayjs';
 
 function AddDocument() {
