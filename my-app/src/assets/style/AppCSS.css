@@ -1,0 +1,35 @@
+.custom-navbar {
+    background-color: #f8f9fa; /* Background color */
+    width: 1316px;
+    height: 44px;
+    top: 27px;
+    position: relative;
+  }
+  
+  .navbar-title {
+    font-size: 32px;
+    border: 1px;
+    font-family: Times;
+    font-weight: 700;
+    width: 230px;
+    height: 37px;
+    left: 558px;
+    line-height: 36.8px;
+    color: #101420; /* Text color */
+    position: relative;
+  }
+  
+  .profile-icon {
+    width: 44px;
+    height: 44px;
+    left: 1268px;
+    position: absolute;
+    color: #585757;
+  }
+  
+  .custom-navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  

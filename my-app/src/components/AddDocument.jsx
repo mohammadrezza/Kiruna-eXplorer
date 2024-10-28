@@ -4,33 +4,34 @@ import '../assets/style/AddDocumentCSS.css'
 
 function AddDocument() {
   return  (
-    <div className="form-container mt-5">
+    <div className="form-container">
       <h2>New Document</h2>
       
       <Form>
+        <div className='top-form'>
         <Row>
-          <Col md={6}>
-            <Form.Group className="mb-4" controlId="title">
+          <Col className='col-form'>
+            <Form.Group className='form-group'  controlId="title">
               <Form.Label>Title</Form.Label>
               <Form.Control type="text" placeholder="Enter title" required />
             </Form.Group>
             
-            <Form.Group className="mb-4" controlId="stakeholder">
+            <Form.Group className='form-group'  controlId="stakeholder">
               <Form.Label>Stakeholder</Form.Label>
               <Form.Control type="text" placeholder="Enter stakeholder" />
             </Form.Group>
             
-            <Form.Group className="mb-4" controlId="scale">
+            <Form.Group className='form-group'  controlId="scale">
               <Form.Label>Scale</Form.Label>
               <Form.Control type="text" placeholder="Enter scale" />
             </Form.Group>
 
-            <Form.Group className="mb-4" controlId="issuanceDate">
+            <Form.Group className='form-group'  controlId="issuanceDate">
               <Form.Label>Issuance Date</Form.Label>
               <Form.Control type="date" />
             </Form.Group>
 
-            <Form.Group className="mb-4" controlId="type">
+            <Form.Group className='form-group' controlId="type">
               <Form.Label>Type</Form.Label>
               <Form.Select>
                 <option>Select type</option>
@@ -39,7 +40,7 @@ function AddDocument() {
               </Form.Select>
             </Form.Group>
 
-            <Form.Group className="mb-4" controlId="language">
+            <Form.Group className='form-group' controlId="language">
               <Form.Label>Language</Form.Label>
               <Form.Select>
                 <option>Select language</option>
@@ -47,57 +48,15 @@ function AddDocument() {
                 <option>Italian</option>
               </Form.Select>
             </Form.Group>
-
-            <Form.Group className="mb-4" controlId="coordinates">
-              <Form.Label>Coordinates</Form.Label>
-              <InputGroup>
-                <Form.Control type="text" placeholder="Enter coordinates" />
-                <Button className="show-map">Show on Map</Button>
-              </InputGroup>
-            </Form.Group>
           </Col>
 
-          <Col md={6}>
-            <Form.Group controlId="description">
+          <Col className='col-form'>
+            <Form.Group  className='form-group' controlId="description">
               <Form.Label>Description</Form.Label>
               <Form.Control as="textarea" rows={15} placeholder="Enter description" />
             </Form.Group>
           </Col>
         </Row>
-
-        {/* Sezione Connections con layout per il pulsante + Add */}
-        <div className="connections-section">
-          <h5 className="mt-4">Connections</h5>
-          <div className="table-container">
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>Document Title</th>
-                  <th>Stakeholder</th>
-                  <th>Date</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><Form.Check /></td>
-                  <td>Document Title 1</td>
-                  <td>Stakeholder 1</td>
-                  <td>24/12/2020</td>
-                  <td>...</td>
-                </tr>
-                <tr>
-                  <td><Form.Check /></td>
-                  <td>Document Title 2</td>
-                  <td>Stakeholder 2</td>
-                  <td>25/12/2020</td>
-                  <td>...</td>
-                </tr>
-              </tbody>
-            </Table>
-            <Button className="add-button">+ Add</Button>
-          </div>
         </div>
       </Form>
     </div>
