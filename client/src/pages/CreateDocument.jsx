@@ -1,10 +1,11 @@
 import React from 'react';
 import { Form, Button, Row, Col, InputGroup, Table, FormControl } from 'react-bootstrap';
-import '../style/FormDocumentCSS.css'
 import { useState } from 'react';
-import Document from '../mocks/Document.mjs';
-import API from '../services/API.mjs';
 import dayjs from 'dayjs';
+import MapPointSelector from '../components/MapPointSelector'
+import API from '../services/API.mjs';
+import Document from '../mocks/Document.mjs';
+import '../style/CreateDocument.css'
 
 function AddDocument() {
 
@@ -69,7 +70,6 @@ function AddDocument() {
       <h2>New Document</h2>
       
       <Form onSubmit={handleSubmit}>
-        <div className='top-form'>
         <Row>
           <Col className='col-form'>
             <Form.Group className='form-group'  controlId="title">
@@ -130,7 +130,10 @@ function AddDocument() {
             </Form.Control.Feedback>
           </Col>
         </Row>
-        </div>
+        <Row>
+          {/* <MapPointSelector></MapPointSelector> */}
+        </Row>
+        
         
         <Button className="add-button" type='submit'>+Add</Button>
       </Form>
