@@ -1,35 +1,31 @@
-.custom-navbar {
-    background-color: #f8f9fa; /* Background color */
-    width: 1316px;
-    height: 44px;
-    top: 27px;
-    position: relative;
-  }
+.custom-navbar { /* Background color */
+  width: 100%;
+  height: 113px;
+  padding: 0 62px;
+  position: relative;
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.custom-navbar>hr {
+  width: 355px;
+  height: 1px;
+}
+
+.custom-navbar > h3 {
+  position: relative;
+  font-size: 32px;
+  font-weight: 700;
+  text-shadow: -1px -1px 0 var(--grey), 1px -1px 0 var(--grey), 1px 1px 0 var(--grey),
+      1px 1px 0 var(--grey);
+  color: var(--demo-black); /* Text color */
+  text-align: center;
+  margin: 0;
+}
   
-  .navbar-title {
-    font-size: 32px;
-    border: 1px;
-    font-family: Times;
-    font-weight: 700;
-    width: 230px;
-    height: 37px;
-    left: 558px;
-    line-height: 36.8px;
-    color: #101420; /* Text color */
-    position: relative;
-  }
-  
-  .profile-icon {
-    width: 44px;
-    height: 44px;
-    left: 1268px;
-    position: absolute;
-    color: #585757;
-  }
-  
-  .custom-navbar .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
+.profile-icon {
+  width: 44px;
+  height: 44px;
+  color: var(--dark-grey);
+  margin-left: auto;
+}

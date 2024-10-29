@@ -6,8 +6,9 @@ function Header() {
   return (
     <>
     <Navbar className="custom-navbar" variant="light">
-        <div className="navbar-title">Kiruna eXplorer</div>
-        <FaUserCircle className="profile-icon" />
+      <hr></hr>
+      <h3>Kiruna eXplorer</h3>
+      <FaUserCircle className="profile-icon" />
     </Navbar>
    </>
   );

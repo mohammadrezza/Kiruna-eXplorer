@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {RouterProvider, createBrowserRouter} from 'react-router-dom'
 import App from './App';
 import './style/index.css';
+import './style/variables.css';
 
 const router = createBrowserRouter([{
   path:'/*',
