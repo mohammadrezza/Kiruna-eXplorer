@@ -1,6 +1,6 @@
 import { FaUserCircle } from 'react-icons/fa';
 import { Navbar } from 'react-bootstrap';
-import '../style/Header.css'
+import '../style/header.css'
 
 function Header() {
   return (

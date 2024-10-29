@@ -1,53 +1,72 @@
-.form-container > h2 {
-    font-size: 60px;
-    font-weight: 400;
-    color: #101420;
-    position: relative;
+.wrapper{
+    width: 100%;
+    min-height: 100%;
+    padding-bottom: 180px;
 }
-
 .form-container {
-    background-color: white;
+    background-color: var(--white);
     width: calc(1440px - 62px);
-    padding: 30px;
+    padding: 84px;
+    padding-bottom: 180px;
     margin: 0 auto;
     position: relative;
     display: flex;
     flex-direction: column;
-    
+}
+
+.form-container>h2 {
+    font-size: 60px;
+    font-weight: 400;
+    color: var(--demo-black);
+    position: relative;
+    margin-bottom: 105px;
 }
 
 .col-form {
-    width: 505px;
-    height: 645px;
+    width: 50%;
+    min-width: 505px;
 }
 
 .form-label {
     font-weight: 400;
-    color: #101420;
+    color: var(--demo-black);
     font-size: 24px;
-    line-height: 18px;
-    margin-bottom: 0px;
+    line-height: 24px;
+    margin-bottom: 6px;
 }
-
+.form-label > span{
+    font-size: 12px;
+    color: var(--red);
+    vertical-align: super;
+}
 .form-control, .form-select {
+    font-family: 'Times';
     font-size: 24px;
-    color: #101420;
-    width: 505px;
+    color: var(--demo-black);
+    max-width: 505px;
+    width: 100%;
     height: 51px;
-    background-color: #f8f8f8;
+    padding-left: 74px;
+    background-color: var(--lily-white);
     border: none;
     border-radius: 0;
+    margin-bottom: 32px;
+}
+.form-control::placeholder,
+.form-select::placeholder{
+    color: var(--light-grey);
+}
+
+.form-control[readonly],
+.form-select[readonly] {
+    pointer-events: none;
+    user-select: none;
 }
 
 
 textarea.form-control {
-    height: 494px;
+    height: 507px;
     resize: none;
-}
-
-.form-group {
-    padding-bottom: 35.4px;
-    gap: 3px;
 }
 
 .add-button {
@@ -59,22 +78,44 @@ textarea.form-control {
     font-weight: 400;
     line-height: 21.79px;
     border-radius: 0;
-    background-color:white;
+    background-color:var(--white);
     color: #101420;
     border-bottom-color: #101420;
-    border-top: white;
-    border-left:white ;
-    border-right: white;
+    border-top: var(--white);
+    border-left:var(--white) ;
+    border-right: var(--white);
 }
 
 .add-button:hover {
-    background-color:#101420;
+    background-color:var(--demo-black);
 }
 
+.align-bottom {
+    align-items: flex-end;
+}
+.input-group{
+    width: 100%;
+}
 
-
-
-
+.map-view-trigger{
+    margin-left: 16px !important;
+    display: flex;
+    align-items: flex-end;
+    color: var(--dark-grey);
+    cursor: pointer;
+    margin-bottom: 32px;
+}
+.map-view-trigger:hover {
+    color: var(--black);
+}
+.map-view-trigger span{
+    margin-left: 10px;
+    font-size: 15px;
+    font-weight: bold;
+}
+.map-view-trigger svg {
+    font-size: 26px;
+}
 
 
 
