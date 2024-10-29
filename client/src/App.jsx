@@ -7,7 +7,7 @@ function App() {
     <>
     <Header></Header>
     <Routes>
-      <Route path='/documents/create' element={
+      <Route path='/documents/:mode' element={
           <CreateDocument/>
       } />
       

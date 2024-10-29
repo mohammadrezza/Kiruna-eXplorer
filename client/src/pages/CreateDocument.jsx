@@ -1,6 +1,8 @@
 import React from 'react';
 import { Form, Button, Row, Col, InputGroup, Table, FormControl } from 'react-bootstrap';
-import { useState } from 'react';
+import { useParams} from 'react-router-dom'
+import { useState,useEffect } from 'react';
+import {FaPenSquare}from 'react-icons/fa';
 import dayjs from 'dayjs';
 import MapPointSelector from '../components/MapPointSelector'
 import API from '../services/API.mjs';
