@@ -1,22 +1,48 @@
 import React from 'react';
 import { Form, Button, Row, Col, InputGroup, Table, FormControl } from 'react-bootstrap';
 import '../assets/style/FormDocumentCSS.css'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import Document from '../obj/Document.mjs';
+import { FaPenSquare } from 'react-icons/fa';
 import API from '../API.mjs';
 import dayjs from 'dayjs';
 
-function AddDocument() {
+function FormDocument(props) {
+
+  const param = useParams();
 
   const [title,setTitle] = useState('');
   const [stakeholder,setStakeholder] = useState('');
   const [scale,setScale] = useState('');
   const [issuanceDate,setIssuanceDate] = useState();
-  const [type,setType] = useState('');
+  const [type,setType] = useState(null);
   const [language,setLanguage] = useState('');
   const [description,setDescription] = useState('');
+  const [loading,setLoading] = useState(true);
+  const [edit,setEdit] = useState(false);
+
+  const [allTypes,setAllTypes] = useState([]);
 
   const [errors, setErrors] = useState([]);
+
+  useEffect(()=>{
+    const loadType = async() => {
+      try
+      {API.getTypes().then((types) =>{
+        setAllTypes(types);
+      })}
+      catch(error)
+      {
+        console.error("Error loading types:", error);
+      }
+      finally{
+        setLoading(false)
+      }
+    }
+
+    loadType();
+  }, [])
 
   const validateForm = () => {
     const validationErrors = {};
@@ -60,21 +86,24 @@ function AddDocument() {
     }
     setErrors([]);
     setTitle(title.trim());
+    setStakeholder(stakeholder.trim());
     const doc = new Document(title,stakeholder,scale,issuanceDate,type,language,description);
     API.AddDocumentDescription(doc);
   }
+
+  
   
   return  (
     <div className="form-container">
       <h2>New Document</h2>
-      
+      {param.mode==='view' && <FaPenSquare className='edit-button' onClick={() => setEdit(true)}/>}
       <Form onSubmit={handleSubmit}>
         <div className='top-form'>
         <Row>
           <Col className='col-form'>
             <Form.Group className='form-group'  controlId="title">
               <Form.Label>Title</Form.Label>
-              <Form.Control type="text" placeholder="Enter title" minLength={2} value={title} onChange={(event) => setTitle(event.target.value)}  isInvalid={!!errors.title}/>
+              <Form.Control type="text" placeholder="Enter title" minLength={2} value={title} onChange={(event) => setTitle(event.target.value)}  isInvalid={!!errors.title} readOnly={!edit && param.mode!='add'}/>
               <Form.Control.Feedback type="invalid">
                   {errors.title}
               </Form.Control.Feedback>
@@ -82,7 +111,7 @@ function AddDocument() {
             
             <Form.Group className='form-group'  controlId="stakeholder">
               <Form.Label>Stakeholder</Form.Label>
-              <Form.Control type="text" placeholder="Enter stakeholder" value={stakeholder} onChange={(event) => setStakeholder(event.target.value)}  isInvalid={!!errors.stakeholder}/>
+              <Form.Control type="text" placeholder="Enter stakeholder" value={stakeholder} onChange={(event) => setStakeholder(event.target.value)}  isInvalid={!!errors.stakeholder} readOnly={!edit && param.mode!='add'}/>
               <Form.Control.Feedback type="invalid">
                   {errors.stakeholder}
               </Form.Control.Feedback>
@@ -90,7 +119,7 @@ function AddDocument() {
             
             <Form.Group className='form-group'  controlId="scale">
               <Form.Label>Scale</Form.Label>
-              <Form.Control type="text" placeholder="Enter scale" value={scale} onChange={(event) => setScale(event.target.value)}  isInvalid={!!errors.scale}/>
+              <Form.Control type="text" placeholder="Enter scale" value={scale} onChange={(event) => setScale(event.target.value)}  isInvalid={!!errors.scale} readOnly={!edit && param.mode!='add'}/>
               <Form.Control.Feedback type="invalid">
                   {errors.scale}
               </Form.Control.Feedback>
@@ -98,21 +127,22 @@ function AddDocument() {
 
             <Form.Group className='form-group'  controlId="issuanceDate">
               <Form.Label>Issuance Date</Form.Label>
-              <Form.Control type="date" value={issuanceDate} onChange={(event) => setIssuanceDate(event.target.value)}/>
+              <Form.Control type="date" value={issuanceDate} onChange={(event) => setIssuanceDate(event.target.value)} readOnly={!edit && param.mode!='add'}/>
             </Form.Group>
 
             <Form.Group className='form-group' controlId="type">
               <Form.Label>Type</Form.Label>
-              <Form.Select value={type} onChange={(event) => setType(event.target.value)}  isInvalid={!!errors.type}>
+              <Form.Select value={type || ''} onChange={(event) => setType(event.target.value)}  isInvalid={!!errors.type} readOnly={!edit && param.mode!='add'}>
                 <option>Select type</option>
-                <option>Type 1</option>
-                <option>Type 2</option>
+                { allTypes.map((t) => 
+                  <option key={t} value={t}>{t}</option>
+                )}
               </Form.Select>
             </Form.Group>
 
             <Form.Group className='form-group' controlId="language">
               <Form.Label>Language</Form.Label>
-              <Form.Select value={language} onChange={(event) => setLanguage(event.target.value)}>
+              <Form.Select value={language} onChange={(event) => setLanguage(event.target.value)} readOnly={!edit && param.mode!='add'}>
                 <option>Select language</option>
                 <option>English</option>
                 <option>Italian</option>
@@ -123,7 +153,7 @@ function AddDocument() {
           <Col className='col-form'>
             <Form.Group  className='form-group' controlId="description">
               <Form.Label>Description</Form.Label>
-              <Form.Control as="textarea" placeholder="Enter description" value={description} onChange={(event) => setDescription(event.target.value)}  isInvalid={!!errors.description}/>
+              <Form.Control as="textarea" placeholder="Enter description" value={description} onChange={(event) => setDescription(event.target.value)}  isInvalid={!!errors.description} readOnly={!edit && param.mode!='add'}/>
             </Form.Group>
             <Form.Control.Feedback type="invalid">
                   {errors.description}
@@ -132,11 +162,12 @@ function AddDocument() {
         </Row>
         </div>
         
-        <Button className="add-button" type='submit'>+Add</Button>
+        {param.mode==='add' && <Button className="add-button" type='submit'>+Add</Button>}
+        {edit && <Button className="add-button" type='submit'>+Edit</Button>}
       </Form>
     </div>
   );
 }
 
 
-export default AddDocument;
+export default FormDocument;

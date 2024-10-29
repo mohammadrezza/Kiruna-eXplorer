@@ -5,6 +5,11 @@ async function AddDocumentDescription(doc) {
     
 }
 
-const API ={AddDocumentDescription}
+async function getTypes() {
+    const types = ['serv1','serv2','serv3'];
+    return types;
+}
+
+const API ={AddDocumentDescription, getTypes}
 
 export default API;
