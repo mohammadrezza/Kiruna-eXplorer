@@ -1,12 +1,11 @@
 import React from 'react';
 import { Form, Button, Row, Col, InputGroup, Table, FormControl } from 'react-bootstrap';
-import '../assets/style/FormDocumentCSS.css'
-import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import Document from '../obj/Document.mjs';
-import { FaPenSquare } from 'react-icons/fa';
-import API from '../API.mjs';
+import { useState } from 'react';
 import dayjs from 'dayjs';
+import MapPointSelector from '../components/MapPointSelector'
+import API from '../services/API.mjs';
+import Document from '../mocks/Document.mjs';
+import '../style/CreateDocument.css'
 
 function FormDocument(props) {
 
@@ -98,7 +97,6 @@ function FormDocument(props) {
       <h2>New Document</h2>
       {param.mode==='view' && <FaPenSquare className='edit-button' onClick={() => setEdit(true)}/>}
       <Form onSubmit={handleSubmit}>
-        <div className='top-form'>
         <Row>
           <Col className='col-form'>
             <Form.Group className='form-group'  controlId="title">
@@ -160,7 +158,10 @@ function FormDocument(props) {
             </Form.Control.Feedback>
           </Col>
         </Row>
-        </div>
+        <Row>
+          {/* <MapPointSelector></MapPointSelector> */}
+        </Row>
+        
         
         {param.mode==='add' && <Button className="add-button" type='submit'>+Add</Button>}
         {edit && <Button className="add-button" type='submit'>+Edit</Button>}
