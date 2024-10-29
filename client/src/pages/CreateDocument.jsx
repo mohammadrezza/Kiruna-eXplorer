@@ -60,7 +60,7 @@ function FormDocument(props) {
       validationErrors.scale = 'Scale cannot be empty!';
     }
 
-    if(type.trim() === ''){
+    if(type === null){
       validationErrors.type = 'Type cannot be empty!';
     }
 
