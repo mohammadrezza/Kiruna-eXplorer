@@ -1,0 +1,246 @@
+{
+	"info": {
+		"_postman_id": "b1c2203f-b931-42de-9afe-4dcad0d5fc46",
+		"name": "Kiruna Explorer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4016750"
+	},
+	"item": [
+		{
+			"name": "{{host}}/documents",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\":\"foo\",\n    \"stakeholders\":\"foo\",\n    \"scale\":\"foo\",\n    \"issuanceDate\": \"21-02-1996\",\n    \"type\": \"TYPE_FOO\",\n    \"language\":\"english\",\n    \"coordinates\":[\n        0.8338068264956746,\n        18.9844855486035\n     ],\n    \"connectionIds\":[\"uuid\",\"uuid2\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/documents",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"documents"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{host}}/document/types",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/documents/types",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"documents",
+						"types"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "{{host}}/document/types",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/document/types",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"document",
+								"types"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"docuemntTypes\":[\n        \"TYPE_A\",\"TYPE_B\",\"TYPE_C\"\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "{{host}}/documents/",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/documents?documentId&name",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"documents"
+					],
+					"query": [
+						{
+							"key": "documentId",
+							"value": null
+						},
+						{
+							"key": "name",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "{{host}}/documents/",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/documents?documentId&title",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"documents"
+							],
+							"query": [
+								{
+									"key": "documentId",
+									"value": null
+								},
+								{
+									"key": "title",
+									"value": null
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"documents\":[\n        {\n            \"id\": \"uuid\",\n            \"title\":\"foo\",\n            \"stakeholders\":\"foo\",\n            \"scale\":\"foo\",\n            \"issuanceDate\": \"21-02-1996\",\n            \"type\": \"TYPE_FOO\",\n            \"language\":\"english\",\n            \"coordinates\":[\n                0.8338068264956746,\n                18.9844855486035\n            ],\n            \"connectionsCount\": 2,\n            \"isConnected\": true\n        },\n        {\n            \"id\": \"uuid\",\n            \"title\":\"foo\",\n            \"stakeholders\":\"foo\",\n            \"scale\":\"foo\",\n            \"issuanceDate\": \"21-02-1996\",\n            \"type\": \"TYPE_FOO\",\n            \"language\":\"english\",\n            \"coordinates\":[\n                0.0,\n                0.0\n            ],\n            \"connectionsCount\":2,\n            \"isConnected\": false\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "{{host}}/documents/:docmentId",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\":\"foo\",\n    \"stakeholders\":\"foo\",\n    \"scale\":\"foo\",\n    \"issuanceDate\": \"21-02-1996\",\n    \"type\": \"TYPE_FOO\",\n    \"language\":\"english\",\n    \"coordinates\":[\n        0.8338068264956746,\n        18.9844855486035\n     ],\n    \"connectionIds\":[\"uuid\",\"uuid2\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/documents/:docmentId",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"documents",
+						":docmentId"
+					],
+					"variable": [
+						{
+							"key": "docmentId",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{host}}/documents/:dcoumentId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/documents/:dcoumentId",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"documents",
+						":dcoumentId"
+					],
+					"variable": [
+						{
+							"key": "dcoumentId",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "{{host}}/documents/:dcoumentId",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/documents/:dcoumentId",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"documents",
+								":dcoumentId"
+							],
+							"variable": [
+								{
+									"key": "dcoumentId",
+									"value": ""
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n        \"id\": \"uuid\",\n        \"title\":\"foo\",\n        \"stakeholders\":\"foo\",\n        \"scale\":\"foo\",\n        \"issuanceDate\": \"21-02-1996\",\n        \"type\": \"TYPE_FOO\",\n        \"language\":\"english\",\n        \"coordinates\":[\n            0.8338068264956746,\n            18.9844855486035\n        ],\n        \"connections\":[\n            {\n                \"id\": \"uuid\",\n                \"title\":\"foo\",\n                \"stakeholders\":\"foo\",\n                \"scale\":\"foo\",\n                \"issuanceDate\": \"21-02-1996\",\n                \"type\": \"TYPE_FOO\",\n                \"language\":\"english\",\n                \"coordinates\":[\n                    0.8338068264956746,\n                    18.9844855486035\n                ]\n            }\n        ]\n    \n}"
+				}
+			]
+		}
+	]
+}

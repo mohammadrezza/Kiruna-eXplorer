@@ -1,0 +1,31 @@
+.custom-navbar { /* Background color */
+  width: 100%;
+  height: 113px;
+  padding: 0 62px;
+  position: relative;
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.custom-navbar>hr {
+  width: 355px;
+  height: 1px;
+}
+
+.custom-navbar > h3 {
+  position: relative;
+  font-size: 32px;
+  font-weight: 700;
+  text-shadow: -1px -1px 0 var(--grey), 1px -1px 0 var(--grey), 1px 1px 0 var(--grey),
+      1px 1px 0 var(--grey);
+  color: var(--demo-black); /* Text color */
+  text-align: center;
+  margin: 0;
+}
+  
+.profile-icon {
+  width: 44px;
+  height: 44px;
+  color: var(--dark-grey);
+  margin-left: auto;
+}
