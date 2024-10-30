@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Button, Row, Col, InputGroup, Table, FormControl } from 'react-bootstrap';
+import { Form, Button, Row, Col, Modal, ListGroup, InputGroup, Table, FormControl } from 'react-bootstrap';
 import { useParams} from 'react-router-dom'
 import { useState,useEffect } from 'react';
 import {FaPenSquare}from 'react-icons/fa';
@@ -25,7 +25,9 @@ function FormDocument(props) {
   const [loading,setLoading] = useState(true);
   const [edit,setEdit] = useState(false);
   const [showMap, setShowMap] = useState(false);
-
+  const [showModal, setShowModal] = useState(false); 
+  const [allDocuments, setAllDocuments] = useState([]); 
+  const [selectedDocuments, setSelectedDocuments] = useState([]); 
   const [allTypes,setAllTypes] = useState([]);
 
   const [errors, setErrors] = useState([]);
@@ -46,7 +48,19 @@ function FormDocument(props) {
     }
 
     loadType();
-  }, [])
+
+    const loadDocuments = async () => {
+      try {
+        const documents = await API.getDocuments(); 
+        setAllDocuments(documents);
+      } catch (error) {
+        console.error("Error loading documents:", error);
+      }
+    };
+    
+    loadDocuments();
+  }, []);
+  
 
   const toggleMap = () => {
     setShowMap((prevShowMap) => !prevShowMap);
@@ -105,6 +119,13 @@ function FormDocument(props) {
     API.AddDocumentDescription(doc);
   }
 
+  const handleDocumentSelect = (documentId) => {
+    setSelectedDocuments((prevSelected) => 
+      prevSelected.includes(documentId)
+        ? prevSelected.filter(id => id !== documentId)
+        : [...prevSelected, documentId]
+    );
+  };
   
   
   return  (
@@ -226,6 +247,42 @@ function FormDocument(props) {
           </Row>
           {param.mode==='add' && <Button className="add-button" type='submit'>+Add</Button>}
           {edit && <Button className="add-button" type='submit'>+Edit</Button>}
+          <Button variant="link" onClick={() => setShowModal(true)}>
+            Select Related Documents
+          </Button>
+          
+          {/* Modal per selezionare i documenti */}
+          <Modal show={showModal} onHide={() => setShowModal(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Select Related Documents</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <ListGroup>
+                {allDocuments.map((doc) => (
+                  <ListGroup.Item key={doc.id}>
+                    <Form.Check 
+                      type="checkbox"
+                      label={doc.title} 
+                      checked={selectedDocuments.includes(doc.id)}
+                      onChange={() => handleDocumentSelect(doc.id)}
+                    />
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowModal(false)}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={() => setShowModal(false)}>
+                Save Selection
+              </Button>
+            </Modal.Footer>
+          </Modal>
+          
+          <Button type="submit" className="add-button">
+            {param.mode === 'add' ? '+Add' : '+Edit'}
+          </Button>
         </Form>
       </div>
     </div>
