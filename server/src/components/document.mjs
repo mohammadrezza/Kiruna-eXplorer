@@ -38,3 +38,5 @@ class Document {
         this.createdAt = row.created_at;
     }
 }
+
+export default Document; 
