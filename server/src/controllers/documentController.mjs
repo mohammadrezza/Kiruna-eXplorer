@@ -1,15 +1,9 @@
 import Document from "../components/document.mjs";
-import { addDocument} from "../db/db.mjs";
+import { addDocument } from "../db/db.mjs";
 
-export const createDocument = (req, res) => {
-
-  const { id, title, stakeholders, scale, issuanceDate, type, language, coordinates, connectionIds } = req.body;
-
-  //creation logic
-  const document = new Document();
-
-  document.createFromObject({
-
+export const createDocument = async (req, res) => {
+  const {
+    id,
     title,
     stakeholders,
     scale,
@@ -17,16 +11,43 @@ export const createDocument = (req, res) => {
     type,
     language,
     coordinates,
-    connections: connectionIds.length 
+    connectionIds,
+  } = req.body;
+
+  //creation logic
+  const document = new Document();
+
+  document.createFromObject({
+    title,
+    stakeholders,
+    scale,
+    issuanceDate,
+    type,
+    language,
+    coordinates,
+    connections: connectionIds.length,
   });
- 
 
-  addDocument(document.id, title, stakeholders, scale, issuanceDate, type, language, coordinates, connectionIds.length);
+  try {
+    await addDocument(
+      document.id,
+      title,
+      stakeholders,
+      scale,
+      issuanceDate,
+      type,
+      language,
+      coordinates,
+      connectionIds.length
+    );
 
-  
-  console.log("document created", document);
+    res
+      .status(201)
+      .json({ message: "Document successfully created", data: req.body });
+  } catch (error) {
 
- 
-  res.status(201).json({ message: 'Document successfully created', data: req.body });
-
+    console.error("Failed to create document in database:", error);
+    res.status(500).json({ message: "Failed to create document" });
+    
+  }
 };
