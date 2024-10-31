@@ -1,5 +1,6 @@
 import Document from "../components/document.mjs";
 import { addDocument} from "../db/db.mjs";
+
 export const createDocument = (req, res) => {
 
   const { id, title, stakeholders, scale, issuanceDate, type, language, coordinates, connectionIds } = req.body;

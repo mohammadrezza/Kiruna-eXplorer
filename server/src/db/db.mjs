@@ -63,3 +63,4 @@ export function addDocument(
   });
 }
 export default db;
+
