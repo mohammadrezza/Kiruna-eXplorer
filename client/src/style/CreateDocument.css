@@ -69,11 +69,19 @@ textarea.form-control {
     resize: none;
 }
 
+.edit-button{
+    position: relative;
+    left: 700px;
+    width: 40px;
+    height: 40px;
+}
+
 .add-button {
     position: relative;
     font-family: 'Open Sans';
-    top: 800px;
-    left: 1150px;
+    width: 374px;
+    top: 100px;
+    left: 800px;
     font-size: 16px;
     font-weight: 400;
     line-height: 21.79px;
