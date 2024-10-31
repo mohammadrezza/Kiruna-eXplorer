@@ -1,5 +1,5 @@
 import Document from "../components/document.mjs";
-
+import { addDocument} from "../db/db.mjs";
 export const createDocument = (req, res) => {
 
   const { title, stakeholders, scale, issuanceDate, type, language, coordinates, connectionIds } = req.body;
@@ -15,9 +15,10 @@ export const createDocument = (req, res) => {
     type,
     language,
     coordinates,
-    connections: connectionIds 
+    connections: connectionIds.length 
   });
-
+ 
+  addDocument(title, stakeholders, scale, issuanceDate, type, language, coordinates, connectionIds.length);
   //db insertion ...
   
   console.log("document created", document);
