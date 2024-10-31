@@ -1,13 +1,14 @@
 import Document from "../components/document.mjs";
-
+import { addDocument} from "../db/db.mjs";
 export const createDocument = (req, res) => {
 
-  const { title, stakeholders, scale, issuanceDate, type, language, coordinates, connectionIds } = req.body;
+  const { id, title, stakeholders, scale, issuanceDate, type, language, coordinates, connectionIds } = req.body;
 
   //creation logic
   const document = new Document();
 
   document.createFromObject({
+
     title,
     stakeholders,
     scale,
@@ -15,10 +16,12 @@ export const createDocument = (req, res) => {
     type,
     language,
     coordinates,
-    connections: connectionIds 
+    connections: connectionIds.length 
   });
+ 
 
-  //db insertion ...
+  addDocument(document.id, title, stakeholders, scale, issuanceDate, type, language, coordinates, connectionIds.length);
+
   
   console.log("document created", document);
 
