@@ -63,7 +63,34 @@ function addDocument(
     });
 }
 
+function addDocumentConnection(
+    id,
+    documentId,
+    connectionId
+) {
+    return new Promise((resolve, reject) => {
+        const query =
+            "INSERT INTO DocumentConnection (id, documentId, connectionId) VALUES (?,?,?)";
+        db.run(
+            query,
+            [
+                id,
+                documentId,
+                connectionId
+            ],
+            (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            }
+        );
+    });
+}
+
 export {
     addDocument,
+    addDocumentConnection
 };
 

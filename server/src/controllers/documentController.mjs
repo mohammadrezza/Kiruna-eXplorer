@@ -1,5 +1,6 @@
 import Document from "../components/document.mjs";
-import {addDocument} from "../db/db.mjs";
+import DocumentConnection from "../components/documentConnection.mjs";
+import {addDocument, addDocumentConnection} from "../db/db.mjs";
 
 export const createDocument = async (req, res) => {
     const {
@@ -26,6 +27,16 @@ export const createDocument = async (req, res) => {
         connections: connectionIds.length,
     });
 
+    let connections = []
+    for (const connectionId of connectionIds) {
+        let documentConnection = new DocumentConnection();
+        documentConnection.createFromObject({
+            documentId: document.id,
+            connectionId,
+        });
+        connections.push(documentConnection)
+    }
+
     try {
         await addDocument(
             document.id,
@@ -38,6 +49,16 @@ export const createDocument = async (req, res) => {
             coordinates,
             connectionIds.length
         );
+
+        let connectionPromises = []
+        for (const connection of connections) {
+            connectionPromises.push(addDocumentConnection(
+                connection.id,
+                connection.documentId,
+                connection.connectionId
+            ));
+        }
+        await Promise.all(connectionPromises);
 
         res
             .status(201)
