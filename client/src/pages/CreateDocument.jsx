@@ -274,7 +274,7 @@ function FormDocument(props) {
               <Button variant="secondary" onClick={() => setShowModal(false)}>
                 Close
               </Button>
-              <Button variant="primary" onClick={() => setShowModal(false)}>
+              <Button variant="dark" onClick={() => setShowModal(false)}>
                 Save Selection
               </Button>
             </Modal.Footer>

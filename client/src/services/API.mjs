@@ -11,7 +11,8 @@ async function getTypes() {
     return types;
 }
 async function getDocuments(){
- return new Document ("title", "stakeholder", "scale", "date", "type", "language", "description");
+    const docArr = [new Document ("title", "stakeholder", "scale", "date", "type", "language", "description"), new Document ("title2", "stakeholder2", "scale2", "date2", "type2", "language2", "description2")];
+    return docArr;
 }
 const API ={AddDocumentDescription, getTypes, getDocuments}
 
