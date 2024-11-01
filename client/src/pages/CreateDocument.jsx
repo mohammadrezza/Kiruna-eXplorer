@@ -26,7 +26,8 @@ function FormDocument(props) {
   const [loadDoc,setLoadDoc] = useState(true);
   const [edit,setEdit] = useState(false);
   const [showMap, setShowMap] = useState(false);
-  const [showModal, setShowModal] = useState(false); 
+  // const [showModal, setShowModal] = useState(false);
+  const [showDocumentList, setShowDocumentList] = useState(false); 
   const [allDocuments, setAllDocuments] = useState([]); 
   const [selectedDocuments, setSelectedDocuments] = useState([]); 
   const [allTypes,setAllTypes] = useState([]);
@@ -120,14 +121,18 @@ function FormDocument(props) {
     setTitle(title.trim());
     setStakeholder(stakeholder.trim());
     const doc = new Document(title,stakeholder,scale,issuanceDate,type,language,description);
-    API.AddDocumentDescription(doc);
+    API.AddDocumentDescription(doc, selectedDocuments); 
+    //if we want to set the connections 
+    //by using this API we pass selectedDocuments as
+    // an argument here
+    //otherwise we create a new API
   }
 
   const handleDocumentSelect = (documentId) => {
-    setSelectedDocuments((prevSelected) => 
+    setSelectedDocuments((prevSelected) =>
       prevSelected.includes(documentId)
-        ? prevSelected.filter(id => id !== documentId)
-        : [...prevSelected, documentId]
+        ? prevSelected.filter((id) => id !== documentId) 
+        : [...prevSelected, documentId]                  
     );
   };
   
@@ -249,11 +254,11 @@ function FormDocument(props) {
             />}
           </Row>
           
-          <Button variant="link" onClick={() => setShowModal(true)}>
+          {/* <Button variant="link" onClick={() => setShowModal(true)}>
             Select Related Documents
           </Button>
           
-          {/* Modal per selezionare i documenti */}
+          
           {!loadDoc && <Modal show={showModal} onHide={() => setShowModal(false)}>
             <Modal.Header closeButton>
               <Modal.Title>Select Related Documents</Modal.Title>
@@ -281,7 +286,42 @@ function FormDocument(props) {
               </Button>
             </Modal.Footer>
           </Modal>}
+           */}
+           <div>
           
+           {!showDocumentList && ( // Nascondi il bottone se `showDocumentList` è true
+          <Button className="selectrelated" variant="dark" onClick={() => setShowDocumentList(true)}>
+            Select Related Documents
+          </Button>)}
+
+          {/* Lista dei documenti selezionabili */}
+          {showDocumentList && (
+            <div className="document-list">
+              <h5>Select Related Documents</h5>
+              <ListGroup className='relateddocs'>
+                {allDocuments.map((doc) => (
+                  <ListGroup.Item key={doc.id}>
+                    <Form.Check 
+                      type="checkbox"
+                      label={
+                          <Row>
+                            <Col>{doc.title}</Col>
+                            <Col>{doc.stakeholder}</Col>
+                            <Col>{dayjs(doc.issuanceDate).format('DD/MM/YYYY')}</Col>
+                          </Row>
+                        } 
+                      checked={selectedDocuments.includes(doc.id)}
+                      onChange={() => handleDocumentSelect(doc.id)}
+                    />
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+              <Button className="saveselection" variant="dark" onClick={() => setShowDocumentList(false)}>
+                Save Selection
+              </Button>
+            </div>
+          )}
+        </div>
           {param.mode==='add' && <Button className="add-button" type='submit'>+Add</Button>}
           {edit && <Button className="add-button" type='submit'>+Edit</Button>}
         </Form>

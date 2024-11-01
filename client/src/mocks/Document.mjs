@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 
-function Document(title,stakeholder,scale,issuanceDate,type,language,description){
+function Document(id, title,stakeholder,scale,issuanceDate,type,language,description){
+    this.id = id;
     this.title = title;
     this.stakeholder = stakeholder;
     this.scale = scale;
