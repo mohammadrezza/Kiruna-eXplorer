@@ -21,3 +21,5 @@ class DocumentConnection {
         this.createdAt = row.created_at;
     }
 }
+
+export default DocumentConnection;
