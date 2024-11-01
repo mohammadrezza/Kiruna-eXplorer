@@ -16,13 +16,13 @@ const db = new sqlite3.Database(dbFilePath, (err) => {
  * @param {string} id - document id
  * @param {string} title - document title
  * @param {string} stakeholders - document stakeholders
- * @param
- * @param
- * @param
- * @param
- * @param
- * @param
- * @returns {Promise} - 
+ * @param {string} scale - document scale
+ * @param {string} issuanceDate - document issuanceDate
+ * @param {string} type - document type
+ * @param {string} language - document language
+ * @param {string} coordinates - document coordinates
+ * @param {number} connections - document connections
+ * @returns {Promise} -
  */
 
 export function addDocument(
