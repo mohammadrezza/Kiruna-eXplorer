@@ -25,7 +25,7 @@ const db = new sqlite3.Database(dbFilePath, (err) => {
  * @returns {Promise} -
  */
 
-export function addDocument(
+function addDocument(
   id,
   title,
   stakeholders,
@@ -62,5 +62,8 @@ export function addDocument(
     );
   });
 }
-export default db;
+
+export  {
+    addDocument,
+};
 
