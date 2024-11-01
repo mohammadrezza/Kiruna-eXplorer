@@ -3,11 +3,14 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import CreateDocument from './pages/CreateDocument';
 import Homepage from './pages/Homepage';
+import DocumentsList from './pages/DocumentsList'
+
 function App() {
   const location = useLocation();
+  const isHomePage = location.pathname === '/';
   return (
     <>
-    <Header></Header>
+    <Header className={isHomePage ? 'dark-header' : ''}></Header>
     <Routes>
       <Route path='/' element={
           <Homepage/>
@@ -15,8 +18,11 @@ function App() {
       <Route path='/documents/:mode' element={
           <CreateDocument/>
       } />
+      <Route path='/documents' element={
+          <DocumentsList/>
+      } />
    </Routes>
-   {location.pathname === '/' && <Footer />}
+   {isHomePage && <Footer />}
    </>
   );
 }

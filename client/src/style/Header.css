@@ -6,16 +6,19 @@
   display: grid;
   align-items: center;
   grid-template-columns: 1fr 1fr 1fr;
+  font-family: "Times";
 }
 .custom-navbar>hr {
   width: 355px;
   height: 1px;
+  color: var(--dark-grey);
 }
 
 .custom-navbar > h3 {
   position: relative;
   font-size: 32px;
   font-weight: 700;
+  font-family: "Times";
   text-shadow: -1px -1px 0 var(--grey), 1px -1px 0 var(--grey), 1px 1px 0 var(--grey),
       1px 1px 0 var(--grey);
   color: var(--demo-black); /* Text color */
@@ -29,3 +32,12 @@
   color: var(--dark-grey);
   margin-left: auto;
 }
+
+.dark-header{
+  background-color: var(--demo-black);
+  color: var(--white)
+}
+.dark-header h3, .dark-header .profile-icon, .dark-header hr {
+  color: var(--white)
+}
+

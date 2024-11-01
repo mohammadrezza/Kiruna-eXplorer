@@ -4,6 +4,13 @@
   font-weight: 400;
   font-style: normal;
 }
+* {
+  width: -webkit-fill-available;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Times';
+}
 html,
 body {
   margin: 0 auto;
