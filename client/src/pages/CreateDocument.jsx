@@ -23,6 +23,7 @@ function FormDocument(props) {
   const [description,setDescription] = useState('');
   const [coordinates, setCoordinates] = useState({ lat: '', lng: '' });
   const [loading,setLoading] = useState(true);
+  const [loadDoc,setLoadDoc] = useState(true);
   const [edit,setEdit] = useState(false);
   const [showMap, setShowMap] = useState(false);
   const [showModal, setShowModal] = useState(false); 
@@ -55,6 +56,9 @@ function FormDocument(props) {
         setAllDocuments(documents);
       } catch (error) {
         console.error("Error loading documents:", error);
+      }
+      finally{
+        setLoadDoc(false);
       }
     };
     
@@ -131,8 +135,7 @@ function FormDocument(props) {
   return  (
     <div className="wrapper">
       <div className="form-container">
-        <h2>New Document</h2>
-        {param.mode==='view' && <FaPenSquare className='edit-button' onClick={() => setEdit(true)}/>}
+        <h2>New Document{(param.mode==='view' && edit===false) && <FaPenSquare className='edit-button' onClick={() => setEdit(true)}/>}</h2>
         <Form onSubmit={handleSubmit}>
           <Row>
             <Col className='col-form'>
@@ -245,14 +248,13 @@ function FormDocument(props) {
               onCoordinatesChange={handleCoordinatesChange} 
             />}
           </Row>
-          {param.mode==='add' && <Button className="add-button" type='submit'>+Add</Button>}
-          {edit && <Button className="add-button" type='submit'>+Edit</Button>}
+          
           <Button variant="link" onClick={() => setShowModal(true)}>
             Select Related Documents
           </Button>
           
           {/* Modal per selezionare i documenti */}
-          <Modal show={showModal} onHide={() => setShowModal(false)}>
+          {!loadDoc && <Modal show={showModal} onHide={() => setShowModal(false)}>
             <Modal.Header closeButton>
               <Modal.Title>Select Related Documents</Modal.Title>
             </Modal.Header>
@@ -278,11 +280,10 @@ function FormDocument(props) {
                 Save Selection
               </Button>
             </Modal.Footer>
-          </Modal>
+          </Modal>}
           
-          <Button type="submit" className="add-button">
-            {param.mode === 'add' ? '+Add' : '+Edit'}
-          </Button>
+          {param.mode==='add' && <Button className="add-button" type='submit'>+Add</Button>}
+          {edit && <Button className="add-button" type='submit'>+Edit</Button>}
         </Form>
       </div>
     </div>
