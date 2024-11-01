@@ -26,7 +26,6 @@ function FormDocument(props) {
   const [loadDoc,setLoadDoc] = useState(true);
   const [edit,setEdit] = useState(false);
   const [showMap, setShowMap] = useState(false);
-  // const [showModal, setShowModal] = useState(false);
   const [showDocumentList, setShowDocumentList] = useState(false); 
   const [allDocuments, setAllDocuments] = useState([]); 
   const [selectedDocuments, setSelectedDocuments] = useState([]); 
@@ -253,72 +252,58 @@ function FormDocument(props) {
               onCoordinatesChange={handleCoordinatesChange} 
             />}
           </Row>
-          
-          {/* <Button variant="link" onClick={() => setShowModal(true)}>
-            Select Related Documents
-          </Button>
-          
-          
-          {!loadDoc && <Modal show={showModal} onHide={() => setShowModal(false)}>
-            <Modal.Header closeButton>
-              <Modal.Title>Select Related Documents</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <ListGroup>
-                {allDocuments.map((doc) => (
-                  <ListGroup.Item key={doc.id}>
-                    <Form.Check 
-                      type="checkbox"
-                      label={doc.title} 
-                      checked={selectedDocuments.includes(doc.id)}
-                      onChange={() => handleDocumentSelect(doc.id)}
-                    />
-                  </ListGroup.Item>
-                ))}
-              </ListGroup>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={() => setShowModal(false)}>
-                Close
-              </Button>
-              <Button variant="dark" onClick={() => setShowModal(false)}>
-                Save Selection
-              </Button>
-            </Modal.Footer>
-          </Modal>}
-           */}
            <div>
           
-           {!showDocumentList && ( // Nascondi il bottone se `showDocumentList` è true
-          <Button className="selectrelated" variant="dark" onClick={() => setShowDocumentList(true)}>
-            Select Related Documents
-          </Button>)}
-
-          {/* Lista dei documenti selezionabili */}
-          {showDocumentList && (
-            <div className="document-list">
-              <h5>Select Related Documents</h5>
-              <ListGroup className='relateddocs'>
-                {allDocuments.map((doc) => (
-                  <ListGroup.Item key={doc.id}>
-                    <Form.Check 
-                      type="checkbox"
-                      label={
+          {(param.mode === 'add' || edit) ? (
+            !showDocumentList ? (
+              <Button className="selectrelated" variant="dark" onClick={() => setShowDocumentList(true)}>
+                Select Related Documents
+              </Button>
+            ) : (
+              <div className="document-list">
+                <h5>Select Related Documents</h5>
+                <ListGroup className='relateddocs'>
+                  {allDocuments.map((doc) => (
+                    <ListGroup.Item key={doc.id}>
+                      <Form.Check 
+                        type="checkbox"
+                        label={
                           <Row>
                             <Col>{doc.title}</Col>
                             <Col>{doc.stakeholder}</Col>
                             <Col>{dayjs(doc.issuanceDate).format('DD/MM/YYYY')}</Col>
                           </Row>
                         } 
-                      checked={selectedDocuments.includes(doc.id)}
-                      onChange={() => handleDocumentSelect(doc.id)}
-                    />
-                  </ListGroup.Item>
-                ))}
+                        checked={selectedDocuments.includes(doc.id)}
+                        onChange={() => handleDocumentSelect(doc.id)}
+                      />
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+                <Button className="saveselection" variant="dark" onClick={() => setShowDocumentList(false)}>
+                  Save Selection
+                </Button>
+              </div>
+            )
+          ) : (
+            <div className="document-list">
+              <h5>Related Documents</h5>
+              <ListGroup className='relateddocs'>
+                {selectedDocuments.map((docId) => {
+                  const doc = allDocuments.find((d) => d.id === docId);
+                  return (
+                    doc && (
+                      <ListGroup.Item key={doc.id}>
+                        <Row>
+                          <Col>{doc.title}</Col>
+                          <Col>{doc.stakeholder}</Col>
+                          <Col>{dayjs(doc.issuanceDate).format('DD/MM/YYYY')}</Col>
+                        </Row>
+                      </ListGroup.Item>
+                    )
+                  );
+                })}
               </ListGroup>
-              <Button className="saveselection" variant="dark" onClick={() => setShowDocumentList(false)}>
-                Save Selection
-              </Button>
             </div>
           )}
         </div>
