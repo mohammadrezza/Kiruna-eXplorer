@@ -5,6 +5,21 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+package-lock.json
+
 ### STS ###
 .apt_generated
 .classpath
@@ -33,5 +48,13 @@ out/
 /nbdist/
 /.nb-gradle/
 
-### VS Code ###
-.vscode/
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+

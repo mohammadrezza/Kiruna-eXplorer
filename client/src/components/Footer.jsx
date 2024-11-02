@@ -4,8 +4,10 @@ import '../style/footer.css'
 function Footer() {
   return (
     <footer>
-      <p>Kiruna Explorer</p>
-      <hr />
+      <p>
+        <hr/>
+        <span>Kiruna Explorer</span>
+      </p>
       <p>Done by GROUP 11</p>
     </footer>
   );

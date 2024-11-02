@@ -5,7 +5,6 @@
   font-style: normal;
 }
 * {
-  width: -webkit-fill-available;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
