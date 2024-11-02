@@ -1,8 +1,9 @@
 import Document from "../components/document.mjs";
 import DocumentConnection from "../components/documentConnection.mjs";
+import DocumentType from "../components/documentType.mjs";
 import {addDocument, addDocumentConnection} from "../db/db.mjs";
 
-export const createDocument = async (req, res) => {
+async function createDocument(req, res) {
     const {
         title,
         stakeholders,
@@ -70,3 +71,12 @@ export const createDocument = async (req, res) => {
 
     }
 };
+
+async function documentTypesList(req, res) {
+    res.status(200).json({documentTypes: Object.values(DocumentType)});
+}
+
+export  {
+    createDocument,
+    documentTypesList,
+}
