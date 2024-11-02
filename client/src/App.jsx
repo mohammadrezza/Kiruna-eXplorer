@@ -25,11 +25,11 @@ function App() {
       <Route path='/' element={
           <Homepage/>
       } />
-      <Route path='/documents/:mode' element={
-          <CreateDocument/>
+      <Route path='/documents/add' element={
+          <CreateDocument mode={'add'}/>
       } />
-      <Route path='/documents/:mode/:id' element={
-          <CreateDocument/>
+      <Route path='/documents/view/:id' element={
+          <CreateDocument mode={'view'}/>
       } />
       <Route path='/documents' element={
           <DocumentsList/>

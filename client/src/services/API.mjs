@@ -1,9 +1,35 @@
 import Document from "../mocks/Document.mjs";
 
-const url = "http://localhost:8001"
+const url = "http://localhost:3001"
 
-async function AddDocumentDescription(doc) {
-    
+async function AddDocumentDescription(doc ,selectedDocuments, coordinates) {
+    try {
+        const coord = [];
+        coord.push(coordinates.lat);
+        coord.push(coordinates.lng);
+        const response = await fetch(`${url}/documents`,
+            {
+                method: "POST",
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify({title: doc.title, stakeholders:doc.stakeholders, scale: doc.scale, issuanceDate: doc.issuanceDate,type: doc.type,language: doc.language,  coordinates: coordinates, connectionIds:selectedDocuments  })
+            })
+        if (response.ok) {
+            return;
+        } else {
+            const errDetail = await response.json();
+            if (errDetail.error)
+                throw errDetail.error;
+            if (errDetail.message)
+                throw errDetail.message;
+            
+            throw "Something went wrong while saving new doc description.";
+        }
+    } catch (error) {
+        console.error( error);
+        throw error;  
+    }
 }
 
 async function getTypes() {
