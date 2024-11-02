@@ -5,6 +5,7 @@
   position: relative;
   display: grid;
   align-items: center;
+  z-index: 1;
   grid-template-columns: 1fr 1fr 1fr;
   font-family: "Times";
 }
@@ -39,5 +40,9 @@
 }
 .dark-header h3, .dark-header .profile-icon, .dark-header hr {
   color: var(--white)
+}
+
+.transparent-header{
+  background: transparent !important;
 }
 

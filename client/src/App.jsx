@@ -4,11 +4,17 @@ import Footer from './components/Footer';
 import CreateDocument from './pages/CreateDocument';
 import Homepage from './pages/Homepage';
 import DocumentsList from './pages/DocumentsList'
+import Login from './pages/Login'
 import { useState } from 'react';
 
 function App() {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+  const isLoginPage = location.pathname === '/login';
+  const headerClasses = [
+    isHomePage && 'dark-header',
+    isLoginPage && 'dark-header transparent-header'
+  ].filter(Boolean).join(' ');
 
   const [id,setId] = useState('')
 
@@ -20,10 +26,13 @@ function App() {
 
   return (
     <>
-    <Header className={isHomePage ? 'dark-header' : ''}></Header>
+    <Header className={headerClasses}></Header>
     <Routes>
       <Route path='/' element={
           <Homepage/>
+      } />
+      <Route path='/login' element={
+          <Login/>
       } />
       <Route path='/documents/add' element={
           <CreateDocument mode={'add'}/>
