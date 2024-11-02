@@ -89,8 +89,98 @@ function addDocumentConnection(
     });
 }
 
+function editDocument( 
+    id,
+    title,
+    stakeholders,
+    scale,
+    issuanceDate,
+    type,
+    language,
+    coordinates,
+    connections
+) {
+    return new Promise((resolve, reject) => {
+        const query = `
+            UPDATE Document
+            SET
+                title = COALESCE(?, title),
+                stakeholders = COALESCE(?, stakeholders),
+                scale = COALESCE(?, scale),
+                issuanceDate = COALESCE(?, issuanceDate),
+                type = COALESCE(?, type),
+                language = COALESCE(?, language),
+                coordinates = COALESCE(?, coordinates),
+                connections = COALESCE(?, connections)
+            WHERE
+                id = ?
+        `;
+
+        db.run(
+            query,
+            [
+                title,
+                stakeholders,
+                scale,
+                issuanceDate,
+                type,
+                language,
+                coordinates,
+                connections,
+                id  
+            ],
+            (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            }
+        );
+    });
+}
+
+function editDocumentConnection(id, documentId, connectionId) {
+    return new Promise((resolve, reject) => {
+        const checkQuery = `
+            SELECT 1 FROM DocumentConnection
+            WHERE (documentId = ? AND connectionId = ?)
+               OR (documentId = ? AND connectionId = ?)
+        `;
+
+        db.get(checkQuery, [documentId, connectionId, connectionId, documentId], (err, row) => {
+            if (err) {
+                return reject(err);
+            }
+
+            if (row) {
+                
+                return resolve();
+            } else {
+               
+                const insertQuery = `
+                    INSERT INTO DocumentConnection (id, documentId, connectionId)
+                    VALUES (?, ?, ?)
+                `;
+
+                db.run(insertQuery, [id, documentId, connectionId], (err) => {
+                    if (err) {
+                        return reject(err);
+                    } else {
+                        return resolve();
+                    }
+                });
+            }
+        });
+    });
+}
+
+
+
 export {
     addDocument,
-    addDocumentConnection
+    addDocumentConnection, 
+    editDocument, 
+    editDocumentConnection
 };
 

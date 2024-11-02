@@ -1,8 +1,11 @@
 import express from "express";
-import { createDocument } from "../controllers/documentController.mjs";
+import { createDocument, updateDocument } from "../controllers/documentController.mjs";
 
 const documentRouter = express.Router();
 
 documentRouter.post("/", createDocument);
+documentRouter.put("/:documentId", 
+    updateDocument
+  );
 
 export default documentRouter;
