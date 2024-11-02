@@ -14,7 +14,7 @@ function FormDocument(props) {
 
   const param = useParams();
 
-  const [docID,setDocID] = useState(props.id ? props.id : '')
+  const [docID,setDocID] = useState(param.mode==='view' ? param.id : '')
   const [title,setTitle] = useState('');
   const [stakeholder,setStakeholder] = useState('');
   const [scale,setScale] = useState('');
@@ -79,8 +79,8 @@ function FormDocument(props) {
         console.error("Error loading document data:", error)
       }
     }
-
-    loadData();
+    if(param.mode==='view')
+      loadData();
   }, []);
   
 

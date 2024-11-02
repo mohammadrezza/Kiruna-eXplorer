@@ -26,7 +26,10 @@ function App() {
           <Homepage/>
       } />
       <Route path='/documents/:mode' element={
-          <CreateDocument id={id} handleIdNavigate={handleIdNavigate}/>
+          <CreateDocument/>
+      } />
+      <Route path='/documents/:mode/:id' element={
+          <CreateDocument/>
       } />
       <Route path='/documents' element={
           <DocumentsList/>
