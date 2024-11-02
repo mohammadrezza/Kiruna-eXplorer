@@ -14,6 +14,7 @@ function FormDocument(props) {
 
   const param = useParams();
 
+  const [docID,setDocID] = useState(props.id ? props.id : '')
   const [title,setTitle] = useState('');
   const [stakeholder,setStakeholder] = useState('');
   const [scale,setScale] = useState('');
@@ -61,8 +62,25 @@ function FormDocument(props) {
         setLoadDoc(false);
       }
     };
-    
-    loadDocuments();
+    if(param.mode==='add')
+      loadDocuments();
+
+    const loadData = async () => {
+      try{
+        const doc = await API.getData(docID);
+        setTitle(doc.title);
+        setStakeholder(doc.stakeholder);
+        setScale(doc.scale);
+        setDescription(doc.description);
+        setType(doc.type);
+        setLanguage(doc.language);
+        setIssuanceDate(dayjs(doc.issuanceDate).format('YYYY-MM-DD'));
+      }catch(error){
+        console.error("Error loading document data:", error)
+      }
+    }
+
+    loadData();
   }, []);
   
 

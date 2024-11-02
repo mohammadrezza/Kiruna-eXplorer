@@ -17,6 +17,11 @@ async function getDocuments(){
     doc.push(new Document ("3","title3", "stakeholder3", "scale3", "01/01/1999", "type3", "language3", "description3"));
     return doc;
 }
-const API ={AddDocumentDescription, getTypes, getDocuments}
+
+async function getData(id) {
+    console.log(id);
+    return new Document ("1","title", "stakeholder", "scale", "01/01/1999", "type", "language", "description");
+}
+const API ={AddDocumentDescription, getTypes, getDocuments, getData}
 
 export default API;

@@ -4,10 +4,20 @@ import Footer from './components/Footer';
 import CreateDocument from './pages/CreateDocument';
 import Homepage from './pages/Homepage';
 import DocumentsList from './pages/DocumentsList'
+import { useState } from 'react';
 
 function App() {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+
+  const [id,setId] = useState('')
+
+
+  const handleIdNavigate = (docID) =>{
+    setId(docID);
+  }
+  
+
   return (
     <>
     <Header className={isHomePage ? 'dark-header' : ''}></Header>
@@ -16,7 +26,7 @@ function App() {
           <Homepage/>
       } />
       <Route path='/documents/:mode' element={
-          <CreateDocument/>
+          <CreateDocument id={id} handleIdNavigate={handleIdNavigate}/>
       } />
       <Route path='/documents' element={
           <DocumentsList/>

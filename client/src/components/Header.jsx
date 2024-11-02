@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaUserCircle } from 'react-icons/fa';
 import { Navbar } from 'react-bootstrap';
-import '../style/header.css'
+import '../style/Header.css'
 
 function Header({ className }) {
   return (
