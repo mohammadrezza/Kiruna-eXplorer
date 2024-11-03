@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS Document
 (
     id TEXT PRIMARY KEY,
     title TEXT,
+    description TEXT,
     stakeholders TEXT,
     scale TEXT,
     issuanceDate TEXT,
