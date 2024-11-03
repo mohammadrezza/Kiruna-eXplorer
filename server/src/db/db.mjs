@@ -141,23 +141,9 @@ function editDocument(
 }
 
 function editDocumentConnection(id, documentId, connectionId) {
+    
     return new Promise((resolve, reject) => {
-        const checkQuery = `
-            SELECT 1 FROM DocumentConnection
-            WHERE (documentId = ? AND connectionId = ?)
-               OR (documentId = ? AND connectionId = ?)
-        `;
 
-        db.get(checkQuery, [documentId, connectionId, connectionId, documentId], (err, row) => {
-            if (err) {
-                return reject(err);
-            }
-
-            if (row) {
-                
-                return resolve();
-            } else {
-               
                 const insertQuery = `
                     INSERT INTO DocumentConnection (id, documentId, connectionId)
                     VALUES (?, ?, ?)
@@ -170,17 +156,36 @@ function editDocumentConnection(id, documentId, connectionId) {
                         return resolve();
                     }
                 });
+            
+        });
+    }
+
+function deleteAllConnections(id) {
+
+    console.log("deleteAllConnections", id);
+
+    return new Promise((resolve, reject) => {
+        const query = `
+            DELETE FROM DocumentConnection
+            WHERE documentId = ? OR connectionId = ?
+        `;
+
+        db.run(query, [id], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
             }
         });
     });
 }
 
 
-
 export {
     addDocument,
     addDocumentConnection, 
     editDocument, 
-    editDocumentConnection
+    editDocumentConnection, 
+    deleteAllConnections
 };
 
