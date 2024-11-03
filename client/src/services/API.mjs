@@ -33,22 +33,12 @@ async function AddDocumentDescription(doc ,selectedDocuments, coordinates) {
 }
 
 async function getTypes() {
-    const types = ['serv1','serv2','serv3'];
-    /*try{
-        const response = await fetch(`${url}/documents/types`,{
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
+    /*const types = ['serv1','serv2','serv3'];*/
+    const response = await fetch(`${url}/documents/types`);
     if(response.ok){
         const t = await response.json();
-        return t;
+        return t.documentTypes;
     }
-    }catch(error){
-
-    }*/
-    return types;
 }
 // async function getDocuments(){
 //     const doc= [];
@@ -68,7 +58,7 @@ async function getDocuments() {
 
         if (response.ok) {
             const documents = await response.json();
-            return documents;
+            return documents.documents;
         } else {
             const errDetail = await response.json();
             if (errDetail.error)
@@ -104,8 +94,8 @@ async function getRelatedDocuments(docID) {
 }
 
 async function getData(id) {
-    console.log(id);
-    return new Document ("1","title", "stakeholder", "scale", "01/01/1999", "type", "language", "description");
+    const response = await fetch(`${url}/documents/${id}`)
+    return response;
 }
 const API ={AddDocumentDescription, getTypes, getDocuments, getData, getRelatedDocuments}
 

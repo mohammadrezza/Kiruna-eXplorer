@@ -39,7 +39,11 @@ function FormDocument(props) {
     const loadType = async() => {
       try
       {API.getTypes().then((types) =>{
-        setAllTypes(types);
+        let ty = [];
+        for(const t of types){
+          ty.push(t);
+        }
+        setAllTypes(ty);
       })}
       catch(error)
       {
@@ -200,12 +204,12 @@ function FormDocument(props) {
 
               <Form.Group className='form-group' controlId="type">
                 <Form.Label>Type</Form.Label>
-                <Form.Select value={type || ''} onChange={(event) => setType(event.target.value)}  isInvalid={!!errors.type} readOnly={!edit && props.mode!='add'}>
+                {!loading && <Form.Select value={type || ''} onChange={(event) => setType(event.target.value)}  isInvalid={!!errors.type} readOnly={!edit && props.mode!='add'}>
                   <option>Select type</option>
                   { allTypes.map((t) => 
                     <option key={t} value={t}>{t}</option>
                   )}
-                </Form.Select>
+                </Form.Select>}
               </Form.Group>
 
               <Form.Group className='form-group' controlId="language">
