@@ -95,7 +95,9 @@ async function getRelatedDocuments(docID) {
 
 async function getData(id) {
     const response = await fetch(`${url}/documents/${id}`)
-    return response;
+    const data = await response.json();
+    console.log(data)
+    return data.data;
 }
 const API ={AddDocumentDescription, getTypes, getDocuments, getData, getRelatedDocuments}
 

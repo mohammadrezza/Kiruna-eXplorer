@@ -79,6 +79,7 @@ function FormDocument(props) {
         setDescription(doc.description);
         setType(doc.type);
         setLanguage(doc.language);
+        setCoordinates(doc.coordinates)
         setIssuanceDate(dayjs(doc.issuanceDate).format('YYYY-MM-DD'));
         if (props.mode === 'view') {
           const relatedDocs = await API.getRelatedDocuments(docID);
