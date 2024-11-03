@@ -1,4 +1,8 @@
-import {getDocumentWithConnections} from "../db/db.mjs";
+import {getAllDocuments, getDocumentWithConnections} from "../db/db.mjs";
+
+async function getDocuments(documentId, title) {
+    return await getAllDocuments(documentId, title);
+}
 
 async function getDocument(id) {
     try {
@@ -44,5 +48,6 @@ async function getDocument(id) {
 }
 
 export {
-    getDocument
+    getDocument,
+    getDocuments
 }

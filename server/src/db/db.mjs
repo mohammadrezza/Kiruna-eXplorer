@@ -1,4 +1,5 @@
 import sqlite3 from "sqlite3";
+import Document from "../components/Document.mjs";
 
 let env = process.env.NODE_ENV ? process.env.NODE_ENV.trim() : "development";
 
@@ -128,9 +129,62 @@ async function getDocumentWithConnections(id) {
     });
 }
 
+async function getAllDocuments(documentId, title) {
+    return new Promise((resolve, reject) => {
+        let query = `
+            SELECT 
+                d.*,
+                CASE 
+                    WHEN ? IS NOT NULL AND EXISTS (
+                        SELECT 1 FROM DocumentConnection dc 
+                        WHERE (dc.documentId = d.id AND dc.connectionId = ?) 
+                        OR (dc.connectionId = d.id AND dc.documentId = ?)
+                    ) THEN 1
+                    ELSE 0
+                END as is_connected
+            FROM Document d
+            WHERE 1=1
+        `;
+
+        const params = [];
+
+        // Add documentId parameter three times for the CASE statement
+        if (documentId) {
+            params.push(documentId, documentId, documentId);
+            // Exclude the document with provided ID
+            query += ` AND d.id != ?`;
+            params.push(documentId);
+        } else {
+            params.push(null, null, null);
+        }
+
+        // Add title search condition if provided
+        if (title) {
+            query += ` AND d.title LIKE ?`;
+            params.push(`%${title}%`);
+        }
+
+        query += ` ORDER BY d.created_at DESC`;
+
+        db.all(query, params, (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                const documents = rows.map(row => {
+                    const document = new Document();
+                    document.createFromDatabaseRow(row);
+                    return document;
+                });
+                resolve(documents);
+            }
+        });
+    });
+}
+
 export {
     addDocument,
     addDocumentConnection,
+    getAllDocuments,
     getDocumentWithConnections
 };
 
