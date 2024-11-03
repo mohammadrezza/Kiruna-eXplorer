@@ -34,6 +34,20 @@ async function AddDocumentDescription(doc ,selectedDocuments, coordinates) {
 
 async function getTypes() {
     const types = ['serv1','serv2','serv3'];
+    /*try{
+        const response = await fetch(`${url}/documents/types`,{
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    if(response.ok){
+        const t = await response.json();
+        return t;
+    }
+    }catch(error){
+
+    }*/
     return types;
 }
 // async function getDocuments(){

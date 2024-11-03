@@ -144,7 +144,7 @@ function FormDocument(props) {
     setErrors([]);
     setTitle(title.trim());
     setStakeholder(stakeholder.trim());
-    const doc = new Document(title,stakeholder,scale,issuanceDate,type,language,description);
+    const doc = new Document(0,title,stakeholder,scale,issuanceDate,type,language,description);
     API.AddDocumentDescription(doc, selectedDocuments, coordinates); 
     //if we want to set the connections 
     //by using this API we pass selectedDocuments as
