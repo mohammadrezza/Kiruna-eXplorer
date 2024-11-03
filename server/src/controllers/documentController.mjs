@@ -1,6 +1,6 @@
 import Document from "../components/document.mjs";
 import DocumentConnection from "../components/documentConnection.mjs";
-import {addDocument, addDocumentConnection, editDocument, editDocumentConnection} from "../db/db.mjs";
+import {addDocument, addDocumentConnection, editDocument, editDocumentConnection, deleteAllConnections} from "../db/db.mjs";
 
 export const createDocument = async (req, res) => {
     const {
@@ -95,7 +95,11 @@ export const updateDocument = async (req, res) => {
     }
 
     try {
+
         await editDocument(documentId, title, stakeholders, scale, issuanceDate, type, language, coordinates, connectionIds.length);
+
+        await deleteAllConnections(documentId);
+        
         let connectionPromises = [];
         for (const connection of connections) {
             connectionPromises.push(editDocumentConnection(
