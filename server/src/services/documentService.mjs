@@ -1,8 +1,8 @@
 import {getDocumentWithConnections} from "../db/db.mjs";
 
-function getDocument(id) {
+async function getDocument(id) {
     try {
-        const rows = getDocumentWithConnections(id);
+        const rows = await getDocumentWithConnections(id);
 
         if (!rows || rows.length === 0) {
             return null;

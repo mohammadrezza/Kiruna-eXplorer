@@ -89,7 +89,7 @@ function addDocumentConnection(
     });
 }
 
-function getDocumentWithConnections(id) {
+async function getDocumentWithConnections(id) {
     return new Promise((resolve, reject) => {
         const query = `
             SELECT 

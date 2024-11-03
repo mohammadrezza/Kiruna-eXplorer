@@ -84,7 +84,7 @@ async function getDocumentWithId(req, res) {
             });
         }
 
-        const document = getDocument(id);
+        const document = await getDocument(id);
 
         if (!document) {
             return res.status(404).json({
