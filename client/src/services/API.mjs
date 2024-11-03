@@ -7,7 +7,7 @@ async function AddDocumentDescription(doc ,selectedDocuments, coordinates) {
         const coord = [];
         coord.push(coordinates.lat);
         coord.push(coordinates.lng);
-        const response = await fetch(`${url}/documents`,
+        const response = await fetch(`${url}/documents/`,
             {
                 method: "POST",
                 headers:{

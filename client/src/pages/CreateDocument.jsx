@@ -317,7 +317,7 @@ function FormDocument(props) {
               <ListGroup className='relateddocs'>
                 {relatedDocuments.map((relatedDoc) => {
                   return (
-                    doc && (
+                    relatedDoc && (
                       <ListGroup.Item 
                       key={relatedDoc.id}
                       action
