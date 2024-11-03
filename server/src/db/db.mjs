@@ -129,29 +129,56 @@ async function getDocumentWithConnections(id) {
     });
 }
 
-async function getAllDocuments() {
-    const rows = await new Promise((resolve, reject) => {
-        const query =
-            "SELECT * FROM Document ORDER BY created_at DESC";
-        db.all(
-            query,
-            [],
-            (err, res) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(res);
-                }
+async function getAllDocuments(documentId, title) {
+    return new Promise((resolve, reject) => {
+        let query = `
+            SELECT 
+                d.*,
+                CASE 
+                    WHEN ? IS NOT NULL AND EXISTS (
+                        SELECT 1 FROM DocumentConnection dc 
+                        WHERE (dc.documentId = d.id AND dc.connectionId = ?) 
+                        OR (dc.connectionId = d.id AND dc.documentId = ?)
+                    ) THEN 1
+                    ELSE 0
+                END as is_connected
+            FROM Document d
+            WHERE 1=1
+        `;
+
+        const params = [];
+
+        // Add documentId parameter three times for the CASE statement
+        if (documentId) {
+            params.push(documentId, documentId, documentId);
+            // Exclude the document with provided ID
+            query += ` AND d.id != ?`;
+            params.push(documentId);
+        } else {
+            params.push(null, null, null);
+        }
+
+        // Add title search condition if provided
+        if (title) {
+            query += ` AND d.title LIKE ?`;
+            params.push(`%${title}%`);
+        }
+
+        query += ` ORDER BY d.created_at DESC`;
+
+        db.all(query, params, (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                const documents = rows.map(row => {
+                    const document = new Document();
+                    document.createFromDatabaseRow(row);
+                    return document;
+                });
+                resolve(documents);
             }
-        );
+        });
     });
-    let documents = [];
-    for (let row of rows) {
-        let document = new Document();
-        document.createFromDatabaseRow(row);
-        documents.push(document);
-    }
-    return documents
 }
 
 export {

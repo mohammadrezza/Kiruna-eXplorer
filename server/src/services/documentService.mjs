@@ -1,8 +1,7 @@
 import {getAllDocuments, getDocumentWithConnections} from "../db/db.mjs";
 
 async function getDocuments(documentId, title) {
-    const documents = await getAllDocuments();
-    return documents;
+    return await getAllDocuments(documentId, title);
 }
 
 async function getDocument(id) {

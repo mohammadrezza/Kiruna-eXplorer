@@ -12,7 +12,9 @@ class Document {
         this.coordinates = '';
         this.connections = '';
         this.createdAt = '';
+        this.isConnected = false;
     }
+
     createFromObject(obj) {
         this.id = uuidv4();
         this.title = obj.title;
@@ -33,9 +35,10 @@ class Document {
         this.issuanceDate = row.issuance_date;
         this.type = row.type;
         this.language = row.language;
-        this.coordinates = JSON.parse(row.coordinates);
+        this.coordinates = row.coordinates ? JSON.parse(row.coordinates) : [];
         this.connections = row.connections;
         this.createdAt = row.created_at;
+        this.isConnected = row.is_connected === 1;
     }
 }
 
