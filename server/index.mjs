@@ -19,6 +19,15 @@ const corsOptions = {
 };
 app.use(cors(corsOptions))
 
+app.use((err, req, res) => {
+    console.error(err.stack);
+    res.status(500).json({
+        success: false,
+        message: 'Something went wrong!',
+        error: err.message
+    });
+});
+
 
 const PORT = 3001;
 

@@ -31,8 +31,8 @@ function FormDocument(props) {
   const [showDocumentList, setShowDocumentList] = useState(false); 
   const [allDocuments, setAllDocuments] = useState([]); 
   const [selectedDocuments, setSelectedDocuments] = useState([]); 
+  const [relatedDocuments, setRelatedDocuments] = useState([]); 
   const [allTypes,setAllTypes] = useState([]);
-
   const [errors, setErrors] = useState([]);
 
   useEffect(()=>{
@@ -76,6 +76,10 @@ function FormDocument(props) {
         setType(doc.type);
         setLanguage(doc.language);
         setIssuanceDate(dayjs(doc.issuanceDate).format('YYYY-MM-DD'));
+        if (props.mode === 'view') {
+          const relatedDocs = await API.getRelatedDocuments(docID);
+          setRelatedDocuments(relatedDocs);
+        }
       }catch(error){
         console.error("Error loading document data:", error)
       }
@@ -93,7 +97,9 @@ function FormDocument(props) {
     setCoordinates(newCoordinates);
   };
 
-
+  const handleRelatedDocumentClick = (relatedDocumentId) => {
+    navigate(`/view/${relatedDocumentId}`);
+  };
 
   const validateForm = () => {
     const validationErrors = {};
@@ -309,15 +315,17 @@ function FormDocument(props) {
             <div className="document-list">
               <h5>Related Documents</h5>
               <ListGroup className='relateddocs'>
-                {selectedDocuments.map((docId) => {
-                  const doc = allDocuments.find((d) => d.id === docId);
+                {relatedDocuments.map((relatedDoc) => {
                   return (
                     doc && (
-                      <ListGroup.Item key={doc.id}>
+                      <ListGroup.Item 
+                      key={relatedDoc.id}
+                      action
+                      onClick={() => handleRelatedDocumentClick(relatedDoc.id)}>
                         <Row>
-                          <Col>{doc.title}</Col>
-                          <Col>{doc.stakeholder}</Col>
-                          <Col>{dayjs(doc.issuanceDate).format('DD/MM/YYYY')}</Col>
+                          <Col>{relatedDoc.title}</Col>
+                          <Col>{relatedDoc.stakeholder}</Col>
+                          <Col>{dayjs(relatedDoc.issuanceDate).format('DD/MM/YYYY')}</Col>
                         </Row>
                       </ListGroup.Item>
                     )

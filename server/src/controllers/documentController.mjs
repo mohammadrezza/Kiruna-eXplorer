@@ -2,7 +2,7 @@ import Document from "../components/document.mjs";
 import DocumentConnection from "../components/documentConnection.mjs";
 import DocumentType from "../components/documentType.mjs";
 import {addDocument, addDocumentConnection} from "../db/db.mjs";
-import {getDocuments} from "../services/documentService.mjs";
+import {getDocuments, getDocument} from "../services/documentService.mjs";
 
 async function createDocument(req, res) {
     const {
@@ -71,7 +71,41 @@ async function createDocument(req, res) {
         res.status(500).json({message: "Failed to create document"});
 
     }
-};
+}
+
+async function getDocumentWithId(req, res) {
+    try {
+        const { id } = req.params;
+
+        if (!id) {
+            return res.status(400).json({
+                success: false,
+                message: 'Document ID is required'
+            });
+        }
+
+        const document = await getDocument(id);
+
+        if (!document) {
+            return res.status(404).json({
+                success: false,
+                message: 'Document not found'
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            data: document
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message
+        });
+    }
+}
 
 async function documentTypesList(req, res) {
     res.status(200).json({documentTypes: Object.values(DocumentType)});
@@ -86,5 +120,6 @@ async function documentsList(req, res) {
 export {
     createDocument,
     documentTypesList,
-    documentsList
+    documentsList,
+    getDocumentWithId
 }
