@@ -38,7 +38,7 @@ function MapPointSelector({ onCoordinatesChange, coordinates }) {
 
   return (
     <div>
-      <h5 className='map-view-text'>Click on the map to select a point</h5>
+      <h5 className='map-view-text' data-testid="map-info">Click on the map to select a point</h5>
       <MapContainer
         center={initialCenter}
         zoom={13}

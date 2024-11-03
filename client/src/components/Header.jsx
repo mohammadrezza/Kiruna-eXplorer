@@ -12,6 +12,9 @@ function Header({ className }) {
   const handleLoginClick = () => {
     navigate('/login');
   };
+  const handleLogoClick = () => {
+    navigate('/');
+  };
 
   return (
     <Navbar 
@@ -19,8 +22,8 @@ function Header({ className }) {
       variant="light" 
       data-testid="header-wrapper">
       <hr></hr>
-      <h3>Kiruna eXplorer</h3>
-      {!isLoginPage && <FaUserCircle className="profile-icon" onClick={handleLoginClick}/>}
+      <h3 onClick={handleLogoClick}>Kiruna eXplorer</h3>
+      {!isLoginPage && <FaUserCircle className="profile-icon" data-testid="profile-icon" onClick={handleLoginClick}/>}
     </Navbar>
   );
 }

@@ -25,6 +25,7 @@
   color: var(--demo-black); /* Text color */
   text-align: center;
   margin: 0;
+  cursor: pointer;
 }
   
 .profile-icon {
@@ -32,6 +33,7 @@
   height: 44px;
   color: var(--dark-grey);
   margin-left: auto;
+  cursor: pointer;
 }
 
 .dark-header{
