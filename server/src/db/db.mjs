@@ -1,4 +1,5 @@
 import sqlite3 from "sqlite3";
+import Document from "../components/Document.mjs";
 
 let env = process.env.NODE_ENV ? process.env.NODE_ENV.trim() : "development";
 
@@ -89,8 +90,34 @@ function addDocumentConnection(
     });
 }
 
+async function getAllDocuments() {
+    const rows = await new Promise((resolve, reject) => {
+        const query =
+            "SELECT * FROM Document ORDER BY created_at DESC";
+        db.all(
+            query,
+            [],
+            (err, res) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(res);
+                }
+            }
+        );
+    });
+    let documents = [];
+    for (let row of rows) {
+        let document = new Document();
+        document.createFromDatabaseRow(row);
+        documents.push(document);
+    }
+    return documents
+}
+
 export {
     addDocument,
-    addDocumentConnection
+    addDocumentConnection,
+    getAllDocuments
 };
 

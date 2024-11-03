@@ -33,7 +33,7 @@ class Document {
         this.issuanceDate = row.issuance_date;
         this.type = row.type;
         this.language = row.language;
-        this.coordinates = row.coordinates;
+        this.coordinates = JSON.parse(row.coordinates);
         this.connections = row.connections;
         this.createdAt = row.created_at;
     }
