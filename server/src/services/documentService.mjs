@@ -16,6 +16,7 @@ async function getDocument(id) {
         const mainDocument = {
             id: rows[0].doc_id,
             title: rows[0].doc_title,
+            description: rows[0].doc_description,
             stakeholders: rows[0].doc_stakeholders,
             scale: rows[0].doc_scale,
             issuanceDate: rows[0].doc_issuanceDate,
@@ -31,6 +32,7 @@ async function getDocument(id) {
                 mainDocument.connections.push({
                     id: row.conn_id,
                     title: row.conn_title,
+                    description: row.conn_description,
                     stakeholders: row.conn_stakeholders,
                     scale: row.conn_scale,
                     issuanceDate: row.conn_issuanceDate,

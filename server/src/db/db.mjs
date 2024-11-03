@@ -16,6 +16,7 @@ const db = new sqlite3.Database(dbFilePath, (err) => {
  * Inserts a new document in `documents`.
  * @param {string} id - document id
  * @param {string} title - document title
+ * @param {string} description - document description
  * @param {string} stakeholders - document stakeholders
  * @param {string} scale - document scale
  * @param {string} issuanceDate - document issuanceDate
@@ -29,6 +30,7 @@ const db = new sqlite3.Database(dbFilePath, (err) => {
 function addDocument(
     id,
     title,
+    description,
     stakeholders,
     scale,
     issuanceDate,
@@ -39,12 +41,13 @@ function addDocument(
 ) {
     return new Promise((resolve, reject) => {
         const query =
-            "INSERT INTO Document (id, title, stakeholders, scale, issuanceDate, type, language, coordinates, connections) VALUES (?,?,?,?,?,?,?,?,?)";
+            "INSERT INTO Document (id, title, description, stakeholders, scale, issuanceDate, type, language, coordinates, connections) VALUES (?,?,?,?,?,?,?,?,?,?)";
         db.run(
             query,
             [
                 id,
                 title,
+                description,
                 stakeholders,
                 scale,
                 issuanceDate,
@@ -96,6 +99,7 @@ async function getDocumentWithConnections(id) {
             SELECT 
                 d.id as doc_id,
                 d.title as doc_title,
+                d.description as doc_description,
                 d.stakeholders as doc_stakeholders,
                 d.scale as doc_scale,
                 d.issuanceDate as doc_issuanceDate,

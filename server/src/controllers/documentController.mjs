@@ -7,6 +7,7 @@ import {getDocuments, getDocument} from "../services/documentService.mjs";
 async function createDocument(req, res) {
     const {
         title,
+        description,
         stakeholders,
         scale,
         issuanceDate,
@@ -20,6 +21,7 @@ async function createDocument(req, res) {
     const document = new Document();
     document.createFromObject({
         title,
+        description,
         stakeholders,
         scale,
         issuanceDate,
@@ -43,6 +45,7 @@ async function createDocument(req, res) {
         await addDocument(
             document.id,
             title,
+            description,
             stakeholders,
             scale,
             issuanceDate,
