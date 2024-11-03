@@ -1,6 +1,6 @@
 import {getDocumentWithConnections} from "../db/db.mjs";
 
-function getDocumentWithConnections (id) {
+function getDocument(id) {
     try {
         const rows = getDocumentWithConnections(id);
 
@@ -44,5 +44,5 @@ function getDocumentWithConnections (id) {
 }
 
 export {
-    getDocumentWithConnections
+    getDocument
 }

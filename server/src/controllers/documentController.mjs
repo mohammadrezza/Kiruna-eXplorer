@@ -2,7 +2,7 @@ import Document from "../components/document.mjs";
 import DocumentConnection from "../components/documentConnection.mjs";
 import DocumentType from "../components/documentType.mjs";
 import {addDocument, addDocumentConnection} from "../db/db.mjs";
-import {getDocumentWithConnections} from "../services/documentService.mjs";
+import {getDocument} from "../services/documentService.mjs";
 
 async function createDocument(req, res) {
     const {
@@ -73,7 +73,7 @@ async function createDocument(req, res) {
     }
 }
 
-async function getDocument(req, res) {
+async function getDocumentWithId(req, res) {
     try {
         const { id } = req.params;
 
@@ -84,7 +84,7 @@ async function getDocument(req, res) {
             });
         }
 
-        const document = getDocumentWithConnections(id);
+        const document = getDocument(id);
 
         if (!document) {
             return res.status(404).json({
@@ -114,5 +114,5 @@ async function documentTypesList(req, res) {
 export  {
     createDocument,
     documentTypesList,
-    getDocument
+    getDocumentWithId
 }
