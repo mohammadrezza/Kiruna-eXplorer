@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\":\"foo\",\n    \"stakeholders\":\"foo\",\n    \"scale\":\"foo\",\n    \"issuanceDate\": \"21-02-1996\",\n    \"type\": \"TYPE_FOO\",\n    \"language\":\"english\",\n    \"coordinates\":[\n        0.8338068264956746,\n        18.9844855486035\n     ],\n    \"connectionIds\":[\"uuid\",\"uuid2\"]\n}",
+					"raw": "{\n    \"title\":\"foo\",\n    \"description\": \"description\",\n    \"stakeholders\":\"foo\",\n    \"scale\":\"foo\",\n    \"issuanceDate\": \"21-02-1996\",\n    \"type\": \"TYPE_FOO\",\n    \"language\":\"english\",\n    \"coordinates\":[\n        0.8338068264956746,\n        18.9844855486035\n     ],\n    \"connectionIds\":[\"uuid\",\"uuid2\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -144,7 +144,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"documents\":[\n        {\n            \"id\": \"uuid\",\n            \"title\":\"foo\",\n            \"stakeholders\":\"foo\",\n            \"scale\":\"foo\",\n            \"issuanceDate\": \"21-02-1996\",\n            \"type\": \"TYPE_FOO\",\n            \"language\":\"english\",\n            \"coordinates\":[\n                0.8338068264956746,\n                18.9844855486035\n            ],\n            \"connectionsCount\": 2,\n            \"isConnected\": true\n        },\n        {\n            \"id\": \"uuid\",\n            \"title\":\"foo\",\n            \"stakeholders\":\"foo\",\n            \"scale\":\"foo\",\n            \"issuanceDate\": \"21-02-1996\",\n            \"type\": \"TYPE_FOO\",\n            \"language\":\"english\",\n            \"coordinates\":[\n                0.0,\n                0.0\n            ],\n            \"connectionsCount\":2,\n            \"isConnected\": false\n        }\n    ]\n}"
+					"body": "{\n    \"documents\":[\n        {\n            \"id\": \"uuid\",\n            \"title\":\"foo\",\n            \"description\": \"description\",\n            \"stakeholders\":\"foo\",\n            \"scale\":\"foo\",\n            \"issuanceDate\": \"21-02-1996\",\n            \"type\": \"TYPE_FOO\",\n            \"language\":\"english\",\n            \"coordinates\":[\n                0.8338068264956746,\n                18.9844855486035\n            ],\n            \"connectionsCount\": 2,\n            \"isConnected\": true\n        },\n        {\n            \"id\": \"uuid\",\n            \"title\":\"foo\",\n            \"description\": \"description\",\n            \"stakeholders\":\"foo\",\n            \"scale\":\"foo\",\n            \"issuanceDate\": \"21-02-1996\",\n            \"type\": \"TYPE_FOO\",\n            \"language\":\"english\",\n            \"coordinates\":[\n                0.0,\n                0.0\n            ],\n            \"connectionsCount\":2,\n            \"isConnected\": false\n        }\n    ]\n}"
 				}
 			]
 		},
@@ -155,7 +155,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\":\"foo\",\n    \"stakeholders\":\"foo\",\n    \"scale\":\"foo\",\n    \"issuanceDate\": \"21-02-1996\",\n    \"type\": \"TYPE_FOO\",\n    \"language\":\"english\",\n    \"coordinates\":[\n        0.8338068264956746,\n        18.9844855486035\n     ],\n    \"connectionIds\":[\"uuid\",\"uuid2\"]\n}",
+					"raw": "{\n    \"title\":\"foo\",\n    \"description\": \"description\",\n    \"stakeholders\":\"foo\",\n    \"scale\":\"foo\",\n    \"issuanceDate\": \"21-02-1996\",\n    \"type\": \"TYPE_FOO\",\n    \"language\":\"english\",\n    \"coordinates\":[\n        0.8338068264956746,\n        18.9844855486035\n     ],\n    \"connectionIds\":[\"uuid\",\"uuid2\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -238,7 +238,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n        \"id\": \"uuid\",\n        \"title\":\"foo\",\n        \"stakeholders\":\"foo\",\n        \"scale\":\"foo\",\n        \"issuanceDate\": \"21-02-1996\",\n        \"type\": \"TYPE_FOO\",\n        \"language\":\"english\",\n        \"coordinates\":[\n            0.8338068264956746,\n            18.9844855486035\n        ],\n        \"connections\":[\n            {\n                \"id\": \"uuid\",\n                \"title\":\"foo\",\n                \"stakeholders\":\"foo\",\n                \"scale\":\"foo\",\n                \"issuanceDate\": \"21-02-1996\",\n                \"type\": \"TYPE_FOO\",\n                \"language\":\"english\",\n                \"coordinates\":[\n                    0.8338068264956746,\n                    18.9844855486035\n                ]\n            }\n        ]\n    \n}"
+					"body": "{\n        \"id\": \"uuid\",\n        \"title\":\"foo\",\n        \"description\": \"description\",\n        \"stakeholders\":\"foo\",\n        \"scale\":\"foo\",\n        \"issuanceDate\": \"21-02-1996\",\n        \"type\": \"TYPE_FOO\",\n        \"language\":\"english\",\n        \"coordinates\":[\n            0.8338068264956746,\n            18.9844855486035\n        ],\n        \"connections\":[\n            {\n                \"id\": \"uuid\",\n                \"title\":\"foo\",\n                \"description\": \"description\",\n                \"stakeholders\":\"foo\",\n                \"scale\":\"foo\",\n                \"issuanceDate\": \"21-02-1996\",\n                \"type\": \"TYPE_FOO\",\n                \"language\":\"english\",\n                \"coordinates\":[\n                    0.8338068264956746,\n                    18.9844855486035\n                ]\n            }\n        ]\n    \n}"
 				}
 			]
 		}
