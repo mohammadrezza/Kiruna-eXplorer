@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Button, Row, Col, Modal, ListGroup, InputGroup, Table, FormControl } from 'react-bootstrap';
-import { useParams} from 'react-router-dom'
+import { useNavigate, useParams} from 'react-router-dom'
 import { useState,useEffect } from 'react';
 import {FaPenSquare}from 'react-icons/fa';
 import { PiMapPinSimpleAreaFill, PiPen } from "react-icons/pi";
@@ -13,7 +13,9 @@ import '../style/CreateDocument.css'
 function FormDocument(props) {
 
   const param = useParams();
+  const navigate = useNavigate();
 
+  const [docID,setDocID] = useState(props.mode==='view' ? param.id : '')
   const [title,setTitle] = useState('');
   const [stakeholder,setStakeholder] = useState('');
   const [scale,setScale] = useState('');
@@ -23,20 +25,25 @@ function FormDocument(props) {
   const [description,setDescription] = useState('');
   const [coordinates, setCoordinates] = useState({ lat: '', lng: '' });
   const [loading,setLoading] = useState(true);
+  const [loadDoc,setLoadDoc] = useState(true);
   const [edit,setEdit] = useState(false);
   const [showMap, setShowMap] = useState(false);
-  const [showModal, setShowModal] = useState(false); 
+  const [showDocumentList, setShowDocumentList] = useState(false); 
   const [allDocuments, setAllDocuments] = useState([]); 
   const [selectedDocuments, setSelectedDocuments] = useState([]); 
+  const [relatedDocuments, setRelatedDocuments] = useState([]); 
   const [allTypes,setAllTypes] = useState([]);
-
   const [errors, setErrors] = useState([]);
 
   useEffect(()=>{
     const loadType = async() => {
       try
       {API.getTypes().then((types) =>{
-        setAllTypes(types);
+        let ty = [];
+        for(const t of types){
+          ty.push(t);
+        }
+        setAllTypes(ty);
       })}
       catch(error)
       {
@@ -56,9 +63,34 @@ function FormDocument(props) {
       } catch (error) {
         console.error("Error loading documents:", error);
       }
+      finally{
+        setLoadDoc(false);
+      }
     };
-    
-    loadDocuments();
+    if(props.mode==='add')
+      loadDocuments();
+
+    const loadData = async () => {
+      try{
+        const doc = await API.getData(docID);
+        setTitle(doc.title);
+        setStakeholder(doc.stakeholder);
+        setScale(doc.scale);
+        setDescription(doc.description);
+        setType(doc.type);
+        setLanguage(doc.language);
+        setCoordinates(doc.coordinates)
+        setIssuanceDate(dayjs(doc.issuanceDate).format('YYYY-MM-DD'));
+        if (props.mode === 'view') {
+          const relatedDocs = await API.getRelatedDocuments(docID);
+          setRelatedDocuments(relatedDocs);
+        }
+      }catch(error){
+        console.error("Error loading document data:", error)
+      }
+    }
+    if(props.mode==='view')
+      loadData();
   }, []);
   
 
@@ -70,7 +102,9 @@ function FormDocument(props) {
     setCoordinates(newCoordinates);
   };
 
-
+  const handleRelatedDocumentClick = (relatedDocumentId) => {
+    navigate(`/view/${relatedDocumentId}`);
+  };
 
   const validateForm = () => {
     const validationErrors = {};
@@ -109,21 +143,26 @@ function FormDocument(props) {
     const validationErrors = validateForm();
     if(Object.keys(validationErrors).length>0){
       setErrors(validationErrors);
-      console.log(errors.title);
+      console.log(errors);
       return;
     }
     setErrors([]);
     setTitle(title.trim());
     setStakeholder(stakeholder.trim());
-    const doc = new Document(title,stakeholder,scale,issuanceDate,type,language,description);
-    API.AddDocumentDescription(doc);
+    const doc = new Document(0,title,stakeholder,scale,issuanceDate,type,language,description);
+    API.AddDocumentDescription(doc, selectedDocuments, coordinates); 
+    //if we want to set the connections 
+    //by using this API we pass selectedDocuments as
+    // an argument here
+    //otherwise we create a new API
+    navigate('/')
   }
 
   const handleDocumentSelect = (documentId) => {
-    setSelectedDocuments((prevSelected) => 
+    setSelectedDocuments((prevSelected) =>
       prevSelected.includes(documentId)
-        ? prevSelected.filter(id => id !== documentId)
-        : [...prevSelected, documentId]
+        ? prevSelected.filter((id) => id !== documentId) 
+        : [...prevSelected, documentId]                  
     );
   };
   
@@ -131,14 +170,13 @@ function FormDocument(props) {
   return  (
     <div className="wrapper">
       <div className="form-container">
-        <h2>New Document</h2>
-        {param.mode==='view' && <FaPenSquare className='edit-button' onClick={() => setEdit(true)}/>}
+        <h2>New Document{(props.mode==='view' && edit===false) && <FaPenSquare className='edit-button' onClick={() => setEdit(true)}/>}</h2>
         <Form onSubmit={handleSubmit}>
           <Row>
             <Col className='col-form'>
               <Form.Group className='form-group'  controlId="title">
                 <Form.Label>Title</Form.Label>
-                <Form.Control type="text" placeholder="Enter title" minLength={2} value={title} onChange={(event) => setTitle(event.target.value)}  isInvalid={!!errors.title} readOnly={!edit && param.mode!='add'}/>
+                <Form.Control type="text" placeholder="Enter title" minLength={2} value={title} onChange={(event) => setTitle(event.target.value)}  isInvalid={!!errors.title} readOnly={!edit && props.mode!='add'}/>
                 <Form.Control.Feedback type="invalid">
                     {errors.title}
                 </Form.Control.Feedback>
@@ -146,7 +184,7 @@ function FormDocument(props) {
               
               <Form.Group className='form-group'  controlId="stakeholder">
                 <Form.Label>Stakeholder</Form.Label>
-                <Form.Control type="text" placeholder="Enter stakeholder" value={stakeholder} onChange={(event) => setStakeholder(event.target.value)}  isInvalid={!!errors.stakeholder} readOnly={!edit && param.mode!='add'}/>
+                <Form.Control type="text" placeholder="Enter stakeholder" value={stakeholder} onChange={(event) => setStakeholder(event.target.value)}  isInvalid={!!errors.stakeholder} readOnly={!edit && props.mode!='add'}/>
                 <Form.Control.Feedback type="invalid">
                     {errors.stakeholder}
                 </Form.Control.Feedback>
@@ -154,7 +192,7 @@ function FormDocument(props) {
               
               <Form.Group className='form-group'  controlId="scale">
                 <Form.Label>Scale</Form.Label>
-                <Form.Control type="text" placeholder="Enter scale" value={scale} onChange={(event) => setScale(event.target.value)}  isInvalid={!!errors.scale} readOnly={!edit && param.mode!='add'}/>
+                <Form.Control type="text" placeholder="Enter scale" value={scale} onChange={(event) => setScale(event.target.value)}  isInvalid={!!errors.scale} readOnly={!edit && props.mode!='add'}/>
                 <Form.Control.Feedback type="invalid">
                     {errors.scale}
                 </Form.Control.Feedback>
@@ -162,22 +200,22 @@ function FormDocument(props) {
 
               <Form.Group className='form-group'  controlId="issuanceDate">
                 <Form.Label>Issuance Date</Form.Label>
-                <Form.Control type="date" value={issuanceDate} onChange={(event) => setIssuanceDate(event.target.value)} readOnly={!edit && param.mode!='add'}/>
+                <Form.Control type="date" value={issuanceDate} onChange={(event) => setIssuanceDate(event.target.value)} readOnly={!edit && props.mode!='add'}/>
               </Form.Group>
 
               <Form.Group className='form-group' controlId="type">
                 <Form.Label>Type</Form.Label>
-                <Form.Select value={type || ''} onChange={(event) => setType(event.target.value)}  isInvalid={!!errors.type} readOnly={!edit && param.mode!='add'}>
+                {!loading && <Form.Select value={type || ''} onChange={(event) => setType(event.target.value)}  isInvalid={!!errors.type} readOnly={!edit && props.mode!='add'}>
                   <option>Select type</option>
                   { allTypes.map((t) => 
                     <option key={t} value={t}>{t}</option>
                   )}
-                </Form.Select>
+                </Form.Select>}
               </Form.Group>
 
               <Form.Group className='form-group' controlId="language">
                 <Form.Label>Language</Form.Label>
-                <Form.Select value={language} onChange={(event) => setLanguage(event.target.value)} readOnly={!edit && param.mode!='add'}>
+                <Form.Select value={language} onChange={(event) => setLanguage(event.target.value)} readOnly={!edit && props.mode!='add'}>
                   <option>Select language</option>
                   <option>English</option>
                   <option>Italian</option>
@@ -188,7 +226,7 @@ function FormDocument(props) {
             <Col className='col-form'>
               <Form.Group  className='form-group' controlId="description">
                 <Form.Label>Description</Form.Label>
-                <Form.Control as="textarea" placeholder="Enter description" value={description} onChange={(event) => setDescription(event.target.value)}  isInvalid={!!errors.description} readOnly={!edit && param.mode!='add'}/>
+                <Form.Control as="textarea" placeholder="Enter description" value={description} onChange={(event) => setDescription(event.target.value)}  isInvalid={!!errors.description} readOnly={!edit && props.mode!='add'}/>
               </Form.Group>
               <Form.Control.Feedback type="invalid">
                     {errors.description}
@@ -207,7 +245,7 @@ function FormDocument(props) {
                     value={coordinates.lat} 
                     onChange={(event) => handleCoordinatesChange({lat:event.target.value, lng:coordinates.lng})}
                     isInvalid={!!errors.coordinates} 
-                    readOnly={(!edit && param.mode !=='add') || showMap}
+                    readOnly={(!edit && props.mode !=='add') || showMap}
                     />
                   </Form.Group>
                 </Col>
@@ -220,7 +258,7 @@ function FormDocument(props) {
                       value={coordinates.lng} 
                       onChange={(event) => handleCoordinatesChange({lat: coordinates.lat, lng:event.target.value})}
                       isInvalid={!!errors.coordinates} 
-                      readOnly={(!edit && param.mode !== 'add' )|| showMap}
+                      readOnly={(!edit && props.mode !== 'add' )|| showMap}
                       />
                   </Form.Group>
                 </Col>
@@ -245,44 +283,65 @@ function FormDocument(props) {
               onCoordinatesChange={handleCoordinatesChange} 
             />}
           </Row>
-          {param.mode==='add' && <Button className="add-button" type='submit'>+Add</Button>}
-          {edit && <Button className="add-button" type='submit'>+Edit</Button>}
-          <Button variant="link" onClick={() => setShowModal(true)}>
-            Select Related Documents
-          </Button>
+           <div>
           
-          {/* Modal per selezionare i documenti */}
-          <Modal show={showModal} onHide={() => setShowModal(false)}>
-            <Modal.Header closeButton>
-              <Modal.Title>Select Related Documents</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <ListGroup>
-                {allDocuments.map((doc) => (
-                  <ListGroup.Item key={doc.id}>
-                    <Form.Check 
-                      type="checkbox"
-                      label={doc.title} 
-                      checked={selectedDocuments.includes(doc.id)}
-                      onChange={() => handleDocumentSelect(doc.id)}
-                    />
-                  </ListGroup.Item>
-                ))}
+          {(props.mode === 'add' || edit) ? (
+            !showDocumentList ? (
+              <Button className="selectrelated" variant="dark" onClick={() => setShowDocumentList(true)}>
+                Select Related Documents
+              </Button>
+            ) : (
+              <div className="document-list">
+                <h5>Select Related Documents</h5>
+                <ListGroup className='relateddocs'>
+                  {allDocuments.map((doc) => (
+                    <ListGroup.Item key={doc.id}>
+                      <Form.Check 
+                        type="checkbox"
+                        label={
+                          <Row>
+                            <Col>{doc.title}</Col>
+                            <Col>{doc.stakeholder}</Col>
+                            <Col>{dayjs(doc.issuanceDate).format('DD/MM/YYYY')}</Col>
+                          </Row>
+                        } 
+                        checked={selectedDocuments.includes(doc.id)}
+                        onChange={() => handleDocumentSelect(doc.id)}
+                      />
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+                <Button className="saveselection" variant="dark" onClick={() => setShowDocumentList(false)}>
+                  Save Selection
+                </Button>
+              </div>
+            )
+          ) : (
+            <div className="document-list">
+              <h5>Related Documents</h5>
+              <ListGroup className='relateddocs'>
+                {relatedDocuments.map((relatedDoc) => {
+                  return (
+                    relatedDoc && (
+                      <ListGroup.Item 
+                      key={relatedDoc.id}
+                      action
+                      onClick={() => handleRelatedDocumentClick(relatedDoc.id)}>
+                        <Row>
+                          <Col>{relatedDoc.title}</Col>
+                          <Col>{relatedDoc.stakeholder}</Col>
+                          <Col>{dayjs(relatedDoc.issuanceDate).format('DD/MM/YYYY')}</Col>
+                        </Row>
+                      </ListGroup.Item>
+                    )
+                  );
+                })}
               </ListGroup>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={() => setShowModal(false)}>
-                Close
-              </Button>
-              <Button variant="primary" onClick={() => setShowModal(false)}>
-                Save Selection
-              </Button>
-            </Modal.Footer>
-          </Modal>
-          
-          <Button type="submit" className="add-button">
-            {param.mode === 'add' ? '+Add' : '+Edit'}
-          </Button>
+            </div>
+          )}
+        </div>
+          {props.mode==='add' && <Button className="add-button" type='submit'>+Add</Button>}
+          {edit && <Button className="add-button" type='submit'>+Edit</Button>}
         </Form>
       </div>
     </div>

@@ -1,0 +1,40 @@
+.login-wrapper{
+    width: 100%;
+    height: 100vh;
+    top: -113px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('../../public/login.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.login-block{
+    width: 440px;
+    height: 503px;
+    padding: 50px 72px;
+    background-color: rgba(16, 20, 32, 0.75);
+    border-radius: 8px;
+    color: var(--white);
+}
+.login-block h3{
+    color: var(--white);
+    text-align: left;
+    font-size: 50px;
+    margin: 0 0 75px 0;
+}
+.login-block label {
+    color: var(--white);
+}
+.login-block input{
+    margin-bottom: 10px;
+}
+
+.login-block button {
+    width: 100%;
+    height: 51px;
+    margin-top: 35px;
+    font-size: 24px;
+}

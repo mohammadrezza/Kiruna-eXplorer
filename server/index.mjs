@@ -10,14 +10,24 @@ app.use(morgan('dev'));
 app.use(express.json());
 
 
-app.use('/documents', documentRouter);
+
 
 const corsOptions = {
     origin: 'http://localhost:3000',
-    optionsSuccessStatus: 200,
-    credentials: true
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type'], 
 };
 app.use(cors(corsOptions))
+app.use('/documents', documentRouter);
+
+app.use((err, req, res) => {
+    console.error(err.stack);
+    res.status(500).json({
+        success: false,
+        message: 'Something went wrong!',
+        error: err.message
+    });
+});
 
 
 const PORT = 3001;

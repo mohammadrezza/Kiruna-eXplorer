@@ -4,6 +4,7 @@
     padding-bottom: 180px;
 }
 .form-container {
+    
     background-color: var(--white);
     width: calc(1440px - 62px);
     padding: 84px;
@@ -15,6 +16,7 @@
 }
 
 .form-container>h2 {
+    font-family: 'Open Sans';
     font-size: 60px;
     font-weight: 400;
     color: var(--demo-black);
@@ -28,6 +30,7 @@
 }
 
 .form-label {
+    font-family: 'Open Sans';
     font-weight: 400;
     color: var(--demo-black);
     font-size: 24px;
@@ -40,7 +43,7 @@
     vertical-align: super;
 }
 .form-control, .form-select {
-    font-family: 'Times';
+    font-family: 'Open Sans';
     font-size: 24px;
     color: var(--demo-black);
     max-width: 505px;
@@ -69,11 +72,19 @@ textarea.form-control {
     resize: none;
 }
 
+.edit-button{
+    position: relative;
+    left: 700px;
+    width: 40px;
+    height: 40px;
+}
+
 .add-button {
     position: relative;
     font-family: 'Open Sans';
-    top: 800px;
-    left: 1150px;
+    width: 374px;
+    top: 100px;
+    left: 800px;
     font-size: 16px;
     font-weight: 400;
     line-height: 21.79px;
@@ -117,6 +128,63 @@ textarea.form-control {
     font-size: 26px;
 }
 
+.document-list h5{
+    
+    font-family: 'Open Sans';
+    margin-top: 20px;
+  
+  }
+  .relateddocs .list-group-item{
+    margin-top: 20px;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    
+  }
 
+  .relateddocs .list-group-item .col{
+    font-family: 'Open Sans';
+    font-size: large;
+    margin-left: 10px;
+  }
 
+  .selectrelated{
+    position: relative;
+    font-family: 'Open Sans';
+    width: 374px;
+    top: 30px;
+    left: 0px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 21.79px;
+    border-radius: 0;
+    background-color:var(--white);
+    color: #101420;
+    border-bottom-color: #101420;
+    border-top: var(--white);
+    border-left:var(--white) ;
+    border-right: var(--white);
+  }
 
+  .saveselection{
+    position: relative;
+    font-family: 'Open Sans';
+    width: 374px;
+    top: 35px;
+    left: 0px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 21.79px;
+    border-radius: 0;
+    background-color:var(--white);
+    color: #101420;
+    border-bottom-color: #101420;
+    border-top: var(--white);
+    border-left:var(--white) ;
+    border-right: var(--white);
+  }
+
+  .form-check-input:checked[type=checkbox]{
+    background-color: #101420;
+    border: #101420;
+  }
