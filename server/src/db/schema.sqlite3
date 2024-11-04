@@ -19,3 +19,22 @@ CREATE TABLE IF NOT EXISTS DocumentConnection
     connectionId TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TRIGGER after_delete_document_connection
+AFTER DELETE ON DocumentConnection
+FOR EACH ROW
+BEGIN
+
+    UPDATE Document
+    SET connections = connections - 1
+    WHERE id = OLD.connectionId;
+END;
+
+CREATE TRIGGER after_insert_document_connection
+AFTER INSERT ON DocumentConnection
+FOR EACH ROW
+BEGIN
+    UPDATE Document
+    SET connections = connections + 1
+    WHERE id = NEW.connectionId;
+END;
