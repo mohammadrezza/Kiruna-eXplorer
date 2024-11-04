@@ -162,8 +162,6 @@ function editDocumentConnection(id, documentId, connectionId) {
 
 function deleteAllConnections(id) {
 
-    console.log("deleteAllConnections", id);
-
     return new Promise((resolve, reject) => {
         const query = `
             DELETE FROM DocumentConnection
