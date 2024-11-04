@@ -129,7 +129,7 @@ function editDocument(
                 issuanceDate,
                 type,
                 language,
-                coordinates,
+                JSON.stringify(coordinates),
                 connections,
                 id
             ],
