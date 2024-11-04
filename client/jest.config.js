@@ -9,7 +9,10 @@ module.exports = {
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
   },
-  transformIgnorePatterns: ['/node_modules/(?!(react-bootstrap)/)'],
+  transformIgnorePatterns: [
+    'node_modules/(?!(react-leaflet|@react-leaflet/core)/)',
+    '/node_modules/(?!(react-bootstrap)/)',
+  ],
   moduleNameMapper: {
     '\\.(css|less|sass|scss)$': '<rootDir>/tests/__mocks__/styleMock.js',
   },

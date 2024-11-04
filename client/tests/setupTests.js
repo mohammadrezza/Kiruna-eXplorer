@@ -3,4 +3,5 @@ jest.mock('react-bootstrap', () => require('./__mocks__/reactBootstrap'));
 jest.mock('react-router-dom', () => ({
   useLocation: jest.fn(),
   useNavigate: jest.fn(),
+  useParams: jest.fn(),
 }));

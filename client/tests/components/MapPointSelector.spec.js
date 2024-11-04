@@ -8,9 +8,9 @@ jest.mock('react-leaflet', () => ({
   ),
   TileLayer: () => <div />,
   Marker: () => <div data-testid="marker" />,
-  useMapEvents: jest.fn().mockReturnValue({
-    on: jest.fn(),
-  }),
+  useMapEvents: jest.fn(),
+  useMap: jest.fn(),
+  useMapEvent: jest.fn(),
 }));
 
 describe('MapPointSelector Component', () => {
