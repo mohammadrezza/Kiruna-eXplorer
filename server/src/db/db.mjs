@@ -96,6 +96,7 @@ function addDocumentConnection(
 function editDocument(
     id,
     title,
+    description,
     stakeholders,
     scale,
     issuanceDate,
@@ -109,6 +110,7 @@ function editDocument(
             UPDATE Document
             SET
                 title = COALESCE(?, title),
+                description = COALESCE(?, description),
                 stakeholders = COALESCE(?, stakeholders),
                 scale = COALESCE(?, scale),
                 issuanceDate = COALESCE(?, issuanceDate),
@@ -124,6 +126,7 @@ function editDocument(
             query,
             [
                 title,
+                description,
                 stakeholders,
                 scale,
                 issuanceDate,

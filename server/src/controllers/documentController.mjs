@@ -120,16 +120,11 @@ async function documentsList(req, res) {
     res.status(200).json({documents: documents});
 }
 
-export {
-    createDocument,
-    documentTypesList,
-    documentsList,
-    getDocumentWithId
-}
 export const updateDocument = async (req, res) => {
     const { documentId } = req.params;
     const {
         title,
+        description,
         stakeholders,
         scale,
         issuanceDate,
@@ -151,7 +146,7 @@ export const updateDocument = async (req, res) => {
 
     try {
 
-        await editDocument(documentId, title, stakeholders, scale, issuanceDate, type, language, coordinates, connectionIds.length);
+        await editDocument(documentId, title, description, stakeholders, scale, issuanceDate, type, language, coordinates, connectionIds.length);
 
         await deleteAllConnections(documentId);
 
@@ -173,3 +168,10 @@ export const updateDocument = async (req, res) => {
         res.status(500).json({ message: "Failed to update document" });
     }
 };
+
+export {
+    createDocument,
+    documentTypesList,
+    documentsList,
+    getDocumentWithId
+}
