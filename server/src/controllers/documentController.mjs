@@ -1,10 +1,12 @@
-import Document from "../components/document.mjs";
-import DocumentConnection from "../components/documentConnection.mjs";
-import {addDocument, addDocumentConnection, editDocument, editDocumentConnection, deleteAllConnections} from "../db/db.mjs";
+//import Document from "../components/document.mjs";
+//import DocumentConnection from "../components/documentConnection.mjs";
+
+
 import DocumentType from "../components/documentType.mjs";
-import {getDocuments, getDocument} from "../services/documentService.mjs";
+import {getDocuments, getDocument, postDocument, putDocument} from "../services/documentService.mjs";
 
 async function createDocument(req, res) {
+try {
     const {
         title,
         description,
@@ -17,10 +19,7 @@ async function createDocument(req, res) {
         connectionIds,
     } = req.body;
 
-    //creation logic
-    const document = new Document();
-    document.createFromObject({
-        title,
+    const document = await postDocument(title,
         description,
         stakeholders,
         scale,
@@ -28,55 +27,36 @@ async function createDocument(req, res) {
         type,
         language,
         coordinates,
-        connections: connectionIds.length,
+        connectionIds);
+
+    if (!document) {
+        return res.status(400).json({
+            success: false,
+            message: 'Bad request'
+        });
+    }
+
+    return res.status(201).json({
+        success: true,
+        data: document
     });
 
-    let connections = []
-    for (const connectionId of connectionIds) {
-        let documentConnection = new DocumentConnection();
-        documentConnection.createFromObject({
-            documentId: document.id,
-            connectionId,
-        });
-        connections.push(documentConnection)
-    }
+} catch (error){
+    console.error('Error:', error);
+    return res.status(500).json({
+        success: false,
+        message: 'Internal server error',
+        error: error.message
+    });
+}
 
-    try {
-        await addDocument(
-            document.id,
-            title,
-            description,
-            stakeholders,
-            scale,
-            issuanceDate,
-            type,
-            language,
-            coordinates,
-            connectionIds.length
-        );
+    
 
-        let connectionPromises = []
-        for (const connection of connections) {
-            connectionPromises.push(addDocumentConnection(
-                connection.id,
-                connection.documentId,
-                connection.connectionId
-            ));
-        }
-        await Promise.all(connectionPromises);
-
-        res
-            .status(201)
-            .json({message: "Document successfully created", data: req.body});
-    } catch (error) {
-
-        console.error("Failed to create document in database:", error);
-        res.status(500).json({message: "Failed to create document"});
-
-    }
+   
 }
 
 async function getDocumentWithId(req, res) {
+
     try {
         const { id } = req.params;
 
@@ -121,6 +101,7 @@ async function documentsList(req, res) {
 }
 
 export const updateDocument = async (req, res) => {
+
     const { documentId } = req.params;
     const {
         title,
@@ -134,38 +115,37 @@ export const updateDocument = async (req, res) => {
         connectionIds,
     } = req.body;
 
-    let connections = [];
-    for (const connectionId of connectionIds) {
-        let documentConnection = new DocumentConnection();
-        documentConnection.createFromObject({
-            documentId: documentId,
-            connectionId,
-        });
-        connections.push(documentConnection);
-    }
+try{
+    const document = await putDocument(documentId, title,
+        description,
+        stakeholders,
+        scale,
+        issuanceDate,
+        type,
+        language,
+        coordinates,
+        connectionIds);
 
-    try {
-
-        await editDocument(documentId, title, description, stakeholders, scale, issuanceDate, type, language, coordinates, connectionIds.length);
-
-        await deleteAllConnections(documentId);
-
-        let connectionPromises = [];
-        for (const connection of connections) {
-            connectionPromises.push(editDocumentConnection(
-                connection.id,
-                connection.documentId,
-                connection.connectionId
-            ));
+        if (!document) {
+            return res.status(400).json({
+                success: false,
+                message: 'Bad request'
+            });
         }
-        await Promise.all(connectionPromises);
-
-        res
-            .status(201)
-            .json({ message: "Document successfully updated", data: req.body });
-    } catch (error) {
-        console.error("Failed to update document in database:", error);
-        res.status(500).json({ message: "Failed to update document" });
+    
+        return res.status(200).json({
+            success: true,
+            data: document
+        });
+    
+    }catch(error) {
+        
+        console.error('Error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message
+        });
     }
 };
 
