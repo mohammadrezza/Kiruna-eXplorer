@@ -99,6 +99,7 @@ async function documentsList(req, res) {
 export const updateDocument = async (req, res) => {
 
     const { documentId } = req.params;
+
     const {
         title,
         description,
@@ -112,6 +113,15 @@ export const updateDocument = async (req, res) => {
     } = req.body;
 
 try{
+
+    const previousDocument = await getDocument(documentId);
+    if (!previousDocument) {
+        return res.status(404).json({
+            success: false,
+            message: 'Document not found'
+        });
+    }
+    
     const document = await putDocument(documentId, title,
         description,
         stakeholders,
