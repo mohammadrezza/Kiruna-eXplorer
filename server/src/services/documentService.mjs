@@ -1,4 +1,12 @@
-import {addDocument,addDocumentConnection, getDocumentWithConnections, editDocument, editDocumentConnection, deleteAllConnections} from "../db/db.mjs";
+import {
+    addDocument,
+    addDocumentConnection,
+    getDocumentWithConnections,
+    editDocument,
+    editDocumentConnection,
+    deleteAllConnections,
+    getAllDocuments
+} from "../db/db.mjs";
 
 import Document from "../components/document.mjs";
 import DocumentConnection from "../components/documentConnection.mjs";
@@ -17,8 +25,8 @@ async function postDocument(
     language,
     coordinates,
     connectionIds) {
-  
-     //creation logic
+
+    //creation logic
     const document = new Document();
     document.createFromObject({
         title,
@@ -41,7 +49,7 @@ async function postDocument(
         });
         connections.push(documentConnection)
     }
- 
+
     try {
         await addDocument(
             document.id,
@@ -66,13 +74,14 @@ async function postDocument(
         }
         await Promise.all(connectionPromises);
 
-       return({message: "Document successfully created", data: document});
+        return ({message: "Document successfully created", data: document});
 
     } catch (error) {
 
         throw new Error(`Error creating document: ${error.message}`);
 
-    }}
+    }
+}
 
 async function putDocument(
     documentId,
@@ -84,51 +93,52 @@ async function putDocument(
     type,
     language,
     coordinates,
-    connectionIds){
-        
-        const document = new Document();
-        document.createFromObject({
-            documentId,
-            title,
-            description,
-            stakeholders,
-            scale,
-            issuanceDate,
-            type,
-            language,
-            coordinates,
-            connections: connectionIds.length,
-        });
-        let connections = [];
-        for (const connectionId of connectionIds) {
-            let documentConnection = new DocumentConnection();
-            documentConnection.createFromObject({
-                documentId: documentId,
-                connectionId,
-            });
-            connections.push(documentConnection);
-        }
-    
-        try {
-    
-            await editDocument(documentId, title, description, stakeholders, scale, issuanceDate, type, language, coordinates, connectionIds.length);
-    
-            await deleteAllConnections(documentId);
-    
-            let connectionPromises = [];
-            for (const connection of connections) {
-                connectionPromises.push(editDocumentConnection(
-                    connection.id,
-                    connection.documentId,
-                    connection.connectionId
-                ));
-            }
-            await Promise.all(connectionPromises);
-            return({message: "Document successfully updated", data: document});
+    connectionIds) {
 
-    }catch(error){
+    const document = new Document();
+    document.createFromObject({
+        documentId,
+        title,
+        description,
+        stakeholders,
+        scale,
+        issuanceDate,
+        type,
+        language,
+        coordinates,
+        connections: connectionIds.length,
+    });
+    let connections = [];
+    for (const connectionId of connectionIds) {
+        let documentConnection = new DocumentConnection();
+        documentConnection.createFromObject({
+            documentId: documentId,
+            connectionId,
+        });
+        connections.push(documentConnection);
+    }
+
+    try {
+
+        await editDocument(documentId, title, description, stakeholders, scale, issuanceDate, type, language, coordinates, connectionIds.length);
+
+        await deleteAllConnections(documentId);
+
+        let connectionPromises = [];
+        for (const connection of connections) {
+            connectionPromises.push(editDocumentConnection(
+                connection.id,
+                connection.documentId,
+                connection.connectionId
+            ));
+        }
+        await Promise.all(connectionPromises);
+        return ({message: "Document successfully updated", data: document});
+
+    } catch (error) {
         throw new Error(`Error updating document: ${error.message}`);
-    }}
+    }
+}
 
 async function getDocument(id) {
     try {
@@ -177,7 +187,7 @@ async function getDocument(id) {
 
 export {
     getDocument,
-    getDocuments, 
-    postDocument, 
+    getDocuments,
+    postDocument,
     putDocument
 }
