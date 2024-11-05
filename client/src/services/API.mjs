@@ -30,12 +30,12 @@ async function AddDocumentDescription(doc ,selectedDocuments, coordinates) {
     }
 }
 
-async function EditDocumentDescription(doc ,selectedDocuments, coordinates) {
+async function EditDocumentDescription(doc ,selectedDocuments, coordinates, id) {
     try {
         const coord = [];
         coord.push(coordinates.lat);
         coord.push(coordinates.lng);
-        const response = await fetch(`${url}/documents/`,
+        const response = await fetch(`${url}/documents/${id}`,
             {
                 method: "PUT",
                 headers:{

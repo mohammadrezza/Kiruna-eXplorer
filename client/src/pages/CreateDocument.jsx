@@ -59,7 +59,9 @@ function FormDocument(props) {
 
     const loadDocuments = async () => {
       try {
-        const documents = await API.getDocuments(); 
+        let documents = await API.getDocuments(); 
+        if(props.mode==='view')
+          documents = documents.filter((d) => d.id!==param.id)
         setAllDocuments(documents);
       } catch (error) {
         console.error("Error loading documents:", error);
@@ -68,7 +70,8 @@ function FormDocument(props) {
         setLoadDoc(false);
       }
     };
-    if(props.mode==='add')
+
+
       loadDocuments();
 
     const loadData = async () => {
@@ -154,7 +157,7 @@ function FormDocument(props) {
     if(props.mode==='add')
       API.AddDocumentDescription(doc, selectedDocuments, coordinates); 
     if(props.mode==='view')
-      API.EditDocumentDescription(doc, selectedDocuments, coordinates)
+      API.EditDocumentDescription(doc, selectedDocuments, coordinates,docID)
     //if we want to set the connections 
     //by using this API we pass selectedDocuments as
     // an argument here
