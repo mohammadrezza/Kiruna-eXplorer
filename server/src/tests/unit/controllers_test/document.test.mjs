@@ -1,4 +1,4 @@
-import {createDocument, documentsList} from '../../../controllers/documentController.mjs'
+import {createDocument, documentsList, updateDocument} from '../../../controllers/documentController.mjs'
 import DocumentType from "../../../components/documentType.mjs";
 import * as documentService from "../../../services/documentService.mjs";
 import {describe} from "@jest/globals";
@@ -71,6 +71,89 @@ describe('controllers', () => {
             expect(documentService.getDocuments).toHaveBeenCalledTimes(1)
         })
     })
+    
+    describe('update document', () => {
+
+        test("successful update of a document", async () => {
+            const document = {
+                id: '1',
+                title: 'updated title',
+                description: 'updated description',
+                stakeholders: 'updated stakeholders',
+                scale: 'updated scale',
+                issuanceDate: 'updated issuanceDate',
+                type: 'DESIGN_DOCUMENT',
+                language: 'updated language',
+                coordinates: '[1.1, 2.2]',
+                connectionIds: []
+            };
+    
+            
+            jest.spyOn(documentService, 'getDocument').mockResolvedValue(document);
+    
+           
+            jest.spyOn(documentService, 'putDocument').mockResolvedValue(document);
+    
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+    
+            await updateDocument(
+                { params: { documentId: '1' }, body: document },
+                res
+            );
+    
+           
+            expect(documentService.getDocument).toHaveBeenCalledTimes(1);
+            expect(documentService.putDocument).toHaveBeenCalledTimes(1);
+    
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith({
+                success: true,
+                data: document
+            });
+        });
+    
+        test("failed update of a document due to non-existent document", async () => {
+            const document = {
+                id: '1',
+                title: 'updated title',
+                description: 'updated description',
+                stakeholders: 'updated stakeholders',
+                scale: 'updated scale',
+                issuanceDate: 'updated issuanceDate',
+                type: 'DESIGN_DOCUMENT',
+                language: 'updated language',
+                coordinates: '[1.1, 2.2]',
+                connectionIds: []
+            };
+    
+           
+            jest.spyOn(documentService, 'getDocument').mockResolvedValue(null);
+    
+            const res = {
+                status: jest.fn().mockReturnThis(),
+                json: jest.fn()
+            };
+    
+            await updateDocument(
+                { params: { documentId: '1' }, body: document },
+                res
+            );
+    
+           
+            expect(documentService.getDocument).toHaveBeenCalledTimes(1);
+            expect(documentService.putDocument).not.toHaveBeenCalled();
+    
+            expect(res.status).toHaveBeenCalledWith(404);
+            expect(res.json).toHaveBeenCalledWith({
+                success: false,
+                message: 'Document not found'
+            });
+        });
+    });
+    
 })
 
 
