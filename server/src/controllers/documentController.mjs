@@ -1,7 +1,3 @@
-//import Document from "../components/document.mjs";
-//import DocumentConnection from "../components/documentConnection.mjs";
-
-
 import DocumentType from "../components/documentType.mjs";
 import {getDocuments, getDocument, postDocument, putDocument} from "../services/documentService.mjs";
 
