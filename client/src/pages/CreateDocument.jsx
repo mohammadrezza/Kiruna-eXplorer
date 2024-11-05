@@ -4,7 +4,7 @@ import { useNavigate, useParams} from 'react-router-dom'
 import { useState,useEffect } from 'react';
 import {FaPenSquare}from 'react-icons/fa';
 import { PiMapPinSimpleAreaFill, PiPen } from "react-icons/pi";
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs'
 import MapPointSelector from '../components/MapPointSelector'
 import API from '../services/API.mjs';
 import Document from '../mocks/Document.mjs';
@@ -14,6 +14,7 @@ function FormDocument(props) {
 
   const param = useParams();
   const navigate = useNavigate();
+
 
   const [docID,setDocID] = useState(props.mode==='view' ? param.id : '')
   const [title,setTitle] = useState('');
@@ -74,7 +75,7 @@ function FormDocument(props) {
       try{
         const doc = await API.getData(docID);
         setTitle(doc.title);
-        setStakeholder(doc.stakeholder);
+        setStakeholder(doc.stakeholders);
         setScale(doc.scale);
         setDescription(doc.description);
         setType(doc.type);
@@ -82,8 +83,7 @@ function FormDocument(props) {
         setCoordinates(doc.coordinates)
         setIssuanceDate(dayjs(doc.issuanceDate).format('YYYY-MM-DD'));
         if (props.mode === 'view') {
-          const relatedDocs = await API.getRelatedDocuments(docID);
-          setRelatedDocuments(relatedDocs);
+          setRelatedDocuments(doc.connections);
         }
       }catch(error){
         console.error("Error loading document data:", error)
@@ -125,9 +125,9 @@ function FormDocument(props) {
       validationErrors.type = 'Type cannot be empty!';
     }
 
-    if (dayjs(issuanceDate).isAfter(dayjs())) {
+    /*if (dayjs(issuanceDate).isAfter(dayjs())) {
       validationErrors.issuanceDate='Issuance date cannot be in the future!';
-    }
+    }*/
 
     if(description === ''){
       validationErrors.description = 'Description cannot be empty!'
@@ -141,6 +141,7 @@ function FormDocument(props) {
   const handleSubmit = (event) =>{
     event.preventDefault();
     const validationErrors = validateForm();
+    console.log("Form submitted"); // Debugging
     if(Object.keys(validationErrors).length>0){
       setErrors(validationErrors);
       console.log(errors);
@@ -149,8 +150,11 @@ function FormDocument(props) {
     setErrors([]);
     setTitle(title.trim());
     setStakeholder(stakeholder.trim());
-    const doc = new Document(0,title,stakeholder,scale,issuanceDate,type,language,description);
-    API.AddDocumentDescription(doc, selectedDocuments, coordinates); 
+    const doc = new Document(docID,title,stakeholder,scale,issuanceDate,type,language,description);
+    if(props.mode==='add')
+      API.AddDocumentDescription(doc, selectedDocuments, coordinates); 
+    if(props.mode==='view')
+      API.EditDocumentDescription(doc, selectedDocuments, coordinates)
     //if we want to set the connections 
     //by using this API we pass selectedDocuments as
     // an argument here
@@ -170,8 +174,8 @@ function FormDocument(props) {
   return  (
     <div className="wrapper">
       <div className="form-container">
-        <h2>New Document{(props.mode==='view' && edit===false) && <FaPenSquare className='edit-button' onClick={() => setEdit(true)}/>}</h2>
-        <Form onSubmit={handleSubmit}>
+        <h2>{props.mode==='view' ? title : 'New Document'}{(props.mode==='view' && edit===false) && <FaPenSquare className='edit-button' onClick={() => setEdit(true)}/>}</h2>
+        <Form onSubmit={handleSubmit} data-testid="form-component">
           <Row>
             <Col className='col-form'>
               <Form.Group className='form-group'  controlId="title">
@@ -200,12 +204,12 @@ function FormDocument(props) {
 
               <Form.Group className='form-group'  controlId="issuanceDate">
                 <Form.Label>Issuance Date</Form.Label>
-                <Form.Control type="date" value={issuanceDate} onChange={(event) => setIssuanceDate(event.target.value)} readOnly={!edit && props.mode!='add'}/>
+                <Form.Control  data-testid="date-input" type="date" value={issuanceDate} onChange={(event) => setIssuanceDate(event.target.value)} readOnly={!edit && props.mode!='add'}/>
               </Form.Group>
 
               <Form.Group className='form-group' controlId="type">
                 <Form.Label>Type</Form.Label>
-                {!loading && <Form.Select value={type || ''} onChange={(event) => setType(event.target.value)}  isInvalid={!!errors.type} readOnly={!edit && props.mode!='add'}>
+                {!loading && <Form.Select  data-testid="type-input" value={type || ''} onChange={(event) => setType(event.target.value)}  isInvalid={!!errors.type} readOnly={!edit && props.mode!='add'}>
                   <option>Select type</option>
                   { allTypes.map((t) => 
                     <option key={t} value={t}>{t}</option>
@@ -215,10 +219,11 @@ function FormDocument(props) {
 
               <Form.Group className='form-group' controlId="language">
                 <Form.Label>Language</Form.Label>
-                <Form.Select value={language} onChange={(event) => setLanguage(event.target.value)} readOnly={!edit && props.mode!='add'}>
+                <Form.Select  data-testid="language-input" value={language} onChange={(event) => setLanguage(event.target.value)} readOnly={!edit && props.mode!='add'}>
                   <option>Select language</option>
-                  <option>English</option>
-                  <option>Italian</option>
+                  <option>english</option>
+                  <option>italian</option>
+                  <option>swedish</option>
                 </Form.Select>
               </Form.Group>
             </Col>
@@ -340,7 +345,7 @@ function FormDocument(props) {
             </div>
           )}
         </div>
-          {props.mode==='add' && <Button className="add-button" type='submit'>+Add</Button>}
+          {props.mode==='add' && <Button className="add-button" type='submit' data-testid="add">+Add</Button>}
           {edit && <Button className="add-button" type='submit'>+Edit</Button>}
         </Form>
       </div>

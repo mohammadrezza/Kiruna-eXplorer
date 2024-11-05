@@ -1,7 +1,7 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import CreateDocument from './pages/CreateDocument';
+import FormDocument from './pages/CreateDocument';
 import Homepage from './pages/Homepage';
 import DocumentsList from './pages/DocumentsList'
 import Login from './pages/Login'
@@ -35,10 +35,10 @@ function App() {
           <Login/>
       } />
       <Route path='/documents/add' element={
-          <CreateDocument mode={'add'}/>
+          <FormDocument mode={'add'}/>
       } />
       <Route path='/documents/view/:id' element={
-          <CreateDocument mode={'view'}/>
+          <FormDocument mode={'view'}/>
       } />
       <Route path='/documents' element={
           <DocumentsList/>

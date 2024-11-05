@@ -1,8 +1,16 @@
 import React from 'react';
 const MockedComponent = (props) => <div {...props}>{props.children}</div>;
-const MockedForm = ({ children }) => <div>{children}</div>;
+const MockedForm = ({ onSubmit, children }) => (
+    <form onSubmit={onSubmit} data-testid="mocked-form">
+      {children}
+    </form>
+  );
 MockedForm.Label = MockedComponent;
-MockedForm.Select = MockedComponent;
+MockedForm.Select = ({ value, onChange, ...props }) => (
+    <select {...props} value={value} onChange={onChange}>
+      {props.children}
+    </select>
+  );
 MockedForm.Control = ({ isInvalid, ...props }) => (
   <div>
     <input {...props} />
@@ -19,8 +27,14 @@ MockedForm.Group = ({ children, controlId, ...props }) => (
   <div {...props}>{children}</div>
 );
 
+const MockedButton = ({ type, children, ...props }) => (
+    <button type={type} {...props}>
+      {children}
+    </button>
+  );
+
 export const Navbar = MockedComponent;
-export const Button = MockedComponent;
+export const Button = MockedButton;
 export const Form = MockedForm;
 export const FormControl = MockedComponent;
 export const FormLabel = MockedComponent;

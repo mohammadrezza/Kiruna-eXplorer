@@ -1,5 +1,3 @@
-import Document from "../mocks/Document.mjs";
-
 const url = "http://localhost:3001"
 
 async function AddDocumentDescription(doc ,selectedDocuments, coordinates) {
@@ -13,7 +11,7 @@ async function AddDocumentDescription(doc ,selectedDocuments, coordinates) {
                 headers:{
                     'Content-Type':'application/json'
                 },
-                body: JSON.stringify({title: doc.title, stakeholders:doc.stakeholders, scale: doc.scale, issuanceDate: doc.issuanceDate,type: doc.type,language: doc.language,  coordinates: coordinates, connectionIds:selectedDocuments  })
+                body: JSON.stringify({title: doc.title, description: doc.description, stakeholders:doc.stakeholder, scale: doc.scale, issuanceDate: doc.issuanceDate,type: doc.type,language: doc.language,  coordinates: coordinates, connectionIds:selectedDocuments  })
             })
         if (response.ok) {
             return;
@@ -25,6 +23,36 @@ async function AddDocumentDescription(doc ,selectedDocuments, coordinates) {
                 throw errDetail.message;
             
             throw "Something went wrong while saving new doc description.";
+        }
+    } catch (error) {
+        console.error( error);
+        throw error;  
+    }
+}
+
+async function EditDocumentDescription(doc ,selectedDocuments, coordinates) {
+    try {
+        const coord = [];
+        coord.push(coordinates.lat);
+        coord.push(coordinates.lng);
+        const response = await fetch(`${url}/documents/`,
+            {
+                method: "PUT",
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify({title: doc.title, description: doc.description, stakeholders:doc.stakeholder, scale: doc.scale, issuanceDate: doc.issuanceDate,type: doc.type,language: doc.language,  coordinates: coordinates, connectionIds:selectedDocuments  })
+            })
+        if (response.ok) {
+            return;
+        } else {
+            const errDetail = await response.json();
+            if (errDetail.error)
+                throw errDetail.error;
+            if (errDetail.message)
+                throw errDetail.message;
+            
+            throw "Something went wrong while saving edit doc description.";
         }
     } catch (error) {
         console.error( error);
@@ -74,7 +102,7 @@ async function getDocuments() {
     }
 }
 
-async function getRelatedDocuments(docID) {
+/*async function getRelatedDocuments(docID) {
     try {
         const response = await fetch(`${url}/documents/${docID}/related`, {
             method: "GET",
@@ -91,7 +119,7 @@ async function getRelatedDocuments(docID) {
         console.error("Error fetching related documents:", error);
         throw error;
     }
-}
+}*/
 
 async function getData(id) {
     const response = await fetch(`${url}/documents/${id}`)
@@ -99,6 +127,6 @@ async function getData(id) {
     console.log(data)
     return data.data;
 }
-const API ={AddDocumentDescription, getTypes, getDocuments, getData, getRelatedDocuments}
+const API ={AddDocumentDescription, getTypes, getDocuments, getData, EditDocumentDescription}
 
 export default API;
