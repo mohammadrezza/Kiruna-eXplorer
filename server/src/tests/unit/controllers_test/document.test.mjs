@@ -1,9 +1,9 @@
-import {createDocument, documentsList} from '../../controllers/documentController.mjs'
-import DocumentType from "../../components/documentType.mjs";
-import * as documentService from "../../services/documentService.mjs";
+import {createDocument, documentsList} from '../../../controllers/documentController.mjs'
+import DocumentType from "../../../components/documentType.mjs";
+import * as documentService from "../../../services/documentService.mjs";
 import {describe} from "@jest/globals";
 
-jest.mock('../../services/documentService.mjs')
+jest.mock('../../../services/documentService.mjs')
 
 afterEach(() => {
     jest.clearAllMocks()
