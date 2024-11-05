@@ -1,35 +1,34 @@
-import React from 'react';
+import React, { useState,useEffect } from 'react';
 import { Form, Button, Row, Col, Modal, ListGroup, InputGroup, Table, FormControl } from 'react-bootstrap';
 import { useNavigate, useParams} from 'react-router-dom'
-import { useState,useEffect } from 'react';
 import {FaPenSquare}from 'react-icons/fa';
 import { PiMapPinSimpleAreaFill, PiPen } from "react-icons/pi";
 import * as dayjs from 'dayjs'
 import MapPointSelector from '../components/MapPointSelector'
+import RelatedDocumentsSelector from '../components/RelatedDocumentsSelector';
 import API from '../services/API.mjs';
 import Document from '../mocks/Document.mjs';
 import '../style/CreateDocument.css'
 
 function FormDocument(props) {
 
-  const param = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
 
 
-  const [docID,setDocID] = useState(props.mode==='view' ? param.id : '')
+  const [docID,setDocID] = useState(props.mode==='view' ? id : '');
   const [title,setTitle] = useState('');
   const [stakeholder,setStakeholder] = useState('');
   const [scale,setScale] = useState('');
-  const [issuanceDate,setIssuanceDate] = useState();
+  const [issuanceDate,setIssuanceDate] = useState('');
   const [type,setType] = useState(null);
   const [language,setLanguage] = useState('');
   const [description,setDescription] = useState('');
   const [coordinates, setCoordinates] = useState({ lat: '', lng: '' });
   const [loading,setLoading] = useState(true);
-  const [loadDoc,setLoadDoc] = useState(true);
+  const [loadingDocs,setLoadingDocs] = useState(true);
   const [edit,setEdit] = useState(false);
   const [showMap, setShowMap] = useState(false);
-  const [showDocumentList, setShowDocumentList] = useState(false); 
   const [allDocuments, setAllDocuments] = useState([]); 
   const [selectedDocuments, setSelectedDocuments] = useState([]); 
   const [relatedDocuments, setRelatedDocuments] = useState([]); 
@@ -37,107 +36,50 @@ function FormDocument(props) {
   const [errors, setErrors] = useState([]);
 
   useEffect(()=>{
-    const loadType = async() => {
-      try
-      {API.getTypes().then((types) =>{
-        let ty = [];
-        for(const t of types){
-          ty.push(t);
-        }
-        setAllTypes(ty);
-      })}
-      catch(error)
-      {
-        console.error("Error loading types:", error);
-      }
-      finally{
-        setLoading(false)
-      }
-    }
-
-    loadType();
-
-    const loadDocuments = async () => {
+    const loadData = async () => {
       try {
-        let documents = await API.getDocuments(); 
-        if(props.mode==='view')
-          documents = documents.filter((d) => d.id!==param.id)
-        setAllDocuments(documents);
+        const [types, documents] = await Promise.all([API.getTypes(), API.getDocuments()]);
+        setAllTypes(types);
+        const filteredDocuments = props.mode === 'view' ? documents.filter(doc => doc.id !== id) : documents;
+        setAllDocuments(filteredDocuments);
+
+        if (props.mode === 'view') {
+          const doc = await API.getData(docID);
+          setTitle(doc.title);
+          setStakeholder(doc.stakeholders);
+          setScale(doc.scale);
+          setDescription(doc.description);
+          setType(doc.type);
+          setLanguage(doc.language);
+          setCoordinates(doc.coordinates);
+          setIssuanceDate(dayjs(doc.issuanceDate).format('YYYY-MM-DD'));
+          setRelatedDocuments(doc.connections);
+        }
       } catch (error) {
-        console.error("Error loading documents:", error);
-      }
-      finally{
-        setLoadDoc(false);
+        console.error("Error loading data:", error);
+      } finally {
+        setLoading(false);
+        setLoadingDocs(false);
       }
     };
 
+    loadData();
+  }, [props.mode, docID, id]);
 
-      loadDocuments();
+  const toggleMap = () => setShowMap(prev => !prev);
+  const handleCoordinatesChange = (newCoordinates) => setCoordinates(newCoordinates);
+  const handleRelatedDocumentClick = (relatedDocumentId) => navigate(`/view/${relatedDocumentId}`);
 
-    const loadData = async () => {
-      try{
-        const doc = await API.getData(docID);
-        setTitle(doc.title);
-        setStakeholder(doc.stakeholders);
-        setScale(doc.scale);
-        setDescription(doc.description);
-        setType(doc.type);
-        setLanguage(doc.language);
-        setCoordinates(doc.coordinates)
-        setIssuanceDate(dayjs(doc.issuanceDate).format('YYYY-MM-DD'));
-        if (props.mode === 'view') {
-          setRelatedDocuments(doc.connections);
-        }
-      }catch(error){
-        console.error("Error loading document data:", error)
-      }
-    }
-    if(props.mode==='view')
-      loadData();
-  }, []);
-  
-
-  const toggleMap = () => {
-    setShowMap((prevShowMap) => !prevShowMap);
-  };
-
-  const handleCoordinatesChange = (newCoordinates) => {
-    setCoordinates(newCoordinates);
-  };
-
-  const handleRelatedDocumentClick = (relatedDocumentId) => {
-    navigate(`/view/${relatedDocumentId}`);
-  };
 
   const validateForm = () => {
     const validationErrors = {};
-
-    if(title.trim() === ''){
-      validationErrors.title = 'Title cannot be empty!';
-    }
-
-    if(stakeholder.trim() === ''){
-      validationErrors.stakeholder = 'Stakeholder cannot be empty!';
-    }
-
-    if(scale.trim() === ''){
-      validationErrors.scale = 'Scale cannot be empty!';
-    }
-
-    if(type === null){
-      validationErrors.type = 'Type cannot be empty!';
-    }
-
-    /*if (dayjs(issuanceDate).isAfter(dayjs())) {
-      validationErrors.issuanceDate='Issuance date cannot be in the future!';
-    }*/
-
-    if(description === ''){
-      validationErrors.description = 'Description cannot be empty!'
-    }
-
+    if (!title.trim()) validationErrors.title = 'Title cannot be empty!';
+    if (!stakeholder.trim()) validationErrors.stakeholder = 'Stakeholder cannot be empty!';
+    if (!scale.trim()) validationErrors.scale = 'Scale cannot be empty!';
+    if (type === null) validationErrors.type = 'Type cannot be empty!';
+    if (!description.trim()) validationErrors.description = 'Description cannot be empty!';
     return validationErrors;
-  }
+  };
 
 
 
@@ -150,26 +92,26 @@ function FormDocument(props) {
       console.log(errors);
       return;
     }
+    
     setErrors([]);
-    setTitle(title.trim());
-    setStakeholder(stakeholder.trim());
-    const doc = new Document(docID,title,stakeholder,scale,issuanceDate,type,language,description);
-    if(props.mode==='add')
-      API.AddDocumentDescription(doc, selectedDocuments, coordinates); 
-    if(props.mode==='view')
-      API.EditDocumentDescription(doc, selectedDocuments, coordinates,docID)
+    const doc = new Document(docID, title.trim(), stakeholder.trim(), scale, issuanceDate, type, language, description);
+    if(props.mode==='add'){
+      API.AddDocumentDescription(doc, selectedDocuments, coordinates);
+    } else if (props.mode === 'view') {
+      API.EditDocumentDescription(doc, selectedDocuments, coordinates, docID);
+    }
     //if we want to set the connections 
     //by using this API we pass selectedDocuments as
     // an argument here
     //otherwise we create a new API
-    navigate('/')
-  }
+    navigate('/');
+  };
 
   const handleDocumentSelect = (documentId) => {
-    setSelectedDocuments((prevSelected) =>
+    setSelectedDocuments(prevSelected =>
       prevSelected.includes(documentId)
-        ? prevSelected.filter((id) => id !== documentId) 
-        : [...prevSelected, documentId]                  
+        ? prevSelected.filter(id => id !== documentId)
+        : [...prevSelected, documentId]
     );
   };
   
@@ -271,19 +213,10 @@ function FormDocument(props) {
                   </Form.Group>
                 </Col>
                 <Col md={2}>
-                {showMap ? <div className="map-view-trigger" onClick={toggleMap}>
-                  <PiPen></PiPen>
-                  <span>
-                    Type coordinates
-                  </span>
-                  
-                </div>: <div className="map-view-trigger" onClick={toggleMap}>
-                  <PiMapPinSimpleAreaFill></PiMapPinSimpleAreaFill>
-                  <span>
-                    Select on map
-                  </span>
-                  
-                </div>}
+                  <div className="map-view-trigger" onClick={toggleMap}>
+                    {showMap ? (<PiPen />) : (<PiMapPinSimpleAreaFill />)}
+                    <span>{showMap ? 'Type coordinates' : 'Select on map'}</span>
+                  </div>
                 </Col>
               </Row>
             {showMap && <MapPointSelector 
@@ -291,65 +224,22 @@ function FormDocument(props) {
               onCoordinatesChange={handleCoordinatesChange} 
             />}
           </Row>
-           <div>
-          
-          {(props.mode === 'add' || edit) ? (
-            !showDocumentList ? (
-              <Button className="selectrelated" variant="dark" onClick={() => setShowDocumentList(true)}>
-                Select Related Documents
-              </Button>
-            ) : (
-              <div className="document-list">
-                <h5>Select Related Documents</h5>
-                <ListGroup className='relateddocs'>
-                  {allDocuments.map((doc) => (
-                    <ListGroup.Item key={doc.id}>
-                      <Form.Check 
-                        type="checkbox"
-                        label={
-                          <Row>
-                            <Col>{doc.title}</Col>
-                            <Col>{doc.stakeholder}</Col>
-                            <Col>{dayjs(doc.issuanceDate).format('DD/MM/YYYY')}</Col>
-                          </Row>
-                        } 
-                        checked={selectedDocuments.includes(doc.id)}
-                        onChange={() => handleDocumentSelect(doc.id)}
-                      />
-                    </ListGroup.Item>
-                  ))}
-                </ListGroup>
-                <Button className="saveselection" variant="dark" onClick={() => setShowDocumentList(false)}>
-                  Save Selection
-                </Button>
-              </div>
-            )
-          ) : (
-            <div className="document-list">
-              <h5>Related Documents</h5>
-              <ListGroup className='relateddocs'>
-                {relatedDocuments.map((relatedDoc) => {
-                  return (
-                    relatedDoc && (
-                      <ListGroup.Item 
-                      key={relatedDoc.id}
-                      action
-                      onClick={() => handleRelatedDocumentClick(relatedDoc.id)}>
-                        <Row>
-                          <Col>{relatedDoc.title}</Col>
-                          <Col>{relatedDoc.stakeholder}</Col>
-                          <Col>{dayjs(relatedDoc.issuanceDate).format('DD/MM/YYYY')}</Col>
-                        </Row>
-                      </ListGroup.Item>
-                    )
-                  );
-                })}
-              </ListGroup>
-            </div>
-          )}
-        </div>
-          {props.mode==='add' && <Button className="add-button" type='submit' data-testid="add">+Add</Button>}
-          {edit && <Button className="add-button" type='submit'>+Edit</Button>}
+          <RelatedDocumentsSelector 
+            mode={props.mode}
+            edit={edit}
+            allDocuments={allDocuments}
+            relatedDocuments={relatedDocuments}
+            selectedDocuments={selectedDocuments}
+            onDocumentSelect={handleDocumentSelect}
+            onRelatedDocumentClick={handleRelatedDocumentClick}
+          />
+          <Button 
+            className="add-button" 
+            type="submit" 
+            data-testid={props.mode === 'add' ? "add" : undefined}
+          >
+            {props.mode === 'add' ? '+Add' : edit ? '+Edit' : null}
+          </Button>
         </Form>
       </div>
     </div>

@@ -9,7 +9,7 @@ footer {
   align-items: center;
 }
 
-footer p {
+footer div {
   height: 80px;
   padding: 0 121px;
   font-size: 24px;
@@ -19,14 +19,14 @@ footer p {
   align-items: center;
   justify-content: flex-start;
 }
-footer p:first-child {
+footer div:first-child {
   border-right: 1px solid var(--white);
   font-size: 32px;
   font-weight: bold;
   justify-content: flex-end;
   text-align: right;
 }
-footer p:first-child hr {
+footer div:first-child hr {
   margin: 0 20px;
   max-width: 160px;
   width: 30em;
