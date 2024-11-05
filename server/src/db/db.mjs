@@ -93,6 +93,99 @@ function addDocumentConnection(
     });
 }
 
+function editDocument(
+    id,
+    title,
+    description,
+    stakeholders,
+    scale,
+    issuanceDate,
+    type,
+    language,
+    coordinates,
+    connections
+) {
+    return new Promise((resolve, reject) => {
+        const query = `
+            UPDATE Document
+            SET
+                title = COALESCE(?, title),
+                description = COALESCE(?, description),
+                stakeholders = COALESCE(?, stakeholders),
+                scale = COALESCE(?, scale),
+                issuanceDate = COALESCE(?, issuanceDate),
+                type = COALESCE(?, type),
+                language = COALESCE(?, language),
+                coordinates = COALESCE(?, coordinates),
+                connections = COALESCE(?, connections)
+            WHERE
+                id = ?
+        `;
+
+        db.run(
+            query,
+            [
+                title,
+                description,
+                stakeholders,
+                scale,
+                issuanceDate,
+                type,
+                language,
+                JSON.stringify(coordinates),
+                connections,
+                id
+            ],
+            (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            }
+        );
+    });
+}
+
+function editDocumentConnection(id, documentId, connectionId) {
+
+    return new Promise((resolve, reject) => {
+
+                const insertQuery = `
+                    INSERT INTO DocumentConnection (id, documentId, connectionId)
+                    VALUES (?, ?, ?)
+                `;
+
+                db.run(insertQuery, [id, documentId, connectionId], (err) => {
+                    if (err) {
+                        return reject(err);
+                    } else {
+                        return resolve();
+                    }
+                });
+
+        });
+    }
+
+function deleteAllConnections(id) {
+
+    return new Promise((resolve, reject) => {
+        const query = `
+            DELETE FROM DocumentConnection
+            WHERE documentId = ? OR connectionId = ?
+        `;
+
+        db.run(query, [id], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
+
+
 async function getDocumentWithConnections(id) {
     return new Promise((resolve, reject) => {
         const query = `
@@ -189,6 +282,9 @@ export {
     addDocument,
     addDocumentConnection,
     getAllDocuments,
-    getDocumentWithConnections
+    getDocumentWithConnections,
+    editDocument,
+    editDocumentConnection,
+    deleteAllConnections
 };
 
