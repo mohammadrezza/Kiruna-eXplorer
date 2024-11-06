@@ -238,7 +238,7 @@ function FormDocument(props) {
             </Col>
           </Row>
           <Row>
-            <Row className="align-bottom" >
+            <Row>
               <Col md={4}>
                 <Form.Group  className='form-group' controlId="description">
                   <Form.Label>Coordinates{(props.mode === 'add' || edit) && <span>*</span>}</Form.Label>
@@ -251,10 +251,13 @@ function FormDocument(props) {
                     isInvalid={!!errors.coordinates} 
                     readOnly={(!edit && props.mode !=='add') || showMap}
                     />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.coordinates}
+                  </Form.Control.Feedback>
                   </Form.Group>
                 </Col>
                 <Col md={4}>
-                  <Form.Group  className='form-group' controlId="description">
+                  <Form.Group  className='form-group margin-top-3' controlId="description">
                     <Form.Control 
                       type="text" 
                       placeholder="longitude" 
@@ -268,7 +271,7 @@ function FormDocument(props) {
                 </Col>
                 <Col md={3}>
                 {(props.mode === 'add' || edit) && (
-                  <div className='convert-btn' onClick={handleDMSChange}>convert DMS format</div>  
+                  <div className='convert-btn  margin-top-3' onClick={handleDMSChange}>convert DMS format</div>  
                 )}
                 </Col>
               </Row>
