@@ -75,9 +75,12 @@ function FormDocument(props) {
   }, [props.mode, docID, id]);
 
   const toggleMap = () => setShowMap(prev => !prev);
-  const handleCoordinatesChange = (newCoordinates) => setCoordinates(newCoordinates);
+  const handleCoordinatesChange = (newCoordinates) => {
+    if ((/^-?\d*\.?\d*$/.test(newCoordinates.lat) && /^-?\d*\.?\d*$/.test(newCoordinates.lng)) || newCoordinates === '') {
+      setCoordinates(newCoordinates);
+    }
+  };
   const handleRelatedDocumentClick = (relatedDocumentId) => navigate(`/documents/view/${relatedDocumentId}`);
-
 
   const validateForm = () => {
     const validationErrors = {};
@@ -204,6 +207,7 @@ function FormDocument(props) {
                     type="text" 
                     placeholder="latitude" 
                     minLength={2} 
+                    inputMode="decimal"
                     value={coordinates.lat} 
                     onChange={(event) => handleCoordinatesChange({lat:event.target.value, lng:coordinates.lng})}
                     isInvalid={!!errors.coordinates} 
@@ -217,6 +221,7 @@ function FormDocument(props) {
                       type="text" 
                       placeholder="longitude" 
                       minLength={2} 
+                      inputMode="decimal"
                       value={coordinates.lng} 
                       onChange={(event) => handleCoordinatesChange({lat: coordinates.lat, lng:event.target.value})}
                       isInvalid={!!errors.coordinates} 
