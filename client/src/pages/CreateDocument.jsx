@@ -7,6 +7,7 @@ import MapPointSelector from '../components/MapPointSelector'
 import RelatedDocumentsSelector from '../components/RelatedDocumentsSelector';
 import API from '../services/API.mjs';
 import Document from '../mocks/Document.mjs';
+import { dmsToDecimal } from '../utils/convertToDecimal';
 import '../style/CreateDocument.css'
 
 function FormDocument(props) {
@@ -74,13 +75,36 @@ function FormDocument(props) {
     loadData();
   }, [props.mode, docID, id]);
 
-  const toggleMap = () => setShowMap(prev => !prev);
-  const handleCoordinatesChange = (newCoordinates) => {
-    if ((/^-?\d*\.?\d*$/.test(newCoordinates.lat) && /^-?\d*\.?\d*$/.test(newCoordinates.lng)) || newCoordinates === '') {
-      setCoordinates(newCoordinates);
+  const areCoordinatesValid = (coordinates) => {
+    return /^-?\d*\.?\d*$/.test(coordinates.lat) && /^-?\d*\.?\d*$/.test(coordinates.lng);
+  };
+  const handleDMSConversion = (coordinates, setCoordinates, setErrors) => {
+    try {
+      const decimalCoordinate = dmsToDecimal(`${coordinates.lat} ${coordinates.lng}`);
+      setCoordinates(decimalCoordinate);
+      setErrors([]);
+    } catch (error) {
+      setErrors({ coordinates: 'Not correct format' });
+      setCoordinates({ lat: '', lng: '' });
     }
   };
+  const toggleMap = () => {
+    if (areCoordinatesValid(coordinates) || coordinates === '') {
+      setShowMap(prev => !prev);
+    } else {
+      handleDMSConversion(coordinates, setCoordinates, setErrors);
+      setShowMap(prev => !prev);
+    }
+  };
+  const handleCoordinatesChange = (newCoordinates) => {setErrors([]); setCoordinates(newCoordinates)};
   const handleRelatedDocumentClick = (relatedDocumentId) => navigate(`/documents/view/${relatedDocumentId}`);
+  const handleDMSChange = () => {
+    if (areCoordinatesValid(coordinates) || coordinates === '') {
+      setErrors([]);
+    } else {
+      handleDMSConversion(coordinates, setCoordinates, setErrors);
+    }
+  };
 
   const validateForm = () => {
     const validationErrors = {};
@@ -89,6 +113,9 @@ function FormDocument(props) {
     if (!scale.trim()) validationErrors.scale = 'Scale cannot be empty!';
     if (type === null) validationErrors.type = 'Type cannot be empty!';
     if (!description.trim()) validationErrors.description = 'Description cannot be empty!';
+    if (!areCoordinatesValid(coordinates)) {
+      validationErrors.coordinates = 'Not correct format. Try to convert it';
+    }
     return validationErrors;
   };
 
@@ -207,7 +234,6 @@ function FormDocument(props) {
                     type="text" 
                     placeholder="latitude" 
                     minLength={2} 
-                    inputMode="decimal"
                     value={coordinates.lat} 
                     onChange={(event) => handleCoordinatesChange({lat:event.target.value, lng:coordinates.lng})}
                     isInvalid={!!errors.coordinates} 
@@ -221,13 +247,17 @@ function FormDocument(props) {
                       type="text" 
                       placeholder="longitude" 
                       minLength={2} 
-                      inputMode="decimal"
                       value={coordinates.lng} 
                       onChange={(event) => handleCoordinatesChange({lat: coordinates.lat, lng:event.target.value})}
                       isInvalid={!!errors.coordinates} 
                       readOnly={(!edit && props.mode !== 'add' )|| showMap}
                       />
                   </Form.Group>
+                </Col>
+                <Col md={2}>
+                {(props.mode === 'add' || edit) && (
+                  <div className='convert-btn' onClick={handleDMSChange}>convert to DMS format</div>  
+                )}
                 </Col>
                 <Col md={2}>
                 {(props.mode === 'add' || edit) && (

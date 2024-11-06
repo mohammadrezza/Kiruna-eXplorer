@@ -89,7 +89,6 @@ textarea.form-control {
 
 .add-button {
     position: relative;
-    font-family: 'Open Sans';
     width: 374px;
     top: 100px;
     left: 800px;
@@ -165,4 +164,16 @@ textarea.form-control {
   }
 .mt-6{
     margin-top: 72px;
+}
+.convert-btn{
+    cursor: pointer;
+    text-align: center;
+    margin-bottom: 32px;
+    border-radius: 0;
+    background-color: var(--white);
+    color: var(--demo-black);
+    border-bottom: 1px solid var(--demo-black);
+}
+.convert-btn:hover{
+    color: var(--blue);
 }
