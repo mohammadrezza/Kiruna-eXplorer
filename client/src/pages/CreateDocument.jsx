@@ -127,7 +127,7 @@ function FormDocument(props) {
     if (type === null) validationErrors.type = 'Type cannot be empty!';
     if (!description.trim()) validationErrors.description = 'Description cannot be empty!';
     if (!areCoordinatesValid(coordinates)) validationErrors.coordinates = 'Not correct format. Try to convert it';
-    if(!isWholeMunicipal && (!coordinates.lat || !coordinates.lng)) validationErrors.coordinates = 'Coordinates cannot be empty!';
+    //if(!isWholeMunicipal && (!coordinates.lat || !coordinates.lng)) validationErrors.coordinates = 'Coordinates cannot be empty!';
     return validationErrors;
   };
 
@@ -248,7 +248,7 @@ function FormDocument(props) {
                     minLength={2} 
                     value={coordinates.lat} 
                     onChange={(event) => handleCoordinatesChange({lat:event.target.value, lng:coordinates.lng})}
-                    isInvalid={!!errors.coordinates} 
+                    //isInvalid={!!errors.coordinates} 
                     readOnly={(!edit && props.mode !=='add') || showMap}
                     />
                     <Form.Control.Feedback type="invalid">
@@ -264,7 +264,7 @@ function FormDocument(props) {
                       minLength={2} 
                       value={coordinates.lng} 
                       onChange={(event) => handleCoordinatesChange({lat: coordinates.lat, lng:event.target.value})}
-                      isInvalid={!!errors.coordinates} 
+                      //isInvalid={!!errors.coordinates} 
                       readOnly={(!edit && props.mode !== 'add' )|| showMap}
                       />
                   </Form.Group>
