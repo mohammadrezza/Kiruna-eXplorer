@@ -15,6 +15,10 @@ jest.mock('../../src/components/MapPointSelector', () => (props) => (
   <div data-testid="MapPointSelector" {...props}></div>
 ));
 
+jest.mock('../../src/components/RelatedDocumentsSelector', () => (props) => (
+  <div data-testid="RelatedDocumentsSelector" {...props}></div>
+));
+
 jest.mock('../../src/services/API.mjs', () => ({
   getTypes: jest.fn(), // Mock di getTypes
   getDocuments: jest.fn(),
