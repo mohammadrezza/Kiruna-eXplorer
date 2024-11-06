@@ -222,14 +222,18 @@ function FormDocument(props) {
                   </Form.Group>
                 </Col>
                 <Col md={2}>
+                {(props.mode === 'add' || edit) && (
                   <div className="map-view-trigger" onClick={toggleMap}>
                     {showMap ? (<PiPen />) : (<PiMapPinSimpleAreaFill />)}
                     <span>{showMap ? 'Type coordinates' : 'Select on map'}</span>
                   </div>
+                )}
                 </Col>
               </Row>
-            {showMap && <MapPointSelector 
+            {(showMap || (props.mode !== 'add' && !edit)) && <MapPointSelector 
               coordinates={coordinates}
+              mode={props.mode}
+              edit={edit}
               onCoordinatesChange={handleCoordinatesChange} 
             />}
           </Row>

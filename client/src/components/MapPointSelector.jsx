@@ -15,19 +15,21 @@ L.Icon.Default.mergeOptions({
 // Default center of the map
 const initialCenter = { lat: 67.85572, lng: 20.22513 };
 
-function MapEvents({ onCoordinatesChange, setMarkerPosition }) {
+function MapEvents({ onCoordinatesChange, setMarkerPosition, mode, edit }) {
   // This hook handles the map click to place a marker
   useMapEvents({
     click(e) {
-      const { lat, lng } = e.latlng;
-      onCoordinatesChange({ lat, lng });
-      setMarkerPosition([lat, lng]);
+      if(mode === 'add' || edit){
+        const { lat, lng } = e.latlng;
+        onCoordinatesChange({ lat, lng });
+        setMarkerPosition([lat, lng]);
+      }
     },
   });
   return null;
 }
 
-function MapPointSelector({ onCoordinatesChange, coordinates }) {
+function MapPointSelector({ onCoordinatesChange, coordinates, mode, edit  }) {
   const [markerPosition, setMarkerPosition] = useState(null); 
 
   useEffect(() => {
@@ -50,7 +52,7 @@ function MapPointSelector({ onCoordinatesChange, coordinates }) {
           attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
         />
         
-        <MapEvents onCoordinatesChange={onCoordinatesChange} setMarkerPosition={setMarkerPosition} />
+        <MapEvents edit={edit} mode={mode} onCoordinatesChange={onCoordinatesChange} setMarkerPosition={setMarkerPosition}/>
         {markerPosition && <Marker position={markerPosition} />}
       </MapContainer>
     </div>

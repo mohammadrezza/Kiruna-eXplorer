@@ -36,6 +36,9 @@ function RelatedDocumentsSelector({
                   type="checkbox"
                   id={`checkbox-${doc.id}`} 
                   checked={selectedDocuments.includes(doc.id)}
+                  onChange={(e) => {
+                    e.stopPropagation(); 
+                  }}
                 />
               : num + 1}
               </Col>
