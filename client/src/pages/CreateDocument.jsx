@@ -29,6 +29,7 @@ function FormDocument(props) {
   const [loadingDocs,setLoadingDocs] = useState(true);
   const [edit,setEdit] = useState(false);
   const [showMap, setShowMap] = useState(false);
+  const [isWholeMunicipal, setIsWholeMunicipal] = useState(false);
   const [allDocuments, setAllDocuments] = useState([]); 
   const [selectedDocuments, setSelectedDocuments] = useState([]); 
   const [relatedDocuments, setRelatedDocuments] = useState([]); 
@@ -58,9 +59,10 @@ function FormDocument(props) {
           setDescription(doc.description);
           setType(doc.type);
           setLanguage(doc.language);
-          setCoordinates(doc.coordinates);
+          if(doc.coordinates.lat === 0 && doc.coordinates.lng === 0 )
+            setIsWholeMunicipal(true)
+          else setCoordinates(doc.coordinates);
           setIssuanceDate(dayjs(doc.issuanceDate).format('YYYY-MM-DD'));
-          console.log(doc.connections)
           setRelatedDocuments(doc.connections);
           setSelectedDocuments(connectedDocumentIds)
         }
@@ -91,13 +93,18 @@ function FormDocument(props) {
   const toggleMap = () => {
     if (areCoordinatesValid(coordinates) || coordinates === '') {
       setShowMap(prev => !prev);
+      setIsWholeMunicipal(false)
     } else {
       handleDMSConversion(coordinates, setCoordinates, setErrors);
       setShowMap(prev => !prev);
+      setIsWholeMunicipal(false)
     }
   };
-  const handleCoordinatesChange = (newCoordinates) => {setErrors([]); setCoordinates(newCoordinates)};
-  const handleRelatedDocumentClick = (relatedDocumentId) => navigate(`/documents/view/${relatedDocumentId}`);
+  const handleCoordinatesChange = (newCoordinates) => {
+    setErrors([]);
+    setCoordinates(newCoordinates)
+    setIsWholeMunicipal(false)
+  };
   const handleDMSChange = () => {
     if (areCoordinatesValid(coordinates) || coordinates === '') {
       setErrors([]);
@@ -105,6 +112,12 @@ function FormDocument(props) {
       handleDMSConversion(coordinates, setCoordinates, setErrors);
     }
   };
+  const handleSelectWholeMunicipal = () => {
+    setIsWholeMunicipal(!isWholeMunicipal)
+    setCoordinates({ lat: '', lng: '' });
+    setErrors([]);
+  };
+  const handleRelatedDocumentClick = (relatedDocumentId) => navigate(`/documents/view/${relatedDocumentId}`);
 
   const validateForm = () => {
     const validationErrors = {};
@@ -113,9 +126,8 @@ function FormDocument(props) {
     if (!scale.trim()) validationErrors.scale = 'Scale cannot be empty!';
     if (type === null) validationErrors.type = 'Type cannot be empty!';
     if (!description.trim()) validationErrors.description = 'Description cannot be empty!';
-    if (!areCoordinatesValid(coordinates)) {
-      validationErrors.coordinates = 'Not correct format. Try to convert it';
-    }
+    if (!areCoordinatesValid(coordinates)) validationErrors.coordinates = 'Not correct format. Try to convert it';
+    if(!isWholeMunicipal && (!coordinates.lat || !coordinates.lng)) validationErrors.coordinates = 'Coordinates cannot be empty!';
     return validationErrors;
   };
 
@@ -130,7 +142,7 @@ function FormDocument(props) {
       console.log(errors);
       return;
     }
-    
+    if(isWholeMunicipal) {coordinates.lat = 0; coordinates.lng = 0}
     setErrors([]);
     const doc = new Document(docID, title.trim(), stakeholder.trim(), scale, issuanceDate, type, language, description);
     if(props.mode==='add'){
@@ -254,12 +266,27 @@ function FormDocument(props) {
                       />
                   </Form.Group>
                 </Col>
-                <Col md={2}>
+                <Col md={3}>
                 {(props.mode === 'add' || edit) && (
-                  <div className='convert-btn' onClick={handleDMSChange}>convert to DMS format</div>  
+                  <div className='convert-btn' onClick={handleDMSChange}>convert DMS format</div>  
                 )}
                 </Col>
-                <Col md={2}>
+              </Row>
+              <Row>
+                <Col md={4}>
+                  <div className="map-view-trigger">
+                    <Form.Group controlId="formBasicCheckbox">
+                      <Form.Check 
+                        type="checkbox" 
+                        label="Select the whole municipal" 
+                        disabled={!(props.mode === 'add' || edit)}
+                        checked={isWholeMunicipal} 
+                        onChange={handleSelectWholeMunicipal} 
+                      />
+                    </Form.Group>
+                  </div>
+                </Col>
+                <Col md={3}>
                 {(props.mode === 'add' || edit) && (
                   <div className="map-view-trigger" onClick={toggleMap}>
                     {showMap ? (<PiPen />) : (<PiMapPinSimpleAreaFill />)}

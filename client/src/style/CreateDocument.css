@@ -121,7 +121,7 @@ textarea.form-control {
     align-items: flex-end;
     color: var(--dark-grey);
     cursor: pointer;
-    margin-bottom: 32px;
+    margin-bottom: 10px;
 }
 .map-view-trigger:hover {
     color: var(--black);
