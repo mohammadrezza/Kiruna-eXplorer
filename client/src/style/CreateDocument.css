@@ -148,3 +148,10 @@ textarea.form-control {
     font-size: 14px;
     color: var(--light-grey);
 }
+
+.scrollable-description {
+    max-height: 600px; 
+    overflow-y: auto!; 
+    padding: 10px; 
+    
+  }
