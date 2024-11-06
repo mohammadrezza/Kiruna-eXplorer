@@ -240,7 +240,7 @@ function FormDocument(props) {
               onCoordinatesChange={handleCoordinatesChange} 
             />}
           </Row>
-          <Row>
+          <Row className='mt-6'>
             <Row>
               <Col md={4}>
                 <Form.Group  className='form-group' controlId="description">
