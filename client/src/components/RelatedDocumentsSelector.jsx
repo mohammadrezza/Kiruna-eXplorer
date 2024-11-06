@@ -36,7 +36,7 @@ function RelatedDocumentsSelector({
                     label={
                       <Row>
                         <Col>{doc.title}</Col>
-                        <Col>{doc.stakeholder}</Col>
+                        <Col>{doc.stakeholders}</Col>
                         <Col>{dayjs(doc.issuanceDate).format('DD/MM/YYYY')}</Col>
                       </Row>
                     }
@@ -68,7 +68,7 @@ function RelatedDocumentsSelector({
                 >
                   <Row>
                     <Col>{relatedDoc.title}</Col>
-                    <Col>{relatedDoc.stakeholder}</Col>
+                    <Col>{relatedDoc.stakeholders}</Col>
                     <Col>{dayjs(relatedDoc.issuanceDate).format('DD/MM/YYYY')}</Col>
                   </Row>
                 </ListGroup.Item>

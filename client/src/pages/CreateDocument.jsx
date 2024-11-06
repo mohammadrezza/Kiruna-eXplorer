@@ -68,7 +68,7 @@ function FormDocument(props) {
 
   const toggleMap = () => setShowMap(prev => !prev);
   const handleCoordinatesChange = (newCoordinates) => setCoordinates(newCoordinates);
-  const handleRelatedDocumentClick = (relatedDocumentId) => navigate(`/view/${relatedDocumentId}`);
+  const handleRelatedDocumentClick = (relatedDocumentId) => navigate(`/documents/view/${relatedDocumentId}`);
 
 
   const validateForm = () => {
@@ -233,6 +233,8 @@ function FormDocument(props) {
             onDocumentSelect={handleDocumentSelect}
             onRelatedDocumentClick={handleRelatedDocumentClick}
           />
+          {
+            (props.mode==='add' || (props.mode==='view' && edit)) &&
           <Button 
             className="add-button" 
             type="submit" 
@@ -240,6 +242,7 @@ function FormDocument(props) {
           >
             {props.mode === 'add' ? '+Add' : edit ? '+Edit' : null}
           </Button>
+        }
         </Form>
       </div>
     </div>

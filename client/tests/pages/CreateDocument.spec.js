@@ -51,8 +51,13 @@ describe('CreateDocument', () => {
     useNavigate.mockReturnValue(mockNavigate);
   });
 
-  it('should render the form correctly', () => {
+  it('should render the form correctly', async () => {
+    useParams.mockReturnValue({ id: '' });
+    API.getTypes.mockResolvedValue(['Type1', 'Type2', 'Type3'])
     render(<CreateDocument mode="add" />);
+
+    await waitFor(() => {
+    
     const formElement = screen.getByText(/New Document/i);
     expect(formElement).toBeInTheDocument();
 
@@ -79,17 +84,18 @@ describe('CreateDocument', () => {
 
     const coordField = screen.getByText(/Coordinates/i);
     expect(coordField).toBeInTheDocument();
+    })
   });
 
   test('submits the form and calls AddDocumentDescription', async () => {
-
+    useParams.mockReturnValue({ id: '' });
     API.getDocuments.mockResolvedValue([])
     API.getTypes.mockResolvedValue(['Type1', 'Type2', 'Type3'])
     API.AddDocumentDescription.mockResolvedValue({ success: true })
   
     render(<CreateDocument mode="add" />);
   
-    // Compila il modulo usando placeholder o role
+    await waitFor(() => {
     fireEvent.change(screen.getByPlaceholderText(/Enter title/i), { target: { value: 'Document Title' } });
     fireEvent.change(screen.getByPlaceholderText(/Enter stakeholder/i), { target: { value: 'John Doe' } });
     fireEvent.change(screen.getByPlaceholderText(/Enter scale/i), { target: { value: '1:100' } });
@@ -99,7 +105,8 @@ describe('CreateDocument', () => {
     fireEvent.change(screen.getByPlaceholderText(/Enter description/i), { target: { value: 'Some description' } });
     fireEvent.change(screen.getByPlaceholderText(/latitude/i), { target: { value: '40.7128' } });
     fireEvent.change(screen.getByPlaceholderText(/longitude/i), { target: { value: '-74.0060' } });
-  
+    })
+
     fireEvent.submit(screen.getByTestId('mocked-form'));
   
     await waitFor(() => {
@@ -114,8 +121,9 @@ describe('CreateDocument', () => {
 
   test('loads document data when in "view" mode', async () => {
     useParams.mockReturnValue({ id: '123' });
+    API.getDocuments.mockResolvedValue([])
     API.getTypes.mockResolvedValue(['Type1', 'Type2', 'Type3'])
-    API.getData.mockResolvedValue({  // Mock di getData
+    API.getData.mockResolvedValue({  
       title: 'Mock Title',
       stakeholders: 'Mock Stakeholder',
       scale: 'Mock Scale',
@@ -124,12 +132,12 @@ describe('CreateDocument', () => {
       language: 'english',
       description: 'Mock description',
       coordinates: { lat: '40.7128', lng: '-74.0060' },
-      connections: []  // Simula eventuali documenti correlati
+      connections: []  
     })
     render(<CreateDocument mode="view" />);
     
 
-    // Aspetta che il componente abbia terminato il caricamento dei dati
+    
     await waitFor(() => {
       expect(API.getData).toHaveBeenCalledWith('123')
     });
@@ -140,6 +148,26 @@ describe('CreateDocument', () => {
       expect(screen.getByPlaceholderText(/Enter scale/i)).toHaveValue('Mock Scale');
       expect(screen.getByPlaceholderText(/Enter description/i)).toHaveValue('Mock description');
       expect(screen.getByTestId(/type-input/i)).toHaveValue('Type1');
+    });
+  });
+
+  test('shows error when required fields are empty', async () => {
+    useParams.mockReturnValue({ id: '' });
+    API.getTypes.mockResolvedValue(['Type1', 'Type2', 'Type3']);
+    API.getDocuments.mockResolvedValue([]);
+    
+    render(<CreateDocument mode="add" />);
+  
+    // Simulate submitting the form with empty fields
+    fireEvent.submit(screen.getByTestId('mocked-form'));
+  
+    // Wait for the form to be validated
+    await waitFor(() => {
+      // Check that the required fields show validation errors
+      expect(screen.getByText(/Title cannot be empty!/i)).toBeInTheDocument();
+      expect(screen.getByText(/Stakeholder cannot be empty!/i)).toBeInTheDocument();
+      expect(screen.getByText(/Scale cannot be empty!/i)).toBeInTheDocument();
+      expect(screen.getByText(/Description cannot be empty!/i)).toBeInTheDocument();
     });
   });
 });
