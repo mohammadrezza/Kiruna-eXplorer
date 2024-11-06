@@ -35,6 +35,12 @@ function FormDocument(props) {
   const [allTypes,setAllTypes] = useState([]);
   const [errors, setErrors] = useState([]);
 
+  useEffect(() => {
+    if (props.mode === 'view') {
+      setDocID(id); // Update docID whenever id changes
+    }
+  }, [id, props.mode]); // Only run when `id` or `props.mode` changes
+
   useEffect(()=>{
     const loadData = async () => {
       try {
@@ -54,6 +60,7 @@ function FormDocument(props) {
           setLanguage(doc.language);
           setCoordinates(doc.coordinates);
           setIssuanceDate(dayjs(doc.issuanceDate).format('YYYY-MM-DD'));
+          console.log(doc.connections)
           setRelatedDocuments(doc.connections);
           setSelectedDocuments(connectedDocumentIds)
         }
