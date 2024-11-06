@@ -128,63 +128,23 @@ textarea.form-control {
     font-size: 26px;
 }
 
-.document-list h5{
-    
-    font-family: 'Open Sans';
-    margin-top: 20px;
-  
-  }
-  .relateddocs .list-group-item{
-    margin-top: 20px;
+.relatedDocs .list-group-item{
     border-left: none;
     border-right: none;
     border-top: none;
-    
-  }
-
-  .relateddocs .list-group-item .col{
-    font-family: 'Open Sans';
-    font-size: large;
-    margin-left: 10px;
-  }
-
-  .selectrelated{
-    position: relative;
-    font-family: 'Open Sans';
-    width: 374px;
-    top: 30px;
-    left: 0px;
+    padding: 20px 16px;
+    color: var(--dark-grey);
     font-size: 16px;
-    font-weight: 400;
-    line-height: 21.79px;
-    border-radius: 0;
-    background-color:var(--white);
-    color: #101420;
-    border-bottom-color: #101420;
-    border-top: var(--white);
-    border-left:var(--white) ;
-    border-right: var(--white);
-  }
-
-  .saveselection{
-    position: relative;
-    font-family: 'Open Sans';
-    width: 374px;
-    top: 35px;
-    left: 0px;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 21.79px;
-    border-radius: 0;
-    background-color:var(--white);
-    color: #101420;
-    border-bottom-color: #101420;
-    border-top: var(--white);
-    border-left:var(--white) ;
-    border-right: var(--white);
-  }
-
-  .form-check-input:checked[type=checkbox]{
-    background-color: #101420;
-    border: #101420;
-  }
+    cursor: pointer;
+}
+.list-group-item:hover,
+.list-group-item.selected {
+    background-color: var(--lily-white);
+    color: var(--demo-black)
+}
+.relatedDocs .relatedDocs-header{
+    background-color: unset;
+    cursor: unset;
+    font-size: 14px;
+    color: var(--light-grey);
+}
