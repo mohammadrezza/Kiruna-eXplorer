@@ -35,6 +35,9 @@
   margin-left: auto;
   cursor: pointer;
 }
+.profile-icon:hover{
+  color: var(--blue);
+}
 
 .dark-header{
   background-color: var(--demo-black);

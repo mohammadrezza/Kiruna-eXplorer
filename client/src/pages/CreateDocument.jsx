@@ -1,8 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import { Form, Button, Row, Col, Modal, ListGroup, InputGroup, Table, FormControl } from 'react-bootstrap';
 import { useNavigate, useParams} from 'react-router-dom'
-import {FaPenSquare}from 'react-icons/fa';
-import { PiMapPinSimpleAreaFill, PiPen } from "react-icons/pi";
+import { PiMapPinSimpleAreaFill, PiPen, PiNotePencilThin } from "react-icons/pi";
 import * as dayjs from 'dayjs'
 import MapPointSelector from '../components/MapPointSelector'
 import RelatedDocumentsSelector from '../components/RelatedDocumentsSelector';
@@ -128,7 +127,10 @@ function FormDocument(props) {
   return  (
     <div className="wrapper">
       <div className="form-container">
-        <h2>{props.mode==='view' ? title : 'New Document'}{(props.mode==='view' && edit===false) && <FaPenSquare className='edit-button' onClick={() => setEdit(true)}/>}</h2>
+        <h2 className='form-container-title'>
+          {props.mode==='view' ? title : 'New Document'}
+          {(props.mode==='view' && edit===false) && <PiNotePencilThin className='edit-button' onClick={() => setEdit(true)}/>}
+          </h2>
         <Form onSubmit={handleSubmit} data-testid="form-component">
           <Row>
             <Col className='col-form'>

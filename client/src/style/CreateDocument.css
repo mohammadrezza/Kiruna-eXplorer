@@ -23,6 +23,11 @@
     position: relative;
     margin-bottom: 105px;
 }
+.form-container-title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
 .col-form {
     width: 50%;
@@ -74,9 +79,12 @@ textarea.form-control {
 
 .edit-button{
     position: relative;
-    left: 700px;
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+}
+.edit-button:hover{
+    color: var(--blue)
 }
 
 .add-button {
@@ -98,7 +106,7 @@ textarea.form-control {
 }
 
 .add-button:hover {
-    background-color:var(--demo-black);
+    background-color:var(--blue);
 }
 
 .align-bottom {
