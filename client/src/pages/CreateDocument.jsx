@@ -45,6 +45,7 @@ function FormDocument(props) {
 
         if (props.mode === 'view') {
           const doc = await API.getData(docID);
+          const connectedDocumentIds = doc.connections.map(doc => doc.id);
           setTitle(doc.title);
           setStakeholder(doc.stakeholders);
           setScale(doc.scale);
@@ -54,6 +55,7 @@ function FormDocument(props) {
           setCoordinates(doc.coordinates);
           setIssuanceDate(dayjs(doc.issuanceDate).format('YYYY-MM-DD'));
           setRelatedDocuments(doc.connections);
+          setSelectedDocuments(connectedDocumentIds)
         }
       } catch (error) {
         console.error("Error loading data:", error);
@@ -124,7 +126,7 @@ function FormDocument(props) {
           <Row>
             <Col className='col-form'>
               <Form.Group className='form-group'  controlId="title">
-                <Form.Label>Title</Form.Label>
+                <Form.Label>Title<span>*</span></Form.Label>
                 <Form.Control type="text" placeholder="Enter title" minLength={2} value={title} onChange={(event) => setTitle(event.target.value)}  isInvalid={!!errors.title} readOnly={!edit && props.mode!='add'}/>
                 <Form.Control.Feedback type="invalid">
                     {errors.title}
@@ -132,7 +134,7 @@ function FormDocument(props) {
               </Form.Group>
               
               <Form.Group className='form-group'  controlId="stakeholder">
-                <Form.Label>Stakeholder</Form.Label>
+                <Form.Label>Stakeholder<span>*</span></Form.Label>
                 <Form.Control type="text" placeholder="Enter stakeholder" value={stakeholder} onChange={(event) => setStakeholder(event.target.value)}  isInvalid={!!errors.stakeholder} readOnly={!edit && props.mode!='add'}/>
                 <Form.Control.Feedback type="invalid">
                     {errors.stakeholder}
@@ -140,7 +142,7 @@ function FormDocument(props) {
               </Form.Group>
               
               <Form.Group className='form-group'  controlId="scale">
-                <Form.Label>Scale</Form.Label>
+                <Form.Label>Scale<span>*</span></Form.Label>
                 <Form.Control type="text" placeholder="Enter scale" value={scale} onChange={(event) => setScale(event.target.value)}  isInvalid={!!errors.scale} readOnly={!edit && props.mode!='add'}/>
                 <Form.Control.Feedback type="invalid">
                     {errors.scale}
@@ -148,12 +150,12 @@ function FormDocument(props) {
               </Form.Group>
 
               <Form.Group className='form-group'  controlId="issuanceDate">
-                <Form.Label>Issuance Date</Form.Label>
+                <Form.Label>Issuance Date<span>*</span></Form.Label>
                 <Form.Control  data-testid="date-input" type="date" value={issuanceDate} onChange={(event) => setIssuanceDate(event.target.value)} readOnly={!edit && props.mode!='add'}/>
               </Form.Group>
 
               <Form.Group className='form-group' controlId="type">
-                <Form.Label>Type</Form.Label>
+                <Form.Label>Type<span>*</span></Form.Label>
                 {!loading && <Form.Select  data-testid="type-input" value={type || ''} onChange={(event) => setType(event.target.value)}  isInvalid={!!errors.type} readOnly={!edit && props.mode!='add'}>
                   <option>Select type</option>
                   { allTypes.map((t) => 
@@ -163,7 +165,7 @@ function FormDocument(props) {
               </Form.Group>
 
               <Form.Group className='form-group' controlId="language">
-                <Form.Label>Language</Form.Label>
+                <Form.Label>Language<span>*</span></Form.Label>
                 <Form.Select  data-testid="language-input" value={language} onChange={(event) => setLanguage(event.target.value)} readOnly={!edit && props.mode!='add'}>
                   <option>Select language</option>
                   <option>english</option>
@@ -175,7 +177,7 @@ function FormDocument(props) {
 
             <Col className='col-form'>
               <Form.Group  className='form-group' controlId="description">
-                <Form.Label>Description</Form.Label>
+                <Form.Label>Description<span>*</span></Form.Label>
                 <Form.Control as="textarea" placeholder="Enter description" value={description} onChange={(event) => setDescription(event.target.value)}  isInvalid={!!errors.description} readOnly={!edit && props.mode!='add'}/>
               </Form.Group>
               <Form.Control.Feedback type="invalid">
@@ -224,25 +226,32 @@ function FormDocument(props) {
               onCoordinatesChange={handleCoordinatesChange} 
             />}
           </Row>
-          <RelatedDocumentsSelector 
-            mode={props.mode}
-            edit={edit}
-            allDocuments={allDocuments}
-            relatedDocuments={relatedDocuments}
-            selectedDocuments={selectedDocuments}
-            onDocumentSelect={handleDocumentSelect}
-            onRelatedDocumentClick={handleRelatedDocumentClick}
-          />
-          {
-            (props.mode==='add' || (props.mode==='view' && edit)) &&
-          <Button 
-            className="add-button" 
-            type="submit" 
-            data-testid={props.mode === 'add' ? "add" : undefined}
-          >
-            {props.mode === 'add' ? '+Add' : edit ? '+Edit' : null}
-          </Button>
-        }
+          <Row>
+            <Row>
+              <Col md={4}>
+                <Form.Group  className='form-group' controlId="description">
+                  <Form.Label>{(props.mode === 'add' || edit) ? 'Connect to the documents' : 'Connections'}</Form.Label>
+                  </Form.Group>
+                </Col>
+            </Row>
+            <RelatedDocumentsSelector 
+              mode={props.mode}
+              edit={edit}
+              allDocuments={(props.mode === 'add' || edit) ? allDocuments : relatedDocuments}
+              selectedDocuments={selectedDocuments}
+              onDocumentSelect={handleDocumentSelect}
+              onRelatedDocumentClick={handleRelatedDocumentClick}
+            />
+          </Row>
+          {(props.mode === 'add' || edit) && (
+            <Button 
+              className="add-button" 
+              type="submit" 
+              data-testid={props.mode === 'add' ? 'add' : undefined}
+            >
+              {'Save'}
+            </Button>
+          )}
         </Form>
       </div>
     </div>
