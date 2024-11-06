@@ -6,8 +6,7 @@ import {
     editDocumentConnection,
     deleteAllConnections,
     getAllDocuments
-} from "../db/db.mjs";
-
+} from "../daos/documentDAO.mjs";
 import Document from "../components/document.mjs";
 import DocumentConnection from "../components/documentConnection.mjs";
 
