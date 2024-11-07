@@ -17,12 +17,12 @@ sections:
   3/3
 - Total points committed vs. done 
 
-  /
+  9/9
 - Nr of hours planned vs. spent (as a team)
 
-  /
+  96.39/97.25
 
-**Remember**a story is done ONLY if it fits the Definition of Done:
+**Remember** a story is done ONLY if it fits the Definition of Done:
  
 - Unit Tests passing
 - Code review completed
@@ -35,10 +35,10 @@ sections:
 
 | Story | # Tasks | Points | Hours est. | Hours actual |
 |-------|---------|--------|------------|--------------|
-| _#0_  |       |        |         |          |
-| _#1_  |     |      |       |      |
-| _#2_  |      |     |        |        |
-| _#3_  |       |      |         |           |
+| _#0_  |    9    |        |     42   |    40.30      |
+| _#1_  |   8 |    2  |    24.30  |   24.50   |
+| _#2_  |   6  |   5  |     23.30   |  24.05      |
+| _#3_  |    3   |  2    |    8     |     8h      |
    
 
 > story `#0` is for technical tasks, leave out story points (not applicable in this case)
@@ -68,13 +68,13 @@ sections:
 ## QUALITY MEASURES
 
 - Unit Testing:
-  - Total hours estimated: 
-  - Total hours spent: 
-  - Nr of automated unit test cases : 
+  - Total hours estimated: 8
+  - Total hours spent: 8
+  - Nr of automated unit test cases : 6
   - Coverage (if available) 
 - E2E testing:
-  - Total hours estimated 
-  - Total hours spent 
+  - Total hours estimated: 3
+  - Total hours spent: 3
 - Code review 
   - Total hours estimated: 
   - Total hours spent: 
