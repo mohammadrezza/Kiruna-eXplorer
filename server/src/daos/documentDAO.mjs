@@ -164,7 +164,7 @@ function deleteAllConnections(id) {
             WHERE documentId = ? OR connectionId = ?
         `;
 
-        db.run(query, [id], (err) => {
+        db.run(query, [id, id], (err) => {
             if (err) {
                 reject(err);
             } else {
