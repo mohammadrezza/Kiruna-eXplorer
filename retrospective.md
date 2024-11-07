@@ -71,13 +71,13 @@ sections:
   - Total hours estimated: 8
   - Total hours spent: 8
   - Nr of automated unit test cases : 6
-  - Coverage (if available) 
+  - Coverage (if available): 31.5%
 - E2E testing:
   - Total hours estimated: 3
   - Total hours spent: 3
 - Code review 
-  - Total hours estimated: 
-  - Total hours spent: 
+  - Total hours estimated: 3
+  - Total hours spent: 3
   
 
 
@@ -85,16 +85,29 @@ sections:
 
 - What caused your errors in estimation (if any)?
 
+Given the underestimation errors, we hadn’t allocated any time for bug fixing, so resolving issues ended up taking longer than anticipated. 
   
 
 - What lessons did you learn (both positive and negative) in this sprint?
 
+We learned that effective coordination helped us complete the project on time, and that having different people perform the same test allowed us to evaluate various aspects of the task.
+
+One challenge is that, with our language barriers, when explanations aren’t clear, we should provide more examples to enhance understanding.
+
   
-- Which improvement goals set in the previous retrospective were you able to achieve? 
+- Which improvement goals set in the previous retrospective were you able to achieve?
+
+We reached our goal: we did the testing and we did create documentation (postman) beforse starting everything  
   
 - Which ones you were not able to achieve? Why?
 
+We did achieve both
+
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
+
+We should pay closer attention to detail and continuously check constraints, not just at the beginning.
+
 
 - One thing you are proud of as a Team!!
 
+We as a team are proud that our group collaborated so effectively: whenever someone encountered a problem, there was always someone else ready to step in and offer support. 
