@@ -20,7 +20,7 @@ sections:
   9/9
 - Nr of hours planned vs. spent (as a team)
 
-  96.39/97.25
+  97.5/97.25
 
 **Remember** a story is done ONLY if it fits the Definition of Done:
  
@@ -45,7 +45,7 @@ sections:
 
 - Hours per task average, standard deviation (estimate and actual)
 
- average estimate: (/)= 3.71
+ average estimate: (/)= 3.74
 
  average actual: (/)= 3.74
 
