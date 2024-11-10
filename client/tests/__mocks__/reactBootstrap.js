@@ -26,6 +26,19 @@ MockedForm.Group = ({ children, controlId, ...props }) => (
   <div {...props}>{children}</div>
 );
 
+MockedForm.Check = ({ children, controlId, disabled, checked, onChange, ...props }) => (
+  <div {...props}>
+    <input
+      type="checkbox"
+      id={controlId}
+      disabled={disabled}
+      checked={checked}
+      onChange={onChange}
+    />
+    <label htmlFor={controlId}>{children}</label>
+  </div>
+);
+
 const MockedButton = ({ type, children, ...props }) => (
     <button type={type} {...props}>
       {children}

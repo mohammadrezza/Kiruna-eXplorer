@@ -1,8 +1,9 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import CreateDocument from '../../src/pages/CreateDocument';
+import FormDocument from '../../src/pages/CreateDocument.jsx';
 import API from '../../src/services/API.mjs';
 import { useParams, useNavigate } from 'react-router-dom';
+import { dmsToDecimal } from '../../src/utils/convertToDecimal';
 
 jest.mock('dayjs', () =>
   jest.fn(() => ({
@@ -14,6 +15,10 @@ jest.mock('dayjs', () =>
 jest.mock('../../src/components/MapPointSelector', () => (props) => (
   <div data-testid="MapPointSelector" {...props}></div>
 ));
+
+jest.mock('../../src/utils/convertToDecimal', () => ({
+  dmsToDecimal: jest.fn(), // crea un mock della funzione
+}));
 
 jest.mock('../../src/components/RelatedDocumentsSelector', () => (props) => (
   <div data-testid="RelatedDocumentsSelector" {...props}></div>
@@ -58,7 +63,8 @@ describe('CreateDocument', () => {
   it('should render the form correctly', async () => {
     useParams.mockReturnValue({ id: '' });
     API.getTypes.mockResolvedValue(['Type1', 'Type2', 'Type3'])
-    render(<CreateDocument mode="add" />);
+    API.getDocuments.mockResolvedValue([])
+    render(<FormDocument mode="add" />);
 
     await waitFor(() => {
     
@@ -90,14 +96,14 @@ describe('CreateDocument', () => {
     expect(coordField).toBeInTheDocument();
     })
   });
-
+  
   test('submits the form and calls AddDocumentDescription', async () => {
     useParams.mockReturnValue({ id: '' });
     API.getDocuments.mockResolvedValue([])
     API.getTypes.mockResolvedValue(['Type1', 'Type2', 'Type3'])
     API.AddDocumentDescription.mockResolvedValue({ success: true })
   
-    render(<CreateDocument mode="add" />);
+    render(<FormDocument mode="add" />);
   
     await waitFor(() => {
     fireEvent.change(screen.getByPlaceholderText(/Enter title/i), { target: { value: 'Document Title' } });
@@ -138,7 +144,7 @@ describe('CreateDocument', () => {
       coordinates: { lat: '40.7128', lng: '-74.0060' },
       connections: []  
     })
-    render(<CreateDocument mode="view" />);
+    render(<FormDocument mode="view" />);
     
 
     
@@ -160,7 +166,7 @@ describe('CreateDocument', () => {
     API.getTypes.mockResolvedValue(['Type1', 'Type2', 'Type3']);
     API.getDocuments.mockResolvedValue([]);
     
-    render(<CreateDocument mode="add" />);
+    render(<FormDocument mode="add" />);
   
     // Simulate submitting the form with empty fields
     fireEvent.submit(screen.getByTestId('mocked-form'));
@@ -174,4 +180,5 @@ describe('CreateDocument', () => {
       expect(screen.getByText(/Description cannot be empty!/i)).toBeInTheDocument();
     });
   });
+  
 });
