@@ -1,7 +1,7 @@
 import {describe} from "@jest/globals";
 
 import DocumentType from "../../../components/documentType.mjs";
-import {addDocument} from "../../../daos/documentDAO.mjs";
+import {addDocument, editDocument} from "../../../daos/documentDAO.mjs";
 import Document from "../../../components/document.mjs";
 import db from "../../../db/db.mjs";
 
@@ -48,5 +48,62 @@ describe('database queries', () => {
         });
 
 
-    })
+    });
+
+    describe('editDocument', () => {
+
+        test("editDocument query", async () => {
+            const document = {
+                id: '1',
+                title: 'updated title',
+                description: 'updated description',
+                stakeholders: 'updated stakeholders',
+                scale: 'updated scale',
+                issuanceDate: 'updated issuanceDate',
+                type: 'DESIGN_DOCUMENT',
+                language: 'updated language',
+                coordinates: [1.1, 2.2],
+                connections: []
+            };
+
+            jest.spyOn(db, "run").mockImplementation((query, params, callback) => {
+                callback(null);
+                return {};
+            });
+
+            const result = await editDocument(
+                document.id,
+                document.title,
+                document.description,
+                document.stakeholders,
+                document.scale,
+                document.issuanceDate,
+                document.type,
+                document.language,
+                document.coordinates,
+                document.connections
+            );
+
+            expect(result).toBeUndefined();
+            expect(db.run).toHaveBeenCalledWith(
+                expect.any(String),
+                [
+                    document.title,
+                    document.description,
+                    document.stakeholders,
+                    document.scale,
+                    document.issuanceDate,
+                    document.type,
+                    document.language,
+                    JSON.stringify(document.coordinates),
+                    document.connections,
+                    document.id
+                ],
+                expect.any(Function)
+            );
+        });
+
+    });
+
+
 })
