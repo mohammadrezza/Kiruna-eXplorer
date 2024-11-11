@@ -65,8 +65,23 @@ async function getTypes() {
     const response = await fetch(`${url}/documents/types`);
     if(response.ok){
         const t = await response.json();
-        return t.documentTypes;
+        const res =[];
+        t.documentTypes.forEach((type) => {
+            res.push({ value: type, label: type })
+        });
+        return res;
     }
+}
+
+async function getStake() {
+    const stakeholder = [{ value: 'stakeholder1', label: 'Stakeholder 1' },
+        { value: 'stakeholder2', label: 'Stakeholder 2' },
+        { value: 'stakeholder3', label: 'Stakeholder 3' },
+        { value: 'stakeholder4', label: 'Stakeholder 4' },
+        { value: 'stakeholder5', label: 'Stakeholder 5' },
+        { value: 'stakeholder6', label: 'Stakeholder 6' },
+        { value: 'stakeholder7', label: 'Stakeholder 7' }]
+    return stakeholder;
 }
 // async function getDocuments(){
 //     const doc= [];
@@ -127,6 +142,6 @@ async function getData(id) {
     console.log(data)
     return data.data;
 }
-const API ={AddDocumentDescription, getTypes, getDocuments, getData, EditDocumentDescription}
+const API ={AddDocumentDescription, getTypes, getDocuments, getData, EditDocumentDescription, getStake}
 
 export default API;
