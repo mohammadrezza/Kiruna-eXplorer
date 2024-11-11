@@ -6,11 +6,6 @@ const MockedForm = ({ onSubmit, children }) => (
     </form>
   );
 MockedForm.Label = MockedComponent;
-MockedForm.Select = ({ value, onChange, ...props }) => (
-    <select {...props} value={value} onChange={onChange}>
-      {props.children}
-    </select>
-  );
 MockedForm.Control = ({ isInvalid, ...props }) => (
   <div>
     <input {...props} />

@@ -194,7 +194,7 @@ function FormDocument(props) {
     }
     if(isWholeMunicipal) {coordinates.lat = 0; coordinates.lng = 0}
     setErrors([]);
-    const doc = new Document(docID, title.trim(), stakeholder.trim(), scale, issuanceDate, type, language, description);
+    const doc = new Document(docID, title.trim(), stakeholder, scale, issuanceDate, type, language, description);
     if(props.mode==='add'){
       API.AddDocumentDescription(doc, selectedDocuments, coordinates);
     } else if (props.mode === 'view') {
