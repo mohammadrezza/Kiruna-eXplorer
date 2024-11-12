@@ -1,5 +1,33 @@
 const url = "http://localhost:3001"
 
+/*
+async function login(username, password) {
+    let response = await fetch(baseURL + "sessions", {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: username, password: password },)
+    })
+    if (response.ok) {
+        const user = await response.json()
+        return user
+    } else {
+        const errDetail = await response.text();
+        throw errDetail;
+    }
+}
+
+async function logout(){
+    const response = await fetch(baseURL + 'sessions/current', {
+        method: 'DELETE',
+        credentials: 'include'
+      });
+      if (response.ok)
+        return null;
+}
+*/
 async function AddDocumentDescription(doc ,selectedDocuments, coordinates) {
     try {
         const coord = [];
@@ -142,6 +170,6 @@ async function getData(id) {
     console.log(data)
     return data.data;
 }
-const API ={AddDocumentDescription, getTypes, getDocuments, getData, EditDocumentDescription, getStake}
+const API ={AddDocumentDescription, getTypes, getDocuments, getData, EditDocumentDescription, getStake/*, login, logout*/}
 
 export default API;
