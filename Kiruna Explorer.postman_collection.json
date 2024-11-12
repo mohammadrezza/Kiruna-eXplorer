@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\":\"foo\",\n    \"description\": \"description\",\n    \"stakeholders\":\"foo\",\n    \"scale\":\"foo\",\n    \"issuanceDate\": \"21-02-1996\",\n    \"type\": \"TYPE_FOO\",\n    \"language\":\"english\",\n    \"coordinates\":[\n        0.8338068264956746,\n        18.9844855486035\n     ],\n    \"connectionIds\":[\"uuid\",\"uuid2\"]\n}",
+					"raw": "{\n    \"title\":\"foo\",\n    \"description\": \"description\",\n    \"stakeholders\":\"foo\",\n    \"scale\":\"foo\",\n    \"issuanceDate\": \"21-02-1996\",\n    \"type\": \"TYPE_FOO\",\n    \"language\":\"english\",\n    \"coordinates\":[\n        0.8338068264956746,\n        18.9844855486035\n     ],\n    \"connectionIds\":[{\"id\":\"uuid\", \"type\": \"type\"},{\"id\":\"uuid2\", \"type\": \"type2\"}]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -155,7 +155,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\":\"foo\",\n    \"description\": \"description\",\n    \"stakeholders\":\"foo\",\n    \"scale\":\"foo\",\n    \"issuanceDate\": \"21-02-1996\",\n    \"type\": \"TYPE_FOO\",\n    \"language\":\"english\",\n    \"coordinates\":[\n        0.8338068264956746,\n        18.9844855486035\n     ],\n    \"connectionIds\":[\"uuid\",\"uuid2\"]\n}",
+					"raw": "{\n    \"title\":\"foo\",\n    \"description\": \"description\",\n    \"stakeholders\":\"foo\",\n    \"scale\":\"foo\",\n    \"issuanceDate\": \"21-02-1996\",\n    \"type\": \"TYPE_FOO\",\n    \"language\":\"english\",\n    \"coordinates\":[\n        0.8338068264956746,\n        18.9844855486035\n     ],\n    \"connectionIds\":[{\"id\":\"uuid\", \"type\": \"type\"},{\"id\":\"uuid2\", \"type\": \"type2\"}]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
