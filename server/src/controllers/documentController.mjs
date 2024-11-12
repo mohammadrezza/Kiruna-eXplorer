@@ -1,4 +1,6 @@
 import DocumentType from "../components/documentType.mjs";
+import DocumentConnectionType from "../components/documentConnectionType.mjs";
+
 import {getDocuments, getDocument, postDocument, putDocument} from "../services/documentService.mjs";
 
 async function createDocument(req, res) {
@@ -90,6 +92,10 @@ async function documentTypesList(req, res) {
     res.status(200).json({documentTypes: Object.values(DocumentType)});
 }
 
+async function documentConnectionTypesList(req, res) {
+    res.status(200).json({documentConnectionTypes: Object.values(DocumentConnectionType)});
+}
+
 async function documentsList(req, res) {
     const {documentId, title} = req.query;
     const documents = await getDocuments(documentId, title);
@@ -159,5 +165,6 @@ export {
     createDocument,
     documentTypesList,
     documentsList,
+    documentConnectionTypesList,
     getDocumentWithId
 }
