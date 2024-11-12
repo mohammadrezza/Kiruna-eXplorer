@@ -39,3 +39,12 @@ BEGIN
     SET connections = connections + 1
     WHERE id = NEW.connectionId;
 END;
+
+CREATE TABLE IF NOT EXISTS User
+(
+    id       INTEGER not null primary key autoincrement,
+    username TEXT    not null,
+    password TEXT    not null,
+    role     TEXT    not null,
+    salt     TEXT    not null
+);

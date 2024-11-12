@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\":\"foo\",\n    \"description\": \"description\",\n    \"stakeholders\":\"foo\",\n    \"scale\":\"foo\",\n    \"issuanceDate\": \"21-02-1996\",\n    \"type\": \"TYPE_FOO\",\n    \"language\":\"english\",\n    \"coordinates\":[\n        0.8338068264956746,\n        18.9844855486035\n     ],\n    \"connectionIds\":[\"uuid\",\"uuid2\"]\n}",
+					"raw": "{\n    \"title\":\"fourth\",\n    \"description\": \"description\",\n    \"stakeholders\":\"foo\",\n    \"scale\":\"foo\",\n    \"issuanceDate\": \"21-02-1996\",\n    \"type\": \"TYPE_FOO\",\n    \"language\":\"english\",\n    \"coordinates\":[\n        0.8338068264956746,\n        18.9844855486035\n     ],\n    \"connectionIds\":[\"91fee58b-4fd2-452b-aab6-15f0bafcd19b\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -87,7 +87,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/documents?documentId&name",
+					"raw": "{{host}}/documents?documentId=&name",
 					"host": [
 						"{{host}}"
 					],
@@ -97,7 +97,7 @@
 					"query": [
 						{
 							"key": "documentId",
-							"value": null
+							"value": ""
 						},
 						{
 							"key": "name",
@@ -155,7 +155,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\":\"foo\",\n    \"description\": \"description\",\n    \"stakeholders\":\"foo\",\n    \"scale\":\"foo\",\n    \"issuanceDate\": \"21-02-1996\",\n    \"type\": \"TYPE_FOO\",\n    \"language\":\"english\",\n    \"coordinates\":[\n        0.8338068264956746,\n        18.9844855486035\n     ],\n    \"connectionIds\":[\"uuid\",\"uuid2\"]\n}",
+					"raw": "{\n    \"title\":\"primo\",\n    \"description\": \"description2222\",\n    \"stakeholders\":\"foo\",\n    \"scale\":\"foo\",\n    \"issuanceDate\": \"21-02-1996\",\n    \"type\": \"TYPE_FOO\",\n    \"language\":\"english\",\n    \"coordinates\":[\n        0.8338068264956746,\n        18.9844855486035\n     ],\n    \"connectionIds\":[\"198a10d8-b3ac-48cd-a47d-26f0921e7f24\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -174,7 +174,7 @@
 					"variable": [
 						{
 							"key": "docmentId",
-							"value": ""
+							"value": "1361ef07-bc0b-47e3-ba34-2a3bdfe7342b"
 						}
 					]
 				}
@@ -195,10 +195,17 @@
 						"documents",
 						":dcoumentId"
 					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					],
 					"variable": [
 						{
 							"key": "dcoumentId",
-							"value": ""
+							"value": "1361ef07-bc0b-47e3-ba34-2a3bdfe7342b"
 						}
 					]
 				}
@@ -239,6 +246,186 @@
 					],
 					"cookie": [],
 					"body": "{\n        \"id\": \"uuid\",\n        \"title\":\"foo\",\n        \"description\": \"description\",\n        \"stakeholders\":\"foo\",\n        \"scale\":\"foo\",\n        \"issuanceDate\": \"21-02-1996\",\n        \"type\": \"TYPE_FOO\",\n        \"language\":\"english\",\n        \"coordinates\":[\n            0.8338068264956746,\n            18.9844855486035\n        ],\n        \"connections\":[\n            {\n                \"id\": \"uuid\",\n                \"title\":\"foo\",\n                \"description\": \"description\",\n                \"stakeholders\":\"foo\",\n                \"scale\":\"foo\",\n                \"issuanceDate\": \"21-02-1996\",\n                \"type\": \"TYPE_FOO\",\n                \"language\":\"english\",\n                \"coordinates\":[\n                    0.8338068264956746,\n                    18.9844855486035\n                ]\n            }\n        ]\n    \n}"
+				}
+			]
+		},
+		{
+			"name": "{{host}}/sessions/",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\":\"resident\",\n    \"password\":\"102030\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/sessions/",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"sessions",
+						""
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "{{host}}/sessions/",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"resident\",\n    \"password\":\"102030\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/sessions/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"sessions",
+								""
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:3000"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "50"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"32-TGPlHwQiQvjy4mFQuitNVpdYlLE\""
+						},
+						{
+							"key": "Set-Cookie",
+							"value": "connect.sid=s%3A4_QnpoakAJX9MH0d59c-1t6e-GDulv_Z.4BBNu7UEueJxQeNKMmiOyoQyOjhFtcuBqVzeVcvlR7Q; Path=/; Expires=Tue, 12 Nov 2024 16:14:38 GMT"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 11 Nov 2024 16:14:38 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"user\": {\n        \"username\": \"resident\",\n        \"role\": \"Resident\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "{{host}}/sessions/",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/sessions/",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"sessions",
+						""
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "{{host}}/sessions/",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/sessions/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"sessions",
+								""
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:3000"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "50"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"32-TGPlHwQiQvjy4mFQuitNVpdYlLE\""
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 11 Nov 2024 16:14:40 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"user\": {\n        \"username\": \"resident\",\n        \"role\": \"Resident\"\n    }\n}"
 				}
 			]
 		}
