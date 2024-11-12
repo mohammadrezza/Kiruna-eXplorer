@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "b1c2203f-b931-42de-9afe-4dcad0d5fc46",
+		"_postman_id": "f182a70e-fa83-4c29-871e-d4f8919f533a",
 		"name": "Kiruna Explorer",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "4016750"
+		"_exporter_id": "38921252"
 	},
 	"item": [
 		{
@@ -33,7 +33,7 @@
 			"response": []
 		},
 		{
-			"name": "{{host}}/document/types",
+			"name": "{{host}}/documents/types",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -241,6 +241,24 @@
 					"body": "{\n        \"id\": \"uuid\",\n        \"title\":\"foo\",\n        \"description\": \"description\",\n        \"stakeholders\":\"foo\",\n        \"scale\":\"foo\",\n        \"issuanceDate\": \"21-02-1996\",\n        \"type\": \"TYPE_FOO\",\n        \"language\":\"english\",\n        \"coordinates\":[\n            0.8338068264956746,\n            18.9844855486035\n        ],\n        \"connections\":[\n            {\n                \"id\": \"uuid\",\n                \"title\":\"foo\",\n                \"description\": \"description\",\n                \"stakeholders\":\"foo\",\n                \"scale\":\"foo\",\n                \"issuanceDate\": \"21-02-1996\",\n                \"type\": \"TYPE_FOO\",\n                \"language\":\"english\",\n                \"coordinates\":[\n                    0.8338068264956746,\n                    18.9844855486035\n                ]\n            }\n        ]\n    \n}"
 				}
 			]
+		},
+		{
+			"name": "{{host}}/documents/connectionTypes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/documents/connectionTypes",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"documents",
+						"connectionTypes"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
