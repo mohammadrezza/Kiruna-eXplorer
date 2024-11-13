@@ -12,18 +12,28 @@ const users = [
     {username: "urban_planner", password: "708090", role: UserType.URBAN_PLANNER},
 ]
 
-await database.run("DELETE FROM User", [],
-    (err) => {
-        if (err) throw err;
-    });
+await new Promise((resolve, reject) => {
+    database.run("DELETE FROM User", [],
+        (err) => {
+            if (err) {
+                reject(err);
+            }
+            resolve();
+        });
+})
 
 for (const user of users) {
     const {username, password, role} = user;
     const salt = crypto.randomBytes(16).toString("hex");
     const hashedPassword = crypto.scryptSync(password, salt, 16).toString("hex");
-    await database.run("INSERT INTO User (username, password, role, salt) VALUES (?, ?, ?, ?)",
-        [username, hashedPassword, role, salt],
-        (err) => {
-            if (err) throw err;
-        });
+    await new Promise((resolve, reject) => {
+        database.run("INSERT INTO User (username, password, role, salt) VALUES (?, ?, ?, ?)",
+            [username, hashedPassword, role, salt],
+            (err) => {
+                if (err) {
+                    reject(err);
+                }
+                resolve()
+            });
+    })
 }
