@@ -500,6 +500,85 @@
 					"body": "{\n    \"user\": {\n        \"username\": \"resident\",\n        \"role\": \"Resident\"\n    }\n}"
 				}
 			]
+		},
+		{
+			"name": "{{host}}/documents/stakeholders",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/documents/stakeholders",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"documents",
+						"stakeholders"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "{{host}}/documents/stakeholders",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/documents/stakeholders",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"documents",
+								"stakeholders"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:3000"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "102"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"66-vByJJvn48aQ4ro3wDx0Ho5Kfx04\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 13 Nov 2024 11:55:05 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"stakeholders\": [\n        \"LKAB\",\n        \"Municipality\",\n        \"Regional Authority\",\n        \"Architecture Firms\",\n        \"Citizens\",\n        \"Others\"\n    ]\n}"
+				}
+			]
 		}
 	]
 }
