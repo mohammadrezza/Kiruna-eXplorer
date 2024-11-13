@@ -1,11 +1,11 @@
 import {describe} from "@jest/globals";
 
-import DocumentType from "../../../components/documentType.mjs";
-import {addDocument, editDocument} from "../../../daos/documentDAO.mjs";
-import Document from "../../../components/document.mjs";
-import db from "../../../db/db.mjs";
+import DocumentType from "../../../src/components/documentType.mjs";
+import {addDocument, editDocument} from "../../../src/daos/documentDAO.mjs";
+import Document from "../../../src/components/document.mjs";
+import db from "../../../src/db/db.mjs";
 
-jest.mock('../../../db/db.mjs')
+jest.mock('../../../src/db/db.mjs')
 
 afterEach(() => {
     jest.clearAllMocks()
