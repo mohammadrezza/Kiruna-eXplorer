@@ -1,5 +1,6 @@
 import DocumentType from "../components/documentType.mjs";
 import DocumentConnectionType from "../components/documentConnectionType.mjs";
+import Stakeholder from "../components/stakeholder.mjs";
 
 import {getDocuments, getDocument, postDocument, putDocument} from "../services/documentService.mjs";
 
@@ -96,6 +97,10 @@ async function documentConnectionTypesList(req, res) {
     res.status(200).json({documentConnectionTypes: Object.values(DocumentConnectionType)});
 }
 
+async function getStakeholdersList(req, res) {
+    res.status(200).json({stakeholders: Object.values(Stakeholder)});
+}
+
 async function documentsList(req, res) {
     const {documentId, title} = req.query;
     const documents = await getDocuments(documentId, title);
@@ -166,5 +171,6 @@ export {
     documentTypesList,
     documentsList,
     documentConnectionTypesList,
+    getStakeholdersList,
     getDocumentWithId
 }
