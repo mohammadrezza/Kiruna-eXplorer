@@ -94,6 +94,7 @@ async function documentTypesList(req, res) {
 
 async function documentConnectionTypesList(req, res) {
     res.status(200).json({documentConnectionTypes: Object.values(DocumentConnectionType)});
+
 }
 
 async function documentsList(req, res) {

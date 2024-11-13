@@ -34,6 +34,7 @@ function FormDocument(props) {
   const [allDocuments, setAllDocuments] = useState([]); 
   const [selectedDocuments, setSelectedDocuments] = useState([]); 
   const [relatedDocuments, setRelatedDocuments] = useState([]); 
+  const [selectedConnectionTypes, setSelectedConnectionTypes] = useState({});
   const [allTypes,setAllTypes] = useState([]);
   const [allStake,setAllStake] = useState([]);
   const [errors, setErrors] = useState([]);
@@ -196,9 +197,9 @@ function FormDocument(props) {
     setErrors([]);
     const doc = new Document(docID, title.trim(), stakeholder, scale, issuanceDate, type, language, description);
     if(props.mode==='add'){
-      API.AddDocumentDescription(doc, selectedDocuments, coordinates);
+      API.AddDocumentDescription(doc, selectedDocuments, coordinates, selectedConnectionTypes);
     } else if (props.mode === 'view') {
-      API.EditDocumentDescription(doc, selectedDocuments, coordinates, docID);
+      API.EditDocumentDescription(doc, selectedDocuments, coordinates, docID, selectedConnectionTypes);
     }
     //if we want to set the connections 
     //by using this API we pass selectedDocuments as
@@ -227,6 +228,12 @@ function FormDocument(props) {
     setLanguage(selectedOption);
   };
   
+  const handleConnectionTypeSelect = (documentId, selectedConnectionType) => {
+    setSelectedConnectionTypes(prevSelected => ({
+      ...prevSelected,
+      [documentId]: selectedConnectionType
+    }));
+  };
   
   return  (
     <div className="wrapper">
@@ -405,6 +412,7 @@ function FormDocument(props) {
               selectedDocuments={selectedDocuments}
               onDocumentSelect={handleDocumentSelect}
               onRelatedDocumentClick={handleRelatedDocumentClick}
+              onConnectionTypeChange={handleConnectionTypeSelect}
             />
           </Row>
           {(props.mode === 'add' || edit) && (

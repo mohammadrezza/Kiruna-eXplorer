@@ -1,0 +1,19 @@
+.connectionform{
+    font-family: 'Open Sans';
+    font-size: 16px !important;
+    padding-left: 15px !important;
+    border: 1px solid !important;
+    border-color: darkgray !important;
+    border-radius: 13px !important;
+    background-color: white !important;
+    
+}
+
+.filesymbol{
+    margin-left: 27px;
+}
+.filesymbol:hover{
+    color: white;
+    background-color: var(--demo-black);
+    border-radius: 6px ;
+}

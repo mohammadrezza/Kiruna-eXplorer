@@ -101,6 +101,35 @@ async function getTypes() {
     }
 }
 
+async function getConnectionTypes() {
+    try {
+        const response = await fetch(`${url}/documents/connectionTypes`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const types = await response.json();
+            const res =[];
+            types.documentConnectionTypes.forEach((type) => {
+                res.push(type)
+            });
+            return res; 
+        } else {
+            const errDetail = await response.json();
+            if (errDetail.error) throw errDetail.error;
+            if (errDetail.message) throw errDetail.message;
+
+            throw "Something went wrong while fetching connection types.";
+        }
+    } catch (error) {
+        console.error("Error fetching connection types:", error);
+        throw error;
+    }
+}
+
 async function getStake() {
     const stakeholder = [{ value: 'stakeholder1', label: 'Stakeholder 1' },
         { value: 'stakeholder2', label: 'Stakeholder 2' },
@@ -170,6 +199,8 @@ async function getData(id) {
     console.log(data)
     return data.data;
 }
-const API ={AddDocumentDescription, getTypes, getDocuments, getData, EditDocumentDescription, getStake/*, login, logout*/}
+
+
+const API ={AddDocumentDescription, getTypes, getDocuments, getData, EditDocumentDescription, getStake, getConnectionTypes/*, login, logout*/}
 
 export default API;
