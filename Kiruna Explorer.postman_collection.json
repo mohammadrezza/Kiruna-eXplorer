@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "f182a70e-fa83-4c29-871e-d4f8919f533a",
+		"_postman_id": "927b6a59-54c7-4667-81eb-742c23659beb",
 		"name": "Kiruna Explorer",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "38921252"
+		"_exporter_id": "4016750"
 	},
 	"item": [
 		{
@@ -258,7 +258,248 @@
 					]
 				}
 			},
-			"response": []
+			"response": [
+				{
+					"name": "{{host}}/documents/connectionTypes",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/documents/connectionTypes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"documents",
+								"connectionTypes"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:3000"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "97"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"61-I7UuSQf15Eijc/jIFD80uXUQUa8\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 13 Nov 2024 11:18:13 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"documentConnectionTypes\": [\n        \"Direct consequence\",\n        \"Collateral consequence\",\n        \"Projection\",\n        \"Update\"\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "{{host}}/sessions/",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\":\"resident\",\n    \"password\":\"102030\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/sessions/",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"sessions",
+						""
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "{{host}}/sessions/",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"resident\",\n    \"password\":\"102030\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/sessions/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"sessions",
+								""
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:3000"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "50"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"32-TGPlHwQiQvjy4mFQuitNVpdYlLE\""
+						},
+						{
+							"key": "Set-Cookie",
+							"value": "connect.sid=s%3A4_QnpoakAJX9MH0d59c-1t6e-GDulv_Z.4BBNu7UEueJxQeNKMmiOyoQyOjhFtcuBqVzeVcvlR7Q; Path=/; Expires=Tue, 12 Nov 2024 16:14:38 GMT"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 11 Nov 2024 16:14:38 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"user\": {\n        \"username\": \"resident\",\n        \"role\": \"Resident\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "{{host}}/sessions/",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/sessions/",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"sessions",
+						""
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "{{host}}/sessions/",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/sessions/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"sessions",
+								""
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:3000"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "50"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"32-TGPlHwQiQvjy4mFQuitNVpdYlLE\""
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 11 Nov 2024 16:14:40 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"user\": {\n        \"username\": \"resident\",\n        \"role\": \"Resident\"\n    }\n}"
+				}
+			]
 		}
 	]
 }
