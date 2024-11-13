@@ -1,25 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Row, Col } from 'react-bootstrap';
 import dayjs from 'dayjs';
-import API from '../services/API.mjs'; // Ensure this imports your API service correctly
-
+import { ListGroup } from 'react-bootstrap';
 function DocumentDetailsModal({ show, onHide, document }) {
-  const [connectedDocuments, setConnectedDocuments] = useState([]);
-
-  useEffect(() => {
-    const fetchConnectedDocuments = async () => {
-      if (show && document?.id) { 
-        try {
-          const response = await API.get(`/api/documents/${document.id}/connected`);
-          setConnectedDocuments(response.data);
-        } catch (error) {
-          console.error('Error fetching connected documents:', error);
-        }
-      }
-    };
-
-    fetchConnectedDocuments();
-  }, [show, document?.id]);
 
   if (!document) return null;
 
@@ -48,16 +31,30 @@ function DocumentDetailsModal({ show, onHide, document }) {
         <hr />
         <h5>Connected Documents</h5>
         <ul>
-          {connectedDocuments.length > 0 ? (
-            connectedDocuments.map((connectedDoc) => (
-              <li key={connectedDoc.id}>
-                <p><strong>Title:</strong> {connectedDoc.title}</p>
-                <p><strong>Type:</strong> {connectedDoc.type}</p>
-                <p><strong>Issuance Date:</strong> {dayjs(connectedDoc.issuanceDate).format('DD/MM/YYYY')}</p>
-                {/* Additional connected document details can go here */}
-              </li>
-            ))
-          ) : (
+          {document.connections.length > 0 ? (
+            <div className="document-list">
+              <ListGroup className='relatedDocs'>
+                <ListGroup.Item className='relatedDocs-header'>
+                  <Row>
+                    <Col md={3}>Title</Col>
+                    <Col md={3}>Stakeholders</Col>
+                    <Col md={2}>Type</Col>
+                    <Col md={2}>Connection type</Col>
+                  </Row>
+                </ListGroup.Item>
+                {document.connections.map((doc) => (
+                  <ListGroup.Item key={doc.id} >
+                    <Row className="align-items-center">
+                      <Col md={3}>{doc.title}</Col>
+                      <Col md={3}>{doc.stakeholders}</Col>
+                      <Col md={2}>{doc.type}</Col>
+                      <Col md={2}>{"con_type_TOBEADDED"}</Col>
+                    </Row>
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+            </div>
+            ) : (
             <p>No connected documents available.</p>
           )}
         </ul>
