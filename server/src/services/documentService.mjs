@@ -44,7 +44,8 @@ async function postDocument(
         let documentConnection = new DocumentConnection();
         documentConnection.createFromObject({
             documentId: document.id,
-            connectionId,
+            connectionId: connectionId.id, 
+            type: connectionId.type
         });
         connections.push(documentConnection)
     }
@@ -68,7 +69,8 @@ async function postDocument(
             connectionPromises.push(addDocumentConnection(
                 connection.id,
                 connection.documentId,
-                connection.connectionId
+                connection.connectionId,
+                connection.type
             ));
         }
         await Promise.all(connectionPromises);
@@ -112,7 +114,8 @@ async function putDocument(
         let documentConnection = new DocumentConnection();
         documentConnection.createFromObject({
             documentId: documentId,
-            connectionId,
+            connectionId:connectionId.id,
+            type: connectionId.type
         });
         connections.push(documentConnection);
     }
@@ -128,7 +131,8 @@ async function putDocument(
             connectionPromises.push(editDocumentConnection(
                 connection.id,
                 connection.documentId,
-                connection.connectionId
+                connection.connectionId,
+                connection.type
             ));
         }
         await Promise.all(connectionPromises);

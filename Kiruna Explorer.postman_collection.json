@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "b1c2203f-b931-42de-9afe-4dcad0d5fc46",
+		"_postman_id": "927b6a59-54c7-4667-81eb-742c23659beb",
 		"name": "Kiruna Explorer",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "4016750"
@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\":\"fourth\",\n    \"description\": \"description\",\n    \"stakeholders\":\"foo\",\n    \"scale\":\"foo\",\n    \"issuanceDate\": \"21-02-1996\",\n    \"type\": \"TYPE_FOO\",\n    \"language\":\"english\",\n    \"coordinates\":[\n        0.8338068264956746,\n        18.9844855486035\n     ],\n    \"connectionIds\":[\"91fee58b-4fd2-452b-aab6-15f0bafcd19b\"]\n}",
+					"raw": "{\n    \"title\":\"foo\",\n    \"description\": \"description\",\n    \"stakeholders\":\"foo\",\n    \"scale\":\"foo\",\n    \"issuanceDate\": \"21-02-1996\",\n    \"type\": \"TYPE_FOO\",\n    \"language\":\"english\",\n    \"coordinates\":[\n        0.8338068264956746,\n        18.9844855486035\n     ],\n    \"connectionIds\":[{\"id\":\"uuid\", \"type\": \"type\"},{\"id\":\"uuid2\", \"type\": \"type2\"}]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -33,7 +33,7 @@
 			"response": []
 		},
 		{
-			"name": "{{host}}/document/types",
+			"name": "{{host}}/documents/types",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -87,7 +87,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/documents?documentId=&name",
+					"raw": "{{host}}/documents?documentId&name",
 					"host": [
 						"{{host}}"
 					],
@@ -97,7 +97,7 @@
 					"query": [
 						{
 							"key": "documentId",
-							"value": ""
+							"value": null
 						},
 						{
 							"key": "name",
@@ -155,7 +155,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\":\"primo\",\n    \"description\": \"description2222\",\n    \"stakeholders\":\"foo\",\n    \"scale\":\"foo\",\n    \"issuanceDate\": \"21-02-1996\",\n    \"type\": \"TYPE_FOO\",\n    \"language\":\"english\",\n    \"coordinates\":[\n        0.8338068264956746,\n        18.9844855486035\n     ],\n    \"connectionIds\":[\"198a10d8-b3ac-48cd-a47d-26f0921e7f24\"]\n}",
+					"raw": "{\n    \"title\":\"foo\",\n    \"description\": \"description\",\n    \"stakeholders\":\"foo\",\n    \"scale\":\"foo\",\n    \"issuanceDate\": \"21-02-1996\",\n    \"type\": \"TYPE_FOO\",\n    \"language\":\"english\",\n    \"coordinates\":[\n        0.8338068264956746,\n        18.9844855486035\n     ],\n    \"connectionIds\":[{\"id\":\"uuid\", \"type\": \"type\"},{\"id\":\"uuid2\", \"type\": \"type2\"}]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -174,7 +174,7 @@
 					"variable": [
 						{
 							"key": "docmentId",
-							"value": "1361ef07-bc0b-47e3-ba34-2a3bdfe7342b"
+							"value": ""
 						}
 					]
 				}
@@ -195,17 +195,10 @@
 						"documents",
 						":dcoumentId"
 					],
-					"query": [
-						{
-							"key": "",
-							"value": "",
-							"disabled": true
-						}
-					],
 					"variable": [
 						{
 							"key": "dcoumentId",
-							"value": "1361ef07-bc0b-47e3-ba34-2a3bdfe7342b"
+							"value": ""
 						}
 					]
 				}
@@ -246,6 +239,85 @@
 					],
 					"cookie": [],
 					"body": "{\n        \"id\": \"uuid\",\n        \"title\":\"foo\",\n        \"description\": \"description\",\n        \"stakeholders\":\"foo\",\n        \"scale\":\"foo\",\n        \"issuanceDate\": \"21-02-1996\",\n        \"type\": \"TYPE_FOO\",\n        \"language\":\"english\",\n        \"coordinates\":[\n            0.8338068264956746,\n            18.9844855486035\n        ],\n        \"connections\":[\n            {\n                \"id\": \"uuid\",\n                \"title\":\"foo\",\n                \"description\": \"description\",\n                \"stakeholders\":\"foo\",\n                \"scale\":\"foo\",\n                \"issuanceDate\": \"21-02-1996\",\n                \"type\": \"TYPE_FOO\",\n                \"language\":\"english\",\n                \"coordinates\":[\n                    0.8338068264956746,\n                    18.9844855486035\n                ]\n            }\n        ]\n    \n}"
+				}
+			]
+		},
+		{
+			"name": "{{host}}/documents/connectionTypes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/documents/connectionTypes",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"documents",
+						"connectionTypes"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "{{host}}/documents/connectionTypes",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/documents/connectionTypes",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"documents",
+								"connectionTypes"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:3000"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "97"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"61-I7UuSQf15Eijc/jIFD80uXUQUa8\""
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 13 Nov 2024 11:18:13 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"documentConnectionTypes\": [\n        \"Direct consequence\",\n        \"Collateral consequence\",\n        \"Projection\",\n        \"Update\"\n    ]\n}"
 				}
 			]
 		},

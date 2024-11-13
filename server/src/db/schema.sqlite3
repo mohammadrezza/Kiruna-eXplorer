@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS DocumentConnection
     id TEXT PRIMARY KEY,
     documentId TEXT,
     connectionId TEXT,
+    type TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

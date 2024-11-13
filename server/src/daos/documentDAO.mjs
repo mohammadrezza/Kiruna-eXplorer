@@ -59,17 +59,19 @@ function addDocument(
 function addDocumentConnection(
     id,
     documentId,
-    connectionId
+    connectionId,
+    type
 ) {
     return new Promise((resolve, reject) => {
         const query =
-            "INSERT INTO DocumentConnection (id, documentId, connectionId) VALUES (?,?,?)";
+            "INSERT INTO DocumentConnection (id, documentId, connectionId, type) VALUES (?,?,?,?)";
         db.run(
             query,
             [
                 id,
                 documentId,
-                connectionId
+                connectionId,
+                type
             ],
             (err) => {
                 if (err) {
@@ -136,16 +138,16 @@ function editDocument(
     });
 }
 
-function editDocumentConnection(id, documentId, connectionId) {
+function editDocumentConnection(id, documentId, connectionId, type) {
 
     return new Promise((resolve, reject) => {
 
         const insertQuery = `
-                    INSERT INTO DocumentConnection (id, documentId, connectionId)
-                    VALUES (?, ?, ?)
+                    INSERT INTO DocumentConnection (id, documentId, connectionId, type)
+                    VALUES (?, ?, ?, ?)
                 `;
 
-        db.run(insertQuery, [id, documentId, connectionId], (err) => {
+        db.run(insertQuery, [id, documentId, connectionId, type], (err) => {
             if (err) {
                 return reject(err);
             } else {
