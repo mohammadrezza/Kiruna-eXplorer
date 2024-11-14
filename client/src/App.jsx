@@ -7,6 +7,7 @@ import DocumentsList from './pages/DocumentsList'
 import Login from './pages/Login'
 import { useState, useEffect } from 'react';
 import API from './services/API.mjs';
+import { Navigate } from 'react-router-dom';
 
 function App() {
   const location = useLocation();
@@ -18,11 +19,10 @@ function App() {
   ].filter(Boolean).join(' ');
 
   const [id,setId] = useState('');
-  /*
+  
   const [user, setUser] = useState(undefined);
   const [loggedIn, setLoggedIn] = useState(false);
   const [loginMessage, setLoginMessage] = useState('');
-  const [isLoaded, setIsLoaded] = useState(false);
 
   const navigate = useNavigate()
   
@@ -30,15 +30,13 @@ function App() {
     const checkAuth = async () => {
         try {
             const u = await API.getUser()
-            console.log(u)
+            //console.log(u)
             setUser(u);
             setLoggedIn(true);
-            setIsLoaded(true)
             navigate("/")
         } catch {
             setLoggedIn(false);
             setUser(undefined);
-            setIsLoaded(true)
         }
     };
 
@@ -58,7 +56,7 @@ function App() {
     }
 
   }
-
+  /*
   const handleLogout = async () => {
     await API.logout();
     setLoggedIn(false);
@@ -67,29 +65,21 @@ function App() {
     setUser(undefined)
     navigate('/');
   };
-*/
-
-  const handleIdNavigate = (docID) =>{
-    setId(docID);
-  }
+  */
   
 
   return (
     <>
-    <Header className={headerClasses}></Header>
+    <Header className={headerClasses} logged={loggedIn}></Header>
     <Routes>
       <Route path='/' element={
-          <Homepage/>
+          <Homepage logged={loggedIn}/>
       } />
       <Route path='/login' element={
-          <Login/>
+          <Login login={doLogin} message={loginMessage} setMessage={setLoginMessage}/>
       } />
-      <Route path='/documents/add' element={
-          <FormDocument mode={'add'}/>
-      } />
-      <Route path='/documents/view/:id' element={
-          <FormDocument mode={'view'}/>
-      } />
+      <Route path='/documents/add' element={loggedIn ? <FormDocument mode={'add'}/> : <Navigate to={'/login'}/> } />
+      <Route path='/documents/view/:id' element={ loggedIn ? <FormDocument mode={'view'} role={user.role}/> : <FormDocument mode={'view'}/>} />
       <Route path='/documents' element={
           <DocumentsList/>
       } />

@@ -3,12 +3,17 @@ import '../style/Homepage.css';
 import { useNavigate } from 'react-router-dom';
 import Slideshow from '../components/Slideshow';
 
-function Homepage() {
+function Homepage(props) {
   const navigate = useNavigate();
 
   const handleNewDocument = () => {
     navigate(`/documents/add`);
   };
+  
+
+  const handleListDocument = () => {
+    navigate('/documents')
+  }
 
   return (
     <div className="Homepage">
@@ -20,9 +25,9 @@ function Homepage() {
       </div>
       <main className="main-content">
         <div className="search-section">
-          <button onClick={handleNewDocument}> 
+          {props.logged && <button onClick={handleNewDocument}> 
             Create new document
-          </button>
+          </button>}
         </div>
       </main>
     </div>

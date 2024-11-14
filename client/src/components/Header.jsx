@@ -4,7 +4,7 @@ import { FaUserCircle } from 'react-icons/fa';
 import { Navbar } from 'react-bootstrap';
 import '../style/Header.css'
 
-function Header({ className }) {
+function Header({ className, logged }) {
   const location = useLocation();
   const isLoginPage = location.pathname === '/login';
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ function Header({ className }) {
       data-testid="header-wrapper">
       <hr></hr>
       <h3 onClick={handleLogoClick}>Kiruna eXplorer</h3>
-      {!isLoginPage && <FaUserCircle className="profile-icon" data-testid="profile-icon" onClick={handleLoginClick}/>}
+      {(!isLoginPage && !logged) && <FaUserCircle className="profile-icon" data-testid="profile-icon" onClick={handleLoginClick}/>}
     </Navbar>
   );
 }

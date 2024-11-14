@@ -1,13 +1,37 @@
 import React, { useState } from 'react';
 import { Form, Button, InputGroup, Table, FormControl } from 'react-bootstrap';
 import '../style/Login.css';
+import { Alert } from 'react-bootstrap';
 
-function Login() {
+function Login(props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const handleSubmit = (e) =>{
-    e.preventDefault();
-  }
+  
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    props.setMessage('');
+
+    let valid = true;
+    let msg = '';
+
+    if (!username || username === '') {
+        valid = false;
+        msg += 'Please insert a valid username\r\n'
+    }
+
+    if (!password || password === '') {
+        valid = false;
+        msg += 'Please insert a valid password\r\n'
+    }
+
+    if (valid) {
+        props.login(username, password);
+    }
+    else {
+        props.setMessage(msg);
+    }
+}
 
   return (
     <div className="login-wrapper">

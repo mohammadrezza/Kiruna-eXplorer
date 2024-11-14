@@ -4,6 +4,8 @@ import {Button, Row, Col,ListGroup } from 'react-bootstrap';
 import API from '../services/API.mjs';
 import * as dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom';
+import { PiFileText } from 'react-icons/pi';
+import DocumentDetailsModal from '../components/DocumentDetailsModal';
 
 function DocumentsList() {
 
@@ -11,6 +13,8 @@ function DocumentsList() {
 
   const [list, setList] = useState([]);
   const [loading,setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [currentDocument, setCurrentDocument] = useState('');
 
   useEffect(()=>{
     const loadData = async () => {
@@ -29,6 +33,21 @@ function DocumentsList() {
     loadData();
   }, []);
 
+  const handleIconClick = async (doc) => {
+    try {
+      const docData = await API.getData(doc.id); 
+      setCurrentDocument(docData);
+      setShowModal(true);
+    } catch (error) {
+      console.error("Error fetching document data:", error);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setCurrentDocument(null);
+  };
+
   const handleDocumentClick = (documentId) => navigate(`view/${documentId}`);
 
   return (
@@ -36,7 +55,7 @@ function DocumentsList() {
       <div className="form-container">
       <h2 className='form-container-title'>
           Document List
-          <Button  className='add-button'>+Add new document</Button>
+          <Button  className='add-button' onClick={()=>navigate('add')}>+Add new document</Button>
       </h2>
         <div className="document-list">
           <ListGroup className='relatedDocs'>
@@ -46,10 +65,10 @@ function DocumentsList() {
                 <Col md={3}>Stakeholders</Col>
                 <Col md={2}>Type</Col>
                 <Col md={2}>Issuance Date</Col>
-                <Col md={2}>Connections</Col>
+                <Col md={1}>Connections</Col>
               </Row>
             </ListGroup.Item>
-            {list.map((doc, num) => (
+            {!loading && list.map((doc, num) => (
               <ListGroup.Item 
                 key={doc.id} 
                 onClick={() => handleDocumentClick(doc.id)} 
@@ -59,11 +78,26 @@ function DocumentsList() {
                   <Col md={3}>{doc.stakeholders}</Col>
                   <Col md={2}>{doc.type}</Col>
                   <Col md={2}>{dayjs(doc.issuanceDate).format('DD/MM/YYYY')}</Col>
-                  <Col md={2}>{doc.connections}</Col>
+                  <Col md={1}>{doc.connections}</Col>
+                  <Col>
+                    <PiFileText 
+                      className='filesymbol' 
+                      size={22} 
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent row click event
+                        handleIconClick(doc);
+                      }}>
+                    </PiFileText>
+                  </Col>
                 </Row>
               </ListGroup.Item>
             ))}
           </ListGroup>
+          <DocumentDetailsModal
+            show={showModal}
+            onHide={handleCloseModal}
+            document={currentDocument}
+              />
         </div>
       </div>
     </div>

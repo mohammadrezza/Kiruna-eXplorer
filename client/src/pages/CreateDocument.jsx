@@ -195,7 +195,9 @@ function FormDocument(props) {
     }
     if(isWholeMunicipal) {coordinates.lat = 0; coordinates.lng = 0}
     setErrors([]);
-    const doc = new Document(docID, title.trim(), stakeholder, scale, issuanceDate, type, language, description);
+    const st=[];
+    stakeholder.forEach((s) =>st.push(s.value))
+    const doc = new Document(docID, title.trim(), st, scale, issuanceDate, type.value, language.value, description);
     if(props.mode==='add'){
       API.AddDocumentDescription(doc, selectedDocuments, coordinates, selectedConnectionTypes);
     } else if (props.mode === 'view') {
@@ -217,6 +219,7 @@ function FormDocument(props) {
   };
 
   const handleSelectStakeChange = (selectedOptions) => {
+    
     setStakeholder(selectedOptions);
   };
 
@@ -240,7 +243,7 @@ function FormDocument(props) {
       <div className="form-container">
         <h2 className='form-container-title'>
           {props.mode==='view' ? title : 'New Document'}
-          {(props.mode==='view' && edit===false) && <PiNotePencilThin className='edit-button' onClick={() => setEdit(true)}/>}
+          {(props.mode==='view' && edit===false && props.role==='Urban Planner') && <PiNotePencilThin className='edit-button' onClick={() => setEdit(true)}/>}
           </h2>
         <Form onSubmit={handleSubmit} data-testid="form-component">
           <Row>

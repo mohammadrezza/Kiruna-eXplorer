@@ -1,10 +1,14 @@
 const url = "http://localhost:3001"
 
-/*
+
 async function login(username, password) {
-    let response = await fetch(baseURL + "sessions", {
+    
+    let response = await fetch(`${url}/sessions/`, {
         method: 'POST',
         credentials: "include",
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin' ,
         headers: {
             'Content-Type': 'application/json',
         },
@@ -12,15 +16,18 @@ async function login(username, password) {
     })
     if (response.ok) {
         const user = await response.json()
-        return user
+        console.log(user)
+        return user.user
     } else {
         const errDetail = await response.text();
+        console.log('nope')
         throw errDetail;
     }
 }
 
+/*
 async function logout(){
-    const response = await fetch(baseURL + 'sessions/current', {
+    const response = await fetch(url + 'sessions/current', {
         method: 'DELETE',
         credentials: 'include'
       });
@@ -28,6 +35,25 @@ async function logout(){
         return null;
 }
 */
+
+async function getUser(){
+    const response = await fetch(`${url}/sessions/`, { 
+        credentials: "include",
+        headers: {
+        'Content-Type' : 'application/json',
+    }, })
+    const user = await response.json()
+    if (response.ok) {
+        console.log(user)
+        return user.user;
+    } 
+    else{
+        console.log(user)
+        throw user;
+    }
+    }
+
+
 async function AddDocumentDescription(doc ,selectedDocuments, coordinates) {
     try {
         const coord = [];
@@ -201,6 +227,6 @@ async function getData(id) {
 }
 
 
-const API ={AddDocumentDescription, getTypes, getDocuments, getData, EditDocumentDescription, getStake, getConnectionTypes/*, login, logout*/}
+const API ={AddDocumentDescription, getTypes, getDocuments, getData, EditDocumentDescription, getStake, getConnectionTypes, login,getUser,/* logout*/}
 
 export default API;
