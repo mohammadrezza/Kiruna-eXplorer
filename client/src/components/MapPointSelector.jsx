@@ -31,6 +31,10 @@ function MapEvents({ onCoordinatesChange, setMarkerPosition, mode, edit }) {
 
 function MapPointSelector({ onCoordinatesChange, coordinates, mode, edit  }) {
   const [markerPosition, setMarkerPosition] = useState(null); 
+   const kirunaBounds = L.latLngBounds(
+    [67.821, 20.216],
+    [67.865, 20.337] 
+  );
 
   useEffect(() => {
     if (coordinates.lat !== '' || coordinates.lng !== '') {
@@ -45,6 +49,10 @@ function MapPointSelector({ onCoordinatesChange, coordinates, mode, edit  }) {
         center={initialCenter}
         zoom={13}
         style={{ height: '500px', width: '100%' }}
+        minZoom={11}
+        maxZoom={17}
+        maxBounds={kirunaBounds} 
+        maxBoundsViscosity={1.0} 
       >
         {/* OpenStreetMap tiles */}
         <TileLayer

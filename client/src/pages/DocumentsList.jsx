@@ -6,6 +6,7 @@ import * as dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom';
 import { PiFileText } from 'react-icons/pi';
 import DocumentDetailsModal from '../components/DocumentDetailsModal';
+import DocumentMap from '../components/DocumentsMap';
 
 function DocumentsList() {
 
@@ -15,6 +16,7 @@ function DocumentsList() {
   const [loading,setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [currentDocument, setCurrentDocument] = useState('');
+  const [showMap, setShowMap] = useState(true);
 
   useEffect(()=>{
     const loadData = async () => {
@@ -57,6 +59,9 @@ function DocumentsList() {
           Document List
           <Button  className='add-button' onClick={()=>navigate('add')}>+Add new document</Button>
       </h2>
+      {showMap ? (
+        <DocumentMap documents={list} />
+      ):(
         <div className="document-list">
           <ListGroup className='relatedDocs'>
             <ListGroup.Item className='relatedDocs-header'>
@@ -99,6 +104,7 @@ function DocumentsList() {
             document={currentDocument}
               />
         </div>
+      )}
       </div>
     </div>
   );
