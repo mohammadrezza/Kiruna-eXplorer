@@ -169,6 +169,7 @@ async function getDocument(id) {
         rows.forEach(row => {
             if (row.conn_id) {
                 mainDocument.connections.push({
+                    connectionType: row.conn_type,
                     id: row.conn_id,
                     title: row.conn_title,
                     description: row.conn_description,
