@@ -157,14 +157,16 @@ async function getConnectionTypes() {
 }
 
 async function getStake() {
-    const stakeholder = [{ value: 'stakeholder1', label: 'Stakeholder 1' },
-        { value: 'stakeholder2', label: 'Stakeholder 2' },
-        { value: 'stakeholder3', label: 'Stakeholder 3' },
-        { value: 'stakeholder4', label: 'Stakeholder 4' },
-        { value: 'stakeholder5', label: 'Stakeholder 5' },
-        { value: 'stakeholder6', label: 'Stakeholder 6' },
-        { value: 'stakeholder7', label: 'Stakeholder 7' }]
-    return stakeholder;
+    const response = await fetch(`${url}/documents/stakeholders`);
+    if(response.ok){
+        const t = await response.json();
+        const res =[];
+        t.stakeholders.forEach((stake) => {
+            res.push({ value: stake, label: stake })
+        });
+        return res;
+    }
+    return;
 }
 // async function getDocuments(){
 //     const doc= [];

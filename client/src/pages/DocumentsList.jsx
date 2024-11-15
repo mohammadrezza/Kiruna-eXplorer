@@ -4,19 +4,20 @@ import {Button, Row, Col,ListGroup } from 'react-bootstrap';
 import API from '../services/API.mjs';
 import * as dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom';
-import { PiFileText } from 'react-icons/pi';
+import { PiFileMagnifyingGlassLight } from 'react-icons/pi';
 import DocumentDetailsModal from '../components/DocumentDetailsModal';
 import DocumentMap from '../components/DocumentsMap';
+import List from '../components/List';
 
 function DocumentsList() {
 
   const navigate = useNavigate();
 
-  const [list, setList] = useState([]);
-  const [loading,setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [list, setList] = useState([]);
+  const [showMap, setShowMap] = useState(false);
+  const [loading, setLoading] = useState(false)
   const [currentDocument, setCurrentDocument] = useState('');
-  const [showMap, setShowMap] = useState(true);
 
   useEffect(()=>{
     const loadData = async () => {
@@ -45,11 +46,6 @@ function DocumentsList() {
     }
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setCurrentDocument(null);
-  };
-
   const handleDocumentClick = (documentId) => navigate(`view/${documentId}`);
 
   return (
@@ -62,48 +58,14 @@ function DocumentsList() {
       {showMap ? (
         <DocumentMap documents={list} />
       ):(
-        <div className="document-list">
-          <ListGroup className='relatedDocs'>
-            <ListGroup.Item className='relatedDocs-header'>
-              <Row>
-                <Col md={3}>Title</Col>
-                <Col md={3}>Stakeholders</Col>
-                <Col md={2}>Type</Col>
-                <Col md={2}>Issuance Date</Col>
-                <Col md={1}>Connections</Col>
-              </Row>
-            </ListGroup.Item>
-            {!loading && list.map((doc, num) => (
-              <ListGroup.Item 
-                key={doc.id} 
-                onClick={() => handleDocumentClick(doc.id)} 
-                >
-                <Row className="align-items-center">
-                  <Col md={3} className='doc-title'>{doc.title}</Col>
-                  <Col md={3}>{doc.stakeholders}</Col>
-                  <Col md={2}>{doc.type}</Col>
-                  <Col md={2}>{dayjs(doc.issuanceDate).format('DD/MM/YYYY')}</Col>
-                  <Col md={1}>{doc.connections}</Col>
-                  <Col>
-                    <PiFileText 
-                      className='filesymbol' 
-                      size={22} 
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevent row click event
-                        handleIconClick(doc);
-                      }}>
-                    </PiFileText>
-                  </Col>
-                </Row>
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-          <DocumentDetailsModal
-            show={showModal}
-            onHide={handleCloseModal}
-            document={currentDocument}
-              />
-        </div>
+        <List list={list} 
+        handleDocumentClick={handleDocumentClick} 
+        handleIconClick={handleIconClick}
+        currentDocument={currentDocument}
+        handleCurrentDocument={setCurrentDocument}
+        showModal={showModal}
+        handleShowModal={setShowModal}
+        />
       )}
       </div>
     </div>
