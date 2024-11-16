@@ -33,13 +33,19 @@ function Homepage(props) {
           </button>}
           <Row>
             <Col>
-              <button> <PiFiles></PiFiles> List of Documents </button>
+              <button onClick={handleListDocument}> 
+                <h2><PiFiles></PiFiles></h2>
+                List of Documents 
+              </button>
             </Col>
             <Col>
-              <button> <PiFilePlus></PiFilePlus> Create a document </button>
+              <button onClick={handleNewDocument}> 
+                <h2><PiFilePlus></PiFilePlus></h2>
+                 Create a document 
+                 </button>
             </Col>
             <Col>
-              <button> <PiMapTrifold></PiMapTrifold> Explore the map </button>
+              <button> <h2><PiMapTrifold></PiMapTrifold></h2> Explore the map </button>
             </Col>
           </Row>
         </div>

@@ -86,6 +86,7 @@ function RelatedDocumentsSelector({
               {/* <Col md={2}>{dayjs(doc.issuanceDate).format('DD/MM/YYYY')}</Col> */}
               <Col md={2}>{doc.type}</Col>
               <Col md={2}>
+              {(mode === 'add' || edit) ? 
                 <Form.Select
                   className='connectionform'
                   aria-label="Select connection type"
@@ -97,6 +98,8 @@ function RelatedDocumentsSelector({
                     <option key={type} value={type}>{type}</option>
                   ))}
                 </Form.Select>
+              : doc.connectionType}
+                
               </Col>
               <Col>
                 <PiFileText 
