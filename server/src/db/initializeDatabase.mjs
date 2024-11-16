@@ -149,7 +149,7 @@ const initializeDatabase = async () => {
                 id: "conn3",
                 documentId: "doc3",
                 connectionId: "doc4",
-                type: DocumentConnectionType.CONSULTATION
+                type: DocumentConnectionType.UPDATE
             },
             {
                 id: "conn4",
