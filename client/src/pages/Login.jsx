@@ -1,58 +1,67 @@
 import React, { useState } from 'react';
-import { Form, Button, InputGroup, Table, FormControl } from 'react-bootstrap';
+import { Form, Button, Alert } from 'react-bootstrap';
 import '../style/Login.css';
-import { Alert } from 'react-bootstrap';
 
-function Login(props) {
+function Login({ login, setMessage }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    props.setMessage('');
+    setError(null);
+    setMessage('');
 
-    let valid = true;
-    let msg = '';
-
-    if (!username || username === '') {
-        valid = false;
-        msg += 'Please insert a valid username\r\n'
+    if (!username || !password) {
+      setError('Please provide a valid username and password.');
+      return;
     }
 
-    if (!password || password === '') {
-        valid = false;
-        msg += 'Please insert a valid password\r\n'
+    setIsLoading(true);
+    try {
+      const response = await login(username, password);
+      if (response.success) {
+        setMessage('Login successful!');
+      } else {
+        setError(response.message || 'Login failed. Please try again.');
+      }
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
-
-    if (valid) {
-        props.login(username, password);
-    }
-    else {
-        props.setMessage(msg);
-    }
-}
+  };
 
   return (
     <div className="login-wrapper">
-      <div className='login-block'>
+      <div className="login-block">
         <h3>Login</h3>
+        {error && <Alert variant="danger">{error}</Alert>}
         <Form onSubmit={handleSubmit}>
-          <Form.Group className='form-group'  controlId="username">
-            <Form.Label>username</Form.Label>
-            <Form.Control 
-              type="text" 
-              value={username} 
-              onChange={(e) => setUsername(e.target.value)}/>
+          <Form.Group className="form-group" controlId="username">
+            <Form.Label>Username</Form.Label>
+            <Form.Control
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter your username"
+              disabled={isLoading}
+            />
           </Form.Group>
-          <Form.Group className='form-group'  controlId="password">
-            <Form.Label>password</Form.Label>
-            <Form.Control 
-              type="password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)}/>
+          <Form.Group className="form-group" controlId="password">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              disabled={isLoading}
+            />
           </Form.Group>
-          <Button type="submit">Login</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? 'Logging in...' : 'Login'}
+          </Button>
         </Form>
       </div>
     </div>

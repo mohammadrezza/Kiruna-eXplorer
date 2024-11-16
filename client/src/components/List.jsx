@@ -1,25 +1,16 @@
-import '../style/DocumentsList.css';
-import React, { useState,useEffect } from 'react';
-import {Button, Row, Col,ListGroup } from 'react-bootstrap';
-import API from '../services/API.mjs';
+import React from 'react';
+import {Row, Col,ListGroup } from 'react-bootstrap';
 import * as dayjs from 'dayjs'
-import { useNavigate } from 'react-router-dom';
 import { PiFileMagnifyingGlassLight } from 'react-icons/pi';
 import DocumentDetailsModal from '../components/DocumentDetailsModal';
-
+import '../style/DocumentsList.css';
 
 function List(props){
 
-
-    
-
     const handleCloseModal = () => {
-        props.handleShowModal(false);
-        props.handleCurrentDocument(null);
-      };
-
-      
-      
+      props.handleShowModal(false);
+      props.handleCurrentDocument(null);
+    };
 
 
     return(<div className="document-list">
@@ -30,7 +21,7 @@ function List(props){
               <Col md={3}>Stakeholders</Col>
               <Col md={2}>Type</Col>
               <Col md={1}>Connections</Col>
-              <Col md={2}>Issuance Date</Col>
+              <Col>Issuance Date</Col>
             </Row>
           </ListGroup.Item>
           {!props.loading && props.list.map((doc, num) => (
@@ -39,27 +30,30 @@ function List(props){
               >
               <Row className="align-items-center">
                 <Col md={3} className='doc-title' onClick={() => props.handleDocumentClick(doc.id)}>{doc.title}</Col>
-                <Col md={3}> 
-                {doc.stakeholders.map((s, index) => (<span
-                        key={index}
-                        className={`stakeholder-badge stakeholder-${s.toLowerCase().replace(/\s+/g, '-')}`}
-                      >
-                        {s}
-                      </span>
-                ))}
+                <Col md={3} className='stakeholder-col'> 
+                {doc.stakeholders
+                  .slice() 
+                  .sort((a, b) => a.localeCompare(b))
+                  .map((s, index) => (
+                    <div
+                      key={index}
+                      className={`stakeholder-badge stakeholder-${s.toLowerCase().replace(/\s+/g, '-')}`}
+                    >
+                      {s}
+                    </div>
+                  ))}
                 </Col>
                 <Col md={2}>{doc.type}</Col>
                 <Col md={1}>{doc.connections}</Col>
-                <Col md={2}>{dayjs(doc.issuanceDate).format('DD/MM/YYYY')}</Col>
+                <Col>{dayjs(doc.issuanceDate).format('DD/MM/YYYY')}</Col>
                 <Col>
-                  <PiFileMagnifyingGlassLight 
-                    className='filesymbol' 
-                    size={22} 
-                    onClick={(e) => {
+                  <span className='filesymbol' onClick={(e) => {
                       e.stopPropagation(); // Prevent row click event
                       props.handleIconClick(doc);
                     }}>
-                  </PiFileMagnifyingGlassLight>
+                      Preview
+                      <PiFileMagnifyingGlassLight size={22}></PiFileMagnifyingGlassLight>
+                  </span>
                 </Col>
               </Row>
             </ListGroup.Item>

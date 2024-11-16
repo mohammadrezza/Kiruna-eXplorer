@@ -81,7 +81,7 @@ function App() {
       <Route path='/documents/add' element={loggedIn ? <FormDocument mode={'add'}/> : <Navigate to={'/login'}/> } />
       <Route path='/documents/view/:id' element={ loggedIn ? <FormDocument mode={'view'} role={user.role}/> : <FormDocument mode={'view'}/>} />
       <Route path='/documents' element={
-          <DocumentsList/>
+          <DocumentsList logged={loggedIn}/>
       } />
    </Routes>
    {isHomePage && <Footer />}

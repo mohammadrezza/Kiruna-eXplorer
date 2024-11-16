@@ -33,18 +33,7 @@
     padding: 40px;
   }
   
-  .search-section {
-    height: 400px;
-    
-  }
-  
-  .search-section h2 {
-    font-size: 1.8em;
-    margin-bottom: 15px;
-    color: #333;
-  }
-  
-  .search-bar {
+  /* .search-bar {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -69,30 +58,65 @@
     border: none;
     border-radius: 0 5px 5px 0;
     cursor: pointer;
-  }
+  } */
 
   /* .search-section col{
       width: 50px;
   } */
+  .search-section .row{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
   .search-section button {
     padding: 0px;
-    font-size: 1.4em;
     background-color: white;
     color: var(--demo-black);
     cursor: pointer;
     border: none;
     box-shadow: 0px 0px 25px lightgray;
-    width: 60%;
-    height: 120%;
-    margin-left: 20%;
-    margin-top: 17%;
+    width: 300px;
+    height: 170px;
+    margin: 60px;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
   
   .search-section button:hover {
     background-color: var(--light-gray);
   }
+
+  .search-section button > svg {
+    font-size: 50px;
+    margin-bottom: 20px;
+  }
+  .search-section button>span {
+    font-size: 18px;
+  }
+
+  .search-section-title{ 
+    width: 100%;
+    height: 70px;
+    padding: 0px 62px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    z-index: 1;
+    font-family: "Times";
+    margin: 50px 0;
+  }
+
+  .search-section-title>hr {
+    width: 355px;
+    height: 1px;
+    color: var(--dark-grey);
+  }
+  .search-section-title>h2 {
+    font-size: 60px;
+  }
   
- 
   
