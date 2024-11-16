@@ -5,53 +5,49 @@ import Stakeholder from "../components/stakeholder.mjs";
 import {getDocuments, getDocument, postDocument, putDocument} from "../services/documentService.mjs";
 
 async function createDocument(req, res) {
-try {
-    const {
-        title,
-        description,
-        stakeholders,
-        scale,
-        issuanceDate,
-        type,
-        language,
-        coordinates,
-        connectionIds,
-    } = req.body;
+    try {
+        const {
+            title,
+            description,
+            stakeholders,
+            scale,
+            issuanceDate,
+            type,
+            language,
+            coordinates,
+            connectionIds,
+        } = req.body;
 
-    const document = await postDocument(title,
-        description,
-        stakeholders,
-        scale,
-        issuanceDate,
-        type,
-        language,
-        coordinates,
-        connectionIds);
+        const document = await postDocument(title,
+            description,
+            stakeholders,
+            scale,
+            issuanceDate,
+            type,
+            language,
+            coordinates,
+            connectionIds);
 
-    if (!document) {
-        return res.status(400).json({
+        if (!document) {
+            return res.status(400).json({
+                success: false,
+                message: 'Bad request'
+            });
+        }
+
+        return res.status(201).json({
+            success: true,
+            data: document
+        });
+
+    } catch (error){
+        console.error('Error:', error);
+        return res.status(500).json({
             success: false,
-            message: 'Bad request'
+            message: 'Internal server error',
+            error: error.message
         });
     }
-
-    return res.status(201).json({
-        success: true,
-        data: document
-    });
-
-} catch (error){
-    console.error('Error:', error);
-    return res.status(500).json({
-        success: false,
-        message: 'Internal server error',
-        error: error.message
-    });
-}
-
-    
-
-   
 }
 
 async function getDocumentWithId(req, res) {
@@ -103,9 +99,34 @@ async function getStakeholdersList(req, res) {
 }
 
 async function documentsList(req, res) {
-    const {documentId, title} = req.query;
-    const documents = await getDocuments(documentId, title);
-    res.status(200).json({documents: documents});
+    try {
+        const { documentId, title } = req.query;
+        const page = parseInt(req.query.page) || 1;
+        const size = parseInt(req.query.size) || 10;
+
+        // Validate pagination parameters
+        if (page < 1 || size < 1) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid pagination parameters'
+            });
+        }
+
+        const result = await getDocuments(documentId, title, page, size);
+
+        return res.status(200).json({
+            success: true,
+            ...result
+        });
+
+    } catch (error) {
+        console.error('Error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message
+        });
+    }
 }
 
 export const updateDocument = async (req, res) => {

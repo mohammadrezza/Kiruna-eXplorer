@@ -6,6 +6,7 @@ import documentRouter from './src/routers/documentRouter.mjs';
 import sessionRouter from "./src/routers/sessionRouter.mjs";
 import Auth from "./src/auth/auth.mjs";
 import {errorHandler} from "./src/middlewares/errorhandler.mjs";
+import initializeDatabase from "./src/db/initializeDatabase.mjs";
 
 /*** init express and set up the middlewares ***/
 const app = express();
@@ -23,6 +24,8 @@ app.use(cors(corsOptions))
 app.use('/documents', documentRouter);
 app.use('/sessions', sessionRouter);
 errorHandler(app)
+await initializeDatabase();
+
 
 const PORT = 3001;
 
