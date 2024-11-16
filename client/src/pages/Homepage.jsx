@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import '../style/Homepage.css';
 import { useNavigate } from 'react-router-dom';
 import Slideshow from '../components/Slideshow';
 import { Row } from 'react-bootstrap';
 import { PiFilePlus, PiMapTrifold} from 'react-icons/pi';
 import { IoLibraryOutline } from "react-icons/io5";
+import { AuthContext } from '../layouts/AuthContext';
 
-function Homepage(props) {
+function Homepage() {
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
 
   const handleNewDocument = () => {
     navigate(`/documents/add`);
@@ -28,7 +30,7 @@ function Homepage(props) {
       </div>
       <main className="main-content">
         <div className="search-section">
-          <div class="search-section-title">
+          <div className="search-section-title">
             <hr></hr>
             <h2>My Tools & Features</h2>
           </div>
@@ -37,7 +39,7 @@ function Homepage(props) {
               <IoLibraryOutline></IoLibraryOutline>
               <span>List of Documents</span>
             </button>
-            {props.logged && 
+            {user && 
               <button onClick={handleNewDocument}> 
                 <PiFilePlus></PiFilePlus>
                 <span>Create a document</span>

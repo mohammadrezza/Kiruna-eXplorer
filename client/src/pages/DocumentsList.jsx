@@ -1,16 +1,17 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect, useContext } from 'react';
 import {Button} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { PiMapPinSimpleAreaFill } from "react-icons/pi";
+import { AuthContext } from '../layouts/AuthContext';
 import DocumentMap from '../components/DocumentsMap';
 import API from '../services/API.mjs';
 import List from '../components/List';
 import '../style/DocumentsList.css';
 
-function DocumentsList(props) {
+function DocumentsList() {
 
   const navigate = useNavigate();
-
+  const { user } = useContext(AuthContext);
   const [showModal, setShowModal] = useState(false);
   const [list, setList] = useState([]);
   const [showMap, setShowMap] = useState(false);
@@ -54,16 +55,16 @@ function DocumentsList(props) {
       <div className="form-container">
       <h2 className='form-container-title'>
           Document List
-          {props.logged && 
+          {user && 
           <Button  className='add-button' onClick={()=>navigate('add')}>+ New document</Button>
           }
       </h2>
-      <p className='form-container-subtitle'>
+      <div className='form-container-subtitle'>
         <div className="map-view-trigger" onClick={toggleMap}>
           <PiMapPinSimpleAreaFill />
           <span>Show On Map</span>
         </div>
-      </p>
+      </div>
       {showMap ? (
         <DocumentMap documents={list} />
       ):(

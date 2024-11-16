@@ -1,8 +1,9 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useContext } from 'react';
 import { Form, Button, Row, Col, Modal, ListGroup, InputGroup, Table, FormControl } from 'react-bootstrap';
 import { useNavigate, useParams} from 'react-router-dom'
 import { PiMapPinSimpleAreaFill, PiPen, PiNotePencilThin } from "react-icons/pi";
 import * as dayjs from 'dayjs'
+import { AuthContext } from '../layouts/AuthContext';
 import MapPointSelector from '../components/MapPointSelector'
 import RelatedDocumentsSelector from '../components/RelatedDocumentsSelector';
 import API from '../services/API.mjs';
@@ -15,7 +16,7 @@ function FormDocument(props) {
 
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const { user } = useContext(AuthContext);
 
   const [docID,setDocID] = useState(props.mode==='view' ? id : '');
   const [title,setTitle] = useState('');
@@ -245,7 +246,7 @@ function FormDocument(props) {
       <div className="form-container">
         <h2 className='form-container-title'>
           {props.mode==='view' ? title : 'New Document'}
-          {(props.mode==='view' && edit===false && props.role==='Urban Planner') && <PiNotePencilThin className='edit-button' onClick={() => setEdit(true)}/>}
+          {(props.mode==='view' && edit===false && user.role==='Urban Planner') && <PiNotePencilThin className='edit-button' onClick={() => setEdit(true)}/>}
           </h2>
         <Form onSubmit={handleSubmit} data-testid="form-component">
           <Row>

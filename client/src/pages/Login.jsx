@@ -1,18 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
+import { Navigate } from 'react-router-dom';
+import { AuthContext, useAuth } from '../layouts/AuthContext'; // Import AuthContext
 import '../style/Login.css';
 
-function Login({ login, setMessage }) {
+function Login() {
+  const { login } = useContext(AuthContext); // Access login function from AuthContext
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { user } = useAuth(); 
 
+  if (user) {
+    return <Navigate to="/" />;
+  }
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError(null);
-    setMessage('');
-
+    
     if (!username || !password) {
       setError('Please provide a valid username and password.');
       return;
@@ -20,14 +27,9 @@ function Login({ login, setMessage }) {
 
     setIsLoading(true);
     try {
-      const response = await login(username, password);
-      if (response.success) {
-        setMessage('Login successful!');
-      } else {
-        setError(response.message || 'Login failed. Please try again.');
-      }
+      await login(username, password);
     } catch (err) {
-      setError('An unexpected error occurred. Please try again.');
+      setError(err.message || 'Login failed. Please try again.');
     } finally {
       setIsLoading(false);
     }

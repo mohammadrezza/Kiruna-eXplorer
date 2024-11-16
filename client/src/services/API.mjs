@@ -12,17 +12,13 @@ async function login(username, password) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username: username, password: password },)
+        body: JSON.stringify({ username, password },)
     })
-    if (response.ok) {
-        const user = await response.json()
-        console.log(user)
-        return user.user
-    } else {
-        const errDetail = await response.text();
-        console.log('nope')
-        throw errDetail;
+    if (!response.ok) {
+      throw new Error('Login failed');
     }
+
+    return await response.json();
 }
 
 /*
@@ -37,21 +33,12 @@ async function logout(){
 */
 
 async function getUser(){
-    const response = await fetch(`${url}/sessions/`, { 
-        credentials: "include",
-        headers: {
-        'Content-Type' : 'application/json',
-    }, })
-    const user = await response.json()
-    if (response.ok) {
-        console.log(user)
-        return user.user;
-    } 
-    else{
-        console.log(user)
-        throw user;
+    const response = await fetch(`${url}/sessions/`)
+    if (!response.ok) {
+      throw new Error('Not authenticated');
     }
-    }
+    return await response.json();
+}
 
 
 async function AddDocumentDescription(doc ,selectedDocuments, coordinates) {
