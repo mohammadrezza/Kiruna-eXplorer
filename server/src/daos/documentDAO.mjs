@@ -60,7 +60,7 @@ function addDocumentStakeholder(
 ) {
     return new Promise((resolve, reject) => {
         const query =
-            "INSERT INTO DocumentStakeholder (id, document_id, stakeholder) VALUES (?,?,?)";
+            "INSERT INTO DocumentStakeholder (id, documentId, stakeholder) VALUES (?,?,?)";
         db.run(
             query,
             [
@@ -112,7 +112,7 @@ async function getDocumentStakeholders(documentId) {
     return new Promise((resolve, reject) => {
         const query = `
             SELECT * FROM DocumentStakeholder
-            WHERE document_id = ?
+            WHERE documentId = ?
             ORDER BY created_at ASC`;
 
         db.all(query, [documentId], (err, rows) => {
@@ -181,7 +181,7 @@ function deleteAllStakeholders(documentId) {
     return new Promise((resolve, reject) => {
         const query = `
             DELETE FROM DocumentStakeholder
-            WHERE document_id = ?
+            WHERE documentId = ?
         `;
 
         db.run(query, [documentId], (err) => {

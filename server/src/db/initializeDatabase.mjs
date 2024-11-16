@@ -6,7 +6,7 @@ import UserType from "../components/userType.mjs";
 import DocumentConnectionType from "../components/documentConnectionType.mjs";
 
 const initializeDatabase = async () => {
-    const database = new sqlite.Database('./db.db', (err) => {
+    const database = new sqlite.Database('./src/db/db.db', (err) => {
         if (err) throw err;
     });
 
@@ -23,6 +23,7 @@ const initializeDatabase = async () => {
     try {
         // Clear all existing data
         await run("DELETE FROM DocumentConnection");
+        await run("DELETE FROM DocumentStakeholder");
         await run("DELETE FROM Document");
         await run("DELETE FROM User");
 
@@ -53,10 +54,7 @@ const initializeDatabase = async () => {
                 issuanceDate: "2024-01-15",
                 type: DocumentType.PRESCRIPTIVE_DOCUMENT,
                 language: "English",
-                coordinates: {
-                    lat: 67.8558,
-                    long: 20.2253
-                },
+                coordinates: [67.8558, 20.2253],
                 stakeholders: [Stakeholder.MUNICIPALITY, Stakeholder.LKAB]
             },
             {
@@ -67,10 +65,7 @@ const initializeDatabase = async () => {
                 issuanceDate: "2024-02-01",
                 type: DocumentType.TECHNICAL_DOCUMENT,
                 language: "Swedish",
-                coordinates: {
-                    lat: 67.8504,
-                    long: 20.1761
-                },
+                coordinates: [67.8504, 20.1761],
                 stakeholders: [Stakeholder.LKAB, Stakeholder.REGIONAL_AUTHORITY]
             },
             {
@@ -81,10 +76,7 @@ const initializeDatabase = async () => {
                 issuanceDate: "2024-02-15",
                 type: DocumentType.DESIGN_DOCUMENT,
                 language: "English",
-                coordinates: {
-                    lat: 67.8490,
-                    long: 20.2459
-                },
+                coordinates: [67.8490, 20.2459],
                 stakeholders: [Stakeholder.MUNICIPALITY, Stakeholder.ARCHITECTURE_FIRMS]
             },
             {
@@ -95,10 +87,7 @@ const initializeDatabase = async () => {
                 issuanceDate: "2024-02-20",
                 type: DocumentType.CONSULTATION,
                 language: "Swedish",
-                coordinates: {
-                    lat: 67.8575,
-                    long: 20.2256
-                },
+                coordinates: [67.8575, 20.2256],
                 stakeholders: [Stakeholder.CITIZENS, Stakeholder.MUNICIPALITY]
             },
             {
@@ -109,17 +98,15 @@ const initializeDatabase = async () => {
                 issuanceDate: "2024-03-01",
                 type: DocumentType.TECHNICAL_DOCUMENT,
                 language: "English",
-                coordinates: {
-                    lat: 67.8516,
-                    long: 20.2371
-                },
+                coordinates: [67.8516, 20.2371],
                 stakeholders: [Stakeholder.REGIONAL_AUTHORITY, Stakeholder.OTHERS]
             }
         ];
 
+        // Insert documents
         for (const doc of documents) {
             await run(
-                `INSERT INTO Document (id, title, description, scale, issuanceDate, type, language, coordinates) 
+                `INSERT INTO Document (id, title, description, scale, issuanceDate, type, language, coordinates)
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
                 [
                     doc.id,
@@ -132,6 +119,16 @@ const initializeDatabase = async () => {
                     JSON.stringify(doc.coordinates)
                 ]
             );
+
+            // Insert document stakeholders
+            for (const stakeholder of doc.stakeholders) {
+                const stakeholderId = `${doc.id}-${stakeholder}`.toLowerCase().replace(/\s+/g, '-');
+                await run(
+                    `INSERT INTO DocumentStakeholder (id, documentId, stakeholder) 
+                     VALUES (?, ?, ?)`,
+                    [stakeholderId, doc.id, stakeholder]
+                );
+            }
         }
 
         // Insert document connections
@@ -152,7 +149,7 @@ const initializeDatabase = async () => {
                 id: "conn3",
                 documentId: "doc3",
                 connectionId: "doc4",
-                type: DocumentConnectionType.UPDATE
+                type: DocumentConnectionType.CONSULTATION
             },
             {
                 id: "conn4",
@@ -164,7 +161,7 @@ const initializeDatabase = async () => {
 
         for (const conn of connections) {
             await run(
-                `INSERT INTO DocumentConnection (id, documentId, connectionId, type) 
+                `INSERT INTO DocumentConnection (id, documentId, connectionId, type)
                  VALUES (?, ?, ?, ?)`,
                 [conn.id, conn.documentId, conn.connectionId, conn.type]
             );
