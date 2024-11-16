@@ -408,7 +408,7 @@ function FormDocument(props) {
                   </Form.Group>
                 </Col>
             </Row>
-            <RelatedDocumentsSelector 
+            {!loading && <RelatedDocumentsSelector 
               mode={props.mode}
               edit={edit}
               allDocuments={(props.mode === 'add' || edit) ? allDocuments : relatedDocuments}
@@ -416,7 +416,7 @@ function FormDocument(props) {
               onDocumentSelect={handleDocumentSelect}
               onRelatedDocumentClick={handleRelatedDocumentClick}
               onConnectionTypeChange={handleConnectionTypeSelect}
-            />
+            />}
           </Row>
           {(props.mode === 'add' || edit) && (
             <Button 
