@@ -34,7 +34,7 @@ function FormDocument(props) {
   const [allDocuments, setAllDocuments] = useState([]); 
   const [selectedDocuments, setSelectedDocuments] = useState([]); 
   const [relatedDocuments, setRelatedDocuments] = useState([]); 
-  const [selectedConnectionTypes, setSelectedConnectionTypes] = useState({});
+  const [selectedConnectionTypes, setSelectedConnectionTypes] = useState([]);
   const [allTypes,setAllTypes] = useState([]);
   const [allStake,setAllStake] = useState([]);
   const [errors, setErrors] = useState([]);
@@ -199,9 +199,9 @@ function FormDocument(props) {
     stakeholder.forEach((s) =>st.push(s.value))
     const doc = new Document(docID, title.trim(), st, scale, issuanceDate, type.value, language.value, description);
     if(props.mode==='add'){
-      API.AddDocumentDescription(doc, selectedDocuments, coordinates, selectedConnectionTypes);
+      API.AddDocumentDescription(doc, selectedConnectionTypes, coordinates);
     } else if (props.mode === 'view') {
-      API.EditDocumentDescription(doc, selectedDocuments, coordinates, docID, selectedConnectionTypes);
+      API.EditDocumentDescription(doc, selectedConnectionTypes , coordinates, docID );
     }
     //if we want to set the connections 
     //by using this API we pass selectedDocuments as
@@ -232,10 +232,10 @@ function FormDocument(props) {
   };
   
   const handleConnectionTypeSelect = (documentId, selectedConnectionType) => {
-    setSelectedConnectionTypes(prevSelected => ({
+    setSelectedConnectionTypes(prevSelected => ([
       ...prevSelected,
-      [documentId]: selectedConnectionType
-    }));
+      [documentId, selectedConnectionType] 
+    ]));
   };
   
   return  (

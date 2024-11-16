@@ -65,7 +65,16 @@ async function AddDocumentDescription(doc ,selectedDocuments, coordinates) {
                 headers:{
                     'Content-Type':'application/json'
                 },
-                body: JSON.stringify({title: doc.title, description: doc.description, stakeholders:doc.stakeholder, scale: doc.scale, issuanceDate: doc.issuanceDate,type: doc.type,language: doc.language,  coordinates: coordinates, connectionIds:selectedDocuments  })
+                body: JSON.stringify({
+                    title: doc.title,
+                    description: doc.description,
+                    stakeholders:doc.stakeholder, 
+                    scale: doc.scale, 
+                    issuanceDate: doc.issuanceDate,
+                    type: doc.type,
+                    language: doc.language,  
+                    coordinates: coordinates, 
+                    connectionIds: selectedDocuments  })
             })
         if (response.ok) {
             return;
