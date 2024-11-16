@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS Document
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS DocumentConnection
+CREATE TABLE IF NOT EXISTS DocumentStakeholder
 (
     id TEXT PRIMARY KEY,
     documentId TEXT,

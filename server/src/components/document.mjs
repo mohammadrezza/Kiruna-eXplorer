@@ -35,7 +35,7 @@ class Document {
         this.description = row.description;
         this.stakeholders = row.stakeholders;
         this.scale = row.scale;
-        this.issuanceDate = row.issuance_date;
+        this.issuanceDate = row.issuanceDate;
         this.type = row.type;
         this.language = row.language;
         this.coordinates = row.coordinates ? JSON.parse(row.coordinates) : [];
