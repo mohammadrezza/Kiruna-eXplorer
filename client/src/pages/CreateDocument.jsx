@@ -105,7 +105,9 @@ function FormDocument(props) {
           const doc = await API.getData(docID);
           const connectedDocumentIds = doc.connections.map(doc => doc.id);
           setTitle(doc.title);
-          setStakeholder(doc.stakeholders);
+          const st = [];
+          doc.stakeholders.forEach((s) => st.push({value:s, label:s}))
+          setStakeholder(st);
           setScale(doc.scale);
           setDescription(doc.description);
           setType(doc.type);
