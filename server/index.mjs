@@ -8,6 +8,7 @@ import Auth from "./src/auth/auth.mjs";
 import {errorHandler} from "./src/middlewares/errorhandler.mjs";
 import initializeDatabase from "./src/db/initializeDatabase.mjs";
 
+
 /*** init express and set up the middlewares ***/
 const app = express();
 app.use(morgan('dev'));

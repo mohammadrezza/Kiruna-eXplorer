@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "927b6a59-54c7-4667-81eb-742c23659beb",
+		"_postman_id": "f982a36f-5724-48fb-becf-e13b5542b919",
 		"name": "Kiruna Explorer",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "4016750"
+		"_exporter_id": "38921252"
 	},
 	"item": [
 		{
@@ -579,6 +579,41 @@
 					"body": "{\n    \"stakeholders\": [\n        \"LKAB\",\n        \"Municipality\",\n        \"Regional Authority\",\n        \"Architecture Firms\",\n        \"Citizens\",\n        \"Others\"\n    ]\n}"
 				}
 			]
+		},
+		{
+			"name": "{{host}}/documents/:documentId/upload",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/Users/alicesantoro/Desktop/flow.pdf"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{host}}/documents/:documentId/upload",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"documents",
+						":documentId",
+						"upload"
+					],
+					"variable": [
+						{
+							"key": "documentId",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
