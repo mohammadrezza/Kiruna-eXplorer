@@ -3,7 +3,7 @@ import '../style/Slideshow.css';
 
 function Slideshow() {
 
-  const images = ['/kiruna.png', '/kiruna2.jpeg', '/kiruna3.jpeg', '/kiruna4.webp']; // Add paths to more images here
+  const images = ['/kiruna.png', '/kiruna2.png', '/kiruna3.png', '/kiruna4.png']; // Add paths to more images here
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {

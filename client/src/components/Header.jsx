@@ -2,7 +2,7 @@ import React from 'react';
 import {useLocation, useNavigate } from 'react-router-dom';
 import { FaUserCircle } from 'react-icons/fa';
 import { Navbar } from 'react-bootstrap';
-import '../style/Header.css'
+import '../style/header.css'
 
 function Header({ className, logged }) {
   const location = useLocation();
