@@ -11,8 +11,8 @@ import Document from "../components/document.mjs";
 import DocumentConnection from "../components/documentConnection.mjs";
 import DocumentStakeholder from "../components/documentStakeholder.mjs";
 
-async function getDocuments(documentId, title) {
-    return await getAllDocuments(documentId, title);
+async function getDocuments(documentId, title, page, size) {
+    return await getAllDocuments(documentId, title, page, size);
 }
 
 async function postDocument(

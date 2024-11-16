@@ -272,58 +272,116 @@ async function getDocumentWithConnections(id) {
     });
 }
 
-async function getAllDocuments(documentId, title) {
-    return new Promise((resolve, reject) => {
-        let query = `
-            SELECT
-                d.*,
-                CASE
-                    WHEN ? IS NOT NULL AND EXISTS (
-                        SELECT 1 FROM DocumentConnection dc
-                        WHERE (dc.documentId = d.id AND dc.connectionId = ?)
-                           OR (dc.connectionId = d.id AND dc.documentId = ?)
-                    ) THEN 1
-                    ELSE 0
+async function getAllDocuments(documentId, title, page, size) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Calculate offset
+            const offset = (page - 1) * size;
+
+            // Base query for total count
+            let countQuery = `
+                SELECT COUNT(*) as total
+                FROM Document d
+                WHERE 1=1
+            `;
+
+            // Base query for fetching documents
+            let query = `
+                SELECT 
+                    d.*,
+                    CASE 
+                        WHEN ? IS NOT NULL AND EXISTS (
+                            SELECT 1 FROM DocumentConnection dc 
+                            WHERE (dc.documentId = d.id AND dc.connectionId = ?) 
+                            OR (dc.connectionId = d.id AND dc.documentId = ?)
+                        ) THEN 1
+                        ELSE 0
                     END as is_connected
-            FROM Document d
-            WHERE 1=1
-        `;
+                FROM Document d
+                WHERE 1=1
+            `;
 
-        const params = [];
+            const params = [];
+            const countParams = [];
 
-        if (documentId) {
-            params.push(documentId, documentId, documentId);
-            query += ` AND d.id != ?`;
-            params.push(documentId);
-        } else {
-            params.push(null, null, null);
-        }
+            // Add filters
+            if (documentId) {
+                params.push(documentId, documentId, documentId);
+                query += ` AND d.id != ?`;
+                params.push(documentId);
 
-        if (title) {
-            query += ` AND d.title LIKE ?`;
-            params.push(`%${title}%`);
-        }
-
-        query += ` ORDER BY d.created_at DESC`;
-
-        db.all(query, params, async (err, rows) => {
-            if (err) {
-                reject(err);
+                countQuery += ` AND d.id != ?`;
+                countParams.push(documentId);
             } else {
-                // Map rows to documents with stakeholders
-                const documentsPromises = rows.map(async row => {
-                    const document = new Document();
-                    document.createFromDatabaseRow(row);
-                    const stakeholders = await getDocumentStakeholders(row.id);
-                    document.stakeholders = stakeholders.map(s => s.stakeholder);
-                    return document;
-                });
-
-                // Wait for all documents to be processed
-                const documents = await Promise.all(documentsPromises);
-                resolve(documents);
+                params.push(null, null, null);
             }
-        });
+
+            if (title) {
+                query += ` AND d.title LIKE ?`;
+                params.push(`%${title}%`);
+
+                countQuery += ` AND d.title LIKE ?`;
+                countParams.push(`%${title}%`);
+            }
+
+            // Add ordering and pagination
+            query += ` ORDER BY d.created_at DESC LIMIT ? OFFSET ?`;
+            params.push(size, offset);
+
+            // Get total count
+            const totalCount = await new Promise((resolveCount, rejectCount) => {
+                db.get(countQuery, countParams, (err, row) => {
+                    if (err) {
+                        rejectCount(err);
+                    } else {
+                        resolveCount(row.total);
+                    }
+                });
+            });
+
+            // Get paginated documents
+            const rows = await new Promise((resolveRows, rejectRows) => {
+                db.all(query, params, (err, rows) => {
+                    if (err) {
+                        rejectRows(err);
+                    } else {
+                        resolveRows(rows);
+                    }
+                });
+            });
+
+            // Map rows to documents with stakeholders
+            const documentsPromises = rows.map(async row => {
+                const document = new Document();
+                document.createFromDatabaseRow(row);
+                const stakeholders = await getDocumentStakeholders(row.id);
+                document.stakeholders = stakeholders.map(s => s.stakeholder);
+                return document;
+            });
+
+            // Wait for all documents to be processed
+            const documents = await Promise.all(documentsPromises);
+
+            // Calculate pagination metadata
+            const totalPages = Math.ceil(totalCount / size);
+            const hasNextPage = page < totalPages;
+            const hasPreviousPage = page > 1;
+
+            resolve({
+                data: documents,
+                pagination: {
+                    total: totalCount,
+                    totalPages,
+                    currentPage: page,
+                    size,
+                    hasNextPage,
+                    hasPreviousPage
+                }
+            });
+
+        } catch (error) {
+            reject(error);
+        }
     });
 }
 

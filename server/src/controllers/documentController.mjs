@@ -99,9 +99,34 @@ async function getStakeholdersList(req, res) {
 }
 
 async function documentsList(req, res) {
-    const {documentId, title} = req.query;
-    const documents = await getDocuments(documentId, title);
-    res.status(200).json({documents: documents});
+    try {
+        const { documentId, title } = req.query;
+        const page = parseInt(req.query.page) || 1;
+        const size = parseInt(req.query.size) || 10;
+
+        // Validate pagination parameters
+        if (page < 1 || size < 1) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid pagination parameters'
+            });
+        }
+
+        const result = await getDocuments(documentId, title, page, size);
+
+        return res.status(200).json({
+            success: true,
+            ...result
+        });
+
+    } catch (error) {
+        console.error('Error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message
+        });
+    }
 }
 
 export const updateDocument = async (req, res) => {
