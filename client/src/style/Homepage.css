@@ -71,15 +71,16 @@
     cursor: pointer;
   }
   .search-section button {
-    padding: 12px;
+    padding: 0px;
     font-size: 1.3em;
-    background-color: var(--demo-black);
-    color: #fff;
-    border: none;
-    border-radius: 7px 7px 7px 7px;
+    background-color: white;
+    color: var(--demo-black);
     cursor: pointer;
-    width: 50%;
-    margin-left: 25%;
+    border: none;
+    box-shadow: 0px 0px 25px lightgray;
+    width: 60%;
+    height: 150%;
+    margin-left: 20%;
     margin-top: 17%;
     position: relative;
   }
