@@ -28,7 +28,7 @@ function addDocument(
 ) {
     return new Promise((resolve, reject) => {
         const query =
-            "INSERT INTO Document (id, title, description, scale, issuance_date, type, language, coordinates, connections) VALUES (?,?,?,?,?,?,?,?,?)";
+            "INSERT INTO Document (id, title, description, scale, issuanceDate, type, language, coordinates, connections) VALUES (?,?,?,?,?,?,?,?,?)";
         db.run(
             query,
             [
