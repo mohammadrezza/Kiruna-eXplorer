@@ -35,14 +35,11 @@ function Homepage(props) {
                 List of Documents 
               </button>
             </Col>
-            <Col>
+            {props.logged && <Col>
               <button onClick={handleNewDocument}> 
                 <h2><PiFilePlus></PiFilePlus></h2>
                  Create a document 
                  </button>
-            </Col>
-            {props.logged && <Col>
-              <button onClick={handleNewDocument}> <PiFilePlus></PiFilePlus> Create a document </button>
             </Col>}
             <Col>
               <button> <h2><PiMapTrifold></PiMapTrifold></h2> Explore the map </button>

@@ -48,7 +48,7 @@ function DocumentDetailsModal({ show, onHide, document }) {
                       <Col md={3}>{doc.title}</Col>
                       <Col md={3}>{doc.stakeholders}</Col>
                       <Col md={2}>{doc.type}</Col>
-                      <Col md={2}>{"con_type_TOBEADDED"}</Col>
+                      <Col md={2}>{doc.connectionType}</Col>
                     </Row>
                   </ListGroup.Item>
                 ))}

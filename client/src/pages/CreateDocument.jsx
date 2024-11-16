@@ -236,7 +236,7 @@ function FormDocument(props) {
   const handleConnectionTypeSelect = (documentId, selectedConnectionType) => {
     setSelectedConnectionTypes(prevSelected => ([
       ...prevSelected,
-      [documentId, selectedConnectionType] 
+      {"id":documentId, "type":selectedConnectionType}
     ]));
   };
   
