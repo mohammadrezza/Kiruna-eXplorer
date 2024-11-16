@@ -6,7 +6,6 @@ import Document from "../components/document.mjs";
  * @param {string} id - document id
  * @param {string} title - document title
  * @param {string} description - document description
- * @param {string} stakeholders - document stakeholders
  * @param {string} scale - document scale
  * @param {string} issuanceDate - document issuanceDate
  * @param {string} type - document type
@@ -15,11 +14,11 @@ import Document from "../components/document.mjs";
  * @param {number} connections - document connections
  * @returns {Promise} -
  */
+
 function addDocument(
     id,
     title,
     description,
-    stakeholders,
     scale,
     issuanceDate,
     type,
@@ -29,20 +28,45 @@ function addDocument(
 ) {
     return new Promise((resolve, reject) => {
         const query =
-            "INSERT INTO Document (id, title, description, stakeholders, scale, issuanceDate, type, language, coordinates, connections) VALUES (?,?,?,?,?,?,?,?,?,?)";
+            "INSERT INTO Document (id, title, description, scale, issuance_date, type, language, coordinates, connections) VALUES (?,?,?,?,?,?,?,?,?)";
         db.run(
             query,
             [
                 id,
                 title,
                 description,
-                stakeholders,
                 scale,
                 issuanceDate,
                 type,
                 language,
                 JSON.stringify(coordinates),
                 connections,
+            ],
+            (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            }
+        );
+    });
+}
+
+function addDocumentStakeholder(
+    id,
+    documentId,
+    stakeholder
+) {
+    return new Promise((resolve, reject) => {
+        const query =
+            "INSERT INTO DocumentStakeholder (id, document_id, stakeholder) VALUES (?,?,?)";
+        db.run(
+            query,
+            [
+                id,
+                documentId,
+                stakeholder
             ],
             (err) => {
                 if (err) {
@@ -84,11 +108,28 @@ function addDocumentConnection(
     });
 }
 
+async function getDocumentStakeholders(documentId) {
+    return new Promise((resolve, reject) => {
+        const query = `
+            SELECT * FROM DocumentStakeholder
+            WHERE document_id = ?
+            ORDER BY created_at ASC`;
+
+        db.all(query, [documentId], (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
+
+
 function editDocument(
     id,
     title,
     description,
-    stakeholders,
     scale,
     issuanceDate,
     type,
@@ -102,7 +143,6 @@ function editDocument(
             SET
                 title = COALESCE(?, title),
                 description = COALESCE(?, description),
-                stakeholders = COALESCE(?, stakeholders),
                 scale = COALESCE(?, scale),
                 issuanceDate = COALESCE(?, issuanceDate),
                 type = COALESCE(?, type),
@@ -118,7 +158,6 @@ function editDocument(
             [
                 title,
                 description,
-                stakeholders,
                 scale,
                 issuanceDate,
                 type,
@@ -135,6 +174,23 @@ function editDocument(
                 }
             }
         );
+    });
+}
+
+function deleteAllStakeholders(documentId) {
+    return new Promise((resolve, reject) => {
+        const query = `
+            DELETE FROM DocumentStakeholder
+            WHERE document_id = ?
+        `;
+
+        db.run(query, [documentId], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
     });
 }
 
@@ -180,11 +236,10 @@ function deleteAllConnections(id) {
 async function getDocumentWithConnections(id) {
     return new Promise((resolve, reject) => {
         const query = `
-            SELECT 
+            SELECT
                 d.id as doc_id,
                 d.title as doc_title,
                 d.description as doc_description,
-                d.stakeholders as doc_stakeholders,
                 d.scale as doc_scale,
                 d.issuanceDate as doc_issuanceDate,
                 d.type as doc_type,
@@ -192,7 +247,6 @@ async function getDocumentWithConnections(id) {
                 d.coordinates as doc_coordinates,
                 cd.id as conn_id,
                 cd.title as conn_title,
-                cd.stakeholders as conn_stakeholders,
                 cd.scale as conn_scale,
                 cd.issuanceDate as conn_issuanceDate,
                 cd.type as conn_type,
@@ -200,12 +254,12 @@ async function getDocumentWithConnections(id) {
                 cd.coordinates as conn_coordinates,
                 dc.type as conn_type
             FROM Document d
-            LEFT JOIN DocumentConnection dc ON d.id = dc.documentId OR d.id = dc.connectionId
-            LEFT JOIN Document cd ON 
-                CASE 
+                     LEFT JOIN DocumentConnection dc ON d.id = dc.documentId OR d.id = dc.connectionId
+                     LEFT JOIN Document cd ON
+                CASE
                     WHEN dc.documentId = d.id THEN dc.connectionId = cd.id
                     WHEN dc.connectionId = d.id THEN dc.documentId = cd.id
-                END
+                    END
             WHERE d.id = ?`;
 
         db.all(query, [id], (err, rows) => {
@@ -221,33 +275,30 @@ async function getDocumentWithConnections(id) {
 async function getAllDocuments(documentId, title) {
     return new Promise((resolve, reject) => {
         let query = `
-            SELECT 
+            SELECT
                 d.*,
-                CASE 
+                CASE
                     WHEN ? IS NOT NULL AND EXISTS (
-                        SELECT 1 FROM DocumentConnection dc 
-                        WHERE (dc.documentId = d.id AND dc.connectionId = ?) 
-                        OR (dc.connectionId = d.id AND dc.documentId = ?)
+                        SELECT 1 FROM DocumentConnection dc
+                        WHERE (dc.documentId = d.id AND dc.connectionId = ?)
+                           OR (dc.connectionId = d.id AND dc.documentId = ?)
                     ) THEN 1
                     ELSE 0
-                END as is_connected
+                    END as is_connected
             FROM Document d
             WHERE 1=1
         `;
 
         const params = [];
 
-        // Add documentId parameter three times for the CASE statement
         if (documentId) {
             params.push(documentId, documentId, documentId);
-            // Exclude the document with provided ID
             query += ` AND d.id != ?`;
             params.push(documentId);
         } else {
             params.push(null, null, null);
         }
 
-        // Add title search condition if provided
         if (title) {
             query += ` AND d.title LIKE ?`;
             params.push(`%${title}%`);
@@ -255,15 +306,21 @@ async function getAllDocuments(documentId, title) {
 
         query += ` ORDER BY d.created_at DESC`;
 
-        db.all(query, params, (err, rows) => {
+        db.all(query, params, async (err, rows) => {
             if (err) {
                 reject(err);
             } else {
-                const documents = rows.map(row => {
+                // Map rows to documents with stakeholders
+                const documentsPromises = rows.map(async row => {
                     const document = new Document();
                     document.createFromDatabaseRow(row);
+                    const stakeholders = await getDocumentStakeholders(row.id);
+                    document.stakeholders = stakeholders.map(s => s.stakeholder);
                     return document;
                 });
+
+                // Wait for all documents to be processed
+                const documents = await Promise.all(documentsPromises);
                 resolve(documents);
             }
         });
@@ -272,10 +329,13 @@ async function getAllDocuments(documentId, title) {
 
 export {
     addDocument,
+    addDocumentStakeholder,
     addDocumentConnection,
     getAllDocuments,
+    getDocumentStakeholders,
     getDocumentWithConnections,
     editDocument,
     editDocumentConnection,
     deleteAllConnections,
+    deleteAllStakeholders
 };

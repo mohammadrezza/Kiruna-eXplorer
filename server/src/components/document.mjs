@@ -4,8 +4,8 @@ class Document {
     constructor() {
         this.id = '';
         this.title = '';
-        this.description = ''
-        this.stakeholders = '';
+        this.description = '';
+        this.stakeholders = [];
         this.scale = '';
         this.issuanceDate = '';
         this.type = '';

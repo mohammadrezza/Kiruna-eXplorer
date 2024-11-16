@@ -5,10 +5,11 @@ import {
     editDocument,
     editDocumentConnection,
     deleteAllConnections,
-    getAllDocuments
+    getAllDocuments, addDocumentStakeholder, deleteAllStakeholders, getDocumentStakeholders
 } from "../daos/documentDAO.mjs";
 import Document from "../components/document.mjs";
 import DocumentConnection from "../components/documentConnection.mjs";
+import DocumentStakeholder from "../components/documentStakeholder.mjs";
 
 async function getDocuments(documentId, title) {
     return await getAllDocuments(documentId, title);
@@ -30,7 +31,6 @@ async function postDocument(
     document.createFromObject({
         title,
         description,
-        stakeholders,
         scale,
         issuanceDate,
         type,
@@ -38,6 +38,16 @@ async function postDocument(
         coordinates,
         connections: connectionIds.length,
     });
+
+    let documentStakeholders = [];
+    for (const stakeholder of stakeholders) {
+        let docStakeholder = new DocumentStakeholder();
+        docStakeholder.createFromObject({
+            documentId: document.id,
+            stakeholder: stakeholder
+        });
+        documentStakeholders.push(docStakeholder);
+    }
 
     let connections = []
     for (const connectionId of connectionIds) {
@@ -55,7 +65,6 @@ async function postDocument(
             document.id,
             title,
             description,
-            stakeholders,
             scale,
             issuanceDate,
             type,
@@ -63,6 +72,16 @@ async function postDocument(
             coordinates,
             connectionIds.length
         );
+
+        let stakeholderPromises = [];
+        for (const docStakeholder of documentStakeholders) {
+            stakeholderPromises.push(addDocumentStakeholder(
+                docStakeholder.id,
+                docStakeholder.documentId,
+                docStakeholder.stakeholder
+            ));
+        }
+        await Promise.all(stakeholderPromises);
 
         let connectionPromises = [];
         for (const connection of connections) {
@@ -74,6 +93,8 @@ async function postDocument(
             ));
         }
         await Promise.all(connectionPromises);
+
+        document.stakeholders = stakeholders;
 
         return ({message: "Document successfully created", data: document});
 
@@ -101,7 +122,6 @@ async function putDocument(
         documentId,
         title,
         description,
-        stakeholders,
         scale,
         issuanceDate,
         type,
@@ -109,6 +129,17 @@ async function putDocument(
         coordinates,
         connections: connectionIds.length,
     });
+
+    let documentStakeholders = [];
+    for (const stakeholder of stakeholders) {
+        let docStakeholder = new DocumentStakeholder();
+        docStakeholder.createFromObject({
+            documentId: documentId,
+            stakeholder: stakeholder
+        });
+        documentStakeholders.push(docStakeholder);
+    }
+
     let connections = [];
     for (const connectionId of connectionIds) {
         let documentConnection = new DocumentConnection();
@@ -122,7 +153,18 @@ async function putDocument(
 
     try {
 
-        await editDocument(documentId, title, description, stakeholders, scale, issuanceDate, type, language, coordinates, connectionIds.length);
+        await editDocument(documentId, title, description, scale, issuanceDate, type, language, coordinates, connectionIds.length);
+
+        await deleteAllStakeholders(documentId);
+        let stakeholderPromises = [];
+        for (const docStakeholder of documentStakeholders) {
+            stakeholderPromises.push(addDocumentStakeholder(
+                docStakeholder.id,
+                docStakeholder.documentId,
+                docStakeholder.stakeholder
+            ));
+        }
+        await Promise.all(stakeholderPromises);
 
         await deleteAllConnections(documentId);
 
@@ -136,6 +178,9 @@ async function putDocument(
             ));
         }
         await Promise.all(connectionPromises);
+
+        document.stakeholders = stakeholders;
+
         return ({message: "Document successfully updated", data: document});
 
     } catch (error) {
@@ -145,35 +190,37 @@ async function putDocument(
 
 async function getDocument(id) {
     try {
-        const rows = await getDocumentWithConnections(id);
+        const documentData = await getDocumentWithConnections(id);
+        const stakeholders = await getDocumentStakeholders(id);
 
-        if (!rows || rows.length === 0) {
+        if (!documentData || documentData.length === 0) {
             return null;
         }
 
         // Format the main document
         const mainDocument = {
-            id: rows[0].doc_id,
-            title: rows[0].doc_title,
-            description: rows[0].doc_description,
-            stakeholders: rows[0].doc_stakeholders,
-            scale: rows[0].doc_scale,
-            issuanceDate: rows[0].doc_issuanceDate,
-            type: rows[0].doc_type,
-            language: rows[0].doc_language,
-            coordinates: rows[0].doc_coordinates ? JSON.parse(rows[0].doc_coordinates) : [],
+            id: documentData[0].doc_id,
+            title: documentData[0].doc_title,
+            description: documentData[0].doc_description,
+            stakeholders: stakeholders.map(s => s.stakeholder),
+            scale: documentData[0].doc_scale,
+            issuanceDate: documentData[0].doc_issuanceDate,
+            type: documentData[0].doc_type,
+            language: documentData[0].doc_language,
+            coordinates: documentData[0].doc_coordinates ? JSON.parse(documentData[0].doc_coordinates) : [],
             connections: []
         };
 
         // Add connections if they exist
-        rows.forEach(row => {
+        for (const row of documentData) {
             if (row.conn_id) {
+                const connStakeholders = await getDocumentStakeholders(row.conn_id);
                 mainDocument.connections.push({
                     connectionType: row.conn_type,
                     id: row.conn_id,
                     title: row.conn_title,
                     description: row.conn_description,
-                    stakeholders: row.conn_stakeholders,
+                    stakeholders: connStakeholders.map(s => s.stakeholder),
                     scale: row.conn_scale,
                     issuanceDate: row.conn_issuanceDate,
                     type: row.conn_type,
@@ -181,7 +228,7 @@ async function getDocument(id) {
                     coordinates: row.conn_coordinates ? JSON.parse(row.conn_coordinates) : []
                 });
             }
-        });
+        }
 
         return mainDocument;
     } catch (error) {
