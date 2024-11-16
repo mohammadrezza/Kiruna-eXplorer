@@ -28,9 +28,6 @@ function Homepage(props) {
       </div>
       <main className="main-content">
         <div className="search-section">
-          {props.logged && <button onClick={handleNewDocument}> 
-            Create new document
-          </button>}
           <Row>
             <Col>
               <button onClick={handleListDocument}> 
@@ -44,6 +41,9 @@ function Homepage(props) {
                  Create a document 
                  </button>
             </Col>
+            {props.logged && <Col>
+              <button onClick={handleNewDocument}> <PiFilePlus></PiFilePlus> Create a document </button>
+            </Col>}
             <Col>
               <button> <h2><PiMapTrifold></PiMapTrifold></h2> Explore the map </button>
             </Col>

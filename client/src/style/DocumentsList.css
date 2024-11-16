@@ -85,3 +85,31 @@
     background-color: var(--demo-black);
     border-radius: 6px ;
 }
+
+.stakeholder-badge {
+    color: black;
+    padding: 5px 10px;
+    font-size: 0.9em;
+    border-radius: none;
+    margin-right: 5px;
+  }
+  
+  .stakeholder-architecture-firms {
+    background-color: #f8d775;
+  }
+  
+  .stakeholder-citizens {
+    background-color: #b8e4f0;
+  }
+  
+  .stakeholder-municipality {
+    background-color: #a67c52;
+  }
+  
+  .stakeholder-regional-authority {
+    background-color: #f9c74f;
+  }
+  
+  .stakeholder-others {
+    background-color: #b8380d;
+  }

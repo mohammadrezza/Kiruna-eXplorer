@@ -195,7 +195,7 @@ async function getDocuments() {
 
         if (response.ok) {
             const documents = await response.json();
-            return documents.documents;
+            return documents.data;
         } else {
             const errDetail = await response.json();
             if (errDetail.error)

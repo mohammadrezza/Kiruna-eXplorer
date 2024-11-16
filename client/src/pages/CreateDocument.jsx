@@ -105,7 +105,9 @@ function FormDocument(props) {
           const doc = await API.getData(docID);
           const connectedDocumentIds = doc.connections.map(doc => doc.id);
           setTitle(doc.title);
-          setStakeholder(doc.stakeholders);
+          const st = [];
+          doc.stakeholders.forEach((s) => st.push({value:s, label:s}))
+          setStakeholder(st);
           setScale(doc.scale);
           setDescription(doc.description);
           setType(doc.type);
@@ -408,7 +410,7 @@ function FormDocument(props) {
                   </Form.Group>
                 </Col>
             </Row>
-            <RelatedDocumentsSelector 
+            {!loading && <RelatedDocumentsSelector 
               mode={props.mode}
               edit={edit}
               allDocuments={(props.mode === 'add' || edit) ? allDocuments : relatedDocuments}
@@ -416,7 +418,7 @@ function FormDocument(props) {
               onDocumentSelect={handleDocumentSelect}
               onRelatedDocumentClick={handleRelatedDocumentClick}
               onConnectionTypeChange={handleConnectionTypeSelect}
-            />
+            />}
           </Row>
           {(props.mode === 'add' || edit) && (
             <Button 

@@ -18,6 +18,9 @@ function List(props){
         props.handleCurrentDocument(null);
       };
 
+      
+      
+
 
     return(<div className="document-list">
         <ListGroup className='relatedDocs'>
@@ -36,7 +39,15 @@ function List(props){
               >
               <Row className="align-items-center">
                 <Col md={3} className='doc-title' onClick={() => props.handleDocumentClick(doc.id)}>{doc.title}</Col>
-                <Col md={3}>{doc.stakeholders}</Col>
+                <Col md={3}> 
+                {doc.stakeholders.map((s, index) => (<span
+                        key={index}
+                        className={`stakeholder-badge stakeholder-${s.toLowerCase().replace(/\s+/g, '-')}`}
+                      >
+                        {s}
+                      </span>
+                ))}
+                </Col>
                 <Col md={2}>{doc.type}</Col>
                 <Col md={1}>{doc.connections}</Col>
                 <Col md={2}>{dayjs(doc.issuanceDate).format('DD/MM/YYYY')}</Col>
