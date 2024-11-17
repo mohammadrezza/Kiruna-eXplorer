@@ -85,7 +85,7 @@ function RelatedDocumentsSelector({
               : num + 1}
               </Col>
               <Col md={3}>{doc.title}</Col>
-              <Col md={2}>{doc.stakeholders}</Col>
+              <Col md={2}>{doc.stakeholders.join(', ')}</Col>
               {/* <Col md={2}>{dayjs(doc.issuanceDate).format('DD/MM/YYYY')}</Col> */}
               <Col md={2}>{doc.type}</Col>
               <Col md={3}>
