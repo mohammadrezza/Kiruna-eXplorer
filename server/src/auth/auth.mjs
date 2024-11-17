@@ -3,6 +3,8 @@ import crypto from "crypto";
 import session from "express-session";
 import LocalStrategy from "passport-local";
 import * as UserDAO from "../daos/userDAO.mjs";
+import UserType from "../components/userType.mjs";
+import {UnauthorizedError} from "../errors/userErrors.mjs";
 
 class Auth {
     constructor(app) {
@@ -64,6 +66,35 @@ class Auth {
 
     }
 
+    isLoggedIn(req, res, next) {
+        if (req.isAuthenticated()) {
+            return next()
+        }
+        throw new UnauthorizedError()
+    }
+
+
+    isUrbanPlanner(req, res, next) {
+        if (req.isAuthenticated() && req.user.role === UserType.URBAN_PLANNER) {
+            return next()
+        }
+        throw new UnauthorizedError()
+    }
+
+    isResident(req, res, next) {
+        if (req.isAuthenticated() && req.user.role === UserType.RESIDENT) {
+            return next()
+        }
+        throw new UnauthorizedError()
+
+    }
+
+    isVisitor(req, res, next) {
+        if (req.isAuthenticated() && req.user.role === UserType.RESIDENT) {
+            return next()
+        }
+        throw new UnauthorizedError()
+    }
 }
 
 export default Auth;

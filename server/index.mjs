@@ -2,9 +2,8 @@
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors'
-import documentRouter from './src/routers/documentRouter.mjs';
+import DocumentRouter from './src/routers/documentRouter.mjs';
 import sessionRouter from "./src/routers/sessionRouter.mjs";
-import Auth from "./src/auth/auth.mjs";
 import {errorHandler} from "./src/middlewares/errorhandler.mjs";
 import initializeDatabase from "./src/db/initializeDatabase.mjs";
 
@@ -12,16 +11,16 @@ import initializeDatabase from "./src/db/initializeDatabase.mjs";
 const app = express();
 app.use(morgan('dev'));
 app.use(express.json());
-new Auth(app);
 
 
 const corsOptions = {
     origin: 'http://localhost:3000',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type'], 
+    allowedHeaders: ['Content-Type'],
 };
 app.use(cors(corsOptions))
-app.use('/documents', documentRouter);
+const documentRouter = new DocumentRouter(app);
+app.use('/documents', documentRouter.getRouter());
 app.use('/sessions', sessionRouter);
 errorHandler(app)
 await initializeDatabase();
