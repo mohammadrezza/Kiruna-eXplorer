@@ -21,6 +21,9 @@ function RelatedDocumentsSelector({
   const [currentDocument, setCurrentDocument] = useState(null);
 
   useEffect(() => {
+    console.log(allDocuments);
+    console.log(selectedDocuments);
+
     const fetchConnectionTypes = async () => {
       try {
         const response = await API.getConnectionTypes(); 
