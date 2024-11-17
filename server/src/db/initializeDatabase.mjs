@@ -54,7 +54,10 @@ const initializeDatabase = async () => {
                 issuanceDate: "2024-01-15",
                 type: DocumentType.PRESCRIPTIVE_DOCUMENT,
                 language: "English",
-                coordinates: [67.8558, 20.2253],
+                coordinates: {
+                    lat: 67.8558,
+                    lng: 20.2253
+                },
                 stakeholders: [Stakeholder.MUNICIPALITY, Stakeholder.LKAB]
             },
             {
@@ -65,7 +68,10 @@ const initializeDatabase = async () => {
                 issuanceDate: "2024-02-01",
                 type: DocumentType.TECHNICAL_DOCUMENT,
                 language: "Swedish",
-                coordinates: [67.8504, 20.1761],
+                coordinates: {
+                    lat: 67.8504,
+                    lng: 20.1761
+                },
                 stakeholders: [Stakeholder.LKAB, Stakeholder.REGIONAL_AUTHORITY]
             },
             {
@@ -76,7 +82,10 @@ const initializeDatabase = async () => {
                 issuanceDate: "2024-02-15",
                 type: DocumentType.DESIGN_DOCUMENT,
                 language: "English",
-                coordinates: [67.8490, 20.2459],
+                coordinates: {
+                    lat: 67.8490,
+                    lng: 20.2459
+                },
                 stakeholders: [Stakeholder.MUNICIPALITY, Stakeholder.ARCHITECTURE_FIRMS]
             },
             {
@@ -87,7 +96,10 @@ const initializeDatabase = async () => {
                 issuanceDate: "2024-02-20",
                 type: DocumentType.CONSULTATION,
                 language: "Swedish",
-                coordinates: [67.8575, 20.2256],
+                coordinates: {
+                    lat: 67.8575,
+                    lng: 20.2256
+                },
                 stakeholders: [Stakeholder.CITIZENS, Stakeholder.MUNICIPALITY]
             },
             {
@@ -98,7 +110,10 @@ const initializeDatabase = async () => {
                 issuanceDate: "2024-03-01",
                 type: DocumentType.TECHNICAL_DOCUMENT,
                 language: "English",
-                coordinates: [67.8516, 20.2371],
+                coordinates: {
+                    lat: 67.8516,
+                    lng: 20.2371
+                },
                 stakeholders: [Stakeholder.REGIONAL_AUTHORITY, Stakeholder.OTHERS]
             }
         ];
@@ -149,7 +164,7 @@ const initializeDatabase = async () => {
                 id: "conn3",
                 documentId: "doc3",
                 connectionId: "doc4",
-                type: DocumentConnectionType.CONSULTATION
+                type: DocumentConnectionType.UPDATE
             },
             {
                 id: "conn4",
