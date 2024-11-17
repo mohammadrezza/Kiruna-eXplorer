@@ -11,6 +11,7 @@ import Document from '../mocks/Document.mjs';
 import { dmsToDecimal } from '../utils/convertToDecimal';
 import '../style/CreateDocument.css'
 import Select from 'react-select'
+import { showSuccess, showError } from '../utils/notifications';
 
 function FormDocument(props) {
 
@@ -210,7 +211,10 @@ function FormDocument(props) {
     //by using this API we pass selectedDocuments as
     // an argument here
     //otherwise we create a new API
-    navigate('/');
+    showSuccess('Action successful!')
+    setTimeout(()=>{
+      navigate('/documents');
+    }, 2000)
   };
 
   const handleDocumentSelect = (documentId) => {
