@@ -133,26 +133,6 @@ textarea.form-control {
     font-size: 26px;
 }
 
-.relatedDocs .list-group-item{
-    border-left: none;
-    border-right: none;
-    border-top: none;
-    padding: 20px 16px;
-    color: var(--dark-grey);
-    font-size: 16px;
-    cursor: pointer;
-}
-.list-group-item:hover,
-.list-group-item.selected {
-    background-color: var(--lily-white);
-    color: var(--demo-black)
-}
-.relatedDocs .relatedDocs-header{
-    background-color: unset;
-    cursor: unset;
-    font-size: 14px;
-    color: var(--light-grey);
-}
 
 .scrollable-description {
     max-height: 600px; 
