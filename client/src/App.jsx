@@ -1,4 +1,5 @@
 import { Routes, Route, useLocation, Navigate} from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import FormDocument from './pages/CreateDocument';
@@ -7,6 +8,7 @@ import DocumentsList from './pages/DocumentsList'
 import Login from './pages/Login'
 import { AuthProvider } from "./layouts/AuthContext";
 import PrivateRoute from './layouts/PrivateRoute';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const location = useLocation();
@@ -24,15 +26,26 @@ function App() {
     <Routes>
       <Route path='/' element={<Homepage />}/>
       <Route path='/login' element={<Login />}/>
-      <Route path='/documents/add' element={
+      <Route path='/document/add' element={
         <PrivateRoute><FormDocument mode={'add'}/></PrivateRoute>
       } />
-      <Route path='/documents/view/:id' element={
+      <Route path='/document/view/:id' element={
         <FormDocument mode={'view'}/>
       } />
       <Route path='/documents' element={<DocumentsList/>} />
    </Routes>
    {isHomePage && <Footer />}
+   <ToastContainer 
+      position="top-right"
+      autoClose={5000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+    />
    </AuthProvider>
    </>
   );

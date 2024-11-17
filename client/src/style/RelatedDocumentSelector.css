@@ -37,11 +37,11 @@
     
 }
 
-.filesymbol{
+.relatedDocs > .filesymbol{
     margin-left: 27px;
     
 }
-.filesymbol:hover{
+.relatedDocs > .filesymbol:hover{
     color: white;
     background-color: var(--demo-black);
     border-radius: 6px ;
