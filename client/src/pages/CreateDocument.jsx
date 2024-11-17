@@ -171,7 +171,7 @@ function FormDocument(props) {
     setCoordinates({ lat: '', lng: '' });
     setErrors([]);
   };
-  const handleRelatedDocumentClick = (relatedDocumentId) => navigate(`/documents/view/${relatedDocumentId}`);
+  const handleRelatedDocumentClick = (relatedDocumentId) => navigate(`/document/view/${relatedDocumentId}`);
 
   const validateForm = () => {
     const validationErrors = {};

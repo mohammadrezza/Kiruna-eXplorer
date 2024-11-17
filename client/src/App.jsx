@@ -24,10 +24,10 @@ function App() {
     <Routes>
       <Route path='/' element={<Homepage />}/>
       <Route path='/login' element={<Login />}/>
-      <Route path='/documents/add' element={
+      <Route path='/document/add' element={
         <PrivateRoute><FormDocument mode={'add'}/></PrivateRoute>
       } />
-      <Route path='/documents/view/:id' element={
+      <Route path='/document/view/:id' element={
         <FormDocument mode={'view'}/>
       } />
       <Route path='/documents' element={<DocumentsList/>} />

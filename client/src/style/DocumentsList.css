@@ -32,7 +32,7 @@
     justify-content: flex-end;
 }
 
-.relatedDocs .list-group-item{
+.document-list-item .list-group-item{
     border-left: none;
     border-right: none;
     border-top: none;
@@ -48,7 +48,7 @@
     background-color: var(--lily-white);
     color: var(--demo-black)
 }
-.relatedDocs .relatedDocs-header{
+.document-list-item .document-list-item-header{
     background-color: unset;
     cursor: unset;
     font-size: 14px;
@@ -87,7 +87,7 @@
     color: var(--blue);
 }
 
-.filesymbol{
+.document-list > .filesymbol{
     margin-left: 10px;
     font-size: 16px;
     width: 24px;
@@ -96,7 +96,7 @@
     border-bottom: 1px solid var(--black);
     cursor: pointer;
 }
-.filesymbol:hover{
+.document-list > .filesymbol:hover{
     background-color: unset;
     color: unset;
     border-radius: unset;

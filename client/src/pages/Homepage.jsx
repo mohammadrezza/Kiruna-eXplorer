@@ -12,7 +12,7 @@ function Homepage() {
   const { user } = useContext(AuthContext);
 
   const handleNewDocument = () => {
-    navigate(`/documents/add`);
+    navigate(`/document/add`);
   };
   
 
