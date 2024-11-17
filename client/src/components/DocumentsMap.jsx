@@ -42,8 +42,8 @@ const DocumentMap = ({ documents }) => {
   };
   return (
     <div>
-      {municipalDocuments.length>0 && <div>There is a documents with the whole municipal. <span onClick={toggleList}>Show them</span></div>}
-      <div>
+      {municipalDocuments.length>0 && <div className='map-municipal-title'>There is a documents with the whole municipal. <span onClick={toggleList}>Show them</span></div>}
+      <div className='map-municipal-list'>
         {(municipalDocuments.length>0 && showDocuments) && municipalDocuments.map((doc, num) => (
           <Row key={doc.id}>
             <Col>{doc.title}</Col>

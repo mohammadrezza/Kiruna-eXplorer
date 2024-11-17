@@ -4,7 +4,7 @@ import { ListGroup, Row, Col, Form } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import API from '../services/API.mjs';
 import '../style/RelatedDocumentSelector.css'
-import { PiFileText } from 'react-icons/pi';
+import { PiFileMagnifyingGlassLight } from 'react-icons/pi';
 import DocumentDetailsModal from './DocumentDetailsModal';
 
 function RelatedDocumentsSelector({
@@ -107,14 +107,14 @@ function RelatedDocumentsSelector({
                 
               </Col>
               <Col>
-                <PiFileText 
+                <PiFileMagnifyingGlassLight 
                   className='filesymbol' 
                   size={22} 
                   onClick={(e) => {
                     e.stopPropagation(); // Prevent row click event
                     handleIconClick(doc);
                   }}>
-                </PiFileText>
+                </PiFileMagnifyingGlassLight>
               </Col>
             </Row>
           </ListGroup.Item>

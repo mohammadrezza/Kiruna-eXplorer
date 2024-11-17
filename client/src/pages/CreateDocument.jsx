@@ -105,7 +105,7 @@ function FormDocument(props) {
 
         if (props.mode === 'view') {
           if(user){
-            if(user.user.role==='Urban Planner')
+            if(user.role==='Urban Planner')
               setRights(true)
           }
           const doc = await API.getData(docID);
