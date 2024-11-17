@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
           localStorage.setItem('user', fetchedUser);
         } catch {
           setUser(null);
-          localStorage.setItem('user', null);
+          localStorage.removeItem('user');
         } finally {
           setLoading(false);
         }
@@ -36,14 +36,14 @@ export const AuthProvider = ({ children }) => {
       setUser(loggedInUser);
       localStorage.setItem('user', loggedInUser);
     } catch (error) {
-      localStorage.setItem('user', null);
+      localStorage.removeItem('user');
       throw error;
     }
   };
 
   const logout = async () => {
     try {
-      localStorage.clear()
+      localStorage.removeItem('user');
     } catch(error){
       throw error;
     }

@@ -1,7 +1,7 @@
 import React, { useState,useEffect,useContext } from 'react';
 import { Form, Button, Row, Col, Modal, ListGroup, InputGroup, Table, FormControl } from 'react-bootstrap';
 import { useNavigate, useParams} from 'react-router-dom'
-import { PiMapPinSimpleAreaFill, PiPen, PiNotePencilThin } from "react-icons/pi";
+import { PiMapPinSimpleAreaFill, PiPen, PiNotePencilThin, PiArrowRight } from "react-icons/pi";
 import * as dayjs from 'dayjs'
 import { AuthContext } from '../layouts/AuthContext';
 import MapPointSelector from '../components/MapPointSelector'
@@ -136,7 +136,23 @@ function FormDocument(props) {
   }, [props.mode, docID, id]);
 
   const areCoordinatesValid = (coordinates) => {
-    return /^-?\d*\.?\d*$/.test(coordinates.lat) && /^-?\d*\.?\d*$/.test(coordinates.lng);
+    const kirunaBounds = [
+    [67.821, 20.216], // Southwest corner [lat, lng]
+    [67.865, 20.337]  // Northeast corner [lat, lng]
+  ];
+
+  // Extract bounds
+  const [sw, ne] = kirunaBounds; // southwest and northeast corners
+  const isValidLat = coordinates.lat >= sw[0] && coordinates.lat <= ne[0];
+  const isValidLng = coordinates.lng >= sw[1] && coordinates.lng <= ne[1];
+
+  // Validate coordinates are numbers and within bounds
+  return (
+    /^-?\d*\.?\d*$/.test(coordinates.lat) &&
+    /^-?\d*\.?\d*$/.test(coordinates.lng) &&
+    isValidLat &&
+    isValidLng
+  );
   };
   const handleDMSConversion = (coordinates, setCoordinates, setErrors) => {
     try {
@@ -184,7 +200,7 @@ function FormDocument(props) {
     if (!scale.trim()) validationErrors.scale = 'Scale cannot be empty!';
     if (type === null) validationErrors.type = 'Type cannot be empty!';
     if (!description.trim()) validationErrors.description = 'Description cannot be empty!';
-    if (!areCoordinatesValid(coordinates)) validationErrors.coordinates = 'Not correct format. Try to convert it';
+    if (!areCoordinatesValid(coordinates)) validationErrors.coordinates = 'Not correct format or not inside Kiruna area';
     //if(!isWholeMunicipal && (!coordinates.lat || !coordinates.lng)) validationErrors.coordinates = 'Coordinates cannot be empty!';
     return validationErrors;
   };
@@ -376,7 +392,9 @@ function FormDocument(props) {
                 </Col>
                 <Col md={3}>
                 {(props.mode === 'add' || edit) && (
-                  <div className='convert-btn  margin-top-3' onClick={handleDMSChange}>convert DMS format</div>  
+                  <div className='convert-btn  margin-top-3' onClick={handleDMSChange}>
+                    <PiArrowRight />
+                    convert DMS format</div>  
                 )}
                 </Col>
               </Row>
