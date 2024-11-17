@@ -29,7 +29,6 @@ function FormDocument(props) {
   const [description,setDescription] = useState('');
   const [coordinates, setCoordinates] = useState({ lat: '', lng: '' });
   const [loading,setLoading] = useState(true);
-  const [loadingDocs,setLoadingDocs] = useState(true);
   const [edit,setEdit] = useState(false);
   const [showMap, setShowMap] = useState(false);
   const [isWholeMunicipal, setIsWholeMunicipal] = useState(false);
@@ -40,6 +39,7 @@ function FormDocument(props) {
   const [allTypes,setAllTypes] = useState([]);
   const [allStake,setAllStake] = useState([]);
   const [errors, setErrors] = useState([]);
+  const [rights, setRights] = useState(false)
 
   const customStyles = {
     control: (base) => ({
@@ -104,6 +104,10 @@ function FormDocument(props) {
         setAllDocuments(filteredDocuments);
 
         if (props.mode === 'view') {
+          if(user){
+            if(user.user.role==='Urban Planner')
+              setRights(true)
+          }
           const doc = await API.getData(docID);
           const connectedDocumentIds = doc.connections.map(doc => doc.id);
           setTitle(doc.title);
@@ -125,7 +129,6 @@ function FormDocument(props) {
         console.error("Error loading data:", error);
       } finally {
         setLoading(false);
-        setLoadingDocs(false);
       }
     };
 
@@ -250,7 +253,7 @@ function FormDocument(props) {
       <div className="form-container">
         <h2 className='form-container-title'>
           {props.mode==='view' ? title : 'New Document'}
-          {(props.mode==='view' && edit===false && user.role==='Urban Planner') && <PiNotePencilThin className='edit-button' onClick={() => setEdit(true)}/>}
+          {(props.mode==='view' && edit===false && rights) && <PiNotePencilThin className='edit-button' onClick={() => setEdit(true)}/>}
           </h2>
         <Form onSubmit={handleSubmit} data-testid="form-component">
           <Row>
