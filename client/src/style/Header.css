@@ -51,3 +51,15 @@
   background: transparent !important;
 }
 
+.logout-icon{
+  background-color: red;
+  color: black;
+  font-family: "Times";
+  border-color: black;
+  border-radius: 0px;
+  width: 100px;
+  height: 44px;
+  margin-left: auto;
+  cursor: pointer;
+}
+

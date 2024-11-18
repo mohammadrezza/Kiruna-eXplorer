@@ -1,0 +1,143 @@
+.wrapper{
+    width: 100%;
+    min-height: 100%;
+    padding-bottom: 180px;
+}
+.form-container {
+    background-color: var(--white);
+    width: calc(1200px - 50px);
+    padding: 80px 50px;
+    padding-bottom: 180px;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-container>h2 {
+    font-family: 'Open Sans';
+    font-size: 60px;
+    font-weight: 400;
+    color: var(--demo-black);
+    position: relative;
+    margin-bottom: 105px;
+}
+.form-container-title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.form-container-subtitle{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.document-list-item .list-group-item{
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-radius: unset;
+    padding: 15px 16px;
+    color: var(--dark-grey);
+    font-size: 14px;
+    font-weight: 300;
+    cursor: unset;
+}
+.list-group-item:hover,
+.list-group-item.selected {
+    background-color: var(--lily-white);
+    color: var(--demo-black)
+}
+.document-list-item .document-list-item-header{
+    background-color: unset;
+    cursor: unset;
+    font-size: 14px;
+    line-height: 24px;
+    color: var(--light-grey);
+}
+
+.add-button{
+    position: relative;
+    width: 250px;
+    top: 0px;
+    left: 0px;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 33px;
+    border-radius: 0;
+    background-color:var(--white);
+    color: #101420;
+    border-bottom-color: #101420;
+    border-top: var(--white);
+    border-left:var(--white) ;
+    border-right: var(--white);
+}
+
+.add-button:hover {
+    background-color:var(--blue);
+}
+
+
+.doc-title {
+    text-decoration : underline;
+    font-size: 16px;
+    cursor: pointer;
+}
+.doc-title:hover{
+    color: var(--blue);
+}
+
+.document-list > .filesymbol{
+    margin-left: 10px;
+    font-size: 16px;
+    width: 24px;
+    height: 24px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--black);
+    cursor: pointer;
+}
+.document-list > .filesymbol:hover{
+    background-color: unset;
+    color: unset;
+    border-radius: unset;
+    color: var(--blue);
+    border-bottom: 1px solid var(--blue);
+}
+.stakeholder-col {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.stakeholder-badge {
+    color: black;
+    padding: 5px 10px;
+    border: 1px solid var(--demo-black);
+    margin: 5px;
+    font-size: 12px;
+    width: fit-content;
+  }
+  
+  .stakeholder-architecture-firms {
+    background-color: #f8d775;
+    border: none;
+  }
+  
+  .stakeholder-citizens {
+    background-color: #b8e4f0;
+    border: none;
+  }
+  
+  .stakeholder-municipality {
+    background-color: #a67c52;
+    border: none;
+  }
+  
+  .stakeholder-regional-authority {
+    background-color: #f9c74f;
+    border: none;
+  }
+  
+  .stakeholder-others {
+    background-color: #b8380d;
+    border: none;
+  }

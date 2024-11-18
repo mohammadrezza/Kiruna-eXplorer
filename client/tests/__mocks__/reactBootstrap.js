@@ -6,11 +6,6 @@ const MockedForm = ({ onSubmit, children }) => (
     </form>
   );
 MockedForm.Label = MockedComponent;
-MockedForm.Select = ({ value, onChange, ...props }) => (
-    <select {...props} value={value} onChange={onChange}>
-      {props.children}
-    </select>
-  );
 MockedForm.Control = ({ isInvalid, ...props }) => (
   <div>
     <input {...props} />
@@ -24,6 +19,19 @@ MockedForm.Control.Feedback = ({ children }) => (
 
 MockedForm.Group = ({ children, controlId, ...props }) => (
   <div {...props}>{children}</div>
+);
+
+MockedForm.Check = ({ children, controlId, disabled, checked, onChange, ...props }) => (
+  <div {...props}>
+    <input
+      type="checkbox"
+      id={controlId}
+      disabled={disabled}
+      checked={checked}
+      onChange={onChange}
+    />
+    <label htmlFor={controlId}>{children}</label>
+  </div>
 );
 
 const MockedButton = ({ type, children, ...props }) => (

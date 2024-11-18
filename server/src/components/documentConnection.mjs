@@ -5,6 +5,7 @@ class DocumentConnection {
         this.id = '';
         this.documentId = '';
         this.connectionId = '';
+        this.type = '';
         this.createdAt = '';
     }
 
@@ -12,12 +13,14 @@ class DocumentConnection {
         this.id = uuidv4();
         this.documentId = obj.documentId;
         this.connectionId = obj.connectionId;
+        this.type = obj.type;
     }
 
     createFromDatabaseRow(row) {
         this.id = row.id;
         this.documentId = row.document_id;
         this.connectionId = row.connection_id;
+        this.type = row.type;
         this.createdAt = row.created_at;
     }
 }

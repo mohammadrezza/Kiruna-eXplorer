@@ -1,24 +1,27 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useContext } from 'react';
 import { Form, Button, Row, Col, Modal, ListGroup, InputGroup, Table, FormControl } from 'react-bootstrap';
 import { useNavigate, useParams} from 'react-router-dom'
-import { PiMapPinSimpleAreaFill, PiPen, PiNotePencilThin } from "react-icons/pi";
+import { PiMapPinSimpleAreaFill, PiPen, PiNotePencilThin, PiArrowRight } from "react-icons/pi";
 import * as dayjs from 'dayjs'
+import { AuthContext } from '../layouts/AuthContext';
 import MapPointSelector from '../components/MapPointSelector'
 import RelatedDocumentsSelector from '../components/RelatedDocumentsSelector';
 import API from '../services/API.mjs';
 import Document from '../mocks/Document.mjs';
 import { dmsToDecimal } from '../utils/convertToDecimal';
 import '../style/CreateDocument.css'
+import Select from 'react-select'
+import { showSuccess, showError } from '../utils/notifications';
 
 function FormDocument(props) {
 
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const { user } = useContext(AuthContext);
 
   const [docID,setDocID] = useState(props.mode==='view' ? id : '');
   const [title,setTitle] = useState('');
-  const [stakeholder,setStakeholder] = useState('');
+  const [stakeholder,setStakeholder] = useState([]);
   const [scale,setScale] = useState('');
   const [issuanceDate,setIssuanceDate] = useState('');
   const [type,setType] = useState(null);
@@ -26,15 +29,64 @@ function FormDocument(props) {
   const [description,setDescription] = useState('');
   const [coordinates, setCoordinates] = useState({ lat: '', lng: '' });
   const [loading,setLoading] = useState(true);
-  const [loadingDocs,setLoadingDocs] = useState(true);
   const [edit,setEdit] = useState(false);
   const [showMap, setShowMap] = useState(false);
   const [isWholeMunicipal, setIsWholeMunicipal] = useState(false);
   const [allDocuments, setAllDocuments] = useState([]); 
   const [selectedDocuments, setSelectedDocuments] = useState([]); 
   const [relatedDocuments, setRelatedDocuments] = useState([]); 
+  const [selectedConnectionTypes, setSelectedConnectionTypes] = useState([]);
   const [allTypes,setAllTypes] = useState([]);
+  const [allStake,setAllStake] = useState([]);
   const [errors, setErrors] = useState([]);
+  const [rights, setRights] = useState(false)
+
+  const customStyles = {
+    control: (base) => ({
+      ...base,
+      fontFamily: 'Open Sans',                  // Font
+      fontSize: '24px',                          // Dimensione del font
+      color: 'var(--demo-black)',                // Colore del testo
+      maxWidth: '505px',                         // Larghezza massima
+      width: '100%',                             // Larghezza dinamica
+      height: '51px',                            // Altezza del campo
+      paddingLeft: '74px',                       // Padding sinistro
+      backgroundColor: 'var(--lily-white)',      // Colore di sfondo
+      border: 'none',                            // Nessun bordo
+      borderRadius: '0',                         // Nessun arrotondamento
+      boxShadow: 'none',                         // Nessuna ombra
+    }),
+    placeholder: (base) => ({
+      ...base,
+      fontFamily: 'Open Sans',
+      fontSize: '24px',
+      color: 'var(--demo-black)',
+    }),
+    singleValue: (base) => ({
+      ...base,
+      color: 'var(--demo-black)',               // Colore del testo selezionato
+    }),
+    menu: (base) => ({
+      ...base,
+      fontFamily: 'Open Sans',
+      fontSize: '24px',
+      color: 'var(--demo-black)',
+      backgroundColor: 'var(--lily-white)',
+      borderRadius: '0',                        // Bordo del menu
+    }),
+    option: (base, state) => ({
+      ...base,
+      backgroundColor: state.isFocused ? '#e9ecef' : 'var(--lily-white)', // Colore di sfondo quando selezionata o no
+      color: 'var(--demo-black)',
+      '&:active': {
+        backgroundColor: '#e9ecef',
+      },
+    }),
+  };
+
+  const allLanguage = [{ value: 'italian', label: 'italian' },
+    { value: 'swedish', label: 'swedish' },
+    { value: 'english', label: 'english' }]
 
   useEffect(() => {
     if (props.mode === 'view') {
@@ -45,16 +97,23 @@ function FormDocument(props) {
   useEffect(()=>{
     const loadData = async () => {
       try {
-        const [types, documents] = await Promise.all([API.getTypes(), API.getDocuments()]);
+        const [types, documents, stake] = await Promise.all([API.getTypes(), API.getDocuments(), API.getStake()]);
         setAllTypes(types);
+        setAllStake(stake);
         const filteredDocuments = props.mode === 'view' ? documents.filter(doc => doc.id !== id) : documents;
         setAllDocuments(filteredDocuments);
 
         if (props.mode === 'view') {
+          if(user){
+            if(user.role==='Urban Planner')
+              setRights(true)
+          }
           const doc = await API.getData(docID);
           const connectedDocumentIds = doc.connections.map(doc => doc.id);
           setTitle(doc.title);
-          setStakeholder(doc.stakeholders);
+          const st = [];
+          doc.stakeholders.forEach((s) => st.push({value:s, label:s}))
+          setStakeholder(st);
           setScale(doc.scale);
           setDescription(doc.description);
           setType(doc.type);
@@ -70,7 +129,6 @@ function FormDocument(props) {
         console.error("Error loading data:", error);
       } finally {
         setLoading(false);
-        setLoadingDocs(false);
       }
     };
 
@@ -78,7 +136,23 @@ function FormDocument(props) {
   }, [props.mode, docID, id]);
 
   const areCoordinatesValid = (coordinates) => {
-    return /^-?\d*\.?\d*$/.test(coordinates.lat) && /^-?\d*\.?\d*$/.test(coordinates.lng);
+    const kirunaBounds = [
+    [67.821, 20.216], // Southwest corner [lat, lng]
+    [67.865, 20.337]  // Northeast corner [lat, lng]
+  ];
+
+  // Extract bounds
+  const [sw, ne] = kirunaBounds; // southwest and northeast corners
+  const isValidLat = coordinates.lat >= sw[0] && coordinates.lat <= ne[0];
+  const isValidLng = coordinates.lng >= sw[1] && coordinates.lng <= ne[1];
+
+  // Validate coordinates are numbers and within bounds
+  return (
+    /^-?\d*\.?\d*$/.test(coordinates.lat) &&
+    /^-?\d*\.?\d*$/.test(coordinates.lng) &&
+    isValidLat &&
+    isValidLng
+  );
   };
   const handleDMSConversion = (coordinates, setCoordinates, setErrors) => {
     try {
@@ -117,16 +191,16 @@ function FormDocument(props) {
     setCoordinates({ lat: '', lng: '' });
     setErrors([]);
   };
-  const handleRelatedDocumentClick = (relatedDocumentId) => navigate(`/documents/view/${relatedDocumentId}`);
+  const handleRelatedDocumentClick = (relatedDocumentId) => navigate(`/document/view/${relatedDocumentId}`);
 
   const validateForm = () => {
     const validationErrors = {};
     if (!title.trim()) validationErrors.title = 'Title cannot be empty!';
-    if (!stakeholder.trim()) validationErrors.stakeholder = 'Stakeholder cannot be empty!';
+    if (stakeholder.length === 0) validationErrors.stakeholder = 'Stakeholder cannot be empty!';
     if (!scale.trim()) validationErrors.scale = 'Scale cannot be empty!';
     if (type === null) validationErrors.type = 'Type cannot be empty!';
     if (!description.trim()) validationErrors.description = 'Description cannot be empty!';
-    if (!areCoordinatesValid(coordinates)) validationErrors.coordinates = 'Not correct format. Try to convert it';
+    if (!areCoordinatesValid(coordinates)) validationErrors.coordinates = 'Not correct format or not inside Kiruna area';
     //if(!isWholeMunicipal && (!coordinates.lat || !coordinates.lng)) validationErrors.coordinates = 'Coordinates cannot be empty!';
     return validationErrors;
   };
@@ -144,17 +218,22 @@ function FormDocument(props) {
     }
     if(isWholeMunicipal) {coordinates.lat = 0; coordinates.lng = 0}
     setErrors([]);
-    const doc = new Document(docID, title.trim(), stakeholder.trim(), scale, issuanceDate, type, language, description);
+    const st=[];
+    stakeholder.forEach((s) =>st.push(s.value))
+    const doc = new Document(docID, title.trim(), st, scale, issuanceDate, type.value, language.value, description);
     if(props.mode==='add'){
-      API.AddDocumentDescription(doc, selectedDocuments, coordinates);
+      API.AddDocumentDescription(doc, selectedConnectionTypes, coordinates);
     } else if (props.mode === 'view') {
-      API.EditDocumentDescription(doc, selectedDocuments, coordinates, docID);
+      API.EditDocumentDescription(doc, selectedConnectionTypes , coordinates, docID );
     }
     //if we want to set the connections 
     //by using this API we pass selectedDocuments as
     // an argument here
     //otherwise we create a new API
-    navigate('/');
+    showSuccess('Action successful!')
+    setTimeout(()=>{
+      navigate('/documents');
+    }, 2000)
   };
 
   const handleDocumentSelect = (documentId) => {
@@ -164,14 +243,33 @@ function FormDocument(props) {
         : [...prevSelected, documentId]
     );
   };
+
+  const handleSelectStakeChange = (selectedOptions) => {
+    
+    setStakeholder(selectedOptions);
+  };
+
+  const handleSelectTypeChange = (selectedOption) => {
+    setType(selectedOption);
+  };
+
+  const handleSelectLanguageChange = (selectedOption) => {
+    setLanguage(selectedOption);
+  };
   
+  const handleConnectionTypeSelect = (documentId, selectedConnectionType) => {
+    setSelectedConnectionTypes(prevSelected => ([
+      ...prevSelected,
+      {"id":documentId, "type":selectedConnectionType}
+    ]));
+  };
   
   return  (
     <div className="wrapper">
       <div className="form-container">
         <h2 className='form-container-title'>
           {props.mode==='view' ? title : 'New Document'}
-          {(props.mode==='view' && edit===false) && <PiNotePencilThin className='edit-button' onClick={() => setEdit(true)}/>}
+          {(props.mode==='view' && edit===false && rights) && <PiNotePencilThin className='edit-button' onClick={() => setEdit(true)}/>}
           </h2>
         <Form onSubmit={handleSubmit} data-testid="form-component">
           <Row>
@@ -184,12 +282,23 @@ function FormDocument(props) {
                 </Form.Control.Feedback>
               </Form.Group>
               
-              <Form.Group className='form-group'  controlId="stakeholder">
-                <Form.Label>Stakeholder{(props.mode === 'add' || edit) && <span>*</span>}</Form.Label>
-                <Form.Control type="text" placeholder="Enter stakeholder" value={stakeholder} onChange={(event) => setStakeholder(event.target.value)}  isInvalid={!!errors.stakeholder} readOnly={!edit && props.mode!='add'}/>
-                <Form.Control.Feedback type="invalid">
-                    {errors.stakeholder}
-                </Form.Control.Feedback>
+              <Form.Group className='form-group' controlId="stakeholder">
+                <Form.Label>
+                  Stakeholder{(props.mode === 'add' || edit) && <span>*</span>}
+                </Form.Label>
+                {!loading && <Select
+                  classNamePrefix="react-select"
+                  styles={customStyles}
+                  isMulti
+                  options={allStake} // Dati da mostrare nel dropdown
+                  value={stakeholder} // Valori selezionati
+                  onChange={handleSelectStakeChange} // Funzione per aggiornare lo stato
+                  getOptionLabel={(e) => e.label} // Personalizza l'etichetta dell'opzione
+                  getOptionValue={(e) => e.value} // Personalizza il valore dell'opzione
+                  placeholder="Select one or more stakeholders"
+                  isDisabled={!edit && props.mode !== 'add'}
+                >
+                </Select>}
               </Form.Group>
               
               <Form.Group className='form-group'  controlId="scale">
@@ -207,22 +316,34 @@ function FormDocument(props) {
 
               <Form.Group className='form-group' controlId="type">
                 <Form.Label>Type{(props.mode === 'add' || edit) && <span>*</span>}</Form.Label>
-                {!loading && <Form.Select  data-testid="type-input" value={type || ''} onChange={(event) => setType(event.target.value)}  isInvalid={!!errors.type} readOnly={!edit && props.mode!='add'}>
-                  <option>Select type</option>
-                  { allTypes.map((t) => 
-                    <option key={t} value={t}>{t}</option>
-                  )}
-                </Form.Select>}
+                {!loading && <Select
+                  classNamePrefix="react-select"
+                  styles={customStyles}
+                  options={allTypes} // Dati da mostrare nel dropdown
+                  value={type} // Valori selezionati
+                  onChange={handleSelectTypeChange} // Funzione per aggiornare lo stato
+                  getOptionLabel={(e) => e.label} // Personalizza l'etichetta dell'opzione
+                  getOptionValue={(e) => e.value} // Personalizza il valore dell'opzione
+                  placeholder="Select type"
+                  isDisabled={!edit && props.mode !== 'add'}
+                >
+                </Select>}
               </Form.Group>
 
               <Form.Group className='form-group' controlId="language">
                 <Form.Label>Language{(props.mode === 'add' || edit) && <span>*</span>}</Form.Label>
-                <Form.Select  data-testid="language-input" value={language} onChange={(event) => setLanguage(event.target.value)} readOnly={!edit && props.mode!='add'}>
-                  <option>Select language</option>
-                  <option>english</option>
-                  <option>italian</option>
-                  <option>swedish</option>
-                </Form.Select>
+                <Select
+                  classNamePrefix="react-select"
+                  styles={customStyles}
+                  options={allLanguage} // Dati da mostrare nel dropdown
+                  value={language} // Valori selezionati
+                  onChange={handleSelectLanguageChange} // Funzione per aggiornare lo stato
+                  getOptionLabel={(e) => e.label} // Personalizza l'etichetta dell'opzione
+                  getOptionValue={(e) => e.value} // Personalizza il valore dell'opzione
+                  placeholder="Select language"
+                  isDisabled={!edit && props.mode !== 'add'}
+                >
+                </Select>
               </Form.Group>
             </Col>
 
@@ -271,7 +392,9 @@ function FormDocument(props) {
                 </Col>
                 <Col md={3}>
                 {(props.mode === 'add' || edit) && (
-                  <div className='convert-btn  margin-top-3' onClick={handleDMSChange}>convert DMS format</div>  
+                  <div className='convert-btn  margin-top-3' onClick={handleDMSChange}>
+                    <PiArrowRight />
+                    convert DMS format</div>  
                 )}
                 </Col>
               </Row>
@@ -313,14 +436,15 @@ function FormDocument(props) {
                   </Form.Group>
                 </Col>
             </Row>
-            <RelatedDocumentsSelector 
+            {!loading && <RelatedDocumentsSelector 
               mode={props.mode}
               edit={edit}
               allDocuments={(props.mode === 'add' || edit) ? allDocuments : relatedDocuments}
               selectedDocuments={selectedDocuments}
               onDocumentSelect={handleDocumentSelect}
               onRelatedDocumentClick={handleRelatedDocumentClick}
-            />
+              onConnectionTypeChange={handleConnectionTypeSelect}
+            />}
           </Row>
           {(props.mode === 'add' || edit) && (
             <Button 

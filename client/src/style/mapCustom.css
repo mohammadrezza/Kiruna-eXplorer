@@ -1,0 +1,22 @@
+
+.custom-cluster-icon {
+    background-color: var(--white);
+    color: var(--black);
+    border: 1px solid var(--grey);
+    border-radius: 50%;
+    text-align: center;
+    line-height: 40px;
+    font-size: 14px;
+    font-weight: bold;
+}
+.custom-marker-icon {
+    padding: 5px !important;
+    background-color: var(--white);
+    border: 1px solid var(--grey);
+}
+.map-municipal-title{
+
+}
+.map-municipal-list{
+    
+}

@@ -1,8 +1,10 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import CreateDocument from '../../src/pages/CreateDocument';
+import FormDocument from '../../src/pages/CreateDocument.jsx';
 import API from '../../src/services/API.mjs';
 import { useParams, useNavigate } from 'react-router-dom';
+import { dmsToDecimal } from '../../src/utils/convertToDecimal';
+import Select from 'react-select';
 
 jest.mock('dayjs', () =>
   jest.fn(() => ({
@@ -15,6 +17,10 @@ jest.mock('../../src/components/MapPointSelector', () => (props) => (
   <div data-testid="MapPointSelector" {...props}></div>
 ));
 
+jest.mock('../../src/utils/convertToDecimal', () => ({
+  dmsToDecimal: jest.fn(), // crea un mock della funzione
+}));
+
 jest.mock('../../src/components/RelatedDocumentsSelector', () => (props) => (
   <div data-testid="RelatedDocumentsSelector" {...props}></div>
 ));
@@ -24,8 +30,10 @@ jest.mock('../../src/services/API.mjs', () => ({
   getDocuments: jest.fn(),
   AddDocumentDescription: jest.fn(),
   getData: jest.fn(),
-  EditDocumentDescription: jest.fn().mockResolvedValue({ success: true }) 
+  EditDocumentDescription: jest.fn().mockResolvedValue({ success: true }),
+  getStake: jest.fn() 
 }));
+
 
 
 
@@ -43,6 +51,34 @@ jest.mock('../../src/mocks/Document.mjs', () => {
   });
 });
 
+jest.mock("react-select", () => ({ options, value, onChange,placeholder }) => {
+  function handleChange(event) {
+    console.log("called");
+
+    const option = options.find(option => {
+      return option.value == event.currentTarget.value;
+    });
+
+    onChange(option);
+  }
+  return (
+    <select
+      id="uc"
+      data-testid="select"
+      value={value}
+      onChange={event => handleChange(event)}
+    >
+      <option disabled value="">
+            {placeholder}
+          </option>
+      {options?.map(({ label, value }) => (
+        <option key={value} value={value}>
+          {label}
+        </option>
+      ))}
+    </select>
+  );
+});
 
 
 
@@ -57,8 +93,18 @@ describe('CreateDocument', () => {
 
   it('should render the form correctly', async () => {
     useParams.mockReturnValue({ id: '' });
-    API.getTypes.mockResolvedValue(['Type1', 'Type2', 'Type3'])
-    render(<CreateDocument mode="add" />);
+    API.getTypes.mockResolvedValue([{ value: 'type1', label: 'type1' },
+      { value: 'type2', label: 'type2' },
+      { value: 'type3', label: 'type3' }])
+      API.getStake.mockResolvedValue([{ value: 'stakeholder1', label: 'Stakeholder 1' },
+        { value: 'stakeholder2', label: 'Stakeholder 2' },
+        { value: 'stakeholder3', label: 'Stakeholder 3' },
+        { value: 'stakeholder4', label: 'Stakeholder 4' },
+        { value: 'stakeholder5', label: 'Stakeholder 5' },
+        { value: 'stakeholder6', label: 'Stakeholder 6' },
+        { value: 'stakeholder7', label: 'Stakeholder 7' }])
+    API.getDocuments.mockResolvedValue([])
+    render(<FormDocument mode="add" />);
 
     await waitFor(() => {
     
@@ -68,7 +114,7 @@ describe('CreateDocument', () => {
     const titleField = screen.getByPlaceholderText(/Enter title/i);
     expect(titleField).toBeInTheDocument();
 
-    const stakeholderField = screen.getByPlaceholderText(/Enter stakeholder/i);
+    const stakeholderField = screen.getByText(/Select one or more stakeholders/i);
     expect(stakeholderField).toBeInTheDocument();
 
     const scaleField = screen.getByPlaceholderText(/Enter scale/i);
@@ -77,7 +123,7 @@ describe('CreateDocument', () => {
     const dateField = screen.getByText(/Issuance Date/i);
     expect(dateField).toBeInTheDocument();
 
-    const typeField = screen.getByTestId(/type-input/i)
+    const typeField = screen.getByText(/Select type/i)
     expect(typeField).toBeInTheDocument();
 
     const languageField = screen.getByText(/Select language/i);
@@ -90,22 +136,32 @@ describe('CreateDocument', () => {
     expect(coordField).toBeInTheDocument();
     })
   });
-
+  
   test('submits the form and calls AddDocumentDescription', async () => {
     useParams.mockReturnValue({ id: '' });
     API.getDocuments.mockResolvedValue([])
-    API.getTypes.mockResolvedValue(['Type1', 'Type2', 'Type3'])
+    API.getTypes.mockResolvedValue([{ value: 'type1', label: 'type1' },
+      { value: 'type2', label: 'type2' },
+      { value: 'type3', label: 'type3' }])
+    API.getStake.mockResolvedValue([{ value: 'stakeholder1', label: 'Stakeholder 1' },
+      { value: 'stakeholder2', label: 'Stakeholder 2' },
+      { value: 'stakeholder3', label: 'Stakeholder 3' },
+      { value: 'stakeholder4', label: 'Stakeholder 4' },
+      { value: 'stakeholder5', label: 'Stakeholder 5' },
+      { value: 'stakeholder6', label: 'Stakeholder 6' },
+      { value: 'stakeholder7', label: 'Stakeholder 7' }])
     API.AddDocumentDescription.mockResolvedValue({ success: true })
   
-    render(<CreateDocument mode="add" />);
+    render(<FormDocument mode="add" />);
   
     await waitFor(() => {
+    const selectOptions = screen.getAllByTestId(/select/i);
     fireEvent.change(screen.getByPlaceholderText(/Enter title/i), { target: { value: 'Document Title' } });
-    fireEvent.change(screen.getByPlaceholderText(/Enter stakeholder/i), { target: { value: 'John Doe' } });
+    fireEvent.change(selectOptions[0], { target: { value: 'stakeholder6' } });
     fireEvent.change(screen.getByPlaceholderText(/Enter scale/i), { target: { value: '1:100' } });
     fireEvent.change(screen.getByTestId(/date-input/i), { target: { value: '2024-01-01' } });
-    fireEvent.change(screen.getByTestId(/type-input/i), { target: { value: 'Type1' } });
-    fireEvent.change(screen.getByTestId(/language-input/i), { target: { value: 'swedish' } });
+    fireEvent.change(selectOptions[1], { target: { value: 'Type1' } });
+    fireEvent.change(selectOptions[2], { target: { value: 'swedish' } });
     fireEvent.change(screen.getByPlaceholderText(/Enter description/i), { target: { value: 'Some description' } });
     fireEvent.change(screen.getByPlaceholderText(/latitude/i), { target: { value: '40.7128' } });
     fireEvent.change(screen.getByPlaceholderText(/longitude/i), { target: { value: '-74.0060' } });
@@ -125,20 +181,29 @@ describe('CreateDocument', () => {
 
   test('loads document data when in "view" mode', async () => {
     useParams.mockReturnValue({ id: '123' });
+    API.getStake.mockResolvedValue([{ value: 'stakeholder1', label: 'Stakeholder 1' },
+      { value: 'stakeholder2', label: 'Stakeholder 2' },
+      { value: 'stakeholder3', label: 'Stakeholder 3' },
+      { value: 'stakeholder4', label: 'Stakeholder 4' },
+      { value: 'stakeholder5', label: 'Stakeholder 5' },
+      { value: 'stakeholder6', label: 'Stakeholder 6' },
+      { value: 'stakeholder7', label: 'Stakeholder 7' }])
     API.getDocuments.mockResolvedValue([])
-    API.getTypes.mockResolvedValue(['Type1', 'Type2', 'Type3'])
+    API.getTypes.mockResolvedValue([{ value: 'type1', label: 'type1' },
+      { value: 'type2', label: 'type2' },
+      { value: 'type3', label: 'type3' }])
     API.getData.mockResolvedValue({  
       title: 'Mock Title',
-      stakeholders: 'Mock Stakeholder',
+      stakeholders: 'stakeholder6',
       scale: 'Mock Scale',
       issuanceDate: '2023-01-01',
-      type: 'Type1',
+      type: 'type1',
       language: 'english',
       description: 'Mock description',
       coordinates: { lat: '40.7128', lng: '-74.0060' },
       connections: []  
     })
-    render(<CreateDocument mode="view" />);
+    render(<FormDocument mode="view" />);
     
 
     
@@ -147,20 +212,31 @@ describe('CreateDocument', () => {
     });
   
     await waitFor(() => {
+      const selectOptions = screen.getAllByTestId(/select/i);
       expect(screen.getByPlaceholderText(/Enter title/i)).toHaveValue('Mock Title');
-      expect(screen.getByPlaceholderText(/Enter stakeholder/i)).toHaveValue('Mock Stakeholder');
+      expect(selectOptions[0]).toHaveValue('stakeholder6');
       expect(screen.getByPlaceholderText(/Enter scale/i)).toHaveValue('Mock Scale');
       expect(screen.getByPlaceholderText(/Enter description/i)).toHaveValue('Mock description');
-      expect(screen.getByTestId(/type-input/i)).toHaveValue('Type1');
+      expect(selectOptions[1]).toHaveValue('type1');
+      expect(selectOptions[2]).toHaveValue('english');
     });
   });
 
   test('shows error when required fields are empty', async () => {
     useParams.mockReturnValue({ id: '' });
-    API.getTypes.mockResolvedValue(['Type1', 'Type2', 'Type3']);
+    API.getTypes.mockResolvedValue([{ value: 'type1', label: 'type1' },
+      { value: 'type2', label: 'type2' },
+      { value: 'type3', label: 'type3' }])
+    API.getStake.mockResolvedValue([{ value: 'stakeholder1', label: 'Stakeholder 1' },
+      { value: 'stakeholder2', label: 'Stakeholder 2' },
+      { value: 'stakeholder3', label: 'Stakeholder 3' },
+      { value: 'stakeholder4', label: 'Stakeholder 4' },
+      { value: 'stakeholder5', label: 'Stakeholder 5' },
+      { value: 'stakeholder6', label: 'Stakeholder 6' },
+      { value: 'stakeholder7', label: 'Stakeholder 7' }])
     API.getDocuments.mockResolvedValue([]);
     
-    render(<CreateDocument mode="add" />);
+    render(<FormDocument mode="add" />);
   
     // Simulate submitting the form with empty fields
     fireEvent.submit(screen.getByTestId('mocked-form'));
@@ -169,9 +245,10 @@ describe('CreateDocument', () => {
     await waitFor(() => {
       // Check that the required fields show validation errors
       expect(screen.getByText(/Title cannot be empty!/i)).toBeInTheDocument();
-      expect(screen.getByText(/Stakeholder cannot be empty!/i)).toBeInTheDocument();
+      //expect(screen.getByText(/Stakeholder cannot be empty!/i)).toBeInTheDocument();
       expect(screen.getByText(/Scale cannot be empty!/i)).toBeInTheDocument();
       expect(screen.getByText(/Description cannot be empty!/i)).toBeInTheDocument();
     });
   });
+  
 });

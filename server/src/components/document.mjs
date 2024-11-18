@@ -4,8 +4,8 @@ class Document {
     constructor() {
         this.id = '';
         this.title = '';
-        this.description = ''
-        this.stakeholders = '';
+        this.description = '';
+        this.stakeholders = [];
         this.scale = '';
         this.issuanceDate = '';
         this.type = '';
@@ -13,7 +13,6 @@ class Document {
         this.coordinates = '';
         this.connections = '';
         this.createdAt = '';
-        this.isConnected = false;
     }
 
     createFromObject(obj) {
@@ -35,13 +34,12 @@ class Document {
         this.description = row.description;
         this.stakeholders = row.stakeholders;
         this.scale = row.scale;
-        this.issuanceDate = row.issuance_date;
+        this.issuanceDate = row.issuanceDate;
         this.type = row.type;
         this.language = row.language;
         this.coordinates = row.coordinates ? JSON.parse(row.coordinates) : [];
         this.connections = row.connections;
         this.createdAt = row.created_at;
-        this.isConnected = row.is_connected === 1;
     }
 }
 

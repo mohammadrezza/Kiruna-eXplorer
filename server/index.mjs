@@ -3,13 +3,16 @@ import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors'
 import documentRouter from './src/routers/documentRouter.mjs';
+import sessionRouter from "./src/routers/sessionRouter.mjs";
+import Auth from "./src/auth/auth.mjs";
+import {errorHandler} from "./src/middlewares/errorhandler.mjs";
+import initializeDatabase from "./src/db/initializeDatabase.mjs";
 
 /*** init express and set up the middlewares ***/
 const app = express();
 app.use(morgan('dev'));
 app.use(express.json());
-
-
+new Auth(app);
 
 
 const corsOptions = {
@@ -19,15 +22,9 @@ const corsOptions = {
 };
 app.use(cors(corsOptions))
 app.use('/documents', documentRouter);
-
-app.use((err, req, res) => {
-    console.error(err.stack);
-    res.status(500).json({
-        success: false,
-        message: 'Something went wrong!',
-        error: err.message
-    });
-});
+app.use('/sessions', sessionRouter);
+errorHandler(app)
+await initializeDatabase();
 
 
 const PORT = 3001;
