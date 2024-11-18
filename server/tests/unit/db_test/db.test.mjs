@@ -1,5 +1,4 @@
 import {describe} from "@jest/globals";
-
 import DocumentType from "../../../src/components/documentType.mjs";
 import {addDocument, editDocument} from "../../../src/daos/documentDAO.mjs";
 import Document from "../../../src/components/document.mjs";
@@ -51,26 +50,29 @@ describe('database queries', () => {
     });
 
     describe('editDocument', () => {
-
         test("editDocument query", async () => {
-            const document = {
-                id: '1',
+
+            const document = new Document();
+
+            document.createFromObject({
+                id: '1', 
                 title: 'updated title',
                 description: 'updated description',
                 stakeholders: 'updated stakeholders',
                 scale: 'updated scale',
                 issuanceDate: 'updated issuanceDate',
-                type: 'DESIGN_DOCUMENT',
+                type: DocumentType.DESIGN_DOCUMENT,
                 language: 'updated language',
-                coordinates: [1.1, 2.2],
-                connections: []
-            };
-
+                coordinates: "[1.1, 2.2]",
+                connectionIds: []
+            });
+    
             jest.spyOn(db, "run").mockImplementation((query, params, callback) => {
+                console.log('Parameters passed to db.run:', params);
                 callback(null);
                 return {};
             });
-
+    
             const result = await editDocument(
                 document.id,
                 document.title,
@@ -83,7 +85,7 @@ describe('database queries', () => {
                 document.coordinates,
                 document.connections
             );
-
+ 
             expect(result).toBeUndefined();
             expect(db.run).toHaveBeenCalledWith(
                 expect.any(String),
@@ -102,8 +104,4 @@ describe('database queries', () => {
                 expect.any(Function)
             );
         });
-
-    });
-
-
-})
+    }); });
