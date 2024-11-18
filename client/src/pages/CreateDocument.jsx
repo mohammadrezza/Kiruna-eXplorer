@@ -1,7 +1,7 @@
 import React, { useState,useEffect,useContext } from 'react';
 import { Form, Button, Row, Col, Modal, ListGroup, InputGroup, Table, FormControl } from 'react-bootstrap';
 import { useNavigate, useParams} from 'react-router-dom'
-import { PiMapPinSimpleAreaFill, PiPen, PiNotePencilThin } from "react-icons/pi";
+import { PiMapPinSimpleAreaFill, PiPen, PiNotePencilThin, PiArrowRight } from "react-icons/pi";
 import * as dayjs from 'dayjs'
 import { AuthContext } from '../layouts/AuthContext';
 import MapPointSelector from '../components/MapPointSelector'
@@ -11,6 +11,7 @@ import Document from '../mocks/Document.mjs';
 import { dmsToDecimal } from '../utils/convertToDecimal';
 import '../style/CreateDocument.css'
 import Select from 'react-select'
+import { showSuccess, showError } from '../utils/notifications';
 
 function FormDocument(props) {
 
@@ -28,7 +29,6 @@ function FormDocument(props) {
   const [description,setDescription] = useState('');
   const [coordinates, setCoordinates] = useState({ lat: '', lng: '' });
   const [loading,setLoading] = useState(true);
-  const [loadingDocs,setLoadingDocs] = useState(true);
   const [edit,setEdit] = useState(false);
   const [showMap, setShowMap] = useState(false);
   const [isWholeMunicipal, setIsWholeMunicipal] = useState(false);
@@ -39,6 +39,7 @@ function FormDocument(props) {
   const [allTypes,setAllTypes] = useState([]);
   const [allStake,setAllStake] = useState([]);
   const [errors, setErrors] = useState([]);
+  const [rights, setRights] = useState(false)
 
   const customStyles = {
     control: (base) => ({
@@ -103,6 +104,10 @@ function FormDocument(props) {
         setAllDocuments(filteredDocuments);
 
         if (props.mode === 'view') {
+          if(user){
+            if(user.role==='Urban Planner')
+              setRights(true)
+          }
           const doc = await API.getData(docID);
           const connectedDocumentIds = doc.connections.map(doc => doc.id);
           setTitle(doc.title);
@@ -124,7 +129,6 @@ function FormDocument(props) {
         console.error("Error loading data:", error);
       } finally {
         setLoading(false);
-        setLoadingDocs(false);
       }
     };
 
@@ -132,7 +136,23 @@ function FormDocument(props) {
   }, [props.mode, docID, id]);
 
   const areCoordinatesValid = (coordinates) => {
-    return /^-?\d*\.?\d*$/.test(coordinates.lat) && /^-?\d*\.?\d*$/.test(coordinates.lng);
+    const kirunaBounds = [
+    [67.821, 20.216], // Southwest corner [lat, lng]
+    [67.865, 20.337]  // Northeast corner [lat, lng]
+  ];
+
+  // Extract bounds
+  const [sw, ne] = kirunaBounds; // southwest and northeast corners
+  const isValidLat = coordinates.lat >= sw[0] && coordinates.lat <= ne[0];
+  const isValidLng = coordinates.lng >= sw[1] && coordinates.lng <= ne[1];
+
+  // Validate coordinates are numbers and within bounds
+  return (
+    /^-?\d*\.?\d*$/.test(coordinates.lat) &&
+    /^-?\d*\.?\d*$/.test(coordinates.lng) &&
+    isValidLat &&
+    isValidLng
+  );
   };
   const handleDMSConversion = (coordinates, setCoordinates, setErrors) => {
     try {
@@ -171,7 +191,7 @@ function FormDocument(props) {
     setCoordinates({ lat: '', lng: '' });
     setErrors([]);
   };
-  const handleRelatedDocumentClick = (relatedDocumentId) => navigate(`/documents/view/${relatedDocumentId}`);
+  const handleRelatedDocumentClick = (relatedDocumentId) => navigate(`/document/view/${relatedDocumentId}`);
 
   const validateForm = () => {
     const validationErrors = {};
@@ -180,7 +200,7 @@ function FormDocument(props) {
     if (!scale.trim()) validationErrors.scale = 'Scale cannot be empty!';
     if (type === null) validationErrors.type = 'Type cannot be empty!';
     if (!description.trim()) validationErrors.description = 'Description cannot be empty!';
-    if (!areCoordinatesValid(coordinates)) validationErrors.coordinates = 'Not correct format. Try to convert it';
+    if (!areCoordinatesValid(coordinates)) validationErrors.coordinates = 'Not correct format or not inside Kiruna area';
     //if(!isWholeMunicipal && (!coordinates.lat || !coordinates.lng)) validationErrors.coordinates = 'Coordinates cannot be empty!';
     return validationErrors;
   };
@@ -210,7 +230,10 @@ function FormDocument(props) {
     //by using this API we pass selectedDocuments as
     // an argument here
     //otherwise we create a new API
-    navigate('/');
+    showSuccess('Action successful!')
+    setTimeout(()=>{
+      navigate('/documents');
+    }, 2000)
   };
 
   const handleDocumentSelect = (documentId) => {
@@ -246,7 +269,7 @@ function FormDocument(props) {
       <div className="form-container">
         <h2 className='form-container-title'>
           {props.mode==='view' ? title : 'New Document'}
-          {(props.mode==='view' && edit===false && user.role==='Urban Planner') && <PiNotePencilThin className='edit-button' onClick={() => setEdit(true)}/>}
+          {(props.mode==='view' && edit===false && rights) && <PiNotePencilThin className='edit-button' onClick={() => setEdit(true)}/>}
           </h2>
         <Form onSubmit={handleSubmit} data-testid="form-component">
           <Row>
@@ -369,7 +392,9 @@ function FormDocument(props) {
                 </Col>
                 <Col md={3}>
                 {(props.mode === 'add' || edit) && (
-                  <div className='convert-btn  margin-top-3' onClick={handleDMSChange}>convert DMS format</div>  
+                  <div className='convert-btn  margin-top-3' onClick={handleDMSChange}>
+                    <PiArrowRight />
+                    convert DMS format</div>  
                 )}
                 </Col>
               </Row>

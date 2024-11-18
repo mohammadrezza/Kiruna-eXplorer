@@ -14,8 +14,8 @@ function List(props){
 
 
     return(<div className="document-list">
-        <ListGroup className='relatedDocs'>
-          <ListGroup.Item className='relatedDocs-header'>
+        <ListGroup className='document-list-item'>
+          <ListGroup.Item className='document-list-item-header'>
             <Row>
               <Col md={3}>Title</Col>
               <Col md={3}>Stakeholders</Col>

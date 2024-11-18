@@ -1,0 +1,25 @@
+.related .list-group-item{
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    padding: 20px 16px;
+    color: var(--dark-grey);
+    font-size: 16px;
+    background-color: unset ;
+}
+.related .list-group-item:hover{
+    color: var(--dark-grey);
+    background-color: unset ;
+}
+
+.related .related-header{
+    background-color: unset;
+    cursor: unset;
+    font-size: 14px;
+    color: var(--light-grey);
+}
+
+.related .related-header:hover{
+    background-color: unset;
+    color: var(--light-grey);
+}

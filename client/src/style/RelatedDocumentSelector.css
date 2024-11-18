@@ -1,3 +1,31 @@
+.relatedDocs .list-group-item{
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    padding: 20px 16px;
+    color: var(--dark-grey);
+    font-size: 16px;
+    cursor: pointer;
+}
+.relatedDocs .list-group-item:hover,
+.relatedDocs .list-group-item.selected {
+    background-color: var(--lily-white);
+    color: var(--demo-black);
+    cursor: pointer;
+}
+.relatedDocs .relatedDocs-header{
+    background-color: unset;
+    cursor: unset ;
+    font-size: 14px;
+    color: var(--light-grey);
+}
+.relatedDocs .relatedDocs-header:hover{
+    background-color: unset;
+    cursor: unset ;
+    font-size: 14px;
+    color: var(--light-grey);
+}
+
 .connectionform{
     font-family: 'Open Sans';
     font-size: 16px !important;
@@ -9,10 +37,11 @@
     
 }
 
-.filesymbol{
+.relatedDocs > .filesymbol{
     margin-left: 27px;
+    
 }
-.filesymbol:hover{
+.relatedDocs > .filesymbol:hover{
     color: white;
     background-color: var(--demo-black);
     border-radius: 6px ;

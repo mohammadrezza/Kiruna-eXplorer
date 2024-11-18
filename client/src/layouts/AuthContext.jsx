@@ -6,20 +6,20 @@ export const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  const storedUser = localStorage.getItem('user');
+  const storedUser = JSON.parse(localStorage.getItem('user'));
   const [user, setUser] = useState(storedUser);
   const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
     if(!storedUser){
       const fetchUser = async () => {
         try {
           const fetchedUser = await API.getUser()
-          setUser(fetchedUser);
-          localStorage.setItem('user', fetchedUser);
+          setUser(fetchedUser.user);
+          localStorage.setItem('user', JSON.stringify(fetchedUser.user));
         } catch {
           setUser(null);
-          localStorage.setItem('user', null);
+          localStorage.removeItem('user');
         } finally {
           setLoading(false);
         }
@@ -33,17 +33,25 @@ export const AuthProvider = ({ children }) => {
   const login = async (username, password) => {
     try {
       const loggedInUser = await API.login(username, password);
-      setUser(loggedInUser);
-      localStorage.setItem('user', loggedInUser);
+      setUser(loggedInUser.user);
+      localStorage.setItem('user', JSON.stringify(loggedInUser.user));
     } catch (error) {
-      localStorage.setItem('user', null);
+      localStorage.removeItem('user');
       throw error;
     }
   };
 
+  const logout = async () => {
+    try {
+      localStorage.removeItem('user');
+    } catch(error){
+      throw error;
+    }
+  }
+
 
   return (
-    <AuthContext.Provider value={{ user, login, loading }}>
+    <AuthContext.Provider value={{ user, login, loading, logout }}>
       {children}
     </AuthContext.Provider>
   );

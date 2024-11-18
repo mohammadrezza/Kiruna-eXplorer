@@ -4,7 +4,7 @@ import { ListGroup, Row, Col, Form } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import API from '../services/API.mjs';
 import '../style/RelatedDocumentSelector.css'
-import { PiFileText } from 'react-icons/pi';
+import { PiFileMagnifyingGlassLight } from 'react-icons/pi';
 import DocumentDetailsModal from './DocumentDetailsModal';
 
 function RelatedDocumentsSelector({
@@ -21,6 +21,9 @@ function RelatedDocumentsSelector({
   const [currentDocument, setCurrentDocument] = useState(null);
 
   useEffect(() => {
+    console.log(allDocuments);
+    console.log(selectedDocuments);
+
     const fetchConnectionTypes = async () => {
       try {
         const response = await API.getConnectionTypes(); 
@@ -56,9 +59,10 @@ function RelatedDocumentsSelector({
           <Row>
             <Col md={1}></Col>
             <Col md={3}>Title</Col>
-            <Col md={3}>Stakeholders</Col>
+            <Col md={2}>Stakeholders</Col>
             {/* <Col md={2}>Issuance Date</Col> */}
             <Col md={2}>Type</Col>
+            <Col md={1}>Connected</Col>
             <Col md={2}>Connection type</Col>
           </Row>
         </ListGroup.Item>
@@ -82,9 +86,10 @@ function RelatedDocumentsSelector({
               : num + 1}
               </Col>
               <Col md={3}>{doc.title}</Col>
-              <Col md={3}>{doc.stakeholders}</Col>
+              <Col md={2}>{doc.stakeholders.join(', ')}</Col>
               {/* <Col md={2}>{dayjs(doc.issuanceDate).format('DD/MM/YYYY')}</Col> */}
               <Col md={2}>{doc.type}</Col>
+              <Col md={1} className="text-center">{doc.connections}</Col>
               <Col md={2}>
               {(mode === 'add' || edit) ? 
                 <Form.Select
@@ -102,14 +107,14 @@ function RelatedDocumentsSelector({
                 
               </Col>
               <Col>
-                <PiFileText 
+                <PiFileMagnifyingGlassLight 
                   className='filesymbol' 
                   size={22} 
                   onClick={(e) => {
                     e.stopPropagation(); // Prevent row click event
                     handleIconClick(doc);
                   }}>
-                </PiFileText>
+                </PiFileMagnifyingGlassLight>
               </Col>
             </Row>
           </ListGroup.Item>

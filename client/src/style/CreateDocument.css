@@ -133,26 +133,6 @@ textarea.form-control {
     font-size: 26px;
 }
 
-.relatedDocs .list-group-item{
-    border-left: none;
-    border-right: none;
-    border-top: none;
-    padding: 20px 16px;
-    color: var(--dark-grey);
-    font-size: 16px;
-    cursor: pointer;
-}
-.list-group-item:hover,
-.list-group-item.selected {
-    background-color: var(--lily-white);
-    color: var(--demo-black)
-}
-.relatedDocs .relatedDocs-header{
-    background-color: unset;
-    cursor: unset;
-    font-size: 14px;
-    color: var(--light-grey);
-}
 
 .scrollable-description {
     max-height: 600px; 
@@ -168,14 +148,20 @@ textarea.form-control {
 }
 .convert-btn{
     cursor: pointer;
-    text-align: center;
+    display: flex;
+    align-items: center;
     height: 51px;
-    line-height: 51px;
+    width: fit-content;
+    padding: 0px 15px;
     margin-bottom: 32px;
-    border-radius: 0;
+    border-radius: 8px;
     background-color: var(--white);
     color: var(--demo-black);
-    border-bottom: 1px solid var(--demo-black);
+    border: 1px solid var(--light-grey);
+}
+.convert-btn svg{
+    margin-right: 10px;
+    /* width: 15px; */
 }
 .convert-btn:hover{
     color: var(--blue);

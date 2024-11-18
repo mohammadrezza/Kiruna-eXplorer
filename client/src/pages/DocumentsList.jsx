@@ -45,7 +45,7 @@ function DocumentsList() {
     }
   };
 
-  const handleDocumentClick = (documentId) => navigate(`view/${documentId}`);
+  const handleDocumentClick = (documentId) => navigate(`/document/view/${documentId}`);
   const toggleMap = () => {
     setShowMap(prev => !prev);
   };
@@ -56,7 +56,7 @@ function DocumentsList() {
       <h2 className='form-container-title'>
           Document List
           {user && 
-          <Button  className='add-button' onClick={()=>navigate('add')}>+ New document</Button>
+          <Button  className='add-button' onClick={()=>navigate('/document/add')}>+ New document</Button>
           }
       </h2>
       <div className='form-container-subtitle'>
