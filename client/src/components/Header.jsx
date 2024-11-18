@@ -3,7 +3,7 @@ import {useLocation, useNavigate } from 'react-router-dom';
 import { FaUserCircle } from 'react-icons/fa';
 import { Button, Navbar } from 'react-bootstrap';
 import { AuthContext } from '../layouts/AuthContext';
-import '../style/Header.css'
+import '../style/header.css'
 
 function Header({ className }) {
   const location = useLocation();

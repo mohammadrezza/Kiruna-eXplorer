@@ -113,6 +113,7 @@ function FormDocument(props) {
           setTitle(doc.title);
           const st = [];
           doc.stakeholders.forEach((s) => st.push({value:s, label:s}))
+          console.log(st)
           setStakeholder(st);
           setScale(doc.scale);
           setDescription(doc.description);
@@ -124,6 +125,7 @@ function FormDocument(props) {
           setIssuanceDate(dayjs(doc.issuanceDate).format('YYYY-MM-DD'));
           setRelatedDocuments(doc.connections);
           setSelectedDocuments(connectedDocumentIds)
+          
         }
       } catch (error) {
         console.error("Error loading data:", error);
@@ -210,10 +212,10 @@ function FormDocument(props) {
   const handleSubmit = (event) =>{
     event.preventDefault();
     const validationErrors = validateForm();
-    console.log("Form submitted"); // Debugging
+    
     if(Object.keys(validationErrors).length>0){
+      console.log("Form submitted"); // Debugging
       setErrors(validationErrors);
-      console.log(errors);
       return;
     }
     if(isWholeMunicipal) {coordinates.lat = 0; coordinates.lng = 0}
