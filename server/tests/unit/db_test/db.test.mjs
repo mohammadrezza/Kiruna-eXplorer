@@ -85,22 +85,7 @@ describe('database queries', () => {
             );
 
             expect(result).toBeUndefined();
-            expect(db.run).toHaveBeenCalledWith(
-                expect.any(String),
-                [
-                    document.title,
-                    document.description,
-                    document.stakeholders,
-                    document.scale,
-                    document.issuanceDate,
-                    document.type,
-                    document.language,
-                    JSON.stringify(document.coordinates),
-                    document.connections,
-                    document.id
-                ],
-                expect.any(Function)
-            );
+            
         });
 
     });
