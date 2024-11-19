@@ -61,7 +61,7 @@ function Login() {
               disabled={isLoading}
             />
           </Form.Group>
-          <Button type="submit" disabled={isLoading}>
+          <Button type="submit" disabled={isLoading} data-testid='submit-button'>
             {isLoading ? 'Logging in...' : 'Login'}
           </Button>
         </Form>

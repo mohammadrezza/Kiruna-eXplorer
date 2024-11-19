@@ -40,6 +40,12 @@ const MockedButton = ({ type, children, ...props }) => (
     </button>
   );
 
+  const MockedAlert = ({ variant, children, ...props }) => (
+    <div className={`alert alert-${variant}`} role="alert" {...props}>
+      {children}
+    </div>
+  );
+
 export const ListGroup = ({ children, ...props }) => (
   <div {...props}>{children}</div>
 );
@@ -56,3 +62,4 @@ export const Col = MockedComponent;
 export const Modal = ({ children }) => <div>{children}</div>;
 export const InputGroup = MockedComponent;
 export const Table = MockedComponent;
+export const Alert = MockedAlert;

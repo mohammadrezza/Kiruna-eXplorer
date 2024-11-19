@@ -82,7 +82,7 @@ describe('List component',() =>{
         doc.stakeholders.forEach((s)=>{
             expect(screen.getByText(s)).toBeInTheDocument();
         })
-        
+        expect(screen.getByText('2024-01-01')).toBeInTheDocument();
         expect(screen.getByText(doc.type)).toBeInTheDocument();
         expect(screen.getByText(doc.connections)).toBeInTheDocument();
         //expect(screen.getByText('2024-01-01')).toBeInTheDocument()
