@@ -27,12 +27,17 @@
   margin: 0;
   cursor: pointer;
 }
+
+.custom-navbar-actions{
+  display: flex;
+  justify-content: flex-end;
+}
   
 .profile-icon {
   width: 44px;
   height: 44px;
   color: var(--dark-grey);
-  margin-left: auto;
+  margin-left: 20px;
   cursor: pointer;
 }
 .profile-icon:hover{
@@ -49,17 +54,5 @@
 
 .transparent-header{
   background: transparent !important;
-}
-
-.logout-icon{
-  background-color: red;
-  color: black;
-  font-family: "Times";
-  border-color: black;
-  border-radius: 0px;
-  width: 100px;
-  height: 44px;
-  margin-left: auto;
-  cursor: pointer;
 }
 

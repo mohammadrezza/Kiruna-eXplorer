@@ -11,14 +11,7 @@ function Homepage() {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
 
-  const handleNewDocument = () => {
-    navigate(`/document/add`);
-  };
-  
-
-  const handleListDocument = () => {
-    navigate('/documents')
-  }
+  const navigateTo = (path) => navigate(path);
 
   return (
     <div className="Homepage">
@@ -35,17 +28,17 @@ function Homepage() {
             <h2>My Tools & Features</h2>
           </div>
           <Row>
-            <button onClick={handleListDocument}> 
+            <button onClick={() => navigateTo('/documents')}> 
               <IoLibraryOutline></IoLibraryOutline>
               <span>List of Documents</span>
             </button>
             {user && 
-              <button onClick={handleNewDocument}> 
+              <button onClick={() => navigateTo('/document/add')}> 
                 <PiFilePlus></PiFilePlus>
                 <span>Create a document</span>
               </button>
             }
-            <button>
+            <button onClick={() => navigateTo('/documents/map')}>
               <PiMapTrifold></PiMapTrifold>
               <span>Explore the map</span>
             </button>

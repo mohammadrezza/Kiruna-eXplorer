@@ -4,10 +4,13 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import FormDocument from './pages/CreateDocument';
 import Homepage from './pages/Homepage';
-import DocumentsList from './pages/DocumentsList'
+import DocumentsLayout from './layouts/DocumentsLayout'
+import DocumentsList from './components/List'
+import DocumentMap from './components/DocumentsMap'
 import Login from './pages/Login'
 import { AuthProvider } from "./layouts/AuthContext";
 import PrivateRoute from './layouts/PrivateRoute';
+import ScrollToTop from './components/ScrollToTop';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
@@ -23,6 +26,7 @@ function App() {
     <>
     <AuthProvider>
     <Header className={headerClasses}></Header>
+    <ScrollToTop />
     <Routes>
       <Route path='/' element={<Homepage />}/>
       <Route path='/login' element={<Login />}/>
@@ -32,7 +36,10 @@ function App() {
       <Route path='/document/view/:id' element={
         <FormDocument mode={'view'}/>
       } />
-      <Route path='/documents' element={<DocumentsList/>} />
+      <Route path='/documents' element={<DocumentsLayout/>}>
+        <Route index element={<DocumentsList mode="list"/>} />
+        <Route path="map" element={<DocumentMap  mode="map"/>} /> 
+      </Route>
    </Routes>
    {isHomePage && <Footer />}
    <ToastContainer 

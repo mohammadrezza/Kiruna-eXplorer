@@ -202,7 +202,7 @@ function FormDocument(props) {
     if (!scale.trim()) validationErrors.scale = 'Scale cannot be empty!';
     if (type === null) validationErrors.type = 'Type cannot be empty!';
     if (!description.trim()) validationErrors.description = 'Description cannot be empty!';
-    if (!areCoordinatesValid(coordinates)) validationErrors.coordinates = 'Not correct format or not inside Kiruna area';
+    if (!areCoordinatesValid(coordinates) && !isWholeMunicipal) validationErrors.coordinates = 'Not correct format or not inside Kiruna area';
     //if(!isWholeMunicipal && (!coordinates.lat || !coordinates.lng)) validationErrors.coordinates = 'Coordinates cannot be empty!';
     return validationErrors;
   };
@@ -214,7 +214,7 @@ function FormDocument(props) {
     const validationErrors = validateForm();
     
     if(Object.keys(validationErrors).length>0){
-      console.log("Form submitted"); // Debugging
+      console.log("Form not submitted"); // Debugging
       setErrors(validationErrors);
       return;
     }

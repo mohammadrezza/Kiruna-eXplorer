@@ -1,19 +1,37 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Row, Col,ListGroup } from 'react-bootstrap';
 import * as dayjs from 'dayjs'
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import { PiFileMagnifyingGlassLight } from 'react-icons/pi';
 import DocumentDetailsModal from '../components/DocumentDetailsModal';
+import API from '../services/API.mjs';
 import '../style/DocumentsList.css';
 
-function List(props){
+function List(){
+    const navigate = useNavigate();
+    const { list, loading } = useOutletContext();
+    const [currentDocument, setCurrentDocument] = useState('');
+    const [showModal, setShowModal] = useState(false);
 
-    const handleCloseModal = () => {
-      props.handleShowModal(false);
-      props.handleCurrentDocument(null);
+    const handleIconClick = async (doc) => {
+      try {
+        const docData = await API.getData(doc.id); 
+        setCurrentDocument(docData);
+        setShowModal(true);
+      } catch (error) {
+        console.error("Error fetching document data:", error);
+      }
     };
 
+    const handleCloseModal = () => {
+      setShowModal(false);
+      setCurrentDocument(null);
+    };
+    const handleDocumentClick = (documentId) => navigate(`/document/view/${documentId}`);
 
-    return(<div className="document-list">
+
+    return(
+    <div className="document-list">
         <ListGroup className='document-list-item'>
           <ListGroup.Item className='document-list-item-header'>
             <Row>
@@ -24,12 +42,12 @@ function List(props){
               <Col>Issuance Date</Col>
             </Row>
           </ListGroup.Item>
-          {!props.loading && props.list.map((doc, num) => (
+          {!loading && list.map((doc, num) => (
             <ListGroup.Item 
               key={doc.id}  
               >
               <Row className="align-items-center">
-                <Col md={3} className='doc-title' onClick={() => props.handleDocumentClick(doc.id)}>{doc.title}</Col>
+                <Col md={3} className='doc-title' onClick={() => handleDocumentClick(doc.id)}>{doc.title}</Col>
                 <Col md={3} className='stakeholder-col'> 
                 {doc.stakeholders
                   .slice() 
@@ -49,7 +67,7 @@ function List(props){
                 <Col>
                   <span className='filesymbol' onClick={(e) => {
                       e.stopPropagation(); // Prevent row click event
-                      props.handleIconClick(doc);
+                      handleIconClick(doc);
                     }}>
                       Preview
                       <PiFileMagnifyingGlassLight size={22}></PiFileMagnifyingGlassLight>
@@ -60,11 +78,12 @@ function List(props){
           ))}
         </ListGroup>
         <DocumentDetailsModal
-          show={props.showModal}
+          show={showModal}
           onHide={handleCloseModal}
-          document={props.currentDocument}
+          document={currentDocument}
             />
-      </div>)
+    </div>
+    )
 }
 
 export default List

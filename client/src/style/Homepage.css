@@ -5,6 +5,7 @@
     padding-left: 50px;
     height: 635px;
     background-color: var(--demo-black);
+    position: relative;
   }
   
   .welcome-section h1 {
