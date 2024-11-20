@@ -17,6 +17,7 @@ const corsOptions = {
     origin: 'http://localhost:3000',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type'],
+    credentials: true
 };
 app.use(cors(corsOptions))
 const documentRouter = new DocumentRouter(app);
