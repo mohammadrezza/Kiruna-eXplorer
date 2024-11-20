@@ -46,21 +46,6 @@ async function AddDocumentDescription(doc ,selectedDocuments, coordinates) {
         const coord = [];
         coord.push(coordinates.lat);
         coord.push(coordinates.lng);
-       
-        const requestBody = {
-            title: doc.title,
-            description: doc.description,
-            stakeholders: doc.stakeholder, 
-            scale: doc.scale, 
-            issuanceDate: dayjs(doc.issuanceDate).format('DD-MM-YYYY'),
-            type: doc.type,
-            language: doc.language,  
-            coordinates: coordinates, 
-            connectionIds: selectedDocuments
-        };
-
-        console.log("Request Body:", requestBody);
-
         
         const response = await fetch(`${url}/documents/`,
             {
@@ -74,7 +59,7 @@ async function AddDocumentDescription(doc ,selectedDocuments, coordinates) {
                     description: doc.description,
                     stakeholders:doc.stakeholder, 
                     scale: doc.scale, 
-                    issuanceDate: dayjs(doc.issuanceDate).format('DD-MM-YYYY'),
+                    issuanceDate: doc.issuanceDate,
                     type: doc.type,
                     language: doc.language,  
                     coordinates: coordinates, 
