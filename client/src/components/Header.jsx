@@ -4,7 +4,7 @@ import { FaUserCircle } from 'react-icons/fa';
 import { Navbar } from 'react-bootstrap';
 import { IoLibraryOutline, IoExitOutline } from "react-icons/io5";
 import { AuthContext } from '../layouts/AuthContext';
-import '../style/header.css'
+import '../style/Header.css'
 
 function Header({ className }) {
   const location = useLocation();
