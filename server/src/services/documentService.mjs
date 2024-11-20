@@ -216,14 +216,14 @@ async function getDocument(id) {
             if (row.conn_id) {
                 const connStakeholders = await getDocumentStakeholders(row.conn_id);
                 mainDocument.connections.push({
-                    connectionType: row.conn_type,
+                    connectionType: row.connection_type,
                     id: row.conn_id,
                     title: row.conn_title,
                     description: row.conn_description,
                     stakeholders: connStakeholders.map(s => s.stakeholder),
                     scale: row.conn_scale,
                     issuanceDate: row.conn_issuanceDate,
-                    type: row.conn_type,
+                    type: row.conn_doc_type,
                     language: row.conn_language,
                     coordinates: row.conn_coordinates ? JSON.parse(row.conn_coordinates) : []
                 });
