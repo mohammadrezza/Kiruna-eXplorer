@@ -3,18 +3,14 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import FormDocument from '../../src/pages/CreateDocument.jsx';
 import API from '../../src/services/API.mjs';
 import { useParams, useNavigate } from 'react-router-dom';
-import { dmsToDecimal } from '../../src/utils/convertToDecimal';
-import Select from 'react-select';
 import { AuthProvider } from '../../src/layouts/AuthContext.jsx';
-import { select } from "react-select-event";
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';  // Importa il plugin
 
-jest.mock('dayjs', () =>
-  jest.fn(() => ({
-    format: jest.fn(() => 'mocked-date'),
-    add: jest.fn().mockReturnThis(),
-    subtract: jest.fn().mockReturnThis(),
-  }))
-);
+// Estendi dayjs con il plugin customParseFormat
+
+
+
 jest.mock('../../src/components/MapPointSelector', () => (props) => (
   <div data-testid="MapPointSelector" {...props}></div>
 ));
@@ -105,7 +101,7 @@ const MockAuthProvider = ({ children }) => {
 
 
 describe('CreateDocument', () => {
-
+  dayjs.extend(customParseFormat);
   const mockNavigate = jest.fn();
 
   beforeEach(() => {
