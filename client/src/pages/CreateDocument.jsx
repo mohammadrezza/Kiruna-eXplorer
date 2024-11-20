@@ -143,8 +143,8 @@ function FormDocument(props) {
 
   const areCoordinatesValid = (coordinates) => {
     const kirunaBounds = [
-    [67.821, 20.216], // Southwest corner [lat, lng]
-    [67.865, 20.337]  // Northeast corner [lat, lng]
+    [67.765, 20.090],
+    [67.900, 20.420]
   ];
 
   // Extract bounds
