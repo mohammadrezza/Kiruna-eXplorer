@@ -1,54 +1,51 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import API from '../services/API.mjs';
-
+import Cookies from 'js-cookie'; // Importa la libreria js-cookie
 
 export const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  const storedUser = JSON.parse(localStorage.getItem('user'));
+  const storedUser = JSON.parse(Cookies.get('user') || 'null'); // Legge il valore dal cookie
   const [user, setUser] = useState(storedUser);
   const [loading, setLoading] = useState(true);
   
   useEffect(() => {
-    if(!storedUser){
+    if (!storedUser) {
       const fetchUser = async () => {
         try {
-          const fetchedUser = await API.getUser()
+          const fetchedUser = await API.getUser();
           setUser(fetchedUser.user);
-          localStorage.setItem('user', JSON.stringify(fetchedUser.user));
+          Cookies.set('user', JSON.stringify(fetchedUser.user), { expires: 7 }); // Salva il cookie con scadenza di 7 giorni
         } catch {
           setUser(null);
-          localStorage.removeItem('user');
+          Cookies.remove('user'); // Rimuove il cookie se c'è un errore
         } finally {
           setLoading(false);
         }
       };
       fetchUser();
     }
-
-    
-  }, []);
+  }, [storedUser]);
 
   const login = async (username, password) => {
     try {
       const loggedInUser = await API.login(username, password);
       setUser(loggedInUser.user);
-      localStorage.setItem('user', JSON.stringify(loggedInUser.user));
+      Cookies.set('user', JSON.stringify(loggedInUser.user), { expires: 7 }); // Salva il cookie con scadenza di 7 giorni
     } catch (error) {
-      localStorage.removeItem('user');
+      Cookies.remove('user'); // Rimuove il cookie in caso di errore
       throw error;
     }
   };
 
   const logout = async () => {
     try {
-      localStorage.removeItem('user');
-    } catch(error){
+      Cookies.remove('user'); // Rimuove il cookie
+    } catch (error) {
       throw error;
     }
   }
-
 
   return (
     <AuthContext.Provider value={{ user, login, loading, logout }}>
