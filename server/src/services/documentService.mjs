@@ -223,7 +223,7 @@ async function getDocument(id) {
                     stakeholders: connStakeholders.map(s => s.stakeholder),
                     scale: row.conn_scale,
                     issuanceDate: row.conn_issuanceDate,
-                    type: row.conn_type,
+                    type: row.doc_type,
                     language: row.conn_language,
                     coordinates: row.conn_coordinates ? JSON.parse(row.conn_coordinates) : []
                 });
