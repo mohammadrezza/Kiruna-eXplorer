@@ -252,7 +252,12 @@ async function getDocumentWithConnections(id) {
                 cd.language as conn_language,
                 cd.coordinates as conn_coordinates,
                 dc.type as connection_type,
-                cd.type as conn_doc_type
+                cd.type as conn_doc_type,
+                (
+                    SELECT COUNT(*)
+                    FROM DocumentConnection dc2
+                    WHERE dc2.documentId = cd.id OR dc2.connectionId = cd.id
+                ) as conn_total_connections
             FROM Document d
                      LEFT JOIN DocumentConnection dc ON d.id = dc.documentId OR d.id = dc.connectionId
                      LEFT JOIN Document cd ON

@@ -225,6 +225,7 @@ async function getDocument(id) {
                     issuanceDate: row.conn_issuanceDate,
                     type: row.conn_doc_type,
                     language: row.conn_language,
+                    connections: row.conn_total_connections,
                     coordinates: row.conn_coordinates ? JSON.parse(row.conn_coordinates) : []
                 });
             }
