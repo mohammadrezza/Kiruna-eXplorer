@@ -84,9 +84,9 @@ function FormDocument(props) {
     }),
   };
 
-  const allLanguage = [{ value: 'italian', label: 'italian' },
-    { value: 'swedish', label: 'swedish' },
-    { value: 'english', label: 'english' }]
+  const allLanguage = [{ value: 'Italian', label: 'Italian' },
+    { value: 'Swedish', label: 'Swedish' },
+    { value: 'English', label: 'English' }]
 
   useEffect(() => {
     if (props.mode === 'view') {
@@ -113,12 +113,15 @@ function FormDocument(props) {
           setTitle(doc.title);
           const st = [];
           doc.stakeholders.forEach((s) => st.push({value:s, label:s}))
+          console.log(dayjs(doc.issuanceDate).format('DD-MM-YYYY'))
           // console.log(st)
           setStakeholder(st);
           setScale(doc.scale);
           setDescription(doc.description);
-          setType(doc.type);
-          setLanguage(doc.language);
+          const ty = {value:doc.type, label:doc.type}
+          setType(ty);
+          const lan = {value:doc.language, label:doc.language}
+          setLanguage(lan);
           if(doc.coordinates.lat === 0 && doc.coordinates.lng === 0 )
             setIsWholeMunicipal(true)
           else setCoordinates(doc.coordinates);
