@@ -32,8 +32,8 @@ function MapEvents({ onCoordinatesChange, setMarkerPosition, mode, edit }) {
 function MapPointSelector({ onCoordinatesChange, coordinates, mode, edit  }) {
   const [markerPosition, setMarkerPosition] = useState(null); 
    const kirunaBounds = L.latLngBounds(
-    [67.821, 20.216],
-    [67.865, 20.337] 
+    [67.765, 20.090],
+    [67.900, 20.420] 
   );
 
   useEffect(() => {
@@ -44,7 +44,9 @@ function MapPointSelector({ onCoordinatesChange, coordinates, mode, edit  }) {
 
   return (
     <div>
-      <h5 className='map-view-text' data-testid="map-info">Click on the map to select a point</h5>
+      {(mode === 'add' || edit) && (
+        <h5 className='map-view-text' data-testid="map-info">Click on the map to select a point</h5>
+      )}
       <MapContainer
         center={initialCenter}
         zoom={13}

@@ -113,7 +113,7 @@ function FormDocument(props) {
           setTitle(doc.title);
           const st = [];
           doc.stakeholders.forEach((s) => st.push({value:s, label:s}))
-          console.log(st)
+          // console.log(st)
           setStakeholder(st);
           setScale(doc.scale);
           setDescription(doc.description);
@@ -367,7 +367,7 @@ function FormDocument(props) {
                   <Form.Label>Coordinates{(props.mode === 'add' || edit) && <span>*</span>}</Form.Label>
                   <Form.Control 
                     type="text" 
-                    placeholder="latitude" 
+                    placeholder="latitude (e.g., 67.8558)" 
                     minLength={2} 
                     value={coordinates.lat} 
                     onChange={(event) => handleCoordinatesChange({lat:event.target.value, lng:coordinates.lng})}
@@ -383,7 +383,7 @@ function FormDocument(props) {
                   <Form.Group  className='form-group margin-top-3' controlId="description">
                     <Form.Control 
                       type="text" 
-                      placeholder="longitude" 
+                      placeholder="longitude (e.g., 20.2253)" 
                       minLength={2} 
                       value={coordinates.lng} 
                       onChange={(event) => handleCoordinatesChange({lat: coordinates.lat, lng:event.target.value})}
@@ -402,6 +402,7 @@ function FormDocument(props) {
               </Row>
               <Row>
                 <Col md={4}>
+                {(props.mode === 'add' || edit || isWholeMunicipal) && (
                   <div className="map-view-trigger">
                     <Form.Group controlId="formBasicCheckbox">
                       <Form.Check 
@@ -413,6 +414,7 @@ function FormDocument(props) {
                       />
                     </Form.Group>
                   </div>
+                  )}
                 </Col>
                 <Col md={3}>
                 {(props.mode === 'add' || edit) && (
@@ -423,7 +425,7 @@ function FormDocument(props) {
                 )}
                 </Col>
               </Row>
-            {(showMap || (props.mode !== 'add' && !edit)) && <MapPointSelector 
+            {(showMap || (props.mode !== 'add' && !edit && !isWholeMunicipal)) && <MapPointSelector 
               coordinates={coordinates}
               mode={props.mode}
               edit={edit}
@@ -449,13 +451,15 @@ function FormDocument(props) {
             />}
           </Row>
           {(props.mode === 'add' || edit) && (
-            <Button 
-              className="add-button" 
-              type="submit" 
-              data-testid={props.mode === 'add' ? 'add' : undefined}
-            >
-              {'Save'}
-            </Button>
+            <Row className="justify-content-end">
+              <Button 
+                className="save-button" 
+                type="submit" 
+                data-testid={props.mode === 'add' ? 'add' : undefined}
+              >
+                {'Save'}
+              </Button>
+            </Row>
           )}
         </Form>
       </div>

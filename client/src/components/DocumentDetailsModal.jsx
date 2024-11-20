@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Row, Col } from 'react-bootstrap';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 import { ListGroup } from 'react-bootstrap';
 import '../style/DocumentDetailsModal.css'
 function DocumentDetailsModal({ show, onHide, document }) {
+  const navigate = useNavigate();
+  const handleDocumentClick = (documentId) => navigate(`/document/view/${documentId}`);
 
   if (!document) return null;
 
@@ -46,7 +49,7 @@ function DocumentDetailsModal({ show, onHide, document }) {
                 {document.connections.map((doc) => (
                   <ListGroup.Item key={doc.id} >
                     <Row className="align-items-center">
-                      <Col md={3}>{doc.title}</Col>
+                      <Col md={3} className="doc-title" onClick={() => handleDocumentClick(doc.id)}>{doc.title}</Col>
                       <Col md={3}>{doc.stakeholders.join(', ')}</Col>
                       <Col md={2}>{doc.type}</Col>
                       <Col>{doc.connectionType}</Col>

@@ -89,24 +89,23 @@ textarea.form-control {
     color: var(--blue)
 }
 
-.add-button {
+.save-button {
+    margin-top: 100px;
     position: relative;
-    width: 374px;
-    top: 100px;
-    left: 800px;
-    font-size: 16px;
+    width: 200px;
+    font-size: 24px;
+    line-height: 24px;
     font-weight: 400;
-    line-height: 21.79px;
     border-radius: 0;
     background-color:var(--white);
-    color: #101420;
-    border-bottom-color: #101420;
+    color: var(--demo-black);
+    border-bottom-color: var(--demo-black);
     border-top: var(--white);
     border-left:var(--white) ;
     border-right: var(--white);
 }
 
-.add-button:hover {
+.save-button:hover {
     background-color:var(--blue);
 }
 .input-group{

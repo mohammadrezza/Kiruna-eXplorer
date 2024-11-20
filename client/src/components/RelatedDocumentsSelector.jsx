@@ -1,7 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { ListGroup, Row, Col, Form } from 'react-bootstrap';
-import dayjs from 'dayjs';
 import API from '../services/API.mjs';
 import '../style/RelatedDocumentSelector.css'
 import { PiFileMagnifyingGlassLight } from 'react-icons/pi';
@@ -104,17 +103,16 @@ function RelatedDocumentsSelector({
                   ))}
                 </Form.Select>
               : doc.connectionType}
-                
               </Col>
               <Col>
-                <PiFileMagnifyingGlassLight 
-                  className='filesymbol' 
-                  size={22} 
+              <span className='filesymbol'>
+                <PiFileMagnifyingGlassLight
                   onClick={(e) => {
                     e.stopPropagation(); // Prevent row click event
                     handleIconClick(doc);
                   }}>
                 </PiFileMagnifyingGlassLight>
+              </span>
               </Col>
             </Row>
           </ListGroup.Item>
