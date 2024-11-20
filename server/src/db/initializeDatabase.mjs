@@ -182,6 +182,16 @@ const initializeDatabase = async () => {
             );
         }
 
+        // After inserting all connections, update all documents' connection counts
+        await run(`
+        UPDATE Document
+        SET connections = (
+            SELECT COUNT(*)
+            FROM DocumentConnection
+            WHERE documentId = Document.id OR connectionId = Document.id
+            )
+        `);
+
         console.log("Database initialized successfully with test data");
     } catch (error) {
         console.error("Error initializing database:", error);
