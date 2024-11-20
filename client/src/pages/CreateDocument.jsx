@@ -265,11 +265,40 @@ function FormDocument(props) {
   };
   
   const handleConnectionTypeSelect = (documentId, selectedConnectionType) => {
-    setSelectedConnectionTypes(prevSelected => ([
-      ...prevSelected,
-      {"id":documentId, "type":selectedConnectionType}
-    ]));
+    setSelectedConnectionTypes(prevSelected => {
+      // Verifica se il documento è già presente nella lista
+      const existingDocIndex = prevSelected.findIndex(item => item.id === documentId);
+      
+      if (existingDocIndex !== -1) {
+        // Se il documento è già selezionato, aggiorna il tipo di connessione
+        const updatedSelected = [...prevSelected];
+        updatedSelected[existingDocIndex] = { id: documentId, type: selectedConnectionType };
+        return updatedSelected;
+      } else {
+        // Se il documento non è nella lista, aggiungilo
+        return [...prevSelected, { id: documentId, type: selectedConnectionType }];
+      }
+    });
   };
+  // const handleConnectionTypeSelect = (documentId, selectedConnectionType) => {
+  //   setSelectedConnectionTypes(prevSelected => {
+  //     // Verifica se il documento ha già una connessione
+  //     const existingConnection = prevSelected.find(item => item.id === documentId);
+  
+  //     if (existingConnection) {
+  //       // Se la connessione esiste già, aggiorna il tipo di connessione
+  //       return prevSelected.map(item =>
+  //         item.id === documentId ? { ...item, type: selectedConnectionType } : item
+  //       );
+  //     } else {
+  //       // Se la connessione non esiste, aggiungi una nuova
+  //       return [
+  //         ...prevSelected,
+  //         { id: documentId, type: selectedConnectionType }
+  //       ];
+  //     }
+  //   });
+  // };
   
   const handleEditChange=()=>{
     setEdit(true);
@@ -458,9 +487,11 @@ function FormDocument(props) {
               allDocuments={(props.mode === 'add' || edit) ? allDocuments : relatedDocuments}
               relatedDocuments={relatedDocuments}
               selectedDocuments={selectedDocuments}
+              selectedConnectionTypes={selectedConnectionTypes}
               onDocumentSelect={handleDocumentSelect}
               onRelatedDocumentClick={handleRelatedDocumentClick}
               onConnectionTypeChange={handleConnectionTypeSelect}
+              setSelectedConnectionTypes={setSelectedConnectionTypes}
             />}
           </Row>
           {(props.mode === 'add' || edit) && (
