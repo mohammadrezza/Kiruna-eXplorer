@@ -207,6 +207,7 @@ function FormDocument(props) {
     if (!description.trim()) validationErrors.description = 'Description cannot be empty!';
     if (!areCoordinatesValid(coordinates) && !isWholeMunicipal) validationErrors.coordinates = 'Not correct format or not inside Kiruna area';
     //if(!isWholeMunicipal && (!coordinates.lat || !coordinates.lng)) validationErrors.coordinates = 'Coordinates cannot be empty!';
+    console.log(validationErrors);
     return validationErrors;
   };
 
@@ -269,12 +270,19 @@ function FormDocument(props) {
     ]));
   };
   
+  const handleEditChange=()=>{
+    setEdit(true);
+    console.log(allDocuments);
+    console.log(selectedDocuments);
+    console.log(selectedConnectionTypes);
+  };
+
   return  (
     <div className="wrapper">
       <div className="form-container">
         <h2 className='form-container-title'>
           {props.mode==='view' ? title : 'New Document'}
-          {(props.mode==='view' && edit===false && rights) && <PiNotePencilThin className='edit-button' onClick={() => setEdit(true)}/>}
+          {(props.mode==='view' && edit===false && rights) && <PiNotePencilThin className='edit-button' onClick={() => handleEditChange() }/>}
           </h2>
         <Form onSubmit={handleSubmit} data-testid="form-component">
           <Row>
@@ -447,6 +455,7 @@ function FormDocument(props) {
               mode={props.mode}
               edit={edit}
               allDocuments={(props.mode === 'add' || edit) ? allDocuments : relatedDocuments}
+              relatedDocuments={relatedDocuments}
               selectedDocuments={selectedDocuments}
               onDocumentSelect={handleDocumentSelect}
               onRelatedDocumentClick={handleRelatedDocumentClick}
