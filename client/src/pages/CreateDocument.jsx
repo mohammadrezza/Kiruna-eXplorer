@@ -2,7 +2,8 @@ import React, { useState,useEffect,useContext } from 'react';
 import { Form, Button, Row, Col, Modal, ListGroup, InputGroup, Table, FormControl } from 'react-bootstrap';
 import { useNavigate, useParams} from 'react-router-dom'
 import { PiMapPinSimpleAreaFill, PiPen, PiNotePencilThin, PiArrowRight } from "react-icons/pi";
-import * as dayjs from 'dayjs'
+import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { AuthContext } from '../layouts/AuthContext';
 import MapPointSelector from '../components/MapPointSelector'
 import RelatedDocumentsSelector from '../components/RelatedDocumentsSelector';
@@ -14,6 +15,8 @@ import Select from 'react-select'
 import { showSuccess, showError } from '../utils/notifications';
 
 function FormDocument(props) {
+
+  dayjs.extend(customParseFormat);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -113,8 +116,6 @@ function FormDocument(props) {
           setTitle(doc.title);
           const st = [];
           doc.stakeholders.forEach((s) => st.push({value:s, label:s}))
-          console.log(dayjs(doc.issuanceDate).format('DD-MM-YYYY'))
-          // console.log(st)
           setStakeholder(st);
           setScale(doc.scale);
           setDescription(doc.description);
@@ -125,7 +126,7 @@ function FormDocument(props) {
           if(doc.coordinates.lat === 0 && doc.coordinates.lng === 0 )
             setIsWholeMunicipal(true)
           else setCoordinates(doc.coordinates);
-          setIssuanceDate(dayjs(doc.issuanceDate).format('YYYY-MM-DD'));
+          setIssuanceDate(dayjs(doc.issuanceDate,'DD/MM/YYYY').format('YYYY-MM-DD'));
           setRelatedDocuments(doc.connections);
           setSelectedDocuments(connectedDocumentIds)
           
