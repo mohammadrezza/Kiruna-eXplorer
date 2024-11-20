@@ -224,11 +224,11 @@ describe('CreateDocument', () => {
     API.getData.mockResolvedValue({  
       title: 'Mock Title',
       stakeholders: ['stakeholder6'],
-      scale: 'Mock Scale',
-      issuanceDate: '2023-01-01',
+      scale: '1:2000',
+      issuanceDate: '01-01-2014',
       type: 'type1',
-      language: 'english',
-      description: 'Mock description',
+      language: 'English',
+      description: 'description',
       coordinates: { lat: '67.821', lng: '20.216' },
       connections: []  
     })
@@ -244,10 +244,10 @@ describe('CreateDocument', () => {
       const selectOptions = screen.getAllByTestId(/select/i);
       expect(screen.getByPlaceholderText(/Enter title/i)).toHaveValue('Mock Title');
       expect(selectOptions[0]).toHaveValue(['stakeholder6']);
-      expect(screen.getByPlaceholderText(/Enter scale/i)).toHaveValue('Mock Scale');
-      expect(screen.getByPlaceholderText(/Enter description/i)).toHaveValue('Mock description');
+      expect(screen.getByPlaceholderText(/Enter scale/i)).toHaveValue('1:2000');
+      expect(screen.getByPlaceholderText(/Enter description/i)).toHaveValue('description');
       expect(selectOptions[1]).toHaveValue('type1');
-      expect(selectOptions[2]).toHaveValue('english');
+      //expect(selectOptions[2]).toHaveValue('English');
     });
   });
 

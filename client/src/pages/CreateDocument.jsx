@@ -113,7 +113,6 @@ function FormDocument(props) {
           setTitle(doc.title);
           const st = [];
           doc.stakeholders.forEach((s) => st.push({value:s, label:s}))
-          console.log(dayjs(doc.issuanceDate).format('DD-MM-YYYY'))
           // console.log(st)
           setStakeholder(st);
           setScale(doc.scale);
