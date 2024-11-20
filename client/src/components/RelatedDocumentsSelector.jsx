@@ -10,6 +10,7 @@ function RelatedDocumentsSelector({
   mode,
   edit,
   allDocuments,
+  relatedDocuments,
   selectedDocuments,
   onDocumentSelect,
   onRelatedDocumentClick,
@@ -22,7 +23,7 @@ function RelatedDocumentsSelector({
   useEffect(() => {
     console.log(allDocuments);
     console.log(selectedDocuments);
-
+    console.log(relatedDocuments);
     const fetchConnectionTypes = async () => {
       try {
         const response = await API.getConnectionTypes(); 
@@ -69,7 +70,16 @@ function RelatedDocumentsSelector({
           <ListGroup.Item 
             key={doc.id} 
             className={selectedDocuments.includes(doc.id) ? 'selected' : ''}
-            onClick={() => {(mode === 'add' || edit) ? onDocumentSelect(doc.id) : onRelatedDocumentClick(doc.id)}} 
+            // onClick={() => {(mode === 'add' || edit) ? (onDocumentSelect(doc.id)) : onRelatedDocumentClick(doc.id)}} 
+            onClick={() => {
+              if(mode==='add'||edit){
+                onDocumentSelect(doc.id);
+                onConnectionTypeChange(doc.id, connectionTypes[0]);
+              }
+              else{
+                onRelatedDocumentClick(doc.id)
+              }
+            }} 
             >
             <Row className="align-items-center">
               <Col md={1} className="text-center">
@@ -90,19 +100,27 @@ function RelatedDocumentsSelector({
               <Col md={2}>{doc.type}</Col>
               <Col md={1} className="text-center">{doc.connections}</Col>
               <Col md={2}>
-              {(mode === 'add' || edit) ? 
+              {(mode === 'add' || edit) && selectedDocuments.includes(doc.id)?( 
                 <Form.Select
                   className='connectionform'
                   aria-label="Select connection type"
+                  defaultValue={
+                    relatedDocuments.find(relatedDoc => relatedDoc.id === doc.id)?.connectionType ||connectionTypes[0]|| "" 
+                  }
                   onChange={(e) => onConnectionTypeChange(doc.id, e.target.value)} // Notify parent on change
-                  defaultValue=""
+                  onClick={() => {
+                    // Assegna il primo tipo di connessione al documento se non ha già una connessione
+                    if (!relatedDocuments.find((relatedDoc) => relatedDoc.id === doc.id)?.connectionType) {
+                      onConnectionTypeChange(doc.id, connectionTypes[0]);
+                    }
+                  }}
                 >
                   <option value="" disabled>Select connection</option>
                   {connectionTypes.map((type) => (
                     <option key={type} value={type}>{type}</option>
                   ))}
-                </Form.Select>
-              : doc.connectionType}
+                </Form.Select>)
+              : mode==='view'? doc.connectionType : null}
               </Col>
               <Col>
               <span className='filesymbol'>

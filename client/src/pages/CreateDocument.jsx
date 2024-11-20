@@ -2,7 +2,8 @@ import React, { useState,useEffect,useContext } from 'react';
 import { Form, Button, Row, Col, Modal, ListGroup, InputGroup, Table, FormControl } from 'react-bootstrap';
 import { useNavigate, useParams} from 'react-router-dom'
 import { PiMapPinSimpleAreaFill, PiPen, PiNotePencilThin, PiArrowRight } from "react-icons/pi";
-import * as dayjs from 'dayjs'
+import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { AuthContext } from '../layouts/AuthContext';
 import MapPointSelector from '../components/MapPointSelector'
 import RelatedDocumentsSelector from '../components/RelatedDocumentsSelector';
@@ -14,6 +15,8 @@ import Select from 'react-select'
 import { showSuccess, showError } from '../utils/notifications';
 
 function FormDocument(props) {
+
+  dayjs.extend(customParseFormat);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -84,9 +87,9 @@ function FormDocument(props) {
     }),
   };
 
-  const allLanguage = [{ value: 'italian', label: 'italian' },
-    { value: 'swedish', label: 'swedish' },
-    { value: 'english', label: 'english' }]
+  const allLanguage = [{ value: 'Italian', label: 'Italian' },
+    { value: 'Swedish', label: 'Swedish' },
+    { value: 'English', label: 'English' }]
 
   useEffect(() => {
     if (props.mode === 'view') {
@@ -113,16 +116,17 @@ function FormDocument(props) {
           setTitle(doc.title);
           const st = [];
           doc.stakeholders.forEach((s) => st.push({value:s, label:s}))
-          // console.log(st)
           setStakeholder(st);
           setScale(doc.scale);
           setDescription(doc.description);
-          setType(doc.type);
-          setLanguage(doc.language);
+          const ty = {value:doc.type, label:doc.type}
+          setType(ty);
+          const lan = {value:doc.language, label:doc.language}
+          setLanguage(lan);
           if(doc.coordinates.lat === 0 && doc.coordinates.lng === 0 )
             setIsWholeMunicipal(true)
           else setCoordinates(doc.coordinates);
-          setIssuanceDate(dayjs(doc.issuanceDate).format('YYYY-MM-DD'));
+          setIssuanceDate(dayjs(doc.issuanceDate,'DD/MM/YYYY').format('YYYY-MM-DD'));
           setRelatedDocuments(doc.connections);
           setSelectedDocuments(connectedDocumentIds)
           
@@ -204,6 +208,7 @@ function FormDocument(props) {
     if (!description.trim()) validationErrors.description = 'Description cannot be empty!';
     if (!areCoordinatesValid(coordinates) && !isWholeMunicipal) validationErrors.coordinates = 'Not correct format or not inside Kiruna area';
     //if(!isWholeMunicipal && (!coordinates.lat || !coordinates.lng)) validationErrors.coordinates = 'Coordinates cannot be empty!';
+    console.log(validationErrors);
     return validationErrors;
   };
 
@@ -266,12 +271,19 @@ function FormDocument(props) {
     ]));
   };
   
+  const handleEditChange=()=>{
+    setEdit(true);
+    console.log(allDocuments);
+    console.log(selectedDocuments);
+    console.log(selectedConnectionTypes);
+  };
+
   return  (
     <div className="wrapper">
       <div className="form-container">
         <h2 className='form-container-title'>
           {props.mode==='view' ? title : 'New Document'}
-          {(props.mode==='view' && edit===false && rights) && <PiNotePencilThin className='edit-button' onClick={() => setEdit(true)}/>}
+          {(props.mode==='view' && edit===false && rights) && <PiNotePencilThin className='edit-button' onClick={() => handleEditChange() }/>}
           </h2>
         <Form onSubmit={handleSubmit} data-testid="form-component">
           <Row>
@@ -444,6 +456,7 @@ function FormDocument(props) {
               mode={props.mode}
               edit={edit}
               allDocuments={(props.mode === 'add' || edit) ? allDocuments : relatedDocuments}
+              relatedDocuments={relatedDocuments}
               selectedDocuments={selectedDocuments}
               onDocumentSelect={handleDocumentSelect}
               onRelatedDocumentClick={handleRelatedDocumentClick}

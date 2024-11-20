@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 const url = "http://localhost:3001"
 
 
@@ -8,7 +9,6 @@ async function login(username, password) {
         credentials: "include",
         mode: 'cors',
         cache: 'no-cache',
-        credentials: 'same-origin' ,
         headers: {
             'Content-Type': 'application/json',
         },
@@ -46,12 +46,14 @@ async function AddDocumentDescription(doc ,selectedDocuments, coordinates) {
         const coord = [];
         coord.push(coordinates.lat);
         coord.push(coordinates.lng);
+        
         const response = await fetch(`${url}/documents/`,
             {
                 method: "POST",
                 headers:{
                     'Content-Type':'application/json'
                 },
+                credentials: "include",
                 body: JSON.stringify({
                     title: doc.title,
                     description: doc.description,
@@ -91,6 +93,7 @@ async function EditDocumentDescription(doc ,selectedDocuments, coordinates, id) 
                 headers:{
                     'Content-Type':'application/json'
                 },
+                credentials: "include",
                 body: JSON.stringify({title: doc.title, description: doc.description, stakeholders:doc.stakeholder, scale: doc.scale, issuanceDate: doc.issuanceDate,type: doc.type,language: doc.language,  coordinates: coordinates, connectionIds:selectedDocuments  })
             })
         if (response.ok) {
