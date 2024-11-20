@@ -6,6 +6,14 @@ import agreementIcon from '../assets/map_icons/agreement_icon.svg';
 import conflictIcon from '../assets/map_icons/conflict_icon.svg';
 import consultingIcon from '../assets/map_icons/consulting_icon.svg';
 import materialEffectIcon from '../assets/map_icons/material_effect_icon.svg';
+import defaultIcon from '../assets/map_icons/default.svg'
+
+export const pointer = {
+  name: 'default',
+  iconUrl: defaultIcon,
+  iconSize: [40, 40],
+  iconAnchor: [20, 40],
+};
 
 export const iconData = [
   {
@@ -56,4 +64,5 @@ export const iconData = [
     iconSize: [32, 32],
     iconAnchor: [16, 32],
   },
+  pointer
 ];
