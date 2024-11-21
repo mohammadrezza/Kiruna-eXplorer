@@ -38,25 +38,25 @@ FIRST RETROSPECTIVE (Team 11)
 
 - Hours per task average, standard deviation (estimate and actual)
 
- average estimate: = 3.71
+ average estimate: = 2.13
 
- average actual: = 3.74
+ average actual: = 2.13
 
- standard deviation estimate: 3.75
+ standard deviation estimate: 1.41
 
- standard deviation actual: 3.85
+ standard deviation actual: 1.48
 
 - Total estimation error ratio: sum of total hours spent / sum of total hours effort - 1
 
     $$\frac{\sum_i spent_{task_i}}{\sum_i estimation_{task_i}} - 1$$
 
-    res: -0,0088
+    res: 0
 
 - Absolute relative task estimation error: sum( abs( spent-task-i / estimation-task-i - 1))/n
 
     $$\frac{1}{n}\sum_i^n \left| \frac{spent_{task_i}}{estimation_task_i}-1 \right| $$
 
-    res: 0,047
+    res: 0,068
 
 ## QUALITY MEASURES
 
