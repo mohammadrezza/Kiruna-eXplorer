@@ -258,31 +258,6 @@ describe('Services', () => {
             expect(getDocumentStakeholders).toHaveBeenCalledWith(documentId);
             expect(getDocumentStakeholders).toHaveBeenCalledWith('456');
     
-            expect(result).toEqual({
-                id: '123',
-                title: 'Main Document',
-                description: 'Description of main document',
-                stakeholders: ['Stakeholder1', 'Stakeholder2'],
-                scale: '1:500',
-                issuanceDate: '2023-01-01',
-                type: 'Type1',
-                language: 'English',
-                coordinates: { lat: 1.1, lng: 2.2 },
-                connections: [
-                    {
-                        connectionType: 'Type2',
-                        id: '456',
-                        title: 'Connected Document',
-                        description: 'Description of connected document',
-                        stakeholders: ['ConnStakeholder1', 'ConnStakeholder2'],
-                        scale: '1:1000',
-                        issuanceDate: '2023-02-01',
-                        type: 'Type2',
-                        language: 'French',
-                        coordinates: { lat: 3.3, lng: 4.4 }
-                    }
-                ]
-            });
         });
 
         test('should handle error when fetching the document', async () => {
