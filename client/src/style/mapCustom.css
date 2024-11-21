@@ -14,6 +14,13 @@
     background-color: var(--white);
     border: 1px solid var(--grey);
 }
+.custom-marker-popup-link{
+    text-decoration: underline;
+    cursor: pointer;
+}
+.custom-marker-popup-link:hover {
+    color: var(--blue)
+}
 .map-municipal-title{
 
 }
