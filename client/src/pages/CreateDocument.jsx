@@ -2,7 +2,8 @@ import React, { useState,useEffect,useContext } from 'react';
 import { Form, Button, Row, Col, Modal, ListGroup, InputGroup, Table, FormControl } from 'react-bootstrap';
 import { useNavigate, useParams} from 'react-router-dom'
 import { PiMapPinSimpleAreaFill, PiPen, PiNotePencilThin, PiArrowRight } from "react-icons/pi";
-import * as dayjs from 'dayjs'
+import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { AuthContext } from '../layouts/AuthContext';
 import MapPointSelector from '../components/MapPointSelector'
 import RelatedDocumentsSelector from '../components/RelatedDocumentsSelector';
@@ -14,6 +15,8 @@ import Select from 'react-select'
 import { showSuccess, showError } from '../utils/notifications';
 
 function FormDocument(props) {
+
+  dayjs.extend(customParseFormat);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -113,8 +116,6 @@ function FormDocument(props) {
           setTitle(doc.title);
           const st = [];
           doc.stakeholders.forEach((s) => st.push({value:s, label:s}))
-          console.log(dayjs(doc.issuanceDate).format('DD-MM-YYYY'))
-          // console.log(st)
           setStakeholder(st);
           setScale(doc.scale);
           setDescription(doc.description);
@@ -125,7 +126,7 @@ function FormDocument(props) {
           if(doc.coordinates.lat === 0 && doc.coordinates.lng === 0 )
             setIsWholeMunicipal(true)
           else setCoordinates(doc.coordinates);
-          setIssuanceDate(dayjs(doc.issuanceDate).format('YYYY-MM-DD'));
+          setIssuanceDate(dayjs(doc.issuanceDate,'DD/MM/YYYY').format('YYYY-MM-DD'));
           setRelatedDocuments(doc.connections);
           setSelectedDocuments(connectedDocumentIds)
           
@@ -142,8 +143,8 @@ function FormDocument(props) {
 
   const areCoordinatesValid = (coordinates) => {
     const kirunaBounds = [
-    [67.821, 20.216], // Southwest corner [lat, lng]
-    [67.865, 20.337]  // Northeast corner [lat, lng]
+    [67.765, 20.090],
+    [67.900, 20.420]
   ];
 
   // Extract bounds
@@ -207,6 +208,7 @@ function FormDocument(props) {
     if (!description.trim()) validationErrors.description = 'Description cannot be empty!';
     if (!areCoordinatesValid(coordinates) && !isWholeMunicipal) validationErrors.coordinates = 'Not correct format or not inside Kiruna area';
     //if(!isWholeMunicipal && (!coordinates.lat || !coordinates.lng)) validationErrors.coordinates = 'Coordinates cannot be empty!';
+    console.log(validationErrors);
     return validationErrors;
   };
 
@@ -263,18 +265,54 @@ function FormDocument(props) {
   };
   
   const handleConnectionTypeSelect = (documentId, selectedConnectionType) => {
-    setSelectedConnectionTypes(prevSelected => ([
-      ...prevSelected,
-      {"id":documentId, "type":selectedConnectionType}
-    ]));
+    setSelectedConnectionTypes(prevSelected => {
+      // Verifica se il documento è già presente nella lista
+      const existingDocIndex = prevSelected.findIndex(item => item.id === documentId);
+      
+      if (existingDocIndex !== -1) {
+        // Se il documento è già selezionato, aggiorna il tipo di connessione
+        const updatedSelected = [...prevSelected];
+        updatedSelected[existingDocIndex] = { id: documentId, type: selectedConnectionType };
+        return updatedSelected;
+      } else {
+        // Se il documento non è nella lista, aggiungilo
+        return [...prevSelected, { id: documentId, type: selectedConnectionType }];
+      }
+    });
   };
+  // const handleConnectionTypeSelect = (documentId, selectedConnectionType) => {
+  //   setSelectedConnectionTypes(prevSelected => {
+  //     // Verifica se il documento ha già una connessione
+  //     const existingConnection = prevSelected.find(item => item.id === documentId);
   
+  //     if (existingConnection) {
+  //       // Se la connessione esiste già, aggiorna il tipo di connessione
+  //       return prevSelected.map(item =>
+  //         item.id === documentId ? { ...item, type: selectedConnectionType } : item
+  //       );
+  //     } else {
+  //       // Se la connessione non esiste, aggiungi una nuova
+  //       return [
+  //         ...prevSelected,
+  //         { id: documentId, type: selectedConnectionType }
+  //       ];
+  //     }
+  //   });
+  // };
+  
+  const handleEditChange=()=>{
+    setEdit(true);
+    console.log(allDocuments);
+    console.log(selectedDocuments);
+    console.log(selectedConnectionTypes);
+  };
+
   return  (
     <div className="wrapper">
       <div className="form-container">
         <h2 className='form-container-title'>
           {props.mode==='view' ? title : 'New Document'}
-          {(props.mode==='view' && edit===false && rights) && <PiNotePencilThin className='edit-button' onClick={() => setEdit(true)}/>}
+          {(props.mode==='view' && edit===false && rights) && <PiNotePencilThin className='edit-button' onClick={() => handleEditChange() }/>}
           </h2>
         <Form onSubmit={handleSubmit} data-testid="form-component">
           <Row>
@@ -447,10 +485,13 @@ function FormDocument(props) {
               mode={props.mode}
               edit={edit}
               allDocuments={(props.mode === 'add' || edit) ? allDocuments : relatedDocuments}
+              relatedDocuments={relatedDocuments}
               selectedDocuments={selectedDocuments}
+              selectedConnectionTypes={selectedConnectionTypes}
               onDocumentSelect={handleDocumentSelect}
               onRelatedDocumentClick={handleRelatedDocumentClick}
               onConnectionTypeChange={handleConnectionTypeSelect}
+              setSelectedConnectionTypes={setSelectedConnectionTypes}
             />}
           </Row>
           {(props.mode === 'add' || edit) && (

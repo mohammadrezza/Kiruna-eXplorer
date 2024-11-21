@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {Row, Col,ListGroup } from 'react-bootstrap';
-import * as dayjs from 'dayjs'
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { PiFileMagnifyingGlassLight } from 'react-icons/pi';
 import DocumentDetailsModal from '../components/DocumentDetailsModal';
@@ -63,7 +62,7 @@ function List(){
                 </Col>
                 <Col md={2}>{doc.type}</Col>
                 <Col md={1}>{doc.connections}</Col>
-                <Col>{dayjs(doc.issuanceDate).format('DD/MM/YYYY')}</Col>
+                <Col>{doc.issuanceDate}</Col>
                 <Col>
                   <span className='filesymbol' onClick={(e) => {
                       e.stopPropagation(); // Prevent row click event
