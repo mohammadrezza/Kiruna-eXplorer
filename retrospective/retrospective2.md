@@ -1,4 +1,4 @@
-FIRST RETROSPECTIVE (Team 11)
+SECOND RETROSPECTIVE (Team 11)
 =====================================
 
 ## PROCESS MEASURES
@@ -22,8 +22,6 @@ FIRST RETROSPECTIVE (Team 11)
 - Code present on VCS
 - End-to-End tests performed
 
-> Please refine your DoD if required (you cannot remove items!) 
-
 ### Detailed statistics
 
 | Story | # Tasks | Points | Hours est. | Hours actual |
@@ -38,13 +36,13 @@ FIRST RETROSPECTIVE (Team 11)
 
 - Hours per task average, standard deviation (estimate and actual)
 
- average estimate: = 2.13
+ average estimate: 2.13 h
 
- average actual: = 2.13
+ average actual: 2.13 h
 
- standard deviation estimate: 1.41
+ standard deviation estimate: 1.41 h
 
- standard deviation actual: 1.48
+ standard deviation actual: 1.48 h
 
 - Total estimation error ratio: sum of total hours spent / sum of total hours effort - 1
 
@@ -78,30 +76,39 @@ FIRST RETROSPECTIVE (Team 11)
 
 - What caused your errors in estimation (if any)?
 
-We made error in estimate the test's task because it was the first time we really focus on it, so we didn't know well how much time we need to perform them.
+We made errors in estimating the effort required for the testing tasks; some were underestimated, while others were overestimated. This was due to it being our first time focusing on them in depth.
+ Similarly, we underestimated the effort needed to dockerize the project because we had not fully reviewed the directives from the beginning.
   
 
 - What lessons did you learn (both positive and negative) in this sprint?
 
-As positive learned that is better to divide the task into different category, like bug fixing,testing,review, because helps to manage better the time.
+Positive:
+We learned that dividing tasks into distinct categories, such as bug fixing, testing, and review, helps in better time management and organization.
 
-As negative we learned that we should do more meeting during the sprint instead of a big meeting before the demo.
+Negative:
+We realized that having more frequent meetings during the sprint is more effective than relying on a single extensive meeting before the demo.
 
 
   
 - Which improvement goals set in the previous retrospective were you able to achieve?
 
-More or less we reach our goal, but we think that we can improve next time  
-  
+We partially achieved our goal, as we focused more on addressing the constraints. We believe there is still room for improvement in the next sprint.
+
 - Which ones you were not able to achieve? Why?
 
-We should pay closer attention to the documentation we produce at the beginning of the sprint
+The part of the goal that requires more attention is our focus on details. For example, the database was populated in a slightly different way, which led to misunderstandings. We should have relied more on the documentation from the very beginning of the sprint.
 
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
 
-We should communicate more during the sprint, planning more meeting during the sprint to test the website and doing session of pair-programming so everyone in the team know better how the system works.
-
+We should communicate more throughout the sprint by planning additional meetings to test the website and holding pair-programming sessions. This will help ensure that everyone on the team has a better understanding of how the system works.
 
 - One thing you are proud of as a Team!!
 
-We as a team are proud that we were able to deliver the stories in a consistent way, having a good test coverage. 
+As a team, we are proud of maintaining a steady number of stories delivered, ensuring good test coverage, and, overall, accurately estimating the duration of tasks.
+
+
+
+
+
+
+
