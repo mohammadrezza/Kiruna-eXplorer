@@ -50,14 +50,6 @@ CREATE TABLE IF NOT EXISTS DocumentConnection
     created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS DocumentType
-(
-    id         TEXT PRIMARY KEY,
-    documentId TEXT,
-    type       TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
 CREATE TRIGGER IF NOT EXISTS after_delete_document_connection
     AFTER DELETE
     ON DocumentConnection
