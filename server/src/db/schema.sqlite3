@@ -19,6 +19,13 @@ CREATE TABLE IF NOT EXISTS Stakeholder
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS Scale
+(
+    id         TEXT PRIMARY KEY,
+    name       TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE IF NOT EXISTS Type
 (
     id         TEXT PRIMARY KEY,
@@ -51,7 +58,7 @@ CREATE TABLE IF NOT EXISTS DocumentType
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TRIGGER after_delete_document_connection
+CREATE TRIGGER IF NOT EXISTS after_delete_document_connection
     AFTER DELETE
     ON DocumentConnection
     FOR EACH ROW
@@ -62,7 +69,7 @@ BEGIN
     WHERE id = OLD.connectionId;
 END;
 
-CREATE TRIGGER after_insert_document_connection
+CREATE TRIGGER IF NOT EXISTS after_insert_document_connection
     AFTER INSERT
     ON DocumentConnection
     FOR EACH ROW
