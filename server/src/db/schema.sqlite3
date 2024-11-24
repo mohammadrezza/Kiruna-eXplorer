@@ -1,37 +1,60 @@
 CREATE TABLE IF NOT EXISTS Document
 (
-    id TEXT PRIMARY KEY,
-    title TEXT,
-    description TEXT,
-    scale TEXT,
+    id           TEXT PRIMARY KEY,
+    title        TEXT,
+    description  TEXT,
+    scale        TEXT,
     issuanceDate TEXT,
-    type TEXT,
-    language TEXT,
-    coordinates TEXT,
-    connections INTEGER DEFAULT 0,
+    type         TEXT,
+    language     TEXT,
+    coordinates  TEXT,
+    connections  INTEGER   DEFAULT 0,
+    created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS Stakeholder
+(
+    id         TEXT PRIMARY KEY,
+    name       TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS Type
+(
+    id         TEXT PRIMARY KEY,
+    name       TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS DocumentStakeholder
 (
-    id TEXT PRIMARY KEY,
-    documentId TEXT,
+    id          TEXT PRIMARY KEY,
+    documentId  TEXT,
     stakeholder TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS DocumentConnection
 (
-    id TEXT PRIMARY KEY,
-    documentId TEXT,
+    id           TEXT PRIMARY KEY,
+    documentId   TEXT,
     connectionId TEXT,
-    type TEXT,
+    type         TEXT,
+    created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS DocumentType
+(
+    id         TEXT PRIMARY KEY,
+    documentId TEXT,
+    type       TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TRIGGER after_delete_document_connection
-AFTER DELETE ON DocumentConnection
-FOR EACH ROW
+    AFTER DELETE
+    ON DocumentConnection
+    FOR EACH ROW
 BEGIN
 
     UPDATE Document
@@ -40,8 +63,9 @@ BEGIN
 END;
 
 CREATE TRIGGER after_insert_document_connection
-AFTER INSERT ON DocumentConnection
-FOR EACH ROW
+    AFTER INSERT
+    ON DocumentConnection
+    FOR EACH ROW
 BEGIN
     UPDATE Document
     SET connections = connections + 1
@@ -50,9 +74,10 @@ END;
 
 CREATE TABLE IF NOT EXISTS User
 (
-    id       INTEGER not null primary key autoincrement,
-    username TEXT    not null,
-    password TEXT    not null,
-    role     TEXT    not null,
-    salt     TEXT    not null
+    id         TEXT PRIMARY KEY,
+    username   TEXT not null,
+    password   TEXT not null,
+    role       TEXT not null,
+    salt       TEXT not null,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
