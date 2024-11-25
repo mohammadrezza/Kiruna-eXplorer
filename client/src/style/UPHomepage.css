@@ -1,0 +1,66 @@
+.UPHomepage {
+    background-image: url('up_background.png'); /* Percorso relativo dell'immagine */
+    background-size: cover; /* Rende l'immagine proporzionata al contenitore */
+    background-position: center; /* Centra l'immagine */
+    background-repeat: no-repeat; /* Evita la ripetizione dell'immagine */
+    height: 100vh; /* Imposta l'altezza della pagina */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Allinea il contenuto verticalmente */
+    align-items: center; /* Allinea il contenuto orizzontalmente */
+  }
+
+.UPHomepage .main-content{
+    padding: 40px;
+    margin-left: -205px;
+    position: fixed;
+    top: 90px;
+    left: 180px; 
+    z-index: 9999; 
+}
+.UPHomepage .search-section .row{
+    margin-top: -50px;
+}
+
+.search-bar {
+    margin: 0 auto;
+  }
+.input .search .form-control{
+    width: 800px;
+}
+  .search-bar input {
+    max-width: 1061px;
+    margin-left: 45px;
+    height: 70px;
+    font-size: 1em;
+    border: 1px solid #ddd;
+    outline: none;
+    border-right: unset;
+
+  }
+  
+  .search-bar button {
+    margin-left: 0px;
+    height: 70px;
+    width: 70px;
+    font-size: 1em;
+    background-color: var(--lily-white);
+    color: #fff;
+    border: 1px solid #ddd;
+    border-left: unset;
+    border-radius: 0 0 0 0;
+    box-shadow: unset;
+    cursor: unset;
+  }
+  .search-bar button :hover {
+    background: none;
+    border: 1px solid #ddd;
+  }
+
+  .sendIcon{
+    cursor: pointer;
+    margin-top: 15px;
+    background-color: gray;
+    border-radius: 40px 40px 40px 40px;
+  }
+  
