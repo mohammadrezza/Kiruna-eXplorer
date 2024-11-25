@@ -1,8 +1,16 @@
-import DocumentType from "../components/documentType.mjs";
+import {
+    getDocuments,
+    getDocument,
+    postDocument,
+    putDocument,
+    postDocumentType,
+    getDocumentTypes,
+    getStakeholders,
+    getScales,
+    postStakeholder,
+    postScale
+} from "../services/documentService.mjs";
 import DocumentConnectionType from "../components/documentConnectionType.mjs";
-import Stakeholder from "../components/stakeholder.mjs";
-
-import {getDocuments, getDocument, postDocument, putDocument} from "../services/documentService.mjs";
 
 async function createDocument(req, res) {
     try {
@@ -40,7 +48,7 @@ async function createDocument(req, res) {
             data: document
         });
 
-    } catch (error){
+    } catch (error) {
         console.error('Error:', error);
         return res.status(500).json({
             success: false,
@@ -53,7 +61,7 @@ async function createDocument(req, res) {
 async function getDocumentWithId(req, res) {
 
     try {
-        const { id } = req.params;
+        const {id} = req.params;
 
         if (!id) {
             return res.status(400).json({
@@ -85,22 +93,13 @@ async function getDocumentWithId(req, res) {
     }
 }
 
-async function documentTypesList(req, res) {
-    res.status(200).json({documentTypes: Object.values(DocumentType)});
-}
-
 async function documentConnectionTypesList(req, res) {
     res.status(200).json({documentConnectionTypes: Object.values(DocumentConnectionType)});
-
-}
-
-async function getStakeholdersList(req, res) {
-    res.status(200).json({stakeholders: Object.values(Stakeholder)});
 }
 
 async function documentsList(req, res) {
     try {
-        const { documentId, title } = req.query;
+        const {documentId, title} = req.query;
         const page = parseInt(req.query.page) || 1;
         const size = parseInt(req.query.size) || 10;
 
@@ -129,9 +128,9 @@ async function documentsList(req, res) {
     }
 }
 
-export const updateDocument = async (req, res) => {
+async function updateDocument(req, res) {
 
-    const { documentId } = req.params;
+    const {documentId} = req.params;
 
     const {
         title,
@@ -145,25 +144,25 @@ export const updateDocument = async (req, res) => {
         connectionIds,
     } = req.body;
 
-try{
+    try {
 
-    const previousDocument = await getDocument(documentId);
-    if (!previousDocument) {
-        return res.status(404).json({
-            success: false,
-            message: 'Document not found'
-        });
-    }
-    
-    const document = await putDocument(documentId, title,
-        description,
-        stakeholders,
-        scale,
-        issuanceDate,
-        type,
-        language,
-        coordinates,
-        connectionIds);
+        const previousDocument = await getDocument(documentId);
+        if (!previousDocument) {
+            return res.status(404).json({
+                success: false,
+                message: 'Document not found'
+            });
+        }
+
+        const document = await putDocument(documentId, title,
+            description,
+            stakeholders,
+            scale,
+            issuanceDate,
+            type,
+            language,
+            coordinates,
+            connectionIds);
 
         if (!document) {
             return res.status(400).json({
@@ -171,14 +170,14 @@ try{
                 message: 'Bad request'
             });
         }
-    
+
         return res.status(200).json({
             success: true,
             data: document
         });
-    
-    }catch(error) {
-        
+
+    } catch (error) {
+
         console.error('Error:', error);
         return res.status(500).json({
             success: false,
@@ -186,13 +185,72 @@ try{
             error: error.message
         });
     }
-};
+}
+
+async function createDocumentType(req, res) {
+    const types = await getDocumentTypes()
+    if (types.includes(req.body.name)) {
+        res.status(400).json({message: "Document type already exists"})
+        return
+    }
+    await postDocumentType(req.body.name)
+    return res.status(200).send()
+}
+
+async function getDocumentTypesList(req, res) {
+    const types = await getDocumentTypes()
+    res.status(200).json({
+        success: true,
+        data: types
+    })
+}
+
+async function createStakeholder(req, res) {
+    const stakeholders = await getStakeholders()
+    if (stakeholders.includes(req.body.name)) {
+        res.status(400).json({message: "Stakeholder already exists"})
+        return
+    }
+    await postStakeholder(req.body.name)
+    return res.status(200).send()
+}
+
+async function getStakeholdersList(req, res) {
+    const stakeholders = await getStakeholders()
+    res.status(200).json({
+        success: true,
+        data: stakeholders
+    })
+}
+
+async function createScale(req, res) {
+    const scales = await getScales()
+    if (scales.includes(req.body.name)) {
+        res.status(400).json({message: "Scale already exists"})
+        return
+    }
+    await postScale(req.body.name)
+    return res.status(200).send()
+}
+
+async function getScalesList(req, res) {
+    const scales = await getScales()
+    res.status(200).json({
+        success: true,
+        data: scales
+    })
+}
 
 export {
     createDocument,
-    documentTypesList,
+    updateDocument,
     documentsList,
+    getDocumentWithId,
     documentConnectionTypesList,
+    createStakeholder,
     getStakeholdersList,
-    getDocumentWithId
+    createDocumentType,
+    getDocumentTypesList,
+    createScale,
+    getScalesList
 }

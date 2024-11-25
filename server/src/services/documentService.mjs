@@ -5,11 +5,23 @@ import {
     editDocument,
     editDocumentConnection,
     deleteAllConnections,
-    getAllDocuments, addDocumentStakeholder, deleteAllStakeholders, getDocumentStakeholders
+    getAllDocuments,
+    addDocumentStakeholder,
+    deleteAllStakeholders,
+    getDocumentStakeholders,
+    addType,
+    getAllTypes,
+    addScale,
+    addStakeHolder,
+    getAllStakeHolders,
+    getAllScales
 } from "../daos/documentDAO.mjs";
 import Document from "../components/document.mjs";
 import DocumentConnection from "../components/documentConnection.mjs";
 import DocumentStakeholder from "../components/documentStakeholder.mjs";
+import DocumentType from "../components/documentType.mjs";
+import Scale from "../components/scale.mjs";
+import Stakeholder from "../components/stakeholder.mjs";
 
 async function getDocuments(documentId, title, page, size) {
     return await getAllDocuments(documentId, title, page, size);
@@ -54,7 +66,7 @@ async function postDocument(
         let documentConnection = new DocumentConnection();
         documentConnection.createFromObject({
             documentId: document.id,
-            connectionId: connectionId.id, 
+            connectionId: connectionId.id,
             type: connectionId.type
         });
         connections.push(documentConnection)
@@ -145,7 +157,7 @@ async function putDocument(
         let documentConnection = new DocumentConnection();
         documentConnection.createFromObject({
             documentId: documentId,
-            connectionId:connectionId.id,
+            connectionId: connectionId.id,
             type: connectionId.type
         });
         connections.push(documentConnection);
@@ -237,9 +249,73 @@ async function getDocument(id) {
     }
 }
 
+async function postDocumentType(name) {
+    const type = new DocumentType();
+    type.createFromObject({
+        name: name
+    });
+    await addType(type);
+}
+
+async function getDocumentTypes() {
+    const rows = await getAllTypes();
+    const documentTypes = [];
+    for (const row of rows) {
+        const type = new DocumentType();
+        type.createFromDatabaseRow(row);
+        documentTypes.push(type.name);
+    }
+    return documentTypes;
+}
+
+async function postStakeholder(name) {
+    const stakeholder = new Stakeholder();
+    stakeholder.createFromObject({
+        name: name
+    });
+    await addStakeHolder(stakeholder);
+}
+
+async function getStakeholders() {
+    const rows = await getAllStakeHolders();
+    const stakeholders = [];
+    for (const row of rows) {
+        const stakeholder = new Stakeholder();
+        stakeholder.createFromDatabaseRow(row);
+        stakeholders.push(stakeholder.name);
+    }
+    return stakeholders;
+}
+
+async function postScale(name) {
+    const scale = new Scale();
+    scale.createFromObject({
+        name: name
+    });
+    await addScale(scale);
+}
+
+async function getScales() {
+    const rows = await getAllScales();
+    const scales = [];
+    for (const row of rows) {
+        const scale = new Scale();
+        scale.createFromDatabaseRow(row);
+        scales.push(scale.name);
+    }
+    return scales;
+
+}
+
 export {
     getDocument,
     getDocuments,
     postDocument,
-    putDocument
+    putDocument,
+    postDocumentType,
+    getDocumentTypes,
+    postStakeholder,
+    getStakeholders,
+    postScale,
+    getScales
 }
