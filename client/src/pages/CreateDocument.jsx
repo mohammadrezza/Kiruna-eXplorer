@@ -13,6 +13,7 @@ import { dmsToDecimal } from '../utils/convertToDecimal';
 import '../style/CreateDocument.css'
 import Select from 'react-select'
 import { showSuccess, showError } from '../utils/notifications';
+import CreatableSelect from 'react-select/creatable'
 
 function FormDocument(props) {
 
@@ -25,13 +26,19 @@ function FormDocument(props) {
   const [docID,setDocID] = useState(props.mode==='view' ? id : '');
   const [title,setTitle] = useState('');
   const [stakeholder,setStakeholder] = useState([]);
-  const [scale,setScale] = useState('');
+  const [scale,setScale] = useState(null);
   const [issuanceDate,setIssuanceDate] = useState('');
   const [type,setType] = useState(null);
   const [language,setLanguage] = useState('');
   const [description,setDescription] = useState('');
   const [coordinates, setCoordinates] = useState({ lat: '', lng: '' });
   const [loading,setLoading] = useState(true);
+  const [isLoadingStake,setIsLoadingStake] = useState(false);
+  const [isLoadingType,setIsLoadingType] = useState(false);
+  const [isLoadingScale,setIsLoadingScale] = useState(false);
+  const [day,setDay] = useState('')
+  const [month,setMonth] = useState('')
+  const [year,setYear] = useState('')
   const [edit,setEdit] = useState(false);
   const [showMap, setShowMap] = useState(false);
   const [isWholeMunicipal, setIsWholeMunicipal] = useState(false);
@@ -41,6 +48,7 @@ function FormDocument(props) {
   const [selectedConnectionTypes, setSelectedConnectionTypes] = useState([]);
   const [allTypes,setAllTypes] = useState([]);
   const [allStake,setAllStake] = useState([]);
+  const [allScale,setAllScale] = useState([]);
   const [errors, setErrors] = useState([]);
   const [rights, setRights] = useState(false)
 
@@ -53,7 +61,7 @@ function FormDocument(props) {
       maxWidth: '505px',                         // Larghezza massima
       width: '100%',                             // Larghezza dinamica
       height: '51px',                            // Altezza del campo
-      paddingLeft: '74px',                       // Padding sinistro
+      paddingLeft: '20px',                       // Padding sinistro
       backgroundColor: 'var(--lily-white)',      // Colore di sfondo
       border: 'none',                            // Nessun bordo
       borderRadius: '0',                         // Nessun arrotondamento
@@ -126,7 +134,12 @@ function FormDocument(props) {
           if(doc.coordinates.lat === 0 && doc.coordinates.lng === 0 )
             setIsWholeMunicipal(true)
           else setCoordinates(doc.coordinates);
-          setIssuanceDate(dayjs(doc.issuanceDate,'DD/MM/YYYY').format('YYYY-MM-DD'));
+          const [dd, mm, yyyy] = doc.issuanceDate.split("-");
+          if(dd!='00')
+            setDay(dd)
+          if(mm!='00')
+            setMonth(mm)
+          setYear(yyyy)
           setRelatedDocuments(doc.connections);
           setSelectedDocuments(connectedDocumentIds)
           
@@ -203,10 +216,12 @@ function FormDocument(props) {
     const validationErrors = {};
     if (!title.trim()) validationErrors.title = 'Title cannot be empty!';
     if (stakeholder.length === 0) validationErrors.stakeholder = 'Stakeholder cannot be empty!';
-    if (!scale.trim()) validationErrors.scale = 'Scale cannot be empty!';
+    if (scale=== null) validationErrors.scale = 'Scale cannot be empty!';
     if (type === null) validationErrors.type = 'Type cannot be empty!';
     if (!description.trim()) validationErrors.description = 'Description cannot be empty!';
     if (!areCoordinatesValid(coordinates) && !isWholeMunicipal) validationErrors.coordinates = 'Not correct format or not inside Kiruna area';
+    if(day && (!month && !year)) validationErrors.day ='Insert month and year before the day'
+    if(month && !year) validationErrors.month ='Insert year before the day'
     //if(!isWholeMunicipal && (!coordinates.lat || !coordinates.lng)) validationErrors.coordinates = 'Coordinates cannot be empty!';
     console.log(validationErrors);
     return validationErrors;
@@ -227,16 +242,22 @@ function FormDocument(props) {
     setErrors([]);
     const st=[];
     stakeholder.forEach((s) =>st.push(s.value))
+    if(!day){
+      if(!month){
+        setIssuanceDate(`00-00-${year}`)
+      }else{
+        setIssuanceDate(`00-${month}-${year}`)
+      }
+    }else{
+      setIssuanceDate(`${day}-${month}-${year}`)
+    }
+    
     const doc = new Document(docID, title.trim(), st, scale, issuanceDate, type.value, language.value, description);
     if(props.mode==='add'){
       API.AddDocumentDescription(doc, selectedConnectionTypes, coordinates);
     } else if (props.mode === 'view') {
       API.EditDocumentDescription(doc, selectedConnectionTypes , coordinates, docID );
     }
-    //if we want to set the connections 
-    //by using this API we pass selectedDocuments as
-    // an argument here
-    //otherwise we create a new API
     showSuccess('Action successful!')
     setTimeout(()=>{
       navigate('/documents');
@@ -263,6 +284,10 @@ function FormDocument(props) {
   const handleSelectLanguageChange = (selectedOption) => {
     setLanguage(selectedOption);
   };
+
+  const handleSelectScaleChange = (selectedOption) => {
+    setScale(selectedOption);
+  };
   
   const handleConnectionTypeSelect = (documentId, selectedConnectionType) => {
     setSelectedConnectionTypes(prevSelected => {
@@ -280,31 +305,44 @@ function FormDocument(props) {
       }
     });
   };
-  // const handleConnectionTypeSelect = (documentId, selectedConnectionType) => {
-  //   setSelectedConnectionTypes(prevSelected => {
-  //     // Verifica se il documento ha già una connessione
-  //     const existingConnection = prevSelected.find(item => item.id === documentId);
-  
-  //     if (existingConnection) {
-  //       // Se la connessione esiste già, aggiorna il tipo di connessione
-  //       return prevSelected.map(item =>
-  //         item.id === documentId ? { ...item, type: selectedConnectionType } : item
-  //       );
-  //     } else {
-  //       // Se la connessione non esiste, aggiungi una nuova
-  //       return [
-  //         ...prevSelected,
-  //         { id: documentId, type: selectedConnectionType }
-  //       ];
-  //     }
-  //   });
-  // };
   
   const handleEditChange=()=>{
     setEdit(true);
-    console.log(allDocuments);
-    console.log(selectedDocuments);
-    console.log(selectedConnectionTypes);
+  };
+
+  const createOption = (label) => ({
+    label,
+    value: label,
+  });
+
+  const handleCreateStake = (inputValue) => {
+    setIsLoadingStake(true);
+    setTimeout(() => {
+      const newOption = createOption(inputValue);
+      setIsLoadingStake(false);
+      setAllStake((prev) => [...prev, newOption]);
+      setStakeholder((prev) => [...prev, newOption]);
+    }, 1000);
+  };
+
+  const handleCreateType = (inputValue) => {
+    setIsLoadingType(true);
+    setTimeout(() => {
+      const newOption = createOption(inputValue);
+      setIsLoadingType(false);
+      setAllTypes((prev) => [...prev, newOption]);
+      setType((prev) => [...prev, newOption]);
+    }, 1000);
+  };
+
+  const handleCreateScale = (inputValue) => {
+    setIsLoadingScale(true);
+    setTimeout(() => {
+      const newOption = createOption(inputValue);
+      setIsLoadingScale(false);
+      setAllScale((prev) => [...prev, newOption]);
+      setScale((prev) => [...prev, newOption]);
+    }, 1000);
   };
 
   return  (
@@ -329,39 +367,80 @@ function FormDocument(props) {
                 <Form.Label>
                   Stakeholder{(props.mode === 'add' || edit) && <span>*</span>}
                 </Form.Label>
-                {!loading && <Select
+                {!loading && <CreatableSelect
                   classNamePrefix="react-select"
                   styles={customStyles}
                   isMulti
+                  isLoading={isLoadingStake}
                   options={allStake} // Dati da mostrare nel dropdown
                   value={stakeholder} // Valori selezionati
+                  onCreateOption={handleCreateStake}
                   onChange={handleSelectStakeChange} // Funzione per aggiornare lo stato
                   getOptionLabel={(e) => e.label} // Personalizza l'etichetta dell'opzione
                   getOptionValue={(e) => e.value} // Personalizza il valore dell'opzione
                   placeholder="Select one or more stakeholders"
                   isDisabled={!edit && props.mode !== 'add'}
                 >
-                </Select>}
+                </CreatableSelect>
+                }
+                {errors.stakeholder && (
+                  <div className="invalid-feedback" style={{ display: "block" }}>
+                    {errors.stakeholder}
+                  </div>
+                  )}
               </Form.Group>
               
               <Form.Group className='form-group'  controlId="scale">
                 <Form.Label>Scale{(props.mode === 'add' || edit) && <span>*</span>}</Form.Label>
-                <Form.Control type="text" placeholder="Enter scale" value={scale} onChange={(event) => setScale(event.target.value)}  isInvalid={!!errors.scale} readOnly={!edit && props.mode!='add'}/>
-                <Form.Control.Feedback type="invalid">
+                {!loading && <CreatableSelect
+                  classNamePrefix="react-select"
+                  styles={customStyles}
+                  isLoading={isLoadingScale}
+                  onCreateOption={handleCreateScale}
+                  options={allScale} // Dati da mostrare nel dropdown
+                  value={scale} // Valori selezionati
+                  onChange={handleSelectScaleChange} // Funzione per aggiornare lo stato
+                  getOptionLabel={(e) => e.label} // Personalizza l'etichetta dell'opzione
+                  getOptionValue={(e) => e.value} // Personalizza il valore dell'opzione
+                  placeholder="Select scale"
+                  isDisabled={!edit && props.mode !== 'add'}
+                >
+                </CreatableSelect>}
+                {errors.scale && (
+                  <div className="invalid-feedback" style={{ display: "block" }}>
                     {errors.scale}
-                </Form.Control.Feedback>
+                  </div>
+                  )}
               </Form.Group>
 
               <Form.Group className='form-group'  controlId="issuanceDate">
                 <Form.Label>Issuance Date{(props.mode === 'add' || edit) && <span>*</span>}</Form.Label>
-                <Form.Control  data-testid="date-input" type="date" value={issuanceDate} onChange={(event) => setIssuanceDate(event.target.value)} readOnly={!edit && props.mode!='add'}/>
+                <Row>
+                    <Col xs={3}>
+                      <Form.Control type="text" placeholder="DD" value={day} onChange={(event) => setDay(event.target.value)}  isInvalid={!!errors.day} readOnly={!edit && props.mode!='add'}/>
+                      <Form.Control.Feedback type="invalid">
+                        {errors.day}
+                      </Form.Control.Feedback>
+                    </Col>
+                    <Col xs={3}>
+                      <Form.Control type="text" placeholder="MM" value={month} onChange={(event) => setMonth(event.target.value)}  isInvalid={!!errors.month} readOnly={!edit && props.mode!='add'}/>
+                      <Form.Control.Feedback type="invalid">
+                        {errors.month}
+                      </Form.Control.Feedback>
+                    </Col>
+                    <Col xs={4}>
+                      <Form.Control type="text" placeholder="YYYY" value={year} onChange={(event) => setYear(event.target.value)}  isInvalid={!!errors.year} readOnly={!edit && props.mode!='add'}/>
+                    </Col>
+                </Row>
               </Form.Group>
 
               <Form.Group className='form-group' controlId="type">
                 <Form.Label>Type{(props.mode === 'add' || edit) && <span>*</span>}</Form.Label>
-                {!loading && <Select
+                {!loading && <CreatableSelect
                   classNamePrefix="react-select"
                   styles={customStyles}
+                  isLoading={isLoadingType}
+                  onCreateOption={handleCreateType}
                   options={allTypes} // Dati da mostrare nel dropdown
                   value={type} // Valori selezionati
                   onChange={handleSelectTypeChange} // Funzione per aggiornare lo stato
@@ -370,7 +449,12 @@ function FormDocument(props) {
                   placeholder="Select type"
                   isDisabled={!edit && props.mode !== 'add'}
                 >
-                </Select>}
+                </CreatableSelect>}
+                {errors.type && (
+                  <div className="invalid-feedback" style={{ display: "block" }}>
+                    {errors.type}
+                  </div>
+                  )}
               </Form.Group>
 
               <Form.Group className='form-group' controlId="language">
@@ -428,7 +512,7 @@ function FormDocument(props) {
                       minLength={2} 
                       value={coordinates.lng} 
                       onChange={(event) => handleCoordinatesChange({lat: coordinates.lat, lng:event.target.value})}
-                      //isInvalid={!!errors.coordinates} 
+                      isInvalid={!!errors.coordinates} 
                       readOnly={(!edit && props.mode !== 'add' )|| showMap}
                       />
                   </Form.Group>

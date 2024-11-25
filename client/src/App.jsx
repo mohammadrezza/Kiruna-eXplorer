@@ -4,6 +4,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import FormDocument from './pages/CreateDocument';
 import Homepage from './pages/Homepage';
+import UPHomepage from './components/UPHomepage';
 import DocumentsLayout from './layouts/DocumentsLayout'
 import DocumentsList from './components/List'
 import DocumentMap from './components/DocumentsMap'
@@ -29,6 +30,7 @@ function App() {
     <ScrollToTop />
     <Routes>
       <Route path='/' element={<Homepage />}/>
+      <Route path='/UP' element={<UPHomepage />}/> {/* just for test */}
       <Route path='/login' element={<Login />}/>
       <Route path='/document/add' element={
         <PrivateRoute><FormDocument mode={'add'}/></PrivateRoute>
