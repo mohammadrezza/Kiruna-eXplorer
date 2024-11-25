@@ -389,7 +389,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\": \"foo\",\n    \"description\": \"description\",\n    \"stakeholders\": [\n        \"LKAB\",\n        \"Municipality\"\n    ],\n    \"scale\": \"foo\",\n    \"issuanceDate\": \"21-02-1996\",\n    \"type\": \"TYPE_FOO\",\n    \"language\": \"english\",\n    \"coordinates\": {\n        \"lat\": \"0.8338068264956746\",\n        \"lng\": \"18.9844855486035\"\n    },\n    \"connectionIds\": [\n        {\n            \"id\": \"doc1\",\n            \"type\": \"Direct consequence\"\n        },\n        {\n            \"id\": \"doc1\",\n            \"type\": \"ollateral consequence\"\n        },\n        {\n            \"id\": \"doc2\",\n            \"type\": \"Collateral consequence\"\n        }\n    ]\n}",
+					"raw": "{\n    \"title\": \"foo\",\n    \"description\": \"description\",\n    \"stakeholders\": [\n        \"LKAB\",\n        \"Municipality\"\n    ],\n    \"scale\": \"foo\",\n    \"issuanceDate\": \"DD-MM-YYYY\",\n    \"type\": \"TYPE_FOO\",\n    \"language\": \"english\",\n    \"coordinates\": {\n        \"lat\": \"0.8338068264956746\",\n        \"lng\": \"18.9844855486035\"\n    },\n    \"connectionIds\": [\n        {\n            \"id\": \"doc1\",\n            \"type\": \"Direct consequence\"\n        },\n        {\n            \"id\": \"doc1\",\n            \"type\": \"ollateral consequence\"\n        },\n        {\n            \"id\": \"doc2\",\n            \"type\": \"Collateral consequence\"\n        }\n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -497,7 +497,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/documents?documentId&page=1&size=10&sort=nameOfColumn,asc&name=nameOfDocument&documentType=foo,bar,baz&stakeholders=foo,bar,baz",
+					"raw": "{{host}}/documents?documentId&page=1&size=10&sort=nameOfColumn,asc&name=nameOfDocument&documentType=foo,bar,baz&stakeholders=foo,bar,baz&issuanceDateStart=DD-MM-YYY&issanceDateEnd=DD-MM-YYY",
 					"host": [
 						"{{host}}"
 					],
@@ -532,6 +532,16 @@
 						{
 							"key": "stakeholders",
 							"value": "foo,bar,baz"
+						},
+						{
+							"key": "issuanceDateStart",
+							"value": "DD-MM-YYY",
+							"description": "00-00-1996 , 00-06-1996 , 12-06-1996"
+						},
+						{
+							"key": "issanceDateEnd",
+							"value": "DD-MM-YYY",
+							"description": "00-00-1996 , 00-06-1996 , 12-06-1996"
 						}
 					]
 				}
@@ -967,7 +977,7 @@
 			]
 		},
 		{
-			"name": "{{host}}/documents/files",
+			"name": "{{host}}/documents/:documentId/files",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -982,13 +992,20 @@
 					]
 				},
 				"url": {
-					"raw": "{{host}}/documents/files",
+					"raw": "{{host}}/documents/:documentId/files",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
 						"documents",
+						":documentId",
 						"files"
+					],
+					"variable": [
+						{
+							"key": "documentId",
+							"value": ""
+						}
 					]
 				}
 			},
