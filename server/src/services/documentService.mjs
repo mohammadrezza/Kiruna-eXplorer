@@ -7,6 +7,7 @@ import {
     deleteAllConnections,
     getAllDocuments, addDocumentStakeholder, deleteAllStakeholders, getDocumentStakeholders
 } from "../daos/documentDAO.mjs";
+import fs from 'fs/promises';
 import Document from "../components/document.mjs";
 import DocumentConnection from "../components/documentConnection.mjs";
 import DocumentStakeholder from "../components/documentStakeholder.mjs";
@@ -197,6 +198,10 @@ async function getDocument(id) {
             return null;
         }
 
+        const files  = await fs.readdir(`uploads/${id}`);
+        files.forEach((file, index) => {
+            files[index] = `server/uploads/${id}/${file}`;
+        })
         // Format the main document
         const mainDocument = {
             id: documentData[0].doc_id,
@@ -208,7 +213,8 @@ async function getDocument(id) {
             type: documentData[0].doc_type,
             language: documentData[0].doc_language,
             coordinates: documentData[0].doc_coordinates ? JSON.parse(documentData[0].doc_coordinates) : [],
-            connections: []
+            connections: [],
+            files: files
         };
 
         // Add connections if they exist

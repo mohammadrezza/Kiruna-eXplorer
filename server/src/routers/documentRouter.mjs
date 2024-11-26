@@ -15,7 +15,7 @@ import {
 
 
 const storage = multer.diskStorage({
-  destination: path.join(process.cwd(), 'uploads'), 
+  destination: path.join(process.cwd(), 'uploads'),
   filename: (req, file, cb) => {
       cb(null, `${Date.now()}-${file.originalname}`);
   }
@@ -32,6 +32,6 @@ documentRouter.get("/stakeholders", getStakeholdersList);
 documentRouter.get('/:id', getDocumentWithId);
 documentRouter.get("/", documentsList);
 documentRouter.put("/:documentId", updateDocument);
-documentRouter.post("/:documentId/upload",upload.single('file'), uploadDocument);
+documentRouter.post("/:documentId/files",upload.single('file'), uploadDocument);
 
 export default documentRouter;
