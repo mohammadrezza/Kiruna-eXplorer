@@ -16,7 +16,7 @@ import {
     getAllStakeHolders,
     getAllScales
 } from "../daos/documentDAO.mjs";
-import fs from 'fs/promises';
+import fs from 'fs';
 import Document from "../components/document.mjs";
 import DocumentConnection from "../components/documentConnection.mjs";
 import DocumentStakeholder from "../components/documentStakeholder.mjs";
@@ -210,10 +210,14 @@ async function getDocument(id) {
             return null;
         }
 
-        const files  = await fs.readdir(`uploads/${id}`);
-        files.forEach((file, index) => {
-            files[index] = `server/uploads/${id}/${file}`;
-        })
+        let files = []
+        if (fs.existsSync(`uploads/${id}`)) {
+            files = fs.readdirSync(`uploads/${id}`);
+            files.forEach((file, index) => {
+                files[index] = `server/uploads/${id}/${file}`;
+            })
+        }
+
         // Format the main document
         const mainDocument = {
             id: documentData[0].doc_id,

@@ -1,4 +1,4 @@
-import fs from 'fs/promises';
+import fs from 'fs';
 import path from 'path';
 import {
     getDocuments,
@@ -261,9 +261,9 @@ async function uploadDocument(req, res) {
         }
 
         const uploadsDirectory = path.join(process.cwd(), 'uploads', documentId);
-        await fs.mkdir(uploadsDirectory, { recursive: true });
+        fs.mkdirSync(uploadsDirectory, { recursive: true });
         const filePath = path.join(uploadsDirectory, file.filename);
-        await fs.rename(file.path, filePath);
+        fs.renameSync(file.path, filePath);
         return res.status(200).json({
             success: true,
             message: 'File uploaded successfully',
