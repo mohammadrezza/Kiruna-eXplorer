@@ -29,7 +29,7 @@
 }
 .form-container-subtitle{
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
 }
 
 .document-list-item .list-group-item{
@@ -152,3 +152,68 @@
     font-weight: bold;
     color: var(--black); /* Nero scuro */
 }
+  
+.search-bar-list {
+    position: relative;
+    width: 70%;
+  }
+  
+  .search-input-list {
+    width: 100%;
+    padding: 10px 40px 10px 10px; /* Spazio riservato per il pulsante */
+    font-size: 16px;
+    border: 1px solid var(--light-grey);
+    border-radius: 50px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    width: 750px;
+    height: 60px;
+
+  }
+  
+  .search-input-list:focus {
+    outline: none;
+    border-color: var(--blue);
+  }
+  
+  .search-button-list {
+    position: absolute;
+    top: 50%;
+    right: 10px; /* Pulsante all'interno del campo */
+    transform: translateY(-50%);
+    background: #9A9A9A;
+    font-family: Times;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 23px;
+    width: 134px;
+    height: 40px;
+    border-radius: 40px;
+    opacity: 0px;
+    color: white;
+    border: none;
+  }
+  
+ 
+  
+  /* Pulsante dei filtri */
+  .filter-container {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 10px;
+  }
+  
+  .filter-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #FFFFFF;
+    color: var(--demo-black);
+    border: 1px solid #9A9A9A;
+    border-radius: 10px;
+  }
+  
+  .filter-button:hover {
+    background-color: #9A9A9A;
+    color: var(--white);
+    border-color: #9A9A9A;
+  }
+  
