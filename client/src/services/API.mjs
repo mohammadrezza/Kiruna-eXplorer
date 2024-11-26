@@ -167,13 +167,7 @@ async function getStake() {
     }
     return;
 }
-// async function getDocuments(){
-//     const doc= [];
-//     doc.push(new Document ("1","title", "stakeholder", "scale", "01/01/1999", "type", "language", "description"));
-//     doc.push(new Document ("2","title2", "stakeholder2", "scale2", "01/01/1999", "type2", "language2", "description2"));
-//     doc.push(new Document ("3","title3", "stakeholder3", "scale3", "01/01/1999", "type3", "language3", "description3"));
-//     return doc;
-// }
+
 async function getDocuments() {
     try {
         const response = await fetch(`${url}/documents`, {
@@ -201,24 +195,32 @@ async function getDocuments() {
     }
 }
 
-/*async function getRelatedDocuments(docID) {
+async function getSortedDocuments(key,dir) {
     try {
-        const response = await fetch(`${url}/documents/${docID}/related`, {
+        const response = await fetch(`${url}/documents?sort=${key},${dir}`, {
             method: "GET",
-            headers: { 'Content-Type': 'application/json' }
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
+
         if (response.ok) {
-            const relatedDocs = await response.json();
-            return relatedDocs; 
+            const documents = await response.json();
+            return documents.data;
         } else {
-            const errorDetail = await response.json();
-            throw errorDetail.error || errorDetail.message || "Failed to fetch related documents.";
+            const errDetail = await response.json();
+            if (errDetail.error)
+                throw errDetail.error;
+            if (errDetail.message)
+                throw errDetail.message;
+
+            throw "Something went wrong while fetching documents.";
         }
     } catch (error) {
-        console.error("Error fetching related documents:", error);
+        console.error(error);
         throw error;
     }
-}*/
+}
 
 async function getData(id) {
     const response = await fetch(`${url}/documents/${id}`)
@@ -227,7 +229,126 @@ async function getData(id) {
     return data.data;
 }
 
+async function getScale() {
+    const response = await fetch(`${url}/documents/scales`);
+    if(response.ok){
+        const s = await response.json();
+        const res =[];
+        s.scales.forEach((scale) => {
+            res.push({ value: scale, label: scale })
+        });
+        return res;
+    }
+    return;
+}
 
-const API ={AddDocumentDescription, getTypes, getDocuments, getData, EditDocumentDescription, getStake, getConnectionTypes, login,getUser,/* logout*/}
+
+
+
+async function addType(type){
+    try {
+        const response = await fetch(`${url}/documents/types`,
+            {
+                method: "POST",
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    name:type})
+            })
+        if (response.ok) {
+            return;
+        } else {
+            const errDetail = await response.json();
+            if (errDetail.error)
+                throw errDetail.error;
+            if (errDetail.message)
+                throw errDetail.message;
+            
+            throw "Something went wrong while saving new type.";
+        }
+    } catch (error) {
+        console.error( error);
+        throw error;  
+    }
+}
+
+async function addStakeholder(stakeholder){
+    try {
+        const response = await fetch(`${url}/documents/stakeholders`,
+            {
+                method: "POST",
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    name:stakeholder})
+            })
+        if (response.ok) {
+            return;
+        } else {
+            const errDetail = await response.json();
+            if (errDetail.error)
+                throw errDetail.error;
+            if (errDetail.message)
+                throw errDetail.message;
+            
+            throw "Something went wrong while saving new stakeholder.";
+        }
+    } catch (error) {
+        console.error( error);
+        throw error;  
+    }
+}
+
+
+async function addScale(scale){
+    try {
+        const response = await fetch(`${url}/documents/scales`,
+            {
+                method: "POST",
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    name:scale})
+            })
+        if (response.ok) {
+            return;
+        } else {
+            const errDetail = await response.json();
+            if (errDetail.error)
+                throw errDetail.error;
+            if (errDetail.message)
+                throw errDetail.message;
+            
+            throw "Something went wrong while saving new scale.";
+        }
+    } catch (error) {
+        console.error( error);
+        throw error;  
+    }
+}
+
+
+const API ={
+    AddDocumentDescription,
+    getTypes,
+    getDocuments,
+    getData, 
+    EditDocumentDescription, 
+    getStake, 
+    getConnectionTypes, 
+    login,
+    getUser,
+    addType, 
+    addStakeholder,
+    addScale,
+    getScale,
+    getSortedDocuments
+}
 
 export default API;

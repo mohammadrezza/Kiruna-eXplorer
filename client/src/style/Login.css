@@ -12,8 +12,11 @@
     background-repeat: no-repeat;
 }
 .login-block{
-    width: 440px;
-    height: 503px;
+    width: 633px;
+    height: 687px;
+    top: 113px;
+    left: 417px;
+    gap: 0px;
     padding: 50px 72px;
     background-color: rgba(16, 20, 32, 0.75);
     border-radius: 8px;
@@ -21,7 +24,7 @@
 }
 .login-block h3{
     color: var(--white);
-    text-align: left;
+    text-align: center;
     font-size: 50px;
     margin: 0 0 75px 0;
 }
@@ -37,4 +40,6 @@
     height: 51px;
     margin-top: 35px;
     font-size: 24px;
+    border-radius: 0;
+
 }

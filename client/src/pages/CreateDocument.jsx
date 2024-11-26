@@ -108,9 +108,10 @@ function FormDocument(props) {
   useEffect(()=>{
     const loadData = async () => {
       try {
-        const [types, documents, stake] = await Promise.all([API.getTypes(), API.getDocuments(), API.getStake()]);
+        const [types, documents, stake, sca] = await Promise.all([API.getTypes(), API.getDocuments(), API.getStake(), API.getScale()]);
         setAllTypes(types);
         setAllStake(stake);
+        setAllScale(sca);
         const filteredDocuments = props.mode === 'view' ? documents.filter(doc => doc.id !== id) : documents;
         setAllDocuments(filteredDocuments);
 
@@ -319,6 +320,7 @@ function FormDocument(props) {
     setIsLoadingStake(true);
     setTimeout(() => {
       const newOption = createOption(inputValue);
+      API.addStakeholder(inputValue);
       setIsLoadingStake(false);
       setAllStake((prev) => [...prev, newOption]);
       setStakeholder((prev) => [...prev, newOption]);
@@ -329,6 +331,7 @@ function FormDocument(props) {
     setIsLoadingType(true);
     setTimeout(() => {
       const newOption = createOption(inputValue);
+      API.addType(inputValue);
       setIsLoadingType(false);
       setAllTypes((prev) => [...prev, newOption]);
       setType((prev) => [...prev, newOption]);
@@ -339,6 +342,7 @@ function FormDocument(props) {
     setIsLoadingScale(true);
     setTimeout(() => {
       const newOption = createOption(inputValue);
+      API.addScale(inputValue);
       setIsLoadingScale(false);
       setAllScale((prev) => [...prev, newOption]);
       setScale((prev) => [...prev, newOption]);

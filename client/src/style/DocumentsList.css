@@ -141,3 +141,14 @@
     background-color: #b8380d;
     border: none;
   }
+
+  .document-list-item-header .sortable-column {
+    cursor: pointer;
+    color: var(--light-grey);
+    font-weight: 300;
+}
+
+.document-list-item-header .sortable-column.active {
+    font-weight: bold;
+    color: var(--black); /* Nero scuro */
+}
