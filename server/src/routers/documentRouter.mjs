@@ -1,6 +1,10 @@
 import express from "express";
+import multer from 'multer';
 import {body, param} from "express-validator";
 import moment from "moment";
+import storage from "../middlewares/storage.mjs";
+import Auth from "../auth/auth.mjs";
+import {validator} from "../middlewares/validator.mjs";
 import {
     createDocument,
     documentsList,
@@ -12,16 +16,16 @@ import {
     createStakeholder,
     createScale,
     getScalesList,
-    getDocumentTypesList
+    getDocumentTypesList,
+    uploadDocument
 } from "../controllers/documentController.mjs";
-import Auth from "../auth/auth.mjs";
-import {validator} from "../middlewares/validator.mjs";
 
 class DocumentRouter {
     constructor(app) {
         this.app = app;
         this.auth = new Auth(app);
         this.router = express.Router()
+        this.upload = multer({ storage: storage });
         this.initRoutes()
     }
 
@@ -88,8 +92,9 @@ class DocumentRouter {
         this.router.get("/connectionTypes", documentConnectionTypesList);
         this.router.get('/:id', getDocumentWithId);
         this.router.get("/", documentsList);
+        this.router.post("/:documentId/files",
+            this.upload.single('file'),
+            uploadDocument);
     }
-
 }
-
 export default DocumentRouter;

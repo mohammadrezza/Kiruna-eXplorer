@@ -1,8 +1,8 @@
+import fs from 'fs';
+import path from 'path';
 import {
     getDocuments,
     getDocument,
-    postDocument,
-    putDocument,
     postDocumentType,
     getDocumentTypes,
     getStakeholders,
@@ -241,6 +241,45 @@ async function getScalesList(req, res) {
     })
 }
 
+async function uploadDocument(req, res) {
+    try {
+        const { documentId } = req.params;
+        const { file } = req;
+
+        if (!documentId) {
+            return res.status(400).json({
+                success: false,
+                message: 'Document ID is required'
+            });
+        }
+
+        if (!file) {
+            return res.status(400).json({
+                success: false,
+                message: 'File is required'
+            });
+        }
+
+        const uploadsDirectory = path.join(process.cwd(), 'uploads', documentId);
+        fs.mkdirSync(uploadsDirectory, { recursive: true });
+        const filePath = path.join(uploadsDirectory, file.filename);
+        fs.renameSync(file.path, filePath);
+        return res.status(200).json({
+            success: true,
+            message: 'File uploaded successfully',
+            documentId: documentId,
+            filePath: filePath
+        });
+
+    } catch (error) {
+        console.error('Error:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+            error: error.message
+        });
+    }
+}
 export {
     createDocument,
     updateDocument,
@@ -252,5 +291,6 @@ export {
     createDocumentType,
     getDocumentTypesList,
     createScale,
-    getScalesList
+    getScalesList,
+    uploadDocument
 }
