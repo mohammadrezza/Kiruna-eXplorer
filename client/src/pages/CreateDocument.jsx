@@ -109,6 +109,10 @@ function FormDocument(props) {
     const loadData = async () => {
       try {
         const [types, documents, stake, sca] = await Promise.all([API.getTypes(), API.getDocuments(), API.getStake(), API.getScale()]);
+        console.log(types)
+        console.log(documents)
+        console.log(stake)
+        console.log(sca)
         setAllTypes(types);
         setAllStake(stake);
         setAllScale(sca);
@@ -322,7 +326,7 @@ function FormDocument(props) {
       const newOption = createOption(inputValue);
       API.addStakeholder(inputValue);
       setIsLoadingStake(false);
-      setAllStake((prev) => [...prev, newOption]);
+      setAllStake((prev) => [prev, newOption]);
       setStakeholder((prev) => [...prev, newOption]);
     }, 1000);
   };
@@ -334,7 +338,7 @@ function FormDocument(props) {
       API.addType(inputValue);
       setIsLoadingType(false);
       setAllTypes((prev) => [...prev, newOption]);
-      setType((prev) => [...prev, newOption]);
+      setType(newOption);
     }, 1000);
   };
 
@@ -345,7 +349,7 @@ function FormDocument(props) {
       API.addScale(inputValue);
       setIsLoadingScale(false);
       setAllScale((prev) => [...prev, newOption]);
-      setScale((prev) => [...prev, newOption]);
+      setScale(newOption);
     }, 1000);
   };
 

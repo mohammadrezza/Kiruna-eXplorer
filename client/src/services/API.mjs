@@ -119,7 +119,7 @@ async function getTypes() {
     if(response.ok){
         const t = await response.json();
         const res =[];
-        t.documentTypes.forEach((type) => {
+        t.data.forEach((type) => {
             res.push({ value: type, label: type })
         });
         return res;
@@ -160,7 +160,7 @@ async function getStake() {
     if(response.ok){
         const t = await response.json();
         const res =[];
-        t.stakeholders.forEach((stake) => {
+        t.data.forEach((stake) => {
             res.push({ value: stake, label: stake })
         });
         return res;
@@ -234,7 +234,7 @@ async function getScale() {
     if(response.ok){
         const s = await response.json();
         const res =[];
-        s.scales.forEach((scale) => {
+        s.data.forEach((scale) => {
             res.push({ value: scale, label: scale })
         });
         return res;
