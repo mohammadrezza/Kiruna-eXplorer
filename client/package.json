@@ -6,7 +6,9 @@
     "@testing-library/user-event": "^13.5.0",
     "bootstrap": "^5.3.3",
     "dayjs": "^1.11.13",
+    "js-cookie": "^3.0.5",
     "leaflet": "^1.9.4",
+    "mockdate": "^3.0.5",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.5",
     "react-dom": "^18.3.1",
@@ -16,6 +18,8 @@
     "react-router-dom": "^6.27.0",
     "react-scripts": "5.0.1",
     "react-select": "^5.8.3",
+    "react-select-event": "^5.5.1",
+    "react-toastify": "^10.0.6",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -54,6 +58,7 @@
     "babel-jest": "^29.7.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "jest-transform-stub": "^2.0.0",
     "jsdom": "^25.0.1",
     "ts-jest": "^29.2.5"
   },

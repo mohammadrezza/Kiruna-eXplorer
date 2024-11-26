@@ -1,76 +1,121 @@
-import '../style/DocumentsList.css';
-import React, { useState,useEffect } from 'react';
-import {Button, Row, Col,ListGroup } from 'react-bootstrap';
-import API from '../services/API.mjs';
-import * as dayjs from 'dayjs'
-import { useNavigate } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {Row, Col,ListGroup } from 'react-bootstrap';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import { PiFileMagnifyingGlassLight } from 'react-icons/pi';
 import DocumentDetailsModal from '../components/DocumentDetailsModal';
+import API from '../services/API.mjs';
+import '../style/DocumentsList.css';
 
+function List(){
+  const navigate = useNavigate();
+  const { list, loading } = useOutletContext();
+  const [currentDocument, setCurrentDocument] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [sortedList,setSortedList] = useState(list)
 
-function List(props){
+  const [sortConfig, setSortConfig] = useState({ key: '', direction: "" });
 
+  useEffect(()=>{
+    const loadDoc = async () => {
+      try {
+        const documents = await API.getSortedDocuments(sortConfig.key,sortConfig.direction);
+        setSortedList(documents);
+      } catch (error) {
+        console.error("Error loading data:", error);
+      }
+    };
 
-    
+    loadDoc();
+  }, [sortConfig]);
+
+  const handleSort = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const getSortIndicator = (key) => {
+    if (sortConfig.key === key) {
+      return sortConfig.direction === "asc" ? "▲" : "▼";
+    }
+    return "";
+  };
+
+    const handleIconClick = async (doc) => {
+      try {
+        const docData = await API.getData(doc.id); 
+        setCurrentDocument(docData);
+        setShowModal(true);
+      } catch (error) {
+        console.error("Error fetching document data:", error);
+      }
+    };
 
     const handleCloseModal = () => {
-        props.handleShowModal(false);
-        props.handleCurrentDocument(null);
-      };
+      setShowModal(false);
+      setCurrentDocument(null);
+    };
+    const handleDocumentClick = (documentId) => navigate(`/document/view/${documentId}`);
 
-      
-      
-
-
-    return(<div className="document-list">
-        <ListGroup className='relatedDocs'>
-          <ListGroup.Item className='relatedDocs-header'>
+    
+    return(
+    <div className="document-list">
+        <ListGroup className='document-list-item'>
+          <ListGroup.Item className='document-list-item-header'>
             <Row>
-              <Col md={3}>Title</Col>
+              <Col md={2}onClick={() => handleSort("title")}
+              className={`sortable-column ${sortConfig.key === "title" ? "active" : ""}`}>Title  {getSortIndicator("title")}</Col>
               <Col md={3}>Stakeholders</Col>
               <Col md={2}>Type</Col>
-              <Col md={1}>Connections</Col>
-              <Col md={2}>Issuance Date</Col>
+              <Col md={2} onClick={() => handleSort("connections")}
+              className={`sortable-column ${sortConfig.key === "connections" ? "active" : ""}`}>Connections  {getSortIndicator("connections")}</Col>
+              <Col>Issuance Date</Col>
             </Row>
           </ListGroup.Item>
-          {!props.loading && props.list.map((doc, num) => (
+          {!loading && sortedList.map((doc, num) => (
             <ListGroup.Item 
               key={doc.id}  
               >
               <Row className="align-items-center">
-                <Col md={3} className='doc-title' onClick={() => props.handleDocumentClick(doc.id)}>{doc.title}</Col>
-                <Col md={3}> 
-                {doc.stakeholders.map((s, index) => (<span
-                        key={index}
-                        className={`stakeholder-badge stakeholder-${s.toLowerCase().replace(/\s+/g, '-')}`}
-                      >
-                        {s}
-                      </span>
-                ))}
+                <Col md={2} className='doc-title' onClick={() => handleDocumentClick(doc.id)}>{doc.title}</Col>
+                <Col md={3} className='stakeholder-col'> 
+                {doc.stakeholders
+                  .slice() 
+                  .sort((a, b) => a.localeCompare(b))
+                  .map((s, index) => (
+                    <div
+                      key={index}
+                      className={`stakeholder-badge stakeholder-${s.toLowerCase().replace(/\s+/g, '-')}`}
+                    >
+                      {s}
+                    </div>
+                  ))}
                 </Col>
                 <Col md={2}>{doc.type}</Col>
-                <Col md={1}>{doc.connections}</Col>
-                <Col md={2}>{dayjs(doc.issuanceDate).format('DD/MM/YYYY')}</Col>
+                <Col md={2}>{doc.connections}</Col>
+                <Col>{doc.issuanceDate}</Col>
                 <Col>
-                  <PiFileMagnifyingGlassLight 
-                    className='filesymbol' 
-                    size={22} 
-                    onClick={(e) => {
+                  <span className='filesymbol' onClick={(e) => {
                       e.stopPropagation(); // Prevent row click event
-                      props.handleIconClick(doc);
+                      handleIconClick(doc);
                     }}>
-                  </PiFileMagnifyingGlassLight>
+                      Preview
+                      <PiFileMagnifyingGlassLight size={22}></PiFileMagnifyingGlassLight>
+                  </span>
                 </Col>
               </Row>
             </ListGroup.Item>
           ))}
         </ListGroup>
         <DocumentDetailsModal
-          show={props.showModal}
+          show={showModal}
           onHide={handleCloseModal}
-          document={props.currentDocument}
+          document={currentDocument}
             />
-      </div>)
+    </div>
+    )
 }
 
 export default List

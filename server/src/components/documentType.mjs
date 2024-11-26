@@ -1,13 +1,21 @@
-const DocumentType = {
-    MATERIAL_EFFECT: 'Material Effect',
-    PRESCRIPTIVE_DOCUMENT: 'Prescriptive Document',
-    DESIGN_DOCUMENT: 'Design Document',
-    TECHNICAL_DOCUMENT: 'Technical Document',
-    INFORMATIVE_DOCUMENT: 'Informative Document', 
-    AGREEMENT: 'Agreement',
-    CONFLICT: 'Conflict',
-    CONSULTATION: 'Consultation'
-};
+import {v4 as uuidv4} from "uuid";
 
-Object.freeze(DocumentType)
+class DocumentType {
+    constructor() {
+        this.id = '';
+        this.name = '';
+    }
+
+    createFromObject(obj) {
+        this.id = uuidv4();
+        this.name = obj.name;
+    }
+
+    createFromDatabaseRow(row) {
+        this.id = row.id;
+        this.name = row.name;
+        this.createdAt = row.created_at;
+    }
+}
+
 export default DocumentType;

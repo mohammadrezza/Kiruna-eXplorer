@@ -1,22 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import { pointer } from '../utils/mapIcons';
+import 'leaflet/dist/leaflet.css';
 import  '../style/map.css';
 
-// Fix marker icon issue in Leaflet
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-});
-
-// Default center of the map
-const initialCenter = { lat: 67.85572, lng: 20.22513 };
-
 function MapEvents({ onCoordinatesChange, setMarkerPosition, mode, edit }) {
-  // This hook handles the map click to place a marker
   useMapEvents({
     click(e) {
       if(mode === 'add' || edit){
@@ -31,10 +20,16 @@ function MapEvents({ onCoordinatesChange, setMarkerPosition, mode, edit }) {
 
 function MapPointSelector({ onCoordinatesChange, coordinates, mode, edit  }) {
   const [markerPosition, setMarkerPosition] = useState(null); 
-   const kirunaBounds = L.latLngBounds(
-    [67.821, 20.216],
-    [67.865, 20.337] 
+  const initialCenter = { lat: 67.85572, lng: 20.22513 };
+  const kirunaBounds = L.latLngBounds(
+    [67.765, 20.090],
+    [67.900, 20.420] 
   );
+  const icon = L.icon({
+    iconUrl: pointer.iconUrl,
+    iconSize: pointer.iconSize,
+    iconAnchor: pointer.iconAnchor,
+  })
 
   useEffect(() => {
     if (coordinates.lat !== '' || coordinates.lng !== '') {
@@ -44,7 +39,9 @@ function MapPointSelector({ onCoordinatesChange, coordinates, mode, edit  }) {
 
   return (
     <div>
-      <h5 className='map-view-text' data-testid="map-info">Click on the map to select a point</h5>
+      {(mode === 'add' || edit) && (
+        <h5 className='map-view-text' data-testid="map-info">Click on the map to select a point</h5>
+      )}
       <MapContainer
         center={initialCenter}
         zoom={13}
@@ -54,14 +51,13 @@ function MapPointSelector({ onCoordinatesChange, coordinates, mode, edit  }) {
         maxBounds={kirunaBounds} 
         maxBoundsViscosity={1.0} 
       >
-        {/* OpenStreetMap tiles */}
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
         />
         
         <MapEvents edit={edit} mode={mode} onCoordinatesChange={onCoordinatesChange} setMarkerPosition={setMarkerPosition}/>
-        {markerPosition && <Marker position={markerPosition} />}
+        {markerPosition && <Marker position={markerPosition} icon={icon}/>}
       </MapContainer>
     </div>
   );

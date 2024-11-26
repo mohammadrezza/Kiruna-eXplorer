@@ -7,7 +7,9 @@ module.exports = {
   testEnvironment: 'jsdom',
   resetMocks: true,
   transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
+    '^.+\\.(js|jsx|ts|tsx|mjs)$': 'babel-jest',
+    '.+\\.(svg|css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$':
+      'jest-transform-stub',
   },
   transformIgnorePatterns: [
     'node_modules/(?!(react-leaflet|@react-leaflet/core)/)',

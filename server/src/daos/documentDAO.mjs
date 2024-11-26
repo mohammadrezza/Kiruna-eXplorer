@@ -249,10 +249,15 @@ async function getDocumentWithConnections(id) {
                 cd.title as conn_title,
                 cd.scale as conn_scale,
                 cd.issuanceDate as conn_issuanceDate,
-                cd.type as conn_type,
                 cd.language as conn_language,
                 cd.coordinates as conn_coordinates,
-                dc.type as conn_type
+                dc.type as connection_type,
+                cd.type as conn_doc_type,
+                (
+                    SELECT COUNT(*)
+                    FROM DocumentConnection dc2
+                    WHERE dc2.documentId = cd.id OR dc2.connectionId = cd.id
+                ) as conn_total_connections
             FROM Document d
                      LEFT JOIN DocumentConnection dc ON d.id = dc.documentId OR d.id = dc.connectionId
                      LEFT JOIN Document cd ON
@@ -385,6 +390,90 @@ async function getAllDocuments(documentId, title, page, size) {
     });
 }
 
+async function addType(type) {
+    return new Promise((resolve, reject) => {
+        const query = `INSERT INTO Type (id, name) VALUES (?, ?)`;
+
+        db.run(query, [type.id, type.name], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
+
+async function getAllTypes() {
+    return new Promise((resolve, reject) => {
+        const query = `SELECT name FROM Type`;
+
+        db.all(query, (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        })
+    });
+}
+
+async function addStakeHolder(stakeholder) {
+    return new Promise((resolve, reject) => {
+        const query = `INSERT INTO Stakeholder (id, name) VALUES (?, ?)`;
+
+        db.run(query, [stakeholder.id, stakeholder.name], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
+
+async function getAllStakeHolders() {
+    return new Promise((resolve, reject) => {
+        const query = `SELECT * FROM Stakeholder`;
+
+        db.all(query, (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        })
+    });
+}
+
+async function addScale(scale) {
+    return new Promise((resolve, reject) => {
+        const query = `INSERT INTO Scale (id, name) VALUES (?, ?)`;
+
+        db.run(query, [scale.id, scale.name], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
+
+async function getAllScales() {
+    return new Promise((resolve, reject) => {
+        const query = `SELECT * FROM Scale`;
+
+        db.all(query, (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        })
+    });
+}
+
 export {
     addDocument,
     addDocumentStakeholder,
@@ -395,5 +484,11 @@ export {
     editDocument,
     editDocumentConnection,
     deleteAllConnections,
-    deleteAllStakeholders
+    deleteAllStakeholders,
+    addType,
+    getAllTypes,
+    addStakeHolder,
+    getAllStakeHolders,
+    addScale,
+    getAllScales,
 };

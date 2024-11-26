@@ -5,7 +5,7 @@ function Document(id, title,stakeholder,scale,issuanceDate,type,language,descrip
     this.title = title;
     this.stakeholder = stakeholder;
     this.scale = scale;
-    this.issuanceDate = dayjs(issuanceDate);
+    this.issuanceDate = issuanceDate;
     this.type=type;
     this.language = language;
     this.description = description;

@@ -1,172 +1,240 @@
+import {v4 as uuidv4} from "uuid";
 import sqlite from "sqlite3";
 import crypto from "crypto";
-import DocumentType from "../components/documentType.mjs";
-import Stakeholder from "../components/stakeholder.mjs";
 import UserType from "../components/userType.mjs";
 import DocumentConnectionType from "../components/documentConnectionType.mjs";
 
-const initializeDatabase = async () => {
-    const database = new sqlite.Database('./src/db/db.db', (err) => {
-        if (err) throw err;
-    });
+const database = new sqlite.Database('./src/db/db.db', (err) => {
+    if (err) throw err;
+});
 
-    // Helper function to run SQL queries
-    const run = (sql, params = []) => {
-        return new Promise((resolve, reject) => {
-            database.run(sql, params, (err) => {
-                if (err) reject(err);
-                resolve();
-            });
+// Helper function to run SQL queries
+const run = (sql, params = []) => {
+    return new Promise((resolve, reject) => {
+        database.run(sql, params, (err) => {
+            if (err) reject(err);
+            resolve();
         });
-    };
+    });
+};
 
-    try {
-        // Clear all existing data
-        await run("DELETE FROM DocumentConnection");
-        await run("DELETE FROM DocumentStakeholder");
-        await run("DELETE FROM Document");
-        await run("DELETE FROM User");
+const documents = [
+    {
+        id: "doc1",
+        title: "City Transformation Plan 2024",
+        description: "Master plan for Kiruna city transformation",
+        scale: "1:500",
+        issuanceDate: "15-01-2024",
+        type: "Prescriptive",
+        language: "English",
+        coordinates: {
+            lat: 67.8558,
+            lng: 20.2253
+        },
+        stakeholders: ["Municipality", "LKAB"]
+    },
+    {
+        id: "doc2",
+        title: "LKAB Mining Impact Assessment",
+        description: "Analysis of mining activities impact on urban infrastructure",
+        scale: "1:5000",
+        issuanceDate: "01-02-2024",
+        type: "Technical",
+        language: "Swedish",
+        coordinates: {
+            lat: 67.8504,
+            lng: 20.1761
+        },
+        stakeholders: ["LKAB", "Regional Authority"]
+    },
+    {
+        id: "doc3",
+        title: "New Kiruna Center Development",
+        description: "Detailed plans for the new city center development",
+        scale: "1:50000",
+        issuanceDate: "15-02-2024",
+        type: "Design",
+        language: "English",
+        coordinates: {
+            lat: 67.8490,
+            lng: 20.2459
+        },
+        stakeholders: ["Municipality", "Architecture Firms"]
+    },
+    {
+        id: "doc4",
+        title: "Community Consultation Results",
+        description: "Results from community engagement sessions",
+        scale: "1:1000",
+        issuanceDate: "20-02-2024",
+        type: "Consultation",
+        language: "Swedish",
+        coordinates: {
+            lat: 67.8575,
+            lng: 20.2256
+        },
+        stakeholders: ["Citizens", "Municipality"]
+    },
+    {
+        id: "doc5",
+        title: "Environmental Impact Study",
+        description: "Environmental assessment of city relocation",
+        scale: "1:10000",
+        issuanceDate: "01-03-2024",
+        type: "Technical",
+        language: "English",
+        coordinates: {
+            lat: 67.8516,
+            lng: 20.2371
+        },
+        stakeholders: ["Regional Authority"]
+    }
+];
 
-        // Insert users
-        const users = [
-            {username: "resident", password: "102030", role: UserType.RESIDENT},
-            {username: "visitor", password: "405060", role: UserType.VISITOR},
-            {username: "urban_planner", password: "708090", role: UserType.URBAN_PLANNER},
-        ];
+async function populateUserTable() {
+    await run("DELETE FROM User");
+    const users = [
+        {username: "resident", password: "102030", role: UserType.RESIDENT},
+        {username: "visitor", password: "405060", role: UserType.VISITOR},
+        {username: "urban_planner", password: "708090", role: UserType.URBAN_PLANNER},
+    ];
 
-        for (const user of users) {
-            const {username, password, role} = user;
-            const salt = crypto.randomBytes(16).toString("hex");
-            const hashedPassword = crypto.scryptSync(password, salt, 16).toString("hex");
-            await run(
-                "INSERT INTO User (username, password, role, salt) VALUES (?, ?, ?, ?)",
-                [username, hashedPassword, role, salt]
-            );
-        }
+    for (const user of users) {
+        const {username, password, role} = user;
+        const salt = crypto.randomBytes(16).toString("hex");
+        const hashedPassword = crypto.scryptSync(password, salt, 16).toString("hex");
+        await run(
+            "INSERT INTO User (id, username, password, role, salt) VALUES (?, ?, ?, ?, ?)",
+            [uuidv4(), username, hashedPassword, role, salt]
+        );
+    }
+}
 
-        // Insert sample documents with Kiruna-specific coordinates
-        const documents = [
-            {
-                id: "doc1",
-                title: "City Transformation Plan 2024",
-                description: "Master plan for Kiruna city transformation",
-                scale: "City",
-                issuanceDate: "2024-01-15",
-                type: DocumentType.PRESCRIPTIVE_DOCUMENT,
-                language: "English",
-                coordinates: [67.8558, 20.2253],
-                stakeholders: [Stakeholder.MUNICIPALITY, Stakeholder.LKAB]
-            },
-            {
-                id: "doc2",
-                title: "LKAB Mining Impact Assessment",
-                description: "Analysis of mining activities impact on urban infrastructure",
-                scale: "Regional",
-                issuanceDate: "2024-02-01",
-                type: DocumentType.TECHNICAL_DOCUMENT,
-                language: "Swedish",
-                coordinates: [67.8504, 20.1761],
-                stakeholders: [Stakeholder.LKAB, Stakeholder.REGIONAL_AUTHORITY]
-            },
-            {
-                id: "doc3",
-                title: "New Kiruna Center Development",
-                description: "Detailed plans for the new city center development",
-                scale: "Neighborhood",
-                issuanceDate: "2024-02-15",
-                type: DocumentType.DESIGN_DOCUMENT,
-                language: "English",
-                coordinates: [67.8490, 20.2459],
-                stakeholders: [Stakeholder.MUNICIPALITY, Stakeholder.ARCHITECTURE_FIRMS]
-            },
-            {
-                id: "doc4",
-                title: "Community Consultation Results",
-                description: "Results from community engagement sessions",
-                scale: "Neighborhood",
-                issuanceDate: "2024-02-20",
-                type: DocumentType.CONSULTATION,
-                language: "Swedish",
-                coordinates: [67.8575, 20.2256],
-                stakeholders: [Stakeholder.CITIZENS, Stakeholder.MUNICIPALITY]
-            },
-            {
-                id: "doc5",
-                title: "Environmental Impact Study",
-                description: "Environmental assessment of city relocation",
-                scale: "Regional",
-                issuanceDate: "2024-03-01",
-                type: DocumentType.TECHNICAL_DOCUMENT,
-                language: "English",
-                coordinates: [67.8516, 20.2371],
-                stakeholders: [Stakeholder.REGIONAL_AUTHORITY, Stakeholder.OTHERS]
-            }
-        ];
-
-        // Insert documents
-        for (const doc of documents) {
-            await run(
-                `INSERT INTO Document (id, title, description, scale, issuanceDate, type, language, coordinates)
+async function populateDocumentTable() {
+    await run("DELETE FROM Document");
+    for (const doc of documents) {
+        await run(
+            `INSERT INTO Document (id, title, description, scale, issuanceDate, type, language, coordinates)
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-                [
-                    doc.id,
-                    doc.title,
-                    doc.description,
-                    doc.scale,
-                    doc.issuanceDate,
-                    doc.type,
-                    doc.language,
-                    JSON.stringify(doc.coordinates)
-                ]
-            );
+            [
+                doc.id,
+                doc.title,
+                doc.description,
+                doc.scale,
+                doc.issuanceDate,
+                doc.type,
+                doc.language,
+                JSON.stringify(doc.coordinates)
+            ]
+        );
+    }
+}
 
-            // Insert document stakeholders
-            for (const stakeholder of doc.stakeholders) {
-                const stakeholderId = `${doc.id}-${stakeholder}`.toLowerCase().replace(/\s+/g, '-');
-                await run(
-                    `INSERT INTO DocumentStakeholder (id, documentId, stakeholder) 
-                     VALUES (?, ?, ?)`,
-                    [stakeholderId, doc.id, stakeholder]
-                );
-            }
+async function populateDocumentConnectionTable() {
+    await run("DELETE FROM DocumentConnection");
+    const connections = [
+        {
+            id: "conn1",
+            documentId: "doc1",
+            connectionId: "doc2",
+            type: DocumentConnectionType.DIRECT_CONSEQUENCE
+        },
+        {
+            id: "conn2",
+            documentId: "doc2",
+            connectionId: "doc3",
+            type: DocumentConnectionType.COLLATERAL_CONSEQUENCE
+        },
+        {
+            id: "conn3",
+            documentId: "doc3",
+            connectionId: "doc4",
+            type: DocumentConnectionType.UPDATE
+        },
+        {
+            id: "conn4",
+            documentId: "doc1",
+            connectionId: "doc5",
+            type: DocumentConnectionType.PROJECTION
         }
-
-        // Insert document connections
-        const connections = [
-            {
-                id: "conn1",
-                documentId: "doc1",
-                connectionId: "doc2",
-                type: DocumentConnectionType.DIRECT_CONSEQUENCE
-            },
-            {
-                id: "conn2",
-                documentId: "doc2",
-                connectionId: "doc3",
-                type: DocumentConnectionType.COLLATERAL_CONSEQUENCE
-            },
-            {
-                id: "conn3",
-                documentId: "doc3",
-                connectionId: "doc4",
-                type: DocumentConnectionType.CONSULTATION
-            },
-            {
-                id: "conn4",
-                documentId: "doc1",
-                connectionId: "doc5",
-                type: DocumentConnectionType.PROJECTION
-            }
-        ];
-
-        for (const conn of connections) {
-            await run(
-                `INSERT INTO DocumentConnection (id, documentId, connectionId, type)
+    ];
+    for (const conn of connections) {
+        await run(
+            `INSERT INTO DocumentConnection (id, documentId, connectionId, type)
                  VALUES (?, ?, ?, ?)`,
-                [conn.id, conn.documentId, conn.connectionId, conn.type]
+            [conn.id, conn.documentId, conn.connectionId, conn.type]
+        );
+    }
+}
+
+async function populateDocumentStakeholderTable() {
+    await run("DELETE FROM DocumentStakeholder");
+    for (const doc of documents) {
+        for (const stakeholder of doc.stakeholders) {
+            const stakeholderId = `${doc.id}-${stakeholder}`.toLowerCase().replace(/\s+/g, '-');
+            await run(
+                `INSERT INTO DocumentStakeholder (id, documentId, stakeholder) 
+                     VALUES (?, ?, ?)`,
+                [stakeholderId, doc.id, stakeholder]
             );
         }
+    }
+}
 
+async function populateStakeholderTable() {
+    await run("DELETE FROM Stakeholder");
+    const stakeholders = ["Municipality", "LKAB", "Regional Authority", "Architecture Firms", "Citizens"];
+    for (const name of stakeholders) {
+        await run(
+            `INSERT INTO Stakeholder (id, name) VALUES (?,?)`,
+            [uuidv4(), name]
+        );
+    }
+}
+
+async function populateTypeTable() {
+    await run("DELETE FROM Type");
+    const Types = ["Prescriptive", "Technical", "Design", "Consultation"];
+    for (const name of Types) {
+        await run(
+            `INSERT INTO Type (id, name) VALUES (?,?)`,
+            [uuidv4(), name]
+        );
+    }
+}
+
+async function populateScaleTable() {
+    await run("DELETE FROM Scale");
+    const Scales = ["1:500", "1:5000", "1:50000", "1:1000", "1:10000"];
+    for (const name of Scales) {
+        await run(
+            `INSERT INTO Scale (id, name) VALUES (?,?)`,
+            [uuidv4(), name]
+        );
+    }
+}
+
+async function setConnectionCount() {
+    await run(`
+        UPDATE Document
+        SET connections = (
+            SELECT COUNT(*)
+            FROM DocumentConnection
+            WHERE documentId = Document.id OR connectionId = Document.id
+            )
+        `);
+}
+
+async function initializeDatabase() {
+    try {
+        await populateUserTable();
+        await populateDocumentTable();
+        await populateDocumentConnectionTable();
+        await populateDocumentStakeholderTable();
+        await populateStakeholderTable();
+        await populateTypeTable();
+        await populateScaleTable();
+        await setConnectionCount();
         console.log("Database initialized successfully with test data");
     } catch (error) {
         console.error("Error initializing database:", error);
@@ -174,6 +242,6 @@ const initializeDatabase = async () => {
     } finally {
         database.close();
     }
-};
+}
 
 export default initializeDatabase;

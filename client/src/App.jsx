@@ -1,13 +1,18 @@
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate} from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import FormDocument from './pages/CreateDocument';
 import Homepage from './pages/Homepage';
-import DocumentsList from './pages/DocumentsList'
+import UPHomepage from './components/UPHomepage';
+import DocumentsLayout from './layouts/DocumentsLayout'
+import DocumentsList from './components/List'
+import DocumentMap from './components/DocumentsMap'
 import Login from './pages/Login'
-import { useState, useEffect } from 'react';
-import API from './services/API.mjs';
-import { Navigate } from 'react-router-dom';
+import { AuthProvider } from "./layouts/AuthContext";
+import PrivateRoute from './layouts/PrivateRoute';
+import ScrollToTop from './components/ScrollToTop';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const location = useLocation();
@@ -18,73 +23,39 @@ function App() {
     isLoginPage && 'dark-header transparent-header'
   ].filter(Boolean).join(' ');
 
-  const [id,setId] = useState('');
-  
-  const [user, setUser] = useState(undefined);
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [loginMessage, setLoginMessage] = useState('');
-
-  const navigate = useNavigate()
-  
-  useEffect(() => {
-    const checkAuth = async () => {
-        try {
-            const u = await API.getUser()
-            //console.log(u)
-            setUser(u);
-            setLoggedIn(true);
-            navigate("/")
-        } catch {
-            setLoggedIn(false);
-            setUser(undefined);
-        }
-    };
-
-    checkAuth();
-}, []);
-
-
-  const doLogin = async (username,password)=>{
-    try{
-        const user = await API.login(username,password)
-        setLoggedIn(true)
-        setLoginMessage({msg:  `Welcome, ${user.name}!`, type: 'success'})
-        setUser(user)
-        navigate('/')
-    }catch(err){
-      setLoginMessage({msg: err, type: 'danger'})
-    }
-
-  }
-  /*
-  const handleLogout = async () => {
-    await API.logout();
-    setLoggedIn(false);
-    // clean up everything
-    setLoginMessage('');
-    setUser(undefined)
-    navigate('/');
-  };
-  */
-  
-
   return (
     <>
-    <Header className={headerClasses} logged={loggedIn}></Header>
+    <AuthProvider>
+    <Header className={headerClasses}></Header>
+    <ScrollToTop />
     <Routes>
-      <Route path='/' element={
-          <Homepage logged={loggedIn}/>
+      <Route path='/' element={<Homepage />}/>
+      <Route path='/UP' element={<UPHomepage />}/> {/* just for test */}
+      <Route path='/login' element={<Login />}/>
+      <Route path='/document/add' element={
+        <PrivateRoute><FormDocument mode={'add'}/></PrivateRoute>
       } />
-      <Route path='/login' element={
-          <Login login={doLogin} message={loginMessage} setMessage={setLoginMessage}/>
+      <Route path='/document/view/:id' element={
+        <FormDocument mode={'view'}/>
       } />
-      <Route path='/documents/add' element={loggedIn ? <FormDocument mode={'add'}/> : <Navigate to={'/login'}/> } />
-      <Route path='/documents/view/:id' element={ loggedIn ? <FormDocument mode={'view'} role={user.role}/> : <FormDocument mode={'view'}/>} />
-      <Route path='/documents' element={
-          <DocumentsList/>
-      } />
+      <Route path='/documents' element={<DocumentsLayout/>}>
+        <Route index element={<DocumentsList mode="list"/>} />
+        <Route path="map" element={<DocumentMap  mode="map"/>} /> 
+      </Route>
    </Routes>
    {isHomePage && <Footer />}
+   <ToastContainer 
+      position="top-right"
+      autoClose={5000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+    />
+   </AuthProvider>
    </>
   );
 }

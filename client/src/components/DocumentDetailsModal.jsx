@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Row, Col } from 'react-bootstrap';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 import { ListGroup } from 'react-bootstrap';
+import '../style/DocumentDetailsModal.css'
 function DocumentDetailsModal({ show, onHide, document }) {
+  const navigate = useNavigate();
+  const handleDocumentClick = (documentId) => navigate(`/document/view/${documentId}`);
 
   if (!document) return null;
 
@@ -15,7 +19,7 @@ function DocumentDetailsModal({ show, onHide, document }) {
       <Modal.Body>
         <Row className="mb-3">
           <Col md={6}>
-            <p><strong>Stakeholders:</strong> {document.stakeholders}</p>
+            <p><strong>Stakeholders:</strong> {document.stakeholders.join(', ')}</p>
             <p><strong>Type:</strong> {document.type}</p>
             <p><strong>Pages:</strong> {document.pages}</p>
           </Col>
@@ -33,22 +37,22 @@ function DocumentDetailsModal({ show, onHide, document }) {
         <ul>
           {document.connections.length > 0 ? (
             <div className="document-list">
-              <ListGroup className='relatedDocs'>
-                <ListGroup.Item className='relatedDocs-header'>
+              <ListGroup className='related'>
+                <ListGroup.Item className='related-header'>
                   <Row>
                     <Col md={3}>Title</Col>
                     <Col md={3}>Stakeholders</Col>
                     <Col md={2}>Type</Col>
-                    <Col md={2}>Connection type</Col>
+                    <Col>Connection type</Col>
                   </Row>
                 </ListGroup.Item>
                 {document.connections.map((doc) => (
                   <ListGroup.Item key={doc.id} >
                     <Row className="align-items-center">
-                      <Col md={3}>{doc.title}</Col>
-                      <Col md={3}>{doc.stakeholders}</Col>
+                      <Col md={3} className="doc-title" onClick={() => handleDocumentClick(doc.id)}>{doc.title}</Col>
+                      <Col md={3}>{doc.stakeholders.join(', ')}</Col>
                       <Col md={2}>{doc.type}</Col>
-                      <Col md={2}>{doc.connectionType}</Col>
+                      <Col>{doc.connectionType}</Col>
                     </Row>
                   </ListGroup.Item>
                 ))}

@@ -1,11 +1,21 @@
-const Stakeholder = {
-    LKAB: 'LKAB',
-    MUNICIPALITY: 'Municipality',
-    REGIONAL_AUTHORITY: 'Regional Authority',
-    ARCHITECTURE_FIRMS: 'Architecture Firms',
-    CITIZENS: 'Citizens',
-    OTHERS: 'Others'
-};
+import {v4 as uuidv4} from "uuid";
 
-Object.freeze(Stakeholder)
+class Stakeholder {
+    constructor() {
+        this.id = '';
+        this.name = '';
+    }
+
+    createFromObject(obj) {
+        this.id = uuidv4();
+        this.name = obj.name;
+    }
+
+    createFromDatabaseRow(row) {
+        this.id = row.id;
+        this.name = row.name;
+        this.createdAt = row.created_at;
+    }
+}
+
 export default Stakeholder;

@@ -13,7 +13,6 @@ class Document {
         this.coordinates = '';
         this.connections = '';
         this.createdAt = '';
-        this.isConnected = false;
     }
 
     createFromObject(obj) {
@@ -41,7 +40,6 @@ class Document {
         this.coordinates = row.coordinates ? JSON.parse(row.coordinates) : [];
         this.connections = row.connections;
         this.createdAt = row.created_at;
-        this.isConnected = row.is_connected === 1;
     }
 }
 
