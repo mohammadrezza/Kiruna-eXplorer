@@ -4,6 +4,9 @@ import path from 'path';
 
 import {body, param} from "express-validator";
 import moment from "moment";
+import storage from "../middlewares/storage.mjs";
+import Auth from "../auth/auth.mjs";
+import {validator} from "../middlewares/validator.mjs";
 import {
     createDocument,
     documentsList,
@@ -19,24 +22,12 @@ import {
     uploadDocument
 } from "../controllers/documentController.mjs";
 
-
-const storage = multer.diskStorage({
-  destination: path.join(process.cwd(), 'uploads'),
-  filename: (req, file, cb) => {
-      cb(null, `${Date.now()}-${file.originalname}`);
-  }
-});
-
-const upload = multer({ storage: storage });
-
-import Auth from "../auth/auth.mjs";
-import {validator} from "../middlewares/validator.mjs";
-
 class DocumentRouter {
     constructor(app) {
         this.app = app;
         this.auth = new Auth(app);
         this.router = express.Router()
+        this.upload = multer({ storage: storage });
         this.initRoutes()
     }
 
@@ -103,8 +94,9 @@ class DocumentRouter {
         this.router.get("/connectionTypes", documentConnectionTypesList);
         this.router.get('/:id', getDocumentWithId);
         this.router.get("/", documentsList);
-        this.router.post("/:documentId/files",upload.single('file'), uploadDocument);
-
+        this.router.post("/:documentId/files",
+            this.upload.single('file'),
+            uploadDocument);
     }
 
 }
