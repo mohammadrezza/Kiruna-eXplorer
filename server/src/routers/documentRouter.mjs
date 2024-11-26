@@ -1,7 +1,5 @@
 import express from "express";
 import multer from 'multer';
-import path from 'path';
-
 import {body, param} from "express-validator";
 import moment from "moment";
 import storage from "../middlewares/storage.mjs";
@@ -98,7 +96,5 @@ class DocumentRouter {
             this.upload.single('file'),
             uploadDocument);
     }
-
 }
-
 export default DocumentRouter;

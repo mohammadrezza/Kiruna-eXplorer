@@ -1,8 +1,8 @@
+import fs from 'fs/promises';
+import path from 'path';
 import {
     getDocuments,
     getDocument,
-    postDocument,
-    putDocument,
     postDocumentType,
     getDocumentTypes,
     getStakeholders,
@@ -11,14 +11,6 @@ import {
     postScale
 } from "../services/documentService.mjs";
 import DocumentConnectionType from "../components/documentConnectionType.mjs";
-import Stakeholder from "../components/stakeholder.mjs";
-
-import fs from 'fs/promises';
-
-import path from 'path';
-
-
-import {getDocuments, getDocument, postDocument, putDocument} from "../services/documentService.mjs";
 
 async function createDocument(req, res) {
     try {
@@ -254,7 +246,6 @@ async function uploadDocument(req, res) {
         const { documentId } = req.params;
         const { file } = req;
 
-
         if (!documentId) {
             return res.status(400).json({
                 success: false,
@@ -269,18 +260,10 @@ async function uploadDocument(req, res) {
             });
         }
 
-
         const uploadsDirectory = path.join(process.cwd(), 'uploads', documentId);
-
-
         await fs.mkdir(uploadsDirectory, { recursive: true });
-
-
         const filePath = path.join(uploadsDirectory, file.filename);
-
-
         await fs.rename(file.path, filePath);
-
         return res.status(200).json({
             success: true,
             message: 'File uploaded successfully',
