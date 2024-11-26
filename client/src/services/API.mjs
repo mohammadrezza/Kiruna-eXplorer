@@ -195,6 +195,33 @@ async function getDocuments() {
     }
 }
 
+async function getSortedDocuments(key,dir) {
+    try {
+        const response = await fetch(`${url}/documents?sort=${key},${dir}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const documents = await response.json();
+            return documents.data;
+        } else {
+            const errDetail = await response.json();
+            if (errDetail.error)
+                throw errDetail.error;
+            if (errDetail.message)
+                throw errDetail.message;
+
+            throw "Something went wrong while fetching documents.";
+        }
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
 async function getData(id) {
     const response = await fetch(`${url}/documents/${id}`)
     const data = await response.json();
@@ -307,6 +334,21 @@ async function addScale(scale){
 }
 
 
-const API ={AddDocumentDescription, getTypes, getDocuments, getData, EditDocumentDescription, getStake, getConnectionTypes, login,getUser,addType, addStakeholder,addScale,getScale}
+const API ={
+    AddDocumentDescription,
+    getTypes,
+    getDocuments,
+    getData, 
+    EditDocumentDescription, 
+    getStake, 
+    getConnectionTypes, 
+    login,
+    getUser,
+    addType, 
+    addStakeholder,
+    addScale,
+    getScale,
+    getSortedDocuments
+}
 
 export default API;
