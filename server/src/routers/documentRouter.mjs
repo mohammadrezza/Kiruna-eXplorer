@@ -4,11 +4,15 @@ import moment from "moment";
 import {
     createDocument,
     documentsList,
-    documentTypesList,
     documentConnectionTypesList,
     getDocumentWithId,
     updateDocument,
-    getStakeholdersList
+    getStakeholdersList,
+    createDocumentType,
+    createStakeholder,
+    createScale,
+    getScalesList,
+    getDocumentTypesList
 } from "../controllers/documentController.mjs";
 import Auth from "../auth/auth.mjs";
 import {validator} from "../middlewares/validator.mjs";
@@ -50,11 +54,6 @@ class DocumentRouter {
             this.auth.isLoggedIn,
             this.auth.isUrbanPlanner,
             createDocument);
-        this.router.get("/types", documentTypesList);
-        this.router.get("/connectionTypes", documentConnectionTypesList);
-        this.router.get("/stakeholders", getStakeholdersList);
-        this.router.get('/:id', getDocumentWithId);
-        this.router.get("/", documentsList);
         this.router.put("/:documentId",
             param('documentId').isString().notEmpty().withMessage('Document ID is required'),
             body('title').optional().isString().withMessage('Title must be a string'),
@@ -80,6 +79,15 @@ class DocumentRouter {
             this.auth.isLoggedIn,
             this.auth.isUrbanPlanner,
             updateDocument);
+        this.router.post('/types', createDocumentType);
+        this.router.get("/types", getDocumentTypesList);
+        this.router.post("/stakeholders", createStakeholder);
+        this.router.get("/stakeholders", getStakeholdersList);
+        this.router.post("/scales", createScale);
+        this.router.get("/scales", getScalesList);
+        this.router.get("/connectionTypes", documentConnectionTypesList);
+        this.router.get('/:id', getDocumentWithId);
+        this.router.get("/", documentsList);
     }
 
 }

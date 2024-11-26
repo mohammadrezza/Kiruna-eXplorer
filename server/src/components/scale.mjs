@@ -1,6 +1,6 @@
 import {v4 as uuidv4} from "uuid";
 
-class DocumentType {
+class Scale {
     constructor() {
         this.id = '';
         this.name = '';
@@ -18,4 +18,4 @@ class DocumentType {
     }
 }
 
-export default DocumentType;
+export default Scale;

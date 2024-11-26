@@ -390,6 +390,90 @@ async function getAllDocuments(documentId, title, page, size) {
     });
 }
 
+async function addType(type) {
+    return new Promise((resolve, reject) => {
+        const query = `INSERT INTO Type (id, name) VALUES (?, ?)`;
+
+        db.run(query, [type.id, type.name], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
+
+async function getAllTypes() {
+    return new Promise((resolve, reject) => {
+        const query = `SELECT name FROM Type`;
+
+        db.all(query, (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        })
+    });
+}
+
+async function addStakeHolder(stakeholder) {
+    return new Promise((resolve, reject) => {
+        const query = `INSERT INTO Stakeholder (id, name) VALUES (?, ?)`;
+
+        db.run(query, [stakeholder.id, stakeholder.name], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
+
+async function getAllStakeHolders() {
+    return new Promise((resolve, reject) => {
+        const query = `SELECT * FROM Stakeholder`;
+
+        db.all(query, (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        })
+    });
+}
+
+async function addScale(scale) {
+    return new Promise((resolve, reject) => {
+        const query = `INSERT INTO Scale (id, name) VALUES (?, ?)`;
+
+        db.run(query, [scale.id, scale.name], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
+
+async function getAllScales() {
+    return new Promise((resolve, reject) => {
+        const query = `SELECT * FROM Scale`;
+
+        db.all(query, (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        })
+    });
+}
+
 export {
     addDocument,
     addDocumentStakeholder,
@@ -400,5 +484,11 @@ export {
     editDocument,
     editDocumentConnection,
     deleteAllConnections,
-    deleteAllStakeholders
+    deleteAllStakeholders,
+    addType,
+    getAllTypes,
+    addStakeHolder,
+    getAllStakeHolders,
+    addScale,
+    getAllScales,
 };
