@@ -5,6 +5,7 @@ import { useOutletContext } from 'react-router-dom';
 import L from 'leaflet';
 import MunicipalDocuments from '@/components/DocumentsMap/MunicipalDocuments';
 import {MapMarkers, createClusterIcon} from '@/components/DocumentsMap/MapMarkers';
+import { kirunaBounds, initialMapCenter } from "@/utils/constants.js";
 import 'leaflet/dist/leaflet.css';
 import '@/style/mapCustom.css';
 
@@ -12,8 +13,7 @@ const DocumentMap = () => {
   const { list } = useOutletContext();
   const [showDocuments, setShowDocuments] = useState(false);
   
-  const kirunaCenter = [67.8558, 20.2253];
-  const kirunaBounds = L.latLngBounds([67.765, 20.090], [67.900, 20.420]);
+  const kirunaBoundsMap = L.latLngBounds(kirunaBounds);
   
   const municipalDocuments = list.filter(
     (doc) => doc.coordinates.lat === 0 && doc.coordinates.lng === 0
@@ -29,12 +29,12 @@ const DocumentMap = () => {
         toggleList={toggleList}
       />
       <MapContainer
-        center={kirunaCenter}
+        center={initialMapCenter}
         zoom={13}
         minZoom={11}
         maxZoom={17}
         style={{ height: '100vh', width: '100%' }}
-        maxBounds={kirunaBounds}
+        maxBounds={kirunaBoundsMap}
         maxBoundsViscosity={1.0}
       >
         <TileLayer

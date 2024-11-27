@@ -20,7 +20,7 @@ const CoordinatesForm = ({coordinates, mode, edit, errors,  onCoordinatesChange,
   };
 
   const toggleMap = () => {
-    if (areValidCoordinates(locationData) || (locationData.lat ===  '' && locationData.lng === '')) {
+    if ((locationData.lat ===  '' && locationData.lng === '') || areValidCoordinates(locationData)) {
       setShowMap(prev => !prev);
     }
   };
