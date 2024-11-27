@@ -3,20 +3,17 @@
     background-size: cover; /* Rende l'immagine proporzionata al contenitore */
     background-position: center; /* Centra l'immagine */
     background-repeat: no-repeat; /* Evita la ripetizione dell'immagine */
-    height: 100vh; /* Imposta l'altezza della pagina */
+    height: 100%; /* Imposta l'altezza della pagina */
     display: flex;
-    flex-direction: column;
-    justify-content: center; /* Allinea il contenuto verticalmente */
-    align-items: center; /* Allinea il contenuto orizzontalmente */
   }
 
 .UPHomepage .main-content{
-    padding: 40px;
-    margin-left: -205px;
-    position: fixed;
-    top: 90px;
-    left: 180px; 
-    z-index: 9999; 
+    position: relative;
+    top: 0px;
+    left: 0px; 
+    width: 2000px;
+    display: flex;
+    
 }
 .UPHomepage .search-section .row{
     margin-top: -50px;
@@ -24,10 +21,9 @@
 
 .search-bar {
     margin: 0 auto;
+    display: flex;
   }
-.input .search .form-control{
-    width: 800px;
-}
+
   .search-bar input {
     max-width: 1061px;
     margin-left: 45px;
@@ -44,7 +40,7 @@
     height: 70px;
     width: 70px;
     font-size: 1em;
-    background-color: var(--lily-white);
+    background-color: var(--lily-white) !important;
     color: #fff;
     border: 1px solid #ddd;
     border-left: unset;
@@ -52,15 +48,17 @@
     box-shadow: unset;
     cursor: unset;
   }
+
   .search-bar button :hover {
-    background: none;
+    background-image: unset !important;
     border: 1px solid #ddd;
   }
 
   .sendIcon{
+    margin-left: -10px;
     cursor: pointer;
     margin-top: 15px;
     background-color: gray;
     border-radius: 40px 40px 40px 40px;
   }
-  
+ 
