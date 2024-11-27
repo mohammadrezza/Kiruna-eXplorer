@@ -39,6 +39,22 @@ function DocumentsList() {
     setSearchQuery(e.target.value);
   };
 
+  const handleClickSearch = () => {
+    const loadSearch = async () => {
+      try {
+        console.log(searchQuery)
+        const documents = await API.searchDoc(searchQuery);
+        setList(documents);
+      } catch (error) {
+        console.error("Error loading data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadSearch();
+  }
+
 
   return (
     <div className="wrapper">
@@ -61,6 +77,7 @@ function DocumentsList() {
           <button
               className="search-button-list"
               aria-label="Search"
+              onClick={handleClickSearch}
             >
               Search
             </button>
