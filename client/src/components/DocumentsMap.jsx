@@ -3,8 +3,8 @@ import { MapContainer, TileLayer } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 import { useOutletContext } from 'react-router-dom';
 import L from 'leaflet';
-import MunicipalDocuments from '@/components/maps/MunicipalDocuments';
-import {MapMarkers, createClusterIcon} from '@/components/maps/MapMarkers';
+import MunicipalDocuments from '@/components/DocumentsMap/MunicipalDocuments';
+import {MapMarkers, createClusterIcon} from '@/components/DocumentsMap/MapMarkers';
 import 'leaflet/dist/leaflet.css';
 import '@/style/mapCustom.css';
 

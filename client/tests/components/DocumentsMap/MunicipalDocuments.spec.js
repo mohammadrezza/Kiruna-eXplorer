@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import MunicipalDocuments from '../../../src/components/maps/MunicipalDocuments';
+import MunicipalDocuments from '../../../src/components/DocumentsMap/MunicipalDocuments';
 import { mockDocuments } from '../../__mocks__/document';
 
 describe('MunicipalDocuments component', () => {

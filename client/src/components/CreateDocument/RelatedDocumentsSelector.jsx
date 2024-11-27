@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { ListGroup, Row, Col, Form } from 'react-bootstrap';
-import API from '../services/API.mjs';
-import '../style/RelatedDocumentSelector.css';
 import { PiFileMagnifyingGlassLight } from 'react-icons/pi';
-import DocumentDetailsModal from './DocumentDetailsModal';
+import DocumentDetailsModal from '@/components/DocumentDetailsModal';
+import API from '@/services/API.mjs';
+import '@/style/RelatedDocumentSelector.css';
 
 function RelatedDocumentsSelector({
   mode,

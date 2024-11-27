@@ -7,7 +7,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 import { AuthContext } from '@/layouts/AuthContext';
-import RelatedDocumentsSelector from '@/components/RelatedDocumentsSelector';
+import RelatedDocumentsSelector from '@/components/CreateDocument/RelatedDocumentsSelector';
 import LocationForm from '@/components/CreateDocument/LocationForm'; 
 import API from '@/services/API.mjs';
 import Document from '@/mocks/Document.mjs';
