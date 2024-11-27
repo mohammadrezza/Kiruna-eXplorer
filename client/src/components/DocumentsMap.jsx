@@ -37,9 +37,10 @@ const DocumentMap = () => {
         maxBounds={kirunaBoundsMap}
         maxBoundsViscosity={1.0}
       >
+        <TileLayer url="https://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}" />
         <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; OpenStreetMap contributors'
+          attribution='&copy; <a href="https://www.esri.com/en-us/home">Esri</a>'
+          url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
         />
         <MarkerClusterGroup iconCreateFunction={createClusterIcon} maxClusterRadius={50}>
           <MapMarkers list={list} />
