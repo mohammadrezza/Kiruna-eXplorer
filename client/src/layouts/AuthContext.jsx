@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import API from '../services/API.mjs';
+import API from '@/services/API.mjs';
 import Cookies from 'js-cookie'; // Importa la libreria js-cookie
 
 export const AuthContext = createContext();

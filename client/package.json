@@ -23,9 +23,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "jest",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired jest",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -56,10 +56,12 @@
     "@testing-library/react": "^16.0.1",
     "@types/jest": "^29.5.14",
     "babel-jest": "^29.7.0",
+    "babel-plugin-module-resolver": "^5.0.2",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "jest-transform-stub": "^2.0.0",
     "jsdom": "^25.0.1",
+    "react-app-rewired": "^2.2.1",
     "ts-jest": "^29.2.5"
   },
   "author": "",

@@ -2,7 +2,7 @@ import React from 'react';
 import { Marker, Popup } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import L from 'leaflet';
-import { iconData } from '../../utils/mapIcons';
+import { iconData } from '@/utils/mapIcons';
 
 const getIcons = () => {
   const icons = {};

@@ -3,8 +3,8 @@ import {useLocation, useNavigate } from 'react-router-dom';
 import { FaUserCircle } from 'react-icons/fa';
 import { Navbar } from 'react-bootstrap';
 import { IoLibraryOutline, IoExitOutline } from "react-icons/io5";
-import { AuthContext } from '../layouts/AuthContext';
-import '../style/Header.css'
+import { AuthContext } from '@/layouts/AuthContext';
+import '@/style/headerStyle.css'
 
 function Header({ className }) {
   const location = useLocation();
