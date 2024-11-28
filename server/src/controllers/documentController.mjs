@@ -25,9 +25,17 @@ async function createDocument(req, res) {
             type,
             language,
             coordinates,
+            area,
             connectionIds,
         } = req.body;
 
+        if ((area.length >= 2 && Object.keys(coordinates).length > 0) ||
+            (area.length === 0 && Object.keys(coordinates).length === 0)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Either area or coordinates must be provided'
+            })
+        }
         const document = await postDocument(title,
             description,
             stakeholders,
@@ -36,6 +44,7 @@ async function createDocument(req, res) {
             type,
             language,
             coordinates,
+            area,
             connectionIds);
 
         if (!document) {
@@ -133,7 +142,6 @@ async function documentsList(req, res) {
 async function updateDocument(req, res) {
 
     const {documentId} = req.params;
-
     const {
         title,
         description,
@@ -143,10 +151,18 @@ async function updateDocument(req, res) {
         type,
         language,
         coordinates,
+        area,
         connectionIds,
     } = req.body;
 
     try {
+        if ((area.length >= 2 && Object.keys(coordinates).length > 0) ||
+            (area.length === 0 && Object.keys(coordinates).length === 0)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Either area or coordinates must be provided'
+            })
+        }
 
         const previousDocument = await getDocument(documentId);
         if (!previousDocument) {
@@ -164,6 +180,7 @@ async function updateDocument(req, res) {
             type,
             language,
             coordinates,
+            area,
             connectionIds);
 
         if (!document) {
@@ -245,8 +262,8 @@ async function getScalesList(req, res) {
 
 async function uploadDocument(req, res) {
     try {
-        const { documentId } = req.params;
-        const { file } = req;
+        const {documentId} = req.params;
+        const {file} = req;
 
         if (!documentId) {
             return res.status(400).json({
@@ -263,7 +280,7 @@ async function uploadDocument(req, res) {
         }
 
         const uploadsDirectory = path.join(process.cwd(), 'uploads', documentId);
-        fs.mkdirSync(uploadsDirectory, { recursive: true });
+        fs.mkdirSync(uploadsDirectory, {recursive: true});
         const filePath = path.join(uploadsDirectory, file.filename);
         fs.renameSync(file.path, filePath);
         return res.status(200).json({
@@ -282,6 +299,7 @@ async function uploadDocument(req, res) {
         });
     }
 }
+
 export {
     createDocument,
     updateDocument,
