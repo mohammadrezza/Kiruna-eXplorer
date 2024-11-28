@@ -6,7 +6,7 @@ const AreaForm = ({coordinates, mode, edit}) => {
   return (
   <Row>
     <Row>
-      Area
+      Whole municipal?
     </Row>
     <Row>
       <MapAreaSelector></MapAreaSelector>

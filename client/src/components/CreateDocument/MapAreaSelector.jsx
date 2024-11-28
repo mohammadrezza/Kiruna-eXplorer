@@ -78,7 +78,7 @@ const MapAreaSelector = () => {
         </FeatureGroup>
       </MapContainer>
 
-      <div className="mt-4">
+      {/* <div className="mt-4">
         <h3 className="font-bold mb-2">Drawn Polygon:</h3>
         {polygon ? (
           <div className="mb-2 p-2 bg-gray-100 rounded">
@@ -92,7 +92,7 @@ const MapAreaSelector = () => {
         ) : (
           <p className="text-gray-500">No polygon drawn yet.</p>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

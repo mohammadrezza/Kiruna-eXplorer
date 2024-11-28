@@ -24,7 +24,7 @@ const MapMarkers = ({ list }) => {
   return list.map((doc) => {
     const { lat, lng } = doc.coordinates;
     if (!lat || !lng || isNaN(lat) || isNaN(lng)) return null;
-    const icon = icons[doc.type];
+    const icon = icons[doc.type] || icons['default'];
     return (
       <Marker key={doc.id} position={[parseFloat(lat), parseFloat(lng)]} icon={icon}>
         <Popup className="custom-marker-popup">
