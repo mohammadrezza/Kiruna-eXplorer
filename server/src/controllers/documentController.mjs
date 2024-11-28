@@ -8,7 +8,8 @@ import {
     getStakeholders,
     getScales,
     postStakeholder,
-    postScale
+    postScale,
+    postDocument
 } from "../services/documentService.mjs";
 import DocumentConnectionType from "../components/documentConnectionType.mjs";
 
