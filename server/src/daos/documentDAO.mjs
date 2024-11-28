@@ -277,7 +277,17 @@ async function getDocumentWithConnections(id) {
     });
 }
 
-async function getAllDocuments(documentId, title, page, size) {
+async function getAllDocuments(
+    documentId,
+    title,
+    page,
+    size,
+    sort,
+    documentTypes,
+    stakeholders,
+    issuanceDateStart,
+    issuanceDateEnd
+) {
     return new Promise(async (resolve, reject) => {
         try {
             // Calculate offset
@@ -285,24 +295,26 @@ async function getAllDocuments(documentId, title, page, size) {
 
             // Base query for total count
             let countQuery = `
-                SELECT COUNT(*) as total
+                SELECT COUNT(DISTINCT d.id) as total
                 FROM Document d
+                         LEFT JOIN DocumentStakeholder ds ON d.id = ds.documentId
                 WHERE 1=1
             `;
 
             // Base query for fetching documents
             let query = `
-                SELECT 
+                SELECT DISTINCT
                     d.*,
-                    CASE 
+                    CASE
                         WHEN ? IS NOT NULL AND EXISTS (
-                            SELECT 1 FROM DocumentConnection dc 
-                            WHERE (dc.documentId = d.id AND dc.connectionId = ?) 
-                            OR (dc.connectionId = d.id AND dc.documentId = ?)
+                            SELECT 1 FROM DocumentConnection dc
+                            WHERE (dc.documentId = d.id AND dc.connectionId = ?)
+                               OR (dc.connectionId = d.id AND dc.documentId = ?)
                         ) THEN 1
                         ELSE 0
-                    END as is_connected
+                        END as is_connected
                 FROM Document d
+                         LEFT JOIN DocumentStakeholder ds ON d.id = ds.documentId
                 WHERE 1=1
             `;
 
@@ -321,6 +333,7 @@ async function getAllDocuments(documentId, title, page, size) {
                 params.push(null, null, null);
             }
 
+            // Title filter
             if (title) {
                 query += ` AND d.title LIKE ?`;
                 params.push(`%${title}%`);
@@ -329,8 +342,90 @@ async function getAllDocuments(documentId, title, page, size) {
                 countParams.push(`%${title}%`);
             }
 
-            // Add ordering and pagination
-            query += ` ORDER BY d.created_at DESC LIMIT ? OFFSET ?`;
+            // Document Type filter
+            if (documentTypes && documentTypes.length > 0) {
+                query += ` AND d.type IN (${documentTypes.map(() => '?').join(',')})`;
+                params.push(...documentTypes);
+
+                countQuery += ` AND d.type IN (${documentTypes.map(() => '?').join(',')})`;
+                countParams.push(...documentTypes);
+            }
+
+            // Stakeholders filter
+            if (stakeholders && stakeholders.length > 0) {
+                query += ` AND ds.stakeholder IN (${stakeholders.map(() => '?').join(',')})`;
+                params.push(...stakeholders);
+
+                countQuery += ` AND ds.stakeholder IN (${stakeholders.map(() => '?').join(',')})`;
+                countParams.push(...stakeholders);
+            }
+
+            // Issuance Date Range filter
+            if (issuanceDateStart && issuanceDateEnd) {
+                query += ` AND (
+                    (
+                        substr(d.issuanceDate, 7, 4) BETWEEN substr(?, 7, 4) AND substr(?, 7, 4)
+                    ) AND (
+                        CASE 
+                            WHEN substr(?, 4, 2) = '00' AND substr(?, 4, 2) = '12' THEN 
+                                substr(d.issuanceDate, 4, 2) IN ('00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12')
+                            WHEN substr(?, 1, 2) = '00' AND substr(?, 1, 2) = '12' THEN 
+                                substr(d.issuanceDate, 1, 2) IN ('00', '01')
+                            ELSE 
+                                d.issuanceDate BETWEEN ? AND ?
+                        END
+                    )
+                )`;
+                params.push(
+                    issuanceDateStart, issuanceDateEnd,
+                    issuanceDateStart, issuanceDateEnd,
+                    issuanceDateStart, issuanceDateEnd,
+                    issuanceDateStart, issuanceDateEnd
+                );
+
+                countQuery += ` AND (
+                    (
+                        substr(d.issuanceDate, 7, 4) BETWEEN substr(?, 7, 4) AND substr(?, 7, 4)
+                    ) AND (
+                        CASE 
+                            WHEN substr(?, 4, 2) = '00' AND substr(?, 4, 2) = '12' THEN 
+                                substr(d.issuanceDate, 4, 2) IN ('00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12')
+                            WHEN substr(?, 1, 2) = '00' AND substr(?, 1, 2) = '12' THEN 
+                                substr(d.issuanceDate, 1, 2) IN ('00', '01')
+                            ELSE 
+                                d.issuanceDate BETWEEN ? AND ?
+                        END
+                    )
+                )`;
+                countParams.push(
+                    issuanceDateStart, issuanceDateEnd,
+                    issuanceDateStart, issuanceDateEnd,
+                    issuanceDateStart, issuanceDateEnd,
+                    issuanceDateStart, issuanceDateEnd
+                );
+            }
+
+            // Sorting
+            if (sort) {
+                const [sortColumn, sortOrder] = sort.split(',');
+                // Whitelist of allowed columns to prevent SQL injection
+                const allowedColumns = ['title', 'issuanceDate', 'type', 'created_at'];
+                const allowedOrders = ['asc', 'desc'];
+
+                if (
+                    allowedColumns.includes(sortColumn) &&
+                    allowedOrders.includes(sortOrder.toLowerCase())
+                ) {
+                    query += ` ORDER BY d.${sortColumn} ${sortOrder.toUpperCase()}`;
+                } else {
+                    query += ` ORDER BY d.created_at DESC`;
+                }
+            } else {
+                query += ` ORDER BY d.created_at DESC`;
+            }
+
+            // Add pagination
+            query += ` LIMIT ? OFFSET ?`;
             params.push(size, offset);
 
             // Get total count
@@ -389,6 +484,7 @@ async function getAllDocuments(documentId, title, page, size) {
         }
     });
 }
+
 
 async function addType(type) {
     return new Promise((resolve, reject) => {
