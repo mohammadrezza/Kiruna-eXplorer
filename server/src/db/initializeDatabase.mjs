@@ -27,10 +27,13 @@ const documents = [
         issuanceDate: "15-01-2024",
         type: "Prescriptive",
         language: "English",
-        coordinates: {
-            lat: 67.8558,
-            lng: 20.2253
-        },
+        coordinates: {},
+        area: [
+            [0.0 , 1.1],
+            [1 , 2],
+            [3 , 4],
+            [0.0 , 1.1]
+        ],
         stakeholders: ["Municipality", "LKAB"]
     },
     {
@@ -45,6 +48,7 @@ const documents = [
             lat: 67.8504,
             lng: 20.1761
         },
+        area: [],
         stakeholders: ["LKAB", "Regional Authority"]
     },
     {
@@ -59,6 +63,7 @@ const documents = [
             lat: 67.8490,
             lng: 20.2459
         },
+        area: [],
         stakeholders: ["Municipality", "Architecture Firms"]
     },
     {
@@ -73,6 +78,7 @@ const documents = [
             lat: 67.8575,
             lng: 20.2256
         },
+        area: [],
         stakeholders: ["Citizens", "Municipality"]
     },
     {
@@ -87,6 +93,7 @@ const documents = [
             lat: 67.8516,
             lng: 20.2371
         },
+        area: [],
         stakeholders: ["Regional Authority"]
     }
 ];
@@ -114,8 +121,8 @@ async function populateDocumentTable() {
     await run("DELETE FROM Document");
     for (const doc of documents) {
         await run(
-            `INSERT INTO Document (id, title, description, scale, issuanceDate, type, language, coordinates)
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+            `INSERT INTO Document (id, title, description, scale, issuanceDate, type, language, coordinates, area)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 doc.id,
                 doc.title,
@@ -124,7 +131,8 @@ async function populateDocumentTable() {
                 doc.issuanceDate,
                 doc.type,
                 doc.language,
-                JSON.stringify(doc.coordinates)
+                JSON.stringify(doc.coordinates),
+                JSON.stringify(doc.area)
             ]
         );
     }
