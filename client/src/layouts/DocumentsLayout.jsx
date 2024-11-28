@@ -3,6 +3,7 @@ import {Button} from 'react-bootstrap';
 import { useNavigate, Outlet, useLocation } from 'react-router-dom';
 import { LiaThListSolid, LiaMapMarkedAltSolid } from "react-icons/lia";
 import { AuthContext } from '../layouts/AuthContext';
+import FilterModal from '../components/FilterModal';
 import API from '../services/API.mjs';
 import '../style/DocumentsList.css';
 
@@ -15,6 +16,7 @@ function DocumentsList() {
   const [loading, setLoading] = useState(false)
   const isList = location.pathname === '/documents';
   const [searchQuery, setSearchQuery] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(()=>{
     const loadData = async () => {
@@ -55,6 +57,10 @@ function DocumentsList() {
     loadSearch();
   }
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
 
   return (
     <div className="wrapper">
@@ -88,10 +94,14 @@ function DocumentsList() {
         </div>
       </div>
       <div className="filter-container">
-        <Button className="filter-button">Filters</Button>
+        <Button className="filter-button" onClick={()=>setShowModal(true)}>Filters</Button>
       </div>
       <Outlet context={{list, loading}} />
       </div>
+      <FilterModal
+          show={showModal}
+          onHide={handleCloseModal}
+            />
     </div>
   );
 }

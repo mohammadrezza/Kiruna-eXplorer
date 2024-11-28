@@ -1,5 +1,5 @@
 import React, { useState,useEffect,useContext, useRef } from 'react';
-import { Form, Button, Row, Col, Modal, ListGroup, InputGroup, Table, FormControl } from 'react-bootstrap';
+import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useNavigate, useParams} from 'react-router-dom'
 import { PiNotePencilThin } from "react-icons/pi";
 import dayjs from 'dayjs'
@@ -106,10 +106,6 @@ function FormDocument(props) {
     const loadData = async () => {
       try {
         const [types, documents, stake, sca] = await Promise.all([API.getTypes(), API.getDocuments(), API.getStake(), API.getScale()]);
-        console.log(types)
-        console.log(documents)
-        console.log(stake)
-        console.log(sca)
         setAllTypes(types);
         setAllStake(stake);
         setAllScale(sca);
