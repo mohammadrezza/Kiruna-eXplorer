@@ -8,7 +8,7 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
   const storedUser = JSON.parse(Cookies.get('user') || 'null'); // Legge il valore dal cookie
   const [user, setUser] = useState(storedUser);
-  const [loading, setLoading] = useState(true);
+  const isAuthenticated = !!user;
   /*
   useEffect(() => {
     if (!storedUser) {
@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, loading, logout }}>
+    <AuthContext.Provider value={{ user, login, isAuthenticated, logout }}>
       {children}
     </AuthContext.Provider>
   );

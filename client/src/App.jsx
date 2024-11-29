@@ -1,10 +1,10 @@
+import React, { useContext } from 'react';
 import { Routes, Route, useLocation, Navigate} from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import FormDocument from './pages/CreateDocument';
 import Homepage from './pages/Homepage';
-import UPHomepage from './components/UPHomepage';
 import DocumentsLayout from './layouts/DocumentsLayout'
 import DocumentsList from './components/List'
 import DocumentMap from './components/DocumentsMap'

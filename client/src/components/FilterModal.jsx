@@ -147,7 +147,7 @@ function FilterModal({ show, onHide, document }) {
                 Cancel
               </Button>
               <Button variant="primary" className="filter-modal-submit">
-                Show Results
+                Apply Filters
               </Button>
             </div>
           </Modal.Body>

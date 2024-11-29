@@ -12,7 +12,8 @@
 .custom-navbar>hr {
   width: 355px;
   height: 1px;
-  color: var(--dark-grey);
+  opacity: 1;
+  color: var(--demo-black);
 }
 
 .custom-navbar > h3 {
@@ -20,8 +21,6 @@
   font-size: 32px;
   font-weight: 700;
   font-family: "Times";
-  text-shadow: -1px -1px 0 var(--grey), 1px -1px 0 var(--grey), 1px 1px 0 var(--grey),
-      1px 1px 0 var(--grey);
   color: var(--demo-black); /* Text color */
   text-align: center;
   margin: 0;
@@ -38,10 +37,6 @@
   height: 44px;
   color: var(--dark-grey);
   margin-left: 20px;
-  cursor: pointer;
-}
-.profile-icon:hover{
-  color: var(--blue);
 }
 
 .dark-header{
@@ -70,7 +65,7 @@
 
 .user-avatar {
   font-size: 2.5rem;
-  color: #007bff;
+  color: var(--blue);
 }
 
 .user-details {
@@ -82,12 +77,12 @@
 .username {
   font-size: 0.9rem;
   font-weight: bold;
-  color: #333;
+  color: var(--demo-black);
 }
 
 .role {
   font-size: 0.8rem;
-  color: #666;
+  color: var(--demo-black);
 }
 
 .profile-icon {
@@ -96,9 +91,12 @@
 }
 
 .logout-icon {
-  margin-left: 15px;
+  margin-left: 10px;
+  height: 40px;
+  width: 40px;
+  color: var(--demo-black);
+  cursor: pointer;
+}
+.logout-icon:hover{
   color: red;
 }
-
-
-

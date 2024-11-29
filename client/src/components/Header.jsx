@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import {useLocation, useNavigate } from 'react-router-dom';
 import { FaUserCircle } from 'react-icons/fa';
 import { Navbar } from 'react-bootstrap';
-import { IoLibraryOutline, IoExitOutline } from "react-icons/io5";
+import { IoLogOutSharp } from "react-icons/io5";
 import { AuthContext } from '@/layouts/AuthContext';
 import '@/style/headerStyle.css'
 
@@ -40,8 +40,8 @@ function Header({ className }) {
               <span className="role">{user.role || 'Ruolo non specificato'}</span>
             </div>
             <FaUserCircle className="user-avatar" />
-            <IoExitOutline
-              className="profile-icon logout-icon"
+            <IoLogOutSharp
+              className="logout-icon"
               onClick={handleLogoutClick}
               title="Logout"
             />
