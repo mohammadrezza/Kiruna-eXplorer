@@ -1,6 +1,6 @@
 import React, { useState,useEffect, useContext } from 'react';
 import {Button} from 'react-bootstrap';
-import { useNavigate, Outlet, useLocation } from 'react-router-dom';
+import { useNavigate, Outlet, useLocation, useSearchParams } from 'react-router-dom';
 import { LiaThListSolid, LiaMapMarkedAltSolid } from "react-icons/lia";
 import { AuthContext } from '../layouts/AuthContext';
 import FilterModal from '../components/FilterModal';
@@ -11,6 +11,7 @@ function DocumentsList() {
 
   const navigate = useNavigate();
   const location = useLocation();
+  let [searchParams, setSearchParams] = useSearchParams();
   const { user } = useContext(AuthContext);
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false)
@@ -21,7 +22,8 @@ function DocumentsList() {
   useEffect(()=>{
     const loadData = async () => {
       try {
-        const documents = await API.getDocuments();
+        console.log(searchParams.get('title'))
+        const documents = (searchParams.get('title') ? await API.getDocuments() : await API.searchDoc(searchParams.get('title')));
         setList(documents);
       } catch (error) {
         console.error("Error loading data:", error);
@@ -44,7 +46,6 @@ function DocumentsList() {
   const handleClickSearch = () => {
     const loadSearch = async () => {
       try {
-        console.log(searchQuery)
         const documents = await API.searchDoc(searchQuery);
         setList(documents);
       } catch (error) {
