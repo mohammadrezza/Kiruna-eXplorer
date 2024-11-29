@@ -293,23 +293,47 @@ function FormDocument(props) {
   const handleSelectScaleChange = (selectedOption) => {
     setScale(selectedOption);
   };
-  
   const handleConnectionTypeSelect = (documentId, selectedConnectionType) => {
-    setSelectedConnectionTypes(prevSelected => {
-      // Verifica se il documento è già presente nella lista
-      const existingDocIndex = prevSelected.findIndex(item => item.id === documentId);
-      
+    console.log("Tipo selezionato:", selectedConnectionType);
+  
+    setSelectedConnectionTypes((prevSelected) => {
+      // Trova il documento esistente
+      const existingDocIndex = prevSelected.findIndex((item) => item.id === documentId);
+      console.log("Precedente stato:", prevSelected);
+  
       if (existingDocIndex !== -1) {
-        // Se il documento è già selezionato, aggiorna il tipo di connessione
+        // Aggiorna tipi di connessione per un documento esistente
         const updatedSelected = [...prevSelected];
-        updatedSelected[existingDocIndex] = { id: documentId, type: selectedConnectionType };
+        const documentConnections = updatedSelected[existingDocIndex];
+  
+        // Assicurati che "type" sia un array, altrimenti inizializzalo
+        if (!Array.isArray(documentConnections.type)) {
+          documentConnections.type = [];
+        }
+  
+        // Rimuovi il tipo se già presente, altrimenti aggiungilo
+        if (documentConnections.type.includes(selectedConnectionType)) {
+          documentConnections.type = documentConnections.type.filter(
+            (type) => type !== selectedConnectionType
+          );
+        } else {
+          documentConnections.type.push(selectedConnectionType);
+        }
+  
+        console.log("Aggiornato documento esistente:", updatedSelected);
         return updatedSelected;
       } else {
-        // Se il documento non è nella lista, aggiungilo
-        return [...prevSelected, { id: documentId, type: selectedConnectionType }];
+        // Aggiungi un nuovo documento con il tipo di connessione
+        const newState = [
+          ...prevSelected,
+          { id: documentId, type: [selectedConnectionType] },
+        ];
+        console.log("Nuovo stato aggiunto:", newState);
+        return newState;
       }
     });
   };
+  
   
   const handleEditChange=()=>{
     setEdit(true);
