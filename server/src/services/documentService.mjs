@@ -37,6 +37,7 @@ async function postDocument(
     type,
     language,
     coordinates,
+    area,
     connectionIds) {
 
     //creation logic
@@ -49,6 +50,7 @@ async function postDocument(
         type,
         language,
         coordinates,
+        area,
         connections: connectionIds.length,
     });
 
@@ -83,6 +85,7 @@ async function postDocument(
             type,
             language,
             coordinates,
+            area,
             connectionIds.length
         );
 
@@ -128,6 +131,7 @@ async function putDocument(
     type,
     language,
     coordinates,
+    area,
     connectionIds) {
 
     const document = new Document();
@@ -140,6 +144,7 @@ async function putDocument(
         type,
         language,
         coordinates,
+        area,
         connections: connectionIds.length,
     });
 
@@ -166,7 +171,7 @@ async function putDocument(
 
     try {
 
-        await editDocument(documentId, title, description, scale, issuanceDate, type, language, coordinates, connectionIds.length);
+        await editDocument(documentId, title, description, scale, issuanceDate, type, language, coordinates, area, connectionIds.length);
 
         await deleteAllStakeholders(documentId);
         let stakeholderPromises = [];
@@ -229,6 +234,7 @@ async function getDocument(id) {
             type: documentData[0].doc_type,
             language: documentData[0].doc_language,
             coordinates: documentData[0].doc_coordinates ? JSON.parse(documentData[0].doc_coordinates) : [],
+            area: documentData[0].doc_area ? JSON.parse(documentData[0].doc_area) : [],
             connections: [],
             files: files
         };
@@ -248,7 +254,8 @@ async function getDocument(id) {
                     type: row.conn_doc_type,
                     language: row.conn_language,
                     connections: row.conn_total_connections,
-                    coordinates: row.conn_coordinates ? JSON.parse(row.conn_coordinates) : []
+                    coordinates: row.conn_coordinates ? JSON.parse(row.conn_coordinates) : [],
+                    area: row.conn_area ? JSON.parse(row.conn_area) : []
                 });
             }
         }
