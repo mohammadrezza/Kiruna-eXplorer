@@ -497,7 +497,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/documents?documentId&page=1&size=10&sort=nameOfColumn,asc&name=nameOfDocument&documentType=foo,bar,baz&stakeholders=foo,bar,baz&issuanceDateStart=DD-MM-YYY&issanceDateEnd=DD-MM-YYY",
+					"raw": "{{host}}/documents?page=1&size=10&sort=nameOfColumn,asc&name=nameOfDocument&documentTypes=foo,bar,baz&stakeholders=foo,bar,baz&issuanceDateStart=02-02-2024&issuanceDateEnd=30-12-2024",
 					"host": [
 						"{{host}}"
 					],
@@ -507,7 +507,8 @@
 					"query": [
 						{
 							"key": "documentId",
-							"value": null
+							"value": null,
+							"disabled": true
 						},
 						{
 							"key": "page",
@@ -526,7 +527,7 @@
 							"value": "nameOfDocument"
 						},
 						{
-							"key": "documentType",
+							"key": "documentTypes",
 							"value": "foo,bar,baz"
 						},
 						{
@@ -535,12 +536,12 @@
 						},
 						{
 							"key": "issuanceDateStart",
-							"value": "DD-MM-YYY",
+							"value": "02-02-2024",
 							"description": "00-00-1996 , 00-06-1996 , 12-06-1996"
 						},
 						{
-							"key": "issanceDateEnd",
-							"value": "DD-MM-YYY",
+							"key": "issuanceDateEnd",
+							"value": "30-12-2024",
 							"description": "00-00-1996 , 00-06-1996 , 12-06-1996"
 						}
 					]
@@ -797,6 +798,41 @@
 			]
 		},
 		{
+			"name": "{{host}}/documents/:documentId/files",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": []
+						}
+					]
+				},
+				"url": {
+					"raw": "{{host}}/documents/:documentId/files",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"documents",
+						":documentId",
+						"files"
+					],
+					"variable": [
+						{
+							"key": "documentId",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "{{host}}/sessions/",
 			"request": {
 				"method": "POST",
@@ -977,35 +1013,18 @@
 			]
 		},
 		{
-			"name": "{{host}}/documents/:documentId/files",
+			"name": "{{host}}/sessions/",
 			"request": {
-				"method": "POST",
+				"method": "DELETE",
 				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "file",
-							"type": "file",
-							"src": []
-						}
-					]
-				},
 				"url": {
-					"raw": "{{host}}/documents/:documentId/files",
+					"raw": "{{host}}/sessions/",
 					"host": [
 						"{{host}}"
 					],
 					"path": [
-						"documents",
-						":documentId",
-						"files"
-					],
-					"variable": [
-						{
-							"key": "documentId",
-							"value": ""
-						}
+						"sessions",
+						""
 					]
 				}
 			},

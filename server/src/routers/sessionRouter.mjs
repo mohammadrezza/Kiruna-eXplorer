@@ -1,5 +1,5 @@
 import express from "express";
-import {login, getCurrentSession} from "../controllers/sessionController.mjs";
+import {login, getCurrentSession, logout} from "../controllers/sessionController.mjs";
 import {validator} from "../middlewares/validator.mjs";
 import {body} from "express-validator";
 import Auth from "../auth/auth.mjs";
@@ -23,6 +23,7 @@ class SessionRouter {
             validator,
             login);
         this.router.get("/", getCurrentSession);
+        this.router.delete("/", logout);
     }
 }
 

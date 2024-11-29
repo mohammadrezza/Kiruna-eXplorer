@@ -24,8 +24,28 @@ import DocumentType from "../components/documentType.mjs";
 import Scale from "../components/scale.mjs";
 import Stakeholder from "../components/stakeholder.mjs";
 
-async function getDocuments(documentId, title, page, size) {
-    return await getAllDocuments(documentId, title, page, size);
+async function getDocuments(
+    documentId,
+    title,
+    page,
+    size,
+    sort,
+    documentTypes,
+    stakeholders,
+    issuanceDateStart,
+    issuanceDateEnd
+) {
+    return await getAllDocuments(
+        documentId,
+        title,
+        page,
+        size,
+        sort,
+        documentTypes,
+        stakeholders,
+        issuanceDateStart,
+        issuanceDateEnd
+    );
 }
 
 async function postDocument(
