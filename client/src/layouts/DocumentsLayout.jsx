@@ -23,7 +23,7 @@ function DocumentsList() {
     const loadData = async () => {
       try {
         console.log(searchParams.get('title'))
-        const documents = (searchParams.get('title') ? await API.getDocuments() : await API.searchDoc(searchParams.get('title')));
+        const documents = (!searchParams.get('title') ? await API.getDocuments() : await API.searchDoc(searchParams.get('title')));
         setList(documents);
       } catch (error) {
         console.error("Error loading data:", error);

@@ -56,3 +56,49 @@
   background: transparent !important;
 }
 
+.custom-navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  font-size: 2.5rem;
+  color: #007bff;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.username {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.role {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.profile-icon {
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.logout-icon {
+  margin-left: 15px;
+  color: red;
+}
+
+
+
