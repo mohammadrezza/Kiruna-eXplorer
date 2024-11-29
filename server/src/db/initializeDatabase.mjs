@@ -27,10 +27,14 @@ const documents = [
         issuanceDate: "15-01-2024",
         type: "Prescriptive",
         language: "English",
-        coordinates: {
-            lat: 67.8558,
-            lng: 20.2253
-        },
+        coordinates: {},
+        area: [
+            [21.69194695167596, 68.35724780305975],
+            [21.54917409493575, 68.23875558911203],
+            [22.069888100957826, 68.14519971920333],
+            [22.253365836108713, 68.28328191108102],
+            [21.69194695167596, 68.35724780305975]
+        ],
         stakeholders: ["Municipality", "LKAB"]
     },
     {
@@ -41,10 +45,17 @@ const documents = [
         issuanceDate: "01-02-2024",
         type: "Technical",
         language: "Swedish",
-        coordinates: {
-            lat: 67.8504,
-            lng: 20.1761
-        },
+        coordinates: {},
+        area: [
+            [18.902225775836797, 68.23660847661984],
+            [18.86276146217881, 68.13686243924516],
+            [19.005025845272485, 68.04303402582252],
+            [19.46093569683245, 67.98504534417518],
+            [19.757833038974894, 68.03846856195338],
+            [19.534816340871856, 68.213280867641],
+            [19.2029703824835, 68.32977485093448],
+            [18.902225775836797, 68.23660847661984]
+        ],
         stakeholders: ["LKAB", "Regional Authority"]
     },
     {
@@ -59,6 +70,7 @@ const documents = [
             lat: 67.8490,
             lng: 20.2459
         },
+        area: [],
         stakeholders: ["Municipality", "Architecture Firms"]
     },
     {
@@ -73,6 +85,7 @@ const documents = [
             lat: 67.8575,
             lng: 20.2256
         },
+        area: [],
         stakeholders: ["Citizens", "Municipality"]
     },
     {
@@ -87,6 +100,7 @@ const documents = [
             lat: 67.8516,
             lng: 20.2371
         },
+        area: [],
         stakeholders: ["Regional Authority"]
     }
 ];
@@ -114,8 +128,8 @@ async function populateDocumentTable() {
     await run("DELETE FROM Document");
     for (const doc of documents) {
         await run(
-            `INSERT INTO Document (id, title, description, scale, issuanceDate, type, language, coordinates)
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+            `INSERT INTO Document (id, title, description, scale, issuanceDate, type, language, coordinates, area)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 doc.id,
                 doc.title,
@@ -124,7 +138,8 @@ async function populateDocumentTable() {
                 doc.issuanceDate,
                 doc.type,
                 doc.language,
-                JSON.stringify(doc.coordinates)
+                JSON.stringify(doc.coordinates),
+                JSON.stringify(doc.area)
             ]
         );
     }

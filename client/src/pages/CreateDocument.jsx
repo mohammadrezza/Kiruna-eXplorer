@@ -1,19 +1,18 @@
-import React, { useState,useEffect,useContext } from 'react';
-import { Form, Button, Row, Col, Modal, ListGroup, InputGroup, Table, FormControl } from 'react-bootstrap';
+import React, { useState,useEffect,useContext, useRef } from 'react';
+import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useNavigate, useParams} from 'react-router-dom'
-import { PiMapPinSimpleAreaFill, PiPen, PiNotePencilThin, PiArrowRight } from "react-icons/pi";
+import { PiNotePencilThin } from "react-icons/pi";
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { AuthContext } from '../layouts/AuthContext';
-import MapPointSelector from '../components/MapPointSelector'
-import RelatedDocumentsSelector from '../components/RelatedDocumentsSelector';
-import API from '../services/API.mjs';
-import Document from '../mocks/Document.mjs';
-import { dmsToDecimal } from '../utils/convertToDecimal';
-import '../style/CreateDocument.css'
 import Select from 'react-select'
-import { showSuccess, showError } from '../utils/notifications';
 import CreatableSelect from 'react-select/creatable'
+import { AuthContext } from '@/layouts/AuthContext';
+import RelatedDocumentsSelector from '@/components/CreateDocument/RelatedDocumentsSelector';
+import LocationForm from '@/components/CreateDocument/LocationForm'; 
+import API from '@/services/API.mjs';
+import Document from '@/mocks/Document.mjs';
+import { showSuccess, showError } from '@/utils/notifications';
+import '../style/CreateDocument.css'
 
 function FormDocument(props) {
 
@@ -22,7 +21,7 @@ function FormDocument(props) {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
-
+  const locationFormRef = useRef();
   const [docID,setDocID] = useState(props.mode==='view' ? id : '');
   const [title,setTitle] = useState('');
   const [stakeholder,setStakeholder] = useState([]);
@@ -40,8 +39,6 @@ function FormDocument(props) {
   const [month,setMonth] = useState('')
   const [year,setYear] = useState('')
   const [edit,setEdit] = useState(false);
-  const [showMap, setShowMap] = useState(false);
-  const [isWholeMunicipal, setIsWholeMunicipal] = useState(false);
   const [allDocuments, setAllDocuments] = useState([]); 
   const [selectedDocuments, setSelectedDocuments] = useState([]); 
   const [relatedDocuments, setRelatedDocuments] = useState([]); 
@@ -109,10 +106,6 @@ function FormDocument(props) {
     const loadData = async () => {
       try {
         const [types, documents, stake, sca] = await Promise.all([API.getTypes(), API.getDocuments(), API.getStake(), API.getScale()]);
-        console.log(types)
-        console.log(documents)
-        console.log(stake)
-        console.log(sca)
         setAllTypes(types);
         setAllStake(stake);
         setAllScale(sca);
@@ -136,9 +129,7 @@ function FormDocument(props) {
           setType(ty);
           const lan = {value:doc.language, label:doc.language}
           setLanguage(lan);
-          if(doc.coordinates.lat === 0 && doc.coordinates.lng === 0 )
-            setIsWholeMunicipal(true)
-          else setCoordinates(doc.coordinates);
+          setCoordinates(doc.coordinates);
           const [dd, mm, yyyy] = doc.issuanceDate.split("-");
           if(dd!='00')
             setDay(dd)
@@ -159,64 +150,8 @@ function FormDocument(props) {
     loadData();
   }, [props.mode, docID, id]);
 
-  const areCoordinatesValid = (coordinates) => {
-    const kirunaBounds = [
-    [67.765, 20.090],
-    [67.900, 20.420]
-  ];
-
-  // Extract bounds
-  const [sw, ne] = kirunaBounds; // southwest and northeast corners
-  const isValidLat = coordinates.lat >= sw[0] && coordinates.lat <= ne[0];
-  const isValidLng = coordinates.lng >= sw[1] && coordinates.lng <= ne[1];
-
-  // Validate coordinates are numbers and within bounds
-  return (
-    /^-?\d*\.?\d*$/.test(coordinates.lat) &&
-    /^-?\d*\.?\d*$/.test(coordinates.lng) &&
-    isValidLat &&
-    isValidLng
-  );
-  };
-  const handleDMSConversion = (coordinates, setCoordinates, setErrors) => {
-    try {
-      const decimalCoordinate = dmsToDecimal(`${coordinates.lat} ${coordinates.lng}`);
-      setCoordinates(decimalCoordinate);
-      setErrors([]);
-    } catch (error) {
-      setErrors({ coordinates: 'Not correct format' });
-      setCoordinates({ lat: '', lng: '' });
-    }
-  };
-  const toggleMap = () => {
-    if (areCoordinatesValid(coordinates) || coordinates === '') {
-      setShowMap(prev => !prev);
-      setIsWholeMunicipal(false)
-    } else {
-      handleDMSConversion(coordinates, setCoordinates, setErrors);
-      setShowMap(prev => !prev);
-      setIsWholeMunicipal(false)
-    }
-  };
-  const handleCoordinatesChange = (newCoordinates) => {
-    setErrors([]);
-    setCoordinates(newCoordinates)
-    setIsWholeMunicipal(false)
-  };
-  const handleDMSChange = () => {
-    if (areCoordinatesValid(coordinates) || coordinates === '') {
-      setErrors([]);
-    } else {
-      handleDMSConversion(coordinates, setCoordinates, setErrors);
-    }
-  };
-  const handleSelectWholeMunicipal = () => {
-    setIsWholeMunicipal(!isWholeMunicipal)
-    setCoordinates({ lat: '', lng: '' });
-    setErrors([]);
-  };
   const handleRelatedDocumentClick = (relatedDocumentId) => navigate(`/document/view/${relatedDocumentId}`);
-
+  const handleCoordinatesChange = (newCoordinates) => { setCoordinates(newCoordinates)};
   const validateForm = () => {
     const validationErrors = {};
     if (!title.trim()) validationErrors.title = 'Title cannot be empty!';
@@ -224,10 +159,12 @@ function FormDocument(props) {
     if (scale=== null) validationErrors.scale = 'Scale cannot be empty!';
     if (type === null) validationErrors.type = 'Type cannot be empty!';
     if (!description.trim()) validationErrors.description = 'Description cannot be empty!';
-    if (!areCoordinatesValid(coordinates) && !isWholeMunicipal) validationErrors.coordinates = 'Not correct format or not inside Kiruna area';
     if(day && (!month && !year)) validationErrors.day ='Insert month and year before the day'
     if(month && !year) validationErrors.month ='Insert year before the day'
-    //if(!isWholeMunicipal && (!coordinates.lat || !coordinates.lng)) validationErrors.coordinates = 'Coordinates cannot be empty!';
+    if (locationFormRef.current) {
+      const isValid = locationFormRef.current.areValidCoordinates(coordinates);
+      if(!isValid) validationErrors.coordinates ='Not correct format or not inside Kiruna area'
+    }
     console.log(validationErrors);
     return validationErrors;
   };
@@ -243,7 +180,6 @@ function FormDocument(props) {
       setErrors(validationErrors);
       return;
     }
-    if(isWholeMunicipal) {coordinates.lat = 0; coordinates.lng = 0}
     setErrors([]);
     const st=[];
     stakeholder.forEach((s) =>st.push(s.value))
@@ -518,76 +454,14 @@ function FormDocument(props) {
             </Col>
           </Row>
           <Row>
-            <Row>
-              <Col md={4}>
-                <Form.Group  className='form-group' controlId="description">
-                  <Form.Label>Coordinates{(props.mode === 'add' || edit) && <span>*</span>}</Form.Label>
-                  <Form.Control 
-                    type="text" 
-                    placeholder="latitude (e.g., 67.8558)" 
-                    minLength={2} 
-                    value={coordinates.lat} 
-                    onChange={(event) => handleCoordinatesChange({lat:event.target.value, lng:coordinates.lng})}
-                    //isInvalid={!!errors.coordinates} 
-                    readOnly={(!edit && props.mode !=='add') || showMap}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.coordinates}
-                  </Form.Control.Feedback>
-                  </Form.Group>
-                </Col>
-                <Col md={4}>
-                  <Form.Group  className='form-group margin-top-3' controlId="description">
-                    <Form.Control 
-                      type="text" 
-                      placeholder="longitude (e.g., 20.2253)" 
-                      minLength={2} 
-                      value={coordinates.lng} 
-                      onChange={(event) => handleCoordinatesChange({lat: coordinates.lat, lng:event.target.value})}
-                      isInvalid={!!errors.coordinates} 
-                      readOnly={(!edit && props.mode !== 'add' )|| showMap}
-                      />
-                  </Form.Group>
-                </Col>
-                <Col md={3}>
-                {(props.mode === 'add' || edit) && (
-                  <div className='convert-btn  margin-top-3' onClick={handleDMSChange}>
-                    <PiArrowRight />
-                    convert DMS format</div>  
-                )}
-                </Col>
-              </Row>
-              <Row>
-                <Col md={4}>
-                {(props.mode === 'add' || edit || isWholeMunicipal) && (
-                  <div className="map-view-trigger">
-                    <Form.Group controlId="formBasicCheckbox">
-                      <Form.Check 
-                        type="checkbox" 
-                        label="Select the whole municipal" 
-                        disabled={!(props.mode === 'add' || edit)}
-                        checked={isWholeMunicipal} 
-                        onChange={handleSelectWholeMunicipal} 
-                      />
-                    </Form.Group>
-                  </div>
-                  )}
-                </Col>
-                <Col md={3}>
-                {(props.mode === 'add' || edit) && (
-                  <div className="map-view-trigger" onClick={toggleMap}>
-                    {showMap ? (<PiPen />) : (<PiMapPinSimpleAreaFill />)}
-                    <span>{showMap ? 'Type coordinates' : 'Select on map'}</span>
-                  </div>
-                )}
-                </Col>
-              </Row>
-            {(showMap || (props.mode !== 'add' && !edit && !isWholeMunicipal)) && <MapPointSelector 
-              coordinates={coordinates}
+            <LocationForm
+              ref={locationFormRef} 
               mode={props.mode}
               edit={edit}
-              onCoordinatesChange={handleCoordinatesChange} 
-            />}
+              coordinates={coordinates}
+              handleCoordinatesChange={handleCoordinatesChange}
+              areas={[]}
+            />
           </Row>
           <Row className='mt-6'>
             <Row>

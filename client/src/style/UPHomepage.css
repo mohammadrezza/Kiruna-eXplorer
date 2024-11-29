@@ -1,5 +1,5 @@
 .UPHomepage {
-    background-image: url('up_background.png'); /* Percorso relativo dell'immagine */
+    background-image: url('../assets/up_background.png'); /* Percorso relativo dell'immagine */
     background-size: cover; /* Rende l'immagine proporzionata al contenitore */
     background-position: center; /* Centra l'immagine */
     background-repeat: no-repeat; /* Evita la ripetizione dell'immagine */

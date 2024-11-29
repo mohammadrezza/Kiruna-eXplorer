@@ -11,6 +11,7 @@ class Document {
         this.type = '';
         this.language = '';
         this.coordinates = '';
+        this.area = [];
         this.connections = '';
         this.createdAt = '';
     }
@@ -25,6 +26,7 @@ class Document {
         this.type = obj.type;
         this.language = obj.language;
         this.coordinates = obj.coordinates;
+        this.area = obj.area;
         this.connections = obj.connections;
     }
 
@@ -38,6 +40,7 @@ class Document {
         this.type = row.type;
         this.language = row.language;
         this.coordinates = row.coordinates ? JSON.parse(row.coordinates) : [];
+        this.area = row.area ? JSON.parse(row.area) : [];
         this.connections = row.connections;
         this.createdAt = row.created_at;
     }

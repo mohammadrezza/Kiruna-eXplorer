@@ -11,6 +11,7 @@ import Document from "../components/document.mjs";
  * @param {string} type - document type
  * @param {string} language - document language
  * @param {string} coordinates - document coordinates
+ * @param {array} area - document coordinates
  * @param {number} connections - document connections
  * @returns {Promise} -
  */
@@ -24,11 +25,12 @@ function addDocument(
     type,
     language,
     coordinates,
+    area,
     connections
 ) {
     return new Promise((resolve, reject) => {
         const query =
-            "INSERT INTO Document (id, title, description, scale, issuanceDate, type, language, coordinates, connections) VALUES (?,?,?,?,?,?,?,?,?)";
+            "INSERT INTO Document (id, title, description, scale, issuanceDate, type, language, coordinates, area, connections) VALUES (?,?,?,?,?,?,?,?,?,?)";
         db.run(
             query,
             [
@@ -40,6 +42,7 @@ function addDocument(
                 type,
                 language,
                 JSON.stringify(coordinates),
+                JSON.stringify(area),
                 connections,
             ],
             (err) => {
@@ -135,6 +138,7 @@ function editDocument(
     type,
     language,
     coordinates,
+    area,
     connections
 ) {
     return new Promise((resolve, reject) => {
@@ -148,6 +152,7 @@ function editDocument(
                 type = COALESCE(?, type),
                 language = COALESCE(?, language),
                 coordinates = COALESCE(?, coordinates),
+                area = COALESCE(?, area),
                 connections = COALESCE(?, connections)
             WHERE
                 id = ?
@@ -163,6 +168,7 @@ function editDocument(
                 type,
                 language,
                 JSON.stringify(coordinates),
+                JSON.stringify(area),
                 connections,
                 id
             ],
@@ -245,12 +251,14 @@ async function getDocumentWithConnections(id) {
                 d.type as doc_type,
                 d.language as doc_language,
                 d.coordinates as doc_coordinates,
+                d.area as doc_area,
                 cd.id as conn_id,
                 cd.title as conn_title,
                 cd.scale as conn_scale,
                 cd.issuanceDate as conn_issuanceDate,
                 cd.language as conn_language,
                 cd.coordinates as conn_coordinates,
+                cd.area as conn_area,
                 dc.type as connection_type,
                 cd.type as conn_doc_type,
                 (

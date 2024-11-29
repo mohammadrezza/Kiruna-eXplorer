@@ -17,7 +17,7 @@ jest.mock('react-leaflet-markercluster', () => ({
   default: ({ children }) => <div>{children}</div>,
 }));
 
-jest.mock('../../src/components/maps/MapMarkers.jsx', () => ({
+jest.mock('../../src/components/DocumentsMap/MapMarkers.jsx', () => ({
   MapMarkers: () => <div>MapMarkers Mock</div>,
   createClusterIcon: jest.fn(),
 }));

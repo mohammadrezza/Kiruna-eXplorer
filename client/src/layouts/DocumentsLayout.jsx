@@ -1,8 +1,9 @@
 import React, { useState,useEffect, useContext } from 'react';
 import {Button} from 'react-bootstrap';
-import { useNavigate, Outlet, useLocation } from 'react-router-dom';
+import { useNavigate, Outlet, useLocation, useSearchParams } from 'react-router-dom';
 import { LiaThListSolid, LiaMapMarkedAltSolid } from "react-icons/lia";
 import { AuthContext } from '../layouts/AuthContext';
+import FilterModal from '../components/FilterModal';
 import API from '../services/API.mjs';
 import '../style/DocumentsList.css';
 
@@ -10,16 +11,19 @@ function DocumentsList() {
 
   const navigate = useNavigate();
   const location = useLocation();
+  let [searchParams, setSearchParams] = useSearchParams();
   const { user } = useContext(AuthContext);
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false)
   const isList = location.pathname === '/documents';
   const [searchQuery, setSearchQuery] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(()=>{
     const loadData = async () => {
       try {
-        const documents = await API.getDocuments();
+        console.log(searchParams.get('title'))
+        const documents = (!searchParams.get('title') ? await API.getDocuments() : await API.searchDoc(searchParams.get('title')));
         setList(documents);
       } catch (error) {
         console.error("Error loading data:", error);
@@ -37,6 +41,25 @@ function DocumentsList() {
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
+  };
+
+  const handleClickSearch = () => {
+    const loadSearch = async () => {
+      try {
+        const documents = await API.searchDoc(searchQuery);
+        setList(documents);
+      } catch (error) {
+        console.error("Error loading data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadSearch();
+  }
+
+  const handleCloseModal = () => {
+    setShowModal(false);
   };
 
 
@@ -61,6 +84,7 @@ function DocumentsList() {
           <button
               className="search-button-list"
               aria-label="Search"
+              onClick={handleClickSearch}
             >
               Search
             </button>
@@ -71,10 +95,14 @@ function DocumentsList() {
         </div>
       </div>
       <div className="filter-container">
-        <Button className="filter-button">Filters</Button>
+        <Button className="filter-button" onClick={()=>setShowModal(true)}>Filters</Button>
       </div>
       <Outlet context={{list, loading}} />
       </div>
+      <FilterModal
+          show={showModal}
+          onHide={handleCloseModal}
+            />
     </div>
   );
 }

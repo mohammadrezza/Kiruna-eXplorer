@@ -28,6 +28,10 @@ function List(){
     loadDoc();
   }, [sortConfig]);
 
+  useEffect(()=>{
+    setSortedList(list);
+  }, [list])
+
   const handleSort = (key) => {
     let direction = "asc";
     if (sortConfig.key === key && sortConfig.direction === "asc") {

@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import API from '../services/API.mjs';
+import API from '@/services/API.mjs';
 import Cookies from 'js-cookie'; // Importa la libreria js-cookie
 
 export const AuthContext = createContext();
@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
   const storedUser = JSON.parse(Cookies.get('user') || 'null'); // Legge il valore dal cookie
   const [user, setUser] = useState(storedUser);
   const [loading, setLoading] = useState(true);
-  
+  /*
   useEffect(() => {
     if (!storedUser) {
       const fetchUser = async () => {
@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
       fetchUser();
     }
   }, [storedUser]);
-
+*/
   const login = async (username, password) => {
     try {
       const loggedInUser = await API.login(username, password);
@@ -41,6 +41,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
+      console.log('logout')
       Cookies.remove('user'); // Rimuove il cookie
     } catch (error) {
       throw error;

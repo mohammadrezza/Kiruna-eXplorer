@@ -3,8 +3,8 @@ import {useLocation, useNavigate } from 'react-router-dom';
 import { FaUserCircle } from 'react-icons/fa';
 import { Navbar } from 'react-bootstrap';
 import { IoLibraryOutline, IoExitOutline } from "react-icons/io5";
-import { AuthContext } from '../layouts/AuthContext';
-import '../style/Header.css'
+import { AuthContext } from '@/layouts/AuthContext';
+import '@/style/headerStyle.css'
 
 function Header({ className }) {
   const location = useLocation();
@@ -13,7 +13,6 @@ function Header({ className }) {
   const { logout } = useContext(AuthContext); // Access login function from AuthContext
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
-
   const navigateTo = (path) => navigate(path);
 
   const handleLogoutClick = async () => {
@@ -28,15 +27,34 @@ function Header({ className }) {
 
   return (
     <Navbar 
-      className={`custom-navbar ${className || ''}`} 
+      className={`custom-navbar ${(user ? '' : (className || ''))}`} 
       variant="light" 
       data-testid="header-wrapper">
       <hr></hr>
       <h3 onClick={() => navigateTo('/')}>Kiruna eXplorer</h3>
       <div className='custom-navbar-actions'>
-        {!isDocumentsListPage && <IoLibraryOutline className="profile-icon" onClick={() => navigateTo('/documents')}></IoLibraryOutline>}
-        {(!isLoginPage && !user) && <FaUserCircle className="profile-icon" data-testid="profile-icon" onClick={() => navigateTo('/login')}/>}
-        {(!isLoginPage && user) && <IoExitOutline className="profile-icon" onClick={handleLogoutClick}>Logout</IoExitOutline>}
+      {user ? (
+          <div className="user-info">
+            <div className="user-details">
+              <span className="username">{user.username || 'Utente'}</span>
+              <span className="role">{user.role || 'Ruolo non specificato'}</span>
+            </div>
+            <FaUserCircle className="user-avatar" />
+            <IoExitOutline
+              className="profile-icon logout-icon"
+              onClick={handleLogoutClick}
+              title="Logout"
+            />
+          </div>
+        ) : (
+          !isLoginPage && (
+            <FaUserCircle
+              className="profile-icon"
+              data-testid="profile-icon"
+              onClick={() => navigateTo('/login')}
+            />
+          )
+        )}
       </div>
       
     </Navbar>
