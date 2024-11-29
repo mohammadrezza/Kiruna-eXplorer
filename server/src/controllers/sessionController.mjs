@@ -34,7 +34,17 @@ async function getCurrentSession(req, res, next) {
     return next(new UnauthorizedError())
 }
 
+async function logout(req, res, next) {
+    if (req.isAuthenticated()) {
+        return new Promise((resolve, reject) => {
+            req.logout(() => resolve(null))
+        }).then(() => res.status(200).send())
+    }
+    return next(new UnauthorizedError())
+}
+
 export {
     login,
-    getCurrentSession
+    getCurrentSession,
+    logout
 }

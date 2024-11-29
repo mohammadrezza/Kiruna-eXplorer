@@ -110,9 +110,17 @@ async function documentConnectionTypesList(req, res) {
 
 async function documentsList(req, res) {
     try {
-        const {documentId, title} = req.query;
-        const page = parseInt(req.query.page) || 1;
-        const size = parseInt(req.query.size) || 10;
+        const {
+            documentId,
+            title,
+            page = 1,
+            size = 10,
+            sort,
+            documentTypes,
+            stakeholders,
+            issuanceDateStart,
+            issuanceDateEnd
+        } = req.query;
 
         // Validate pagination parameters
         if (page < 1 || size < 1) {
@@ -122,7 +130,25 @@ async function documentsList(req, res) {
             });
         }
 
-        const result = await getDocuments(documentId, title, page, size);
+        // Convert comma-separated strings to arrays
+        const processedDocumentTypes = documentTypes
+            ? documentTypes.split(',').map(type => type.trim())
+            : null;
+        const processedStakeholders = stakeholders
+            ? stakeholders.split(',').map(stakeholder => stakeholder.trim())
+            : null;
+
+        const result = await getDocuments(
+            documentId,
+            title,
+            page,
+            size,
+            sort,
+            processedDocumentTypes,
+            processedStakeholders,
+            issuanceDateStart,
+            issuanceDateEnd
+        );
 
         return res.status(200).json({
             success: true,
