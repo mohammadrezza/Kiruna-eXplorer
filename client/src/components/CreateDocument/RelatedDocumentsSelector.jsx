@@ -375,9 +375,9 @@
 import React, { useState, useEffect } from "react";
 import { ListGroup, Row, Col, Form, Button } from "react-bootstrap";
 import API from "@/services/API.mjs";
-import "../../style/RelatedDocumentSelector.css";
+import "@/style/RelatedDocumentSelector.css";
 import { PiFileMagnifyingGlassLight } from "react-icons/pi";
-import DocumentDetailsModal from "../DocumentDetailsModal.jsx";
+import DocumentDetailsModal from "@/components/DocumentDetailsModal";
 
 function RelatedDocumentsSelector({
   mode,

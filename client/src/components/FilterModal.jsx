@@ -198,8 +198,8 @@ function FilterModal({ show, onHide, handleFilter }) {
               >
                 Cancel
               </Button>
-              <Button variant="primary" className="filter-modal-submit" onClick={handleSubmitFilter}>
-                Show Results
+              <Button variant="primary" className="filter-modal-submit">
+                Apply Filters
               </Button>
             </div>
           </Modal.Body>

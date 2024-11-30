@@ -6,7 +6,7 @@
 .form-container {
     
     background-color: var(--white);
-    width: calc(1440px - 62px);
+    width: calc(1200px - 62px);
     padding: 84px;
     padding-bottom: 180px;
     margin: 0 auto;
