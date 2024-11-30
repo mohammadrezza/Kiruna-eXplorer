@@ -2,6 +2,7 @@ import React, { useState,useEffect,useContext, useRef } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useNavigate, useParams} from 'react-router-dom'
 import { PiNotePencilThin } from "react-icons/pi";
+import { RiArrowGoBackFill } from "react-icons/ri";
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import Select from 'react-select'
@@ -13,6 +14,7 @@ import API from '@/services/API.mjs';
 import Document from '@/mocks/Document.mjs';
 import { showSuccess, showError } from '@/utils/notifications';
 import '../style/CreateDocument.css'
+import { CiSaveUp2 } from "react-icons/ci";
 
 function FormDocument(props) {
 
@@ -55,7 +57,7 @@ function FormDocument(props) {
       fontFamily: 'Open Sans',                  // Font
       fontSize: '24px',                          // Dimensione del font
       color: 'var(--demo-black)',                // Colore del testo
-      maxWidth: '505px',                         // Larghezza massima
+      maxWidth: '450px',                         // Larghezza massima
       width: '100%',                             // Larghezza dinamica
       height: '51px',                            // Altezza del campo
       paddingLeft: '20px',                       // Padding sinistro
@@ -171,8 +173,8 @@ function FormDocument(props) {
 
 
 
-  const handleSubmit = (event) =>{
-    event.preventDefault();
+  const handleSubmit = () =>{
+    //event.preventDefault();
     const validationErrors = validateForm();
     
     if(Object.keys(validationErrors).length>0){
@@ -317,8 +319,10 @@ function FormDocument(props) {
     <div className="wrapper">
       <div className="form-container">
         <h2 className='form-container-title'>
+          <RiArrowGoBackFill className='back-button' onClick={()=>navigate(-1)}/>
           {props.mode==='view' ? title : 'New Document'}
           {(props.mode==='view' && edit===false && rights) && <PiNotePencilThin className='edit-button' onClick={() => handleEditChange() }/>}
+          {(props.mode==='add' || (edit===true && rights)) && <CiSaveUp2 className='edit-button' onClick={() => handleSubmit() }/>}
           </h2>
         <Form onSubmit={handleSubmit} data-testid="form-component">
           <Row>
@@ -396,7 +400,7 @@ function FormDocument(props) {
                         {errors.month}
                       </Form.Control.Feedback>
                     </Col>
-                    <Col xs={4}>
+                    <Col xs={5}>
                       <Form.Control type="text" placeholder="YYYY" value={year} onChange={(event) => setYear(event.target.value)}  isInvalid={!!errors.year} readOnly={!edit && props.mode!='add'}/>
                     </Col>
                 </Row>
