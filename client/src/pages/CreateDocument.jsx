@@ -170,6 +170,18 @@ function FormDocument(props) {
       const isValid = locationFormRef.current.areValidCoordinates(coordinates);
       if(!isValid) validationErrors.coordinates ='Not correct format or not inside Kiruna area'
     }
+    selectedConnectionTypes.forEach(connection => {
+      const documentId = connection.id;
+      const connectionType = connection.type;
+  
+      const connectionsForDocument = selectedConnectionTypes.filter(
+        (item) => item.id === documentId
+      );
+  
+      if (connectionsForDocument.length === 1 && connectionsForDocument[0].type === "") {
+        validationErrors[documentId] = `Connection type for document with ID ${documentId} is missing!`;
+      }
+    });
     console.log(validationErrors);
     return validationErrors;
   };
@@ -177,8 +189,13 @@ function FormDocument(props) {
 
 
   const handleSubmit = () =>{
-    //event.preventDefault();
     const validationErrors = validateForm();
+
+    //event.preventDefault();
+    const connections = selectedConnectionTypes.filter(
+      (connection) => connection.type !== ""
+    );
+  
     
     if(Object.keys(validationErrors).length>0){
       console.log("Form not submitted"); // Debugging
@@ -200,9 +217,9 @@ function FormDocument(props) {
     
     const doc = new Document(docID, title.trim(), st, scale, issuanceDate, type.value, language.value, description);
     if(props.mode==='add'){
-      API.AddDocumentDescription(doc, selectedConnectionTypes, coordinates, area);
+      API.AddDocumentDescription(doc, connections, coordinates, area);
     } else if (props.mode === 'view') {
-      API.EditDocumentDescription(doc, selectedConnectionTypes , coordinates, area, docID );
+      API.EditDocumentDescription(doc, connections, coordinates, area, docID );
     }
     showSuccess('Action successful!')
     setTimeout(()=>{

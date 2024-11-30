@@ -439,9 +439,39 @@ function RelatedDocumentsSelector({
     setCurrentDocument(null);
   };
 
-  const handleRowClick = (docId) => {
-    const isSelected = selectedDocuments.includes(docId);
+  // const handleRowClick = (docId) => {
+  //   if (mode === "view" && !edit) {
+  //     onRelatedDocumentClick(docId); // View document details
+  //     return;
+  //   }
+  //   const isSelected = selectedDocuments.includes(docId);
     
+  //   if (isSelected) {
+  //     // Deseleziona il documento
+  //     onDocumentSelect(docId); // Rimuove il documento da selectedDocuments
+  //     setSelectedConnectionTypes((prev) =>
+  //       prev.filter((item) => item.id !== docId) // Rimuove tutti i tipi di connessione associati a questo documento
+  //     );
+  //   } else {
+  //     // Seleziona il documento
+  //     onDocumentSelect(docId); // Aggiunge il documento a selectedDocuments
+  //     // Aggiungi un nuovo oggetto con tipo vuoto
+  //     setSelectedConnectionTypes((prev) => [
+  //       ...prev,
+  //       { id: docId, type: "" }, // Aggiungi un nuovo elemento con tipi vuoti
+  //     ]);
+  //   }
+  //   console.log(selectedConnectionTypes);
+  // };
+  
+  const handleRowClick = (docId, e) => {
+    if (mode === "view" && !edit) {
+      onRelatedDocumentClick(docId); // View document details
+      return;
+    }
+    if (e.target.type === "checkbox") return; // Don't trigger row click when clicking checkbox
+
+    const isSelected = selectedDocuments.includes(docId);
     if (isSelected) {
       // Deseleziona il documento
       onDocumentSelect(docId); // Rimuove il documento da selectedDocuments
@@ -457,12 +487,29 @@ function RelatedDocumentsSelector({
         { id: docId, type: "" }, // Aggiungi un nuovo elemento con tipi vuoti
       ]);
     }
+    console.log(selectedConnectionTypes);
   };
-  
-  
-  const handleCheckboxChange = (docId) => {
-    handleRowClick(docId); // Reindirizza al comportamento di selezione/deselezione della riga
+
+  const handleCheckboxChange = (docId, e) => {
+    e.stopPropagation(); // Prevent row click event
+    const isSelected = selectedDocuments.includes(docId);
+    if (isSelected) {
+      // Deseleziona il documento
+      onDocumentSelect(docId);
+      setSelectedConnectionTypes((prev) =>
+        prev.filter((item) => item.id !== docId)
+      );
+    } else {
+      // Seleziona il documento
+      onDocumentSelect(docId);
+      setSelectedConnectionTypes((prev) => [
+        ...prev,
+        { id: docId, type: "" }, // Add empty type when selecting
+      ]);
+    }
+    console.log(selectedConnectionTypes);
   };
+
 
   const handleConnectionTypeToggle = (docId, type) => {
     setSelectedConnectionTypes((prev) =>
@@ -507,8 +554,8 @@ function RelatedDocumentsSelector({
                     type="checkbox"
                     id={`checkbox-${doc.id}`}
                     checked={selectedDocuments.includes(doc.id)}
-                    onChange={() => {
-                     handleCheckboxChange(doc.id)
+                    onChange={(e) => {
+                     handleCheckboxChange(doc.id,e)
                     }}
                   />) : (num + 1)
                 }
@@ -529,8 +576,7 @@ function RelatedDocumentsSelector({
                           .filter((item) => item.id === doc.id)
                           .map((item) => item.type)
                       };
-                        console.log(selectedConnectionTypes);
-                        console.log(relatedDoc);
+                        // console.log(selectedConnectionTypes);
                       return (
                         <Button
                           key={type}
