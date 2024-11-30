@@ -4,6 +4,11 @@ async function login(username, password) {
   return await fetchRequest('/sessions/', 'POST', { username, password });
 }
 
+async function logout() {
+  return await fetchRequest('/sessions/', 'DELETE');
+}
+
+
 async function getUser() {
   return await fetchRequest('/sessions/');
 }
@@ -67,6 +72,20 @@ async function getSortedDocuments(key, dir) {
     return response.data
 }
 
+async function getFIilteredDocuments(filters) {
+  let query = ``;
+  if(filters.stakeholders)
+    query = query.concat('stakeholders=',filters.stakeholders)
+  if(filters.documentTypes)
+    query = query.concat((query!==''? '&' : ''),'documentTypes=',filters.documentTypes)
+  if(filters.issuanceDateStart)
+    query = query.concat((query!==''? '&' : ''),'issuanceDateStart=',filters.issuanceDateStart)
+  if(filters.issuanceDateEnd)
+    query = query.concat((query!==''? '&' : ''),'issuanceDateEnd=',filters.issuanceDateEnd)
+  const response = await fetchRequest(`/documents?${query}`);
+  return response.data
+}
+
 async function searchDoc(name) {
     const response = await fetchRequest(`/documents?title=${name}`);
     return response.data;
@@ -100,6 +119,7 @@ async function addScale(scale) {
 
 const API = {
   login,
+  logout,
   getUser,
   getTypes,
   getDocuments,
@@ -114,6 +134,7 @@ const API = {
   getScale,
   getSortedDocuments,
   searchDoc,
+  getFIilteredDocuments
 };
 
 export default API;

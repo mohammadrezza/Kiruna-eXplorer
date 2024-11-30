@@ -42,6 +42,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       console.log('logout')
+      API.logout()
       Cookies.remove('user'); // Rimuove il cookie
     } catch (error) {
       throw error;

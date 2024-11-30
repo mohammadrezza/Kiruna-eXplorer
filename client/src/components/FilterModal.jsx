@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Row, Col, Form } from 'react-bootstrap';
 import dayjs from 'dayjs';
-import { useNavigate } from 'react-router-dom';
+import API from '../services/API.mjs';
 import Select from 'react-select'
 import '../style/FilterModal.css'
 
 import '../style/DocumentDetailsModal.css'
-function FilterModal({ show, onHide, document }) {
+function FilterModal({ show, onHide, handleFilter }) {
     const customStyles = {
         control: (base) => ({
           ...base,
@@ -51,15 +51,56 @@ function FilterModal({ show, onHide, document }) {
         }),
       };
 
-  const navigate = useNavigate();
-
   const [loading,setLoading] = useState(true)
+  const [stakeholders,setStakeholders] = useState([])
+  const [types,setTypes] = useState([])
+  const [issuanceDateStart, setissuanceDateStart] = useState('');
+  const [issuanceDateEnd, setissuanceDateEnd] = useState('');
+  const [allTypes,setAllTypes] = useState([]);
+  const [allStake,setAllStake] = useState([]);
 
-  const options = [
-    { value: "architecture_firms", label: "Architecture Firms" },
-    { value: "engineering_firms", label: "Engineering Firms" },
-    // Aggiungi altre opzioni se necessario
-  ];
+
+  useEffect(()=>{
+    const loadData = async () => {
+      try {
+        const [types, stake] = await Promise.all([API.getTypes(), API.getStake()]);
+        setAllTypes(types);
+        setAllStake(stake);
+      } catch (error) {
+        console.error("Error loading data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  const handleSelectStakeChange = (selectedOptions) => {
+    setStakeholders(selectedOptions);
+  };
+
+  const handleSelectTypeChange = (selectedOption) => {
+    setTypes(selectedOption);
+  };
+
+  
+  const handleSubmitFilter = () => {
+    const filters = { documentTypes: '', stakeholders: '', issuanceDateStart: '', issuanceDateEnd: '' }
+    let st = ''
+    stakeholders.forEach((s) =>{st= st.concat(s.value,',')} )
+    filters.stakeholders=st.slice(0,-1);
+    let dt = '';
+    types.forEach((t) => dt = dt.concat(t.value,','))
+    filters.documentTypes=dt.slice(0,-1);
+    filters.issuanceDateEnd=issuanceDateEnd;
+    filters.issuanceDateStart=issuanceDateStart;
+    handleFilter(filters)
+    onHide()
+  };
+  
+
+  
 
 
 
@@ -72,17 +113,19 @@ function FilterModal({ show, onHide, document }) {
                 <Button variant="close" onClick={onHide} aria-label="Close" />
             </Modal.Header>
           <Modal.Body className="p-5">
-            <Form.Group className="mb-4">
+          <Form.Group className="mb-4">
           <Form.Label className="filter-modal-label">Stakeholders</Form.Label>
-          <Select
+          {!loading && <Select
             isMulti
-            options={options}
+            options={allStake}
+            value={stakeholders}
+            onChange={handleSelectStakeChange}
             placeholder="Select stakeholders"
             styles={customStyles}
-          />
+          />}
         </Form.Group>
 
-        {/* Scale */}
+        {/* Scale 
         <Form.Group className="mb-4">
           <Form.Label className="filter-modal-label">Scale</Form.Label>
           <Form.Control
@@ -91,6 +134,7 @@ function FilterModal({ show, onHide, document }) {
             className="filter-modal-input"
           />
         </Form.Group>
+        */}
 
         {/* Issuance date */}
         <Form.Group className="mb-4">
@@ -100,6 +144,9 @@ function FilterModal({ show, onHide, document }) {
             <Form.Control
                 type="date"
                 className="filter-modal-input"
+                value={issuanceDateStart}
+                onChange={(event) => 
+                  setissuanceDateStart(dayjs(event.target.value).format('DD-MM-YYYY'))}
                 placeholder="dd-mm-yyyy"
             />
             </div>
@@ -108,6 +155,9 @@ function FilterModal({ show, onHide, document }) {
             <Form.Label className="filter-modal-label">To</Form.Label>
             <Form.Control
                 type="date"
+                value={issuanceDateEnd}
+                onChange={(event) => 
+                  setissuanceDateEnd(dayjs(event.target.value).format('DD-MM-YYYY'))}
                 className="filter-modal-input"
                 placeholder="To"
             />
@@ -118,15 +168,17 @@ function FilterModal({ show, onHide, document }) {
         {/* Type */}
         <Form.Group className="mb-4">
           <Form.Label className="filter-modal-label">Type</Form.Label>
-          <Select
+          {!loading && <Select
             isMulti
-            options={options}
+            options={allTypes}
+            onChange={handleSelectTypeChange}
+            value={types}
             placeholder="Select type"
             styles={customStyles}
-          />
+          />}
         </Form.Group>
 
-        {/* Language */}
+        {/* Language 
         <Form.Group className="mb-4">
           <Form.Label className="filter-modal-label">Language</Form.Label>
           <Select
@@ -136,8 +188,8 @@ function FilterModal({ show, onHide, document }) {
             styles={customStyles}
           />
         </Form.Group>
-    
-            {/* Buttons */}
+    */}
+            
             <div className="d-flex justify-content-between align-items-center mt-4">
               <Button
                 variant="outline-secondary"
@@ -146,7 +198,7 @@ function FilterModal({ show, onHide, document }) {
               >
                 Cancel
               </Button>
-              <Button variant="primary" className="filter-modal-submit">
+              <Button variant="primary" className="filter-modal-submit" onClick={handleSubmitFilter}>
                 Show Results
               </Button>
             </div>

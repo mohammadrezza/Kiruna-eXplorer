@@ -18,6 +18,7 @@ function DocumentsList() {
   const isList = location.pathname === '/documents';
   const [searchQuery, setSearchQuery] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [filters,setFilters] = useState({ documentTypes: '', stakeholders: '', issuanceDateStart: '', issuanceDateEnd: '' })
 
   useEffect(()=>{
     const loadData = async () => {
@@ -56,6 +57,21 @@ function DocumentsList() {
     };
 
     loadSearch();
+  }
+
+  const handleClickFilter = (filters) => {
+    const loadFiltered = async () => {
+      try {
+        const documents = await API.getFIilteredDocuments(filters);
+        setList(documents);
+      } catch (error) {
+        console.error("Error loading data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadFiltered();
   }
 
   const handleCloseModal = () => {
@@ -102,6 +118,7 @@ function DocumentsList() {
       <FilterModal
           show={showModal}
           onHide={handleCloseModal}
+          handleFilter={handleClickFilter}
             />
     </div>
   );
