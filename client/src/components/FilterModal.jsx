@@ -93,8 +93,8 @@ function FilterModal({ show, onHide, handleFilter }) {
     let dt = '';
     types.forEach((t) => dt = dt.concat(t.value,','))
     filters.documentTypes=dt.slice(0,-1);
-    filters.issuanceDateEnd=issuanceDateEnd;
-    filters.issuanceDateStart=issuanceDateStart;
+    filters.issuanceDateEnd=dayjs(issuanceDateEnd).format('DD-MM-YYYY');
+    filters.issuanceDateStart=dayjs(issuanceDateStart).format('DD-MM-YYYY');
     handleFilter(filters)
     onHide()
   };
@@ -146,7 +146,7 @@ function FilterModal({ show, onHide, handleFilter }) {
                 className="filter-modal-input"
                 value={issuanceDateStart}
                 onChange={(event) => 
-                  setissuanceDateStart(dayjs(event.target.value).format('DD-MM-YYYY'))}
+                  setissuanceDateStart(event.target.value)}
                 placeholder="dd-mm-yyyy"
             />
             </div>
@@ -157,7 +157,7 @@ function FilterModal({ show, onHide, handleFilter }) {
                 type="date"
                 value={issuanceDateEnd}
                 onChange={(event) => 
-                  setissuanceDateEnd(dayjs(event.target.value).format('DD-MM-YYYY'))}
+                  setissuanceDateEnd(event.target.value)}
                 className="filter-modal-input"
                 placeholder="To"
             />

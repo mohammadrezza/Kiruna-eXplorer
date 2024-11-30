@@ -20,7 +20,7 @@ function DocumentsList() {
   const isList = location.pathname === '/documents';
   const [searchQuery, setSearchQuery] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [filters,setFilters] = useState({ documentTypes: '', stakeholders: '', issuanceDateStart: '', issuanceDateEnd: '' })
+  const [filter,setFilter] = useState({ documentTypes: '', stakeholders: '', issuanceDateStart: '', issuanceDateEnd: '' })
 
   useEffect(()=>{
     const loadData = async () => {
@@ -65,6 +65,7 @@ function DocumentsList() {
     const loadFiltered = async () => {
       try {
         const documents = await API.getFIilteredDocuments(filters);
+        setFilter(filters)
         setList(documents);
       } catch (error) {
         console.error("Error loading data:", error);
@@ -74,6 +75,12 @@ function DocumentsList() {
     };
 
     loadFiltered();
+  }
+
+  const handleDeleteFilter = (key) =>{
+    const f = filter;
+    f[key]='';
+    handleClickFilter(f)
   }
 
   const handleCloseModal = () => {
@@ -117,6 +124,23 @@ function DocumentsList() {
           <VscSettings />
           Filters
         </Button>
+        <div className="active-filters">
+            {Object.entries(filter).map(([key, value]) =>
+              value ? (
+                <div key={key} className="filter-tag">
+                  <span>{key}: {value}</span>
+                  <span
+                    className="remove-filter"
+                    onClick={() => {
+                      handleDeleteFilter(key)
+                    }}
+                  >
+                    ✕
+                  </span>
+                </div>
+              ) : null
+            )}
+        </div>
       </div>
       <Outlet context={{list, loading}} />
       </div>

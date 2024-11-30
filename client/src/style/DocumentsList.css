@@ -200,7 +200,8 @@
   /* Pulsante dei filtri */
   .filter-container {
     display: flex;
-    justify-content: flex-start;
+    align-items: center; /* Allinea il pulsante e i filtri verticalmente */
+    gap: 15px; /* Spazio tra il pulsante e i filtri */
     margin-top: 20px;
     margin-bottom: 45px;
   }
@@ -226,6 +227,39 @@
     color: var(--white);
     border-color: var(--light-grey);
   }
+
+  .active-filters {
+    display: flex;
+    flex-wrap: wrap; /* Permette ai filtri di andare su più righe se necessario */
+    gap: 10px; /* Spazio tra i filtri */
+}
+
+.filter-tag {
+  background-color: #438EF240;
+  font-family: 'Inter';
+  border-radius: 40px;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 400px;
+  color: var(--demo-black);
+  border: 1px solid #438EF2;
+  display: flex;
+  align-items: center;
+}
+
+.filter-tag span {
+  margin-right: 8px;
+}
+
+.filter-tag .remove-filter {
+  cursor: pointer;
+  color: var(--blue);
+  font-size: 16px;
+}
+
+.filter-tag .remove-filter:hover {
+  color: var(--dark-grey);
+}
 
   .map-view-documents {
     display: flex;
