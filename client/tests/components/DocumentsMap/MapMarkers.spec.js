@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { MapMarkers } from '../../../src/components/maps/MapMarkers';
+import { MapMarkers } from '../../../src/components/DocumentsMap/MapMarkers';
 import { Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import { mockDocuments } from '../../__mocks__/document';

@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
-import '../style/UPHomepage.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, createSearchParams } from 'react-router-dom';
 import { Row, Form, Col, Button } from 'react-bootstrap';
 import { PiFilePlus, PiMapTrifold } from 'react-icons/pi';
 import { IoLibraryOutline } from "react-icons/io5";
-import { AuthContext } from '../layouts/AuthContext';
 import { VscSend } from "react-icons/vsc";
+import { AuthContext } from '@/layouts/AuthContext';
+import '@/style/UPHomepage.css';
 
 function UPHomepage() {
   const navigate = useNavigate();
@@ -15,8 +15,11 @@ function UPHomepage() {
   const navigateTo = (path) => navigate(path);
 
   const handleSearch = () => {
-    console.log('Search query:', searchQuery);
-    // Implementa la logica di ricerca, se necessario
+    navigate({
+      pathname: "documents",
+      search: `?${createSearchParams({
+        title: searchQuery
+      })}`});
   };
 
   return (

@@ -28,6 +28,10 @@ function List(){
     loadDoc();
   }, [sortConfig]);
 
+  useEffect(()=>{
+    setSortedList(list);
+  }, [list])
+
   const handleSort = (key) => {
     let direction = "asc";
     if (sortConfig.key === key && sortConfig.direction === "asc") {
@@ -68,10 +72,11 @@ function List(){
               <Col md={2}onClick={() => handleSort("title")}
               className={`sortable-column ${sortConfig.key === "title" ? "active" : ""}`}>Title  {getSortIndicator("title")}</Col>
               <Col md={3}>Stakeholders</Col>
-              <Col md={2}>Type</Col>
-              <Col md={2} onClick={() => handleSort("connections")}
-              className={`sortable-column ${sortConfig.key === "connections" ? "active" : ""}`}>Connections  {getSortIndicator("connections")}</Col>
-              <Col>Issuance Date</Col>
+              <Col md={2} onClick={() => handleSort("type")}
+              className={`sortable-column ${sortConfig.key === "type" ? "active" : ""}`}>Type {getSortIndicator("type")}</Col>
+              <Col md={2} >Connections</Col>
+              <Col onClick={() => handleSort("issuanceDate")}
+              className={`sortable-column ${sortConfig.key === "issuanceDate" ? "active" : ""}`}>Issuance Date {getSortIndicator("issuanceDate")}</Col>
             </Row>
           </ListGroup.Item>
           {!loading && sortedList.map((doc, num) => (

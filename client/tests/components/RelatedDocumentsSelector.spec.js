@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import RelatedDocumentsSelector from '../../src/components/RelatedDocumentsSelector';
+import RelatedDocumentsSelector from '../../src/components/CreateDocument/RelatedDocumentsSelector';
 import dayjs from 'dayjs';
 describe('RelatedDocumentsSelector Component', () => {
   const mockOnDocumentSelect = jest.fn();

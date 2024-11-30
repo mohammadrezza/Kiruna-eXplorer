@@ -3,9 +3,9 @@
     min-height: 100%;
     padding-bottom: 180px;
 }
-.form-container {
+.layout-container {
     background-color: var(--white);
-    width: calc(1200px - 50px);
+    width: calc(1440px - 50px);
     padding: 80px 50px;
     padding-bottom: 180px;
     margin: 0 auto;
@@ -14,7 +14,7 @@
     flex-direction: column;
 }
 
-.form-container>h2 {
+.layout-container>h2 {
     font-family: 'Open Sans';
     font-size: 60px;
     font-weight: 400;
@@ -22,12 +22,12 @@
     position: relative;
     margin-bottom: 105px;
 }
-.form-container-title{
+.layout-container-title{
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.form-container-subtitle{
+.layout-container-subtitle{
     display: flex;
     justify-content: space-between;
 }
@@ -155,13 +155,12 @@
   
 .search-bar-list {
     position: relative;
-    width: 70%;
   }
   
   .search-input-list {
     width: 100%;
-    padding: 10px 40px 10px 10px; /* Spazio riservato per il pulsante */
-    font-size: 16px;
+    padding: 10px 10px 10px 40px; /* Spazio riservato per il pulsante */
+    font-size: 20px;
     border: 1px solid var(--light-grey);
     border-radius: 50px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
@@ -180,7 +179,7 @@
     top: 50%;
     right: 10px; /* Pulsante all'interno del campo */
     transform: translateY(-50%);
-    background: #9A9A9A;
+    background: var(--light-grey);
     font-family: Times;
     font-size: 20px;
     font-weight: 400;
@@ -189,8 +188,11 @@
     height: 40px;
     border-radius: 40px;
     opacity: 0px;
-    color: white;
+    color: var(--white);
     border: none;
+  }
+  .search-button-list:hover {
+    background-color: var(--blue);
   }
   
  
@@ -198,22 +200,84 @@
   /* Pulsante dei filtri */
   .filter-container {
     display: flex;
-    justify-content: flex-start;
-    margin-top: 10px;
+    align-items: center; /* Allinea il pulsante e i filtri verticalmente */
+    gap: 15px; /* Spazio tra il pulsante e i filtri */
+    margin-top: 20px;
+    margin-bottom: 45px;
   }
   
   .filter-button {
     padding: 10px 20px;
     font-size: 16px;
-    background-color: #FFFFFF;
+    font-weight: bold;
+    background-color: var(--white);
     color: var(--demo-black);
-    border: 1px solid #9A9A9A;
+    border: 1px solid var(--light-grey);
     border-radius: 10px;
+    display: flex;
+    align-items: center;
+  }
+  .filter-button svg{
+    font-size: 24px;
+    margin-right: 10px;
   }
   
   .filter-button:hover {
-    background-color: #9A9A9A;
+    background-color: var(--light-grey);
     color: var(--white);
-    border-color: #9A9A9A;
+    border-color: var(--light-grey);
+  }
+
+  .active-filters {
+    display: flex;
+    flex-wrap: wrap; /* Permette ai filtri di andare su più righe se necessario */
+    gap: 10px; /* Spazio tra i filtri */
+}
+
+.filter-tag {
+  background-color: #438EF240;
+  font-family: 'Inter';
+  border-radius: 40px;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 400px;
+  color: var(--demo-black);
+  border: 1px solid #438EF2;
+  display: flex;
+  align-items: center;
+}
+
+.filter-tag span {
+  margin-right: 8px;
+}
+
+.filter-tag .remove-filter {
+  cursor: pointer;
+  color: var(--blue);
+  font-size: 16px;
+}
+
+.filter-tag .remove-filter:hover {
+  color: var(--dark-grey);
+}
+
+  .map-documents-button {
+    display: flex;
+    align-items: flex-end;
+    color: var(--dark-grey);
+    cursor: pointer;
+  }
+
+  .map-documents-button:hover {
+    color: var(--blue);
+  }
+
+  .map-documents-button span {
+    margin-left: 10px;
+    font-size: 20px;
+  }
+
+  .map-documents-button svg {
+    font-size: 30px;
   }
   

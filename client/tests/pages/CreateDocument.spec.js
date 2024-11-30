@@ -19,7 +19,7 @@ jest.mock('../../src/utils/convertToDecimal', () => ({
   dmsToDecimal: jest.fn(), // crea un mock della funzione
 }));
 
-jest.mock('../../src/components/RelatedDocumentsSelector', () => (props) => (
+jest.mock('../../src/components/CreateDocument/RelatedDocumentsSelector', () => (props) => (
   <div data-testid="RelatedDocumentsSelector" {...props}></div>
 ));
 
