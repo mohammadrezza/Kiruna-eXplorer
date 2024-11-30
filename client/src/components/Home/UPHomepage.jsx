@@ -53,7 +53,7 @@ function UPHomepage() {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             
-              <button>
+              <button className='search-button'>
                 <VscSend className='sendIcon' onClick={handleSearch}></VscSend>
               </button>
             

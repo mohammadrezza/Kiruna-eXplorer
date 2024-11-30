@@ -36,7 +36,7 @@
 
   }
   
-  .search-bar button {
+  .search-bar .search-button {
     margin-left: 0px;
     height: 70px;
     width: 70px;
@@ -50,7 +50,7 @@
     cursor: unset;
   }
 
-  .search-bar button :hover {
+  .search-bar .search-button :hover {
     background-image: unset !important;
     border: 1px solid #ddd;
   }
