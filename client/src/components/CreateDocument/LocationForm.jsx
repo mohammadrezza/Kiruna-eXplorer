@@ -4,10 +4,9 @@ import AreaForm from "@/components/CreateDocument/AreaForm.jsx"
 import CoordinatesForm from "@/components/CreateDocument/CoordinatesForm.jsx"
 import { kirunaBounds } from "@/utils/constants.js";
 
-const LocationForm = forwardRef(({coordinates, mode, edit, handleCoordinatesChange}, ref) => {
+const LocationForm = forwardRef(({coordinates, area,  mode, edit, handleCoordinatesChange, handleAreaChange}, ref) => {
   const [selectedOption, setSelectedOption] = useState('coordinates');
   const [errors, setErrors] = useState({ lat: '', lng: '' });
-  
   const options = [
     { label: 'Coordinates', value: 'coordinates' },
     { label: 'Geographical Area', value: 'area' },
@@ -16,7 +15,7 @@ const LocationForm = forwardRef(({coordinates, mode, edit, handleCoordinatesChan
   const handleOptionsChange = (e) => {
     setSelectedOption(e.target.value)
     if(e.target.value === 'area') handleCoordinatesChange({lat: '', lng: ''})
-    else if(e.target.value === 'coordinates'){}
+    else if(e.target.value === 'coordinates'){ handleAreaChange([])}
   };
 
   const areValidCoordinates = (coordinates) => {
@@ -60,14 +59,19 @@ const LocationForm = forwardRef(({coordinates, mode, edit, handleCoordinatesChan
     <Row>
       {selectedOption === 'coordinates' && 
         <CoordinatesForm 
-          mode 
-          edit 
+          mode={mode}
+          edit={edit}
           coordinates={coordinates}
           errors={errors}
           areValidCoordinates={areValidCoordinates}
           onCoordinatesChange={handleCoordinatesChange}
         />}
-      {selectedOption === 'area' && <AreaForm mode edit/>}
+      {selectedOption === 'area' && 
+        <AreaForm 
+          mode={mode}
+          edit={edit}
+          area={area}
+          onAreaChange={handleAreaChange}/>}
     </Row>
   </Row>
 )});

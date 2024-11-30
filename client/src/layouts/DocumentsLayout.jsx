@@ -18,6 +18,7 @@ function DocumentsList() {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false)
   const isList = location.pathname === '/documents';
+  const isMap = location.pathname === '/documents/map';
   const [searchQuery, setSearchQuery] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [filters,setFilters] = useState({ documentTypes: '', stakeholders: '', issuanceDateStart: '', issuanceDateEnd: '' })
@@ -83,9 +84,9 @@ function DocumentsList() {
 
   return (
     <div className="wrapper">
-      <div className="layout-container">
+      <div className={`layout-container ${isMap ? 'map-container' : ''}`}>
       <h2 className='layout-container-title'>
-          {isList ? "List of Documents" : "Map View"}
+          {isList ? "List of Documents" : "Map of Documents"}
           {isList && user && 
           (<Button  className='add-button' onClick={()=>navigate('/document/add')}>+ New document</Button>)
           }
@@ -107,7 +108,7 @@ function DocumentsList() {
                 Search
               </button>
         </div>
-        <div className="map-view-documents" onClick={()=>handleNavigation(isList ? "/documents/map" : "/documents")}>
+        <div className="map-documents-button" onClick={()=>handleNavigation(isList ? "/documents/map" : "/documents")}>
           {isList ? <LiaMapMarkedAltSolid /> : <LiaThListSolid/>}
           <span>{isList ? "Show On Map" : "Show List"}</span>
         </div>

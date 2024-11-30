@@ -33,6 +33,7 @@ function FormDocument(props) {
   const [language,setLanguage] = useState('');
   const [description,setDescription] = useState('');
   const [coordinates, setCoordinates] = useState({ lat: '', lng: '' });
+  const [area, setArea] = useState([]);
   const [loading,setLoading] = useState(true);
   const [isLoadingStake,setIsLoadingStake] = useState(false);
   const [isLoadingType,setIsLoadingType] = useState(false);
@@ -132,6 +133,7 @@ function FormDocument(props) {
           const lan = {value:doc.language, label:doc.language}
           setLanguage(lan);
           setCoordinates(doc.coordinates);
+          setArea(doc.area);
           const [dd, mm, yyyy] = doc.issuanceDate.split("-");
           if(dd!='00')
             setDay(dd)
@@ -154,6 +156,7 @@ function FormDocument(props) {
 
   const handleRelatedDocumentClick = (relatedDocumentId) => navigate(`/document/view/${relatedDocumentId}`);
   const handleCoordinatesChange = (newCoordinates) => { setCoordinates(newCoordinates)};
+  const handleAreaChange = (area) => { setArea(area)};
   const validateForm = () => {
     const validationErrors = {};
     if (!title.trim()) validationErrors.title = 'Title cannot be empty!';
@@ -163,7 +166,7 @@ function FormDocument(props) {
     if (!description.trim()) validationErrors.description = 'Description cannot be empty!';
     if(day && (!month && !year)) validationErrors.day ='Insert month and year before the day'
     if(month && !year) validationErrors.month ='Insert year before the day'
-    if (locationFormRef.current) {
+    if (locationFormRef.current && (coordinates.lat !==  '' && coordinates.lng !== '')) {
       const isValid = locationFormRef.current.areValidCoordinates(coordinates);
       if(!isValid) validationErrors.coordinates ='Not correct format or not inside Kiruna area'
     }
@@ -197,9 +200,9 @@ function FormDocument(props) {
     
     const doc = new Document(docID, title.trim(), st, scale, issuanceDate, type.value, language.value, description);
     if(props.mode==='add'){
-      API.AddDocumentDescription(doc, selectedConnectionTypes, coordinates);
+      API.AddDocumentDescription(doc, selectedConnectionTypes, coordinates, area);
     } else if (props.mode === 'view') {
-      API.EditDocumentDescription(doc, selectedConnectionTypes , coordinates, docID );
+      API.EditDocumentDescription(doc, selectedConnectionTypes , coordinates, area, docID );
     }
     showSuccess('Action successful!')
     setTimeout(()=>{
@@ -464,7 +467,8 @@ function FormDocument(props) {
               edit={edit}
               coordinates={coordinates}
               handleCoordinatesChange={handleCoordinatesChange}
-              areas={[]}
+              area={area}
+              handleAreaChange={handleAreaChange}
             />
           </Row>
           <Row className='mt-6'>

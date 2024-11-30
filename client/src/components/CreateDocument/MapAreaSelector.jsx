@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { MapContainer, TileLayer, FeatureGroup } from 'react-leaflet';
+import React, { useState, useRef, useEffect } from 'react';
+import { MapContainer, TileLayer, FeatureGroup, Polygon } from 'react-leaflet';
 import { EditControl } from 'react-leaflet-draw';
 import L from 'leaflet';
 import { kirunaBounds, initialMapCenter } from "@/utils/constants.js";
@@ -17,10 +17,9 @@ let DefaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
-const MapAreaSelector = () => {
+const MapAreaSelector = ({ area, mode, edit, onAreaChange }) => {
   const [polygon, setPolygon] = useState(null); // Allow only one polygon
   const mapRef = useRef(null);
-
   // Handle polygon creation
   const handleCreated = (e) => {
     if (polygon) {
@@ -35,14 +34,24 @@ const MapAreaSelector = () => {
       lat: coord.lat,
       lng: coord.lng,
     }));
+    const convertedCoordinates = polygonCoords.map(coord => [coord.lat, coord.lng]);
 
-    setPolygon(polygonCoords);
+    setPolygon(polygonCoords)
+    onAreaChange(convertedCoordinates) ;
   };
 
   // Handle polygon deletion
   const handleDeleted = () => {
-    setPolygon(null); // Clear the polygon
+    setPolygon(null);
+    onAreaChange([])
   };
+
+  const renderDrawingControls = (mode === 'add' || edit);
+  useEffect(() => {
+    if (area && area.length) {
+      setPolygon(area);
+    }
+  }, [area]);
 
   return (
     <div>
@@ -61,23 +70,33 @@ const MapAreaSelector = () => {
           url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
         />
 
-        <FeatureGroup>
-          <EditControl
-            position="topright"
-            onCreated={handleCreated}
-            onDeleted={handleDeleted}
-            draw={{
-              polygon: true,
-              polyline: false,
-              rectangle: false,
-              circle: false,
-              circlemarker: false,
-              marker: false,
-            }}
-          />
-        </FeatureGroup>
-      </MapContainer>
+        {renderDrawingControls && (
+          <FeatureGroup>
+            <EditControl
+              position="topright"
+              onCreated={handleCreated}
+              onDeleted={handleDeleted}
+              draw={{
+                polygon: true,
+                polyline: false,
+                rectangle: false,
+                circle: false,
+                circlemarker: false,
+                marker: false,
+              }}
+            />
+          </FeatureGroup>
+        )}
 
+        {polygon && !renderDrawingControls && (
+          <Polygon
+            positions={polygon}
+            color="blue"
+            fillColor="blue"
+            fillOpacity={0.5}
+          />
+        )}
+      </MapContainer>
       {/* <div className="mt-4">
         <h3 className="font-bold mb-2">Drawn Polygon:</h3>
         {polygon ? (
