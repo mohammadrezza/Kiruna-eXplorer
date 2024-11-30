@@ -93,8 +93,8 @@ function FilterModal({ show, onHide, handleFilter }) {
     let dt = '';
     types.forEach((t) => dt = dt.concat(t.value,','))
     filters.documentTypes=dt.slice(0,-1);
-    filters.issuanceDateEnd=dayjs(issuanceDateEnd).format('DD-MM-YYYY');
-    filters.issuanceDateStart=dayjs(issuanceDateStart).format('DD-MM-YYYY');
+    filters.issuanceDateEnd=(issuanceDateEnd ? dayjs(issuanceDateEnd).format('DD-MM-YYYY') : '');
+    filters.issuanceDateStart=(issuanceDateStart ? dayjs(issuanceDateStart).format('DD-MM-YYYY'): '');
     handleFilter(filters)
     onHide()
   };
