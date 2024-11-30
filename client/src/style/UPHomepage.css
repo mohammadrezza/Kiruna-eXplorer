@@ -3,6 +3,7 @@
     background-size: cover; /* Rende l'immagine proporzionata al contenitore */
     background-position: center; /* Centra l'immagine */
     background-repeat: no-repeat; /* Evita la ripetizione dell'immagine */
+    background-attachment: fixed; /* L'immagine rimane fissa rispetto alla viewport */
     height: 100%; /* Imposta l'altezza della pagina */
     display: flex;
   }

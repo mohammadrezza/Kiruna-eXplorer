@@ -234,42 +234,37 @@ function FormDocument(props) {
   const handleSelectScaleChange = (selectedOption) => {
     setScale(selectedOption);
   };
+
+
   const handleConnectionTypeSelect = (documentId, selectedConnectionType) => {
     console.log("Tipo selezionato:", selectedConnectionType);
   
     setSelectedConnectionTypes((prevSelected) => {
-      // Trova il documento esistente
-      const existingDocIndex = prevSelected.findIndex((item) => item.id === documentId);
+      // Trova tutte le connessioni esistenti per il documento
+      const existingConnections = prevSelected.filter(
+        (item) => item.id === documentId
+      );
+  
       console.log("Precedente stato:", prevSelected);
   
-      if (existingDocIndex !== -1) {
-        // Aggiorna tipi di connessione per un documento esistente
-        const updatedSelected = [...prevSelected];
-        const documentConnections = updatedSelected[existingDocIndex];
+      // Controlla se il tipo di connessione è già presente
+      const isConnectionPresent = existingConnections.some(
+        (item) => item.type === selectedConnectionType
+      );
   
-        // Assicurati che "type" sia un array, altrimenti inizializzalo
-        if (!Array.isArray(documentConnections.type)) {
-          documentConnections.type = [];
-        }
-  
-        // Rimuovi il tipo se già presente, altrimenti aggiungilo
-        if (documentConnections.type.includes(selectedConnectionType)) {
-          documentConnections.type = documentConnections.type.filter(
-            (type) => type !== selectedConnectionType
-          );
-        } else {
-          documentConnections.type.push(selectedConnectionType);
-        }
-  
-        console.log("Aggiornato documento esistente:", updatedSelected);
+      if (isConnectionPresent) {
+        // Se il tipo di connessione è già presente, rimuovilo
+        const updatedSelected = prevSelected.filter(
+          (item) =>
+            !(item.id === documentId && item.type === selectedConnectionType)
+        );
+        console.log("Connessione rimossa:", updatedSelected);
         return updatedSelected;
       } else {
-        // Aggiungi un nuovo documento con il tipo di connessione
-        const newState = [
-          ...prevSelected,
-          { id: documentId, type: [selectedConnectionType] },
-        ];
-        console.log("Nuovo stato aggiunto:", newState);
+        // Altrimenti, aggiungilo come nuovo oggetto
+        const newConnection = { id: documentId, type: selectedConnectionType };
+        const newState = [...prevSelected, newConnection];
+        console.log("Nuova connessione aggiunta:", newState);
         return newState;
       }
     });
