@@ -261,23 +261,23 @@
   color: var(--dark-grey);
 }
 
-  .map-view-documents {
+  .map-documents-button {
     display: flex;
     align-items: flex-end;
     color: var(--dark-grey);
     cursor: pointer;
   }
 
-  .map-view-documents:hover {
+  .map-documents-button:hover {
     color: var(--blue);
   }
 
-  .map-view-documents span {
+  .map-documents-button span {
     margin-left: 10px;
     font-size: 20px;
   }
 
-  .map-view-documents svg {
+  .map-documents-button svg {
     font-size: 30px;
   }
   

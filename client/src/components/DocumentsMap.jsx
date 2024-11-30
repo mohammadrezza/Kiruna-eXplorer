@@ -9,40 +9,21 @@ import { calculateCentroid } from "@/utils/geometry"; // Import the centroid fun
 import 'leaflet/dist/leaflet.css';
 import '@/style/mapCustom.css';
 
-const polygonsData = [
-  {
-    id: 1,
-    coords: [
-      [67.8598, 20.2092],
-      [67.8522, 20.1970],
-      [67.8677, 20.2439],
-    ],
-    name: 'Polygon 1',
-  },
-  {
-    id: 2,
-    coords: [
-      [67.8608, 20.2050],
-      [67.8530, 20.1900],
-      [67.8685, 20.2400],
-    ],
-    name: 'Polygon 2',
-  },
-];
-
 const DocumentMap = () => {
   const { list } = useOutletContext();
+  const areas = list.filter(item => item.area && item.area.length > 0);
+  const coordinates = list.filter(item => item.coordinates && Object.keys(item.coordinates).length > 0);
   const kirunaBoundsMap = L.latLngBounds(kirunaBounds);
-  
   // Calculate centroids for each polygon
-  const centroids = polygonsData.map((polygon) => {
-    const centroid = calculateCentroid(polygon.coords);
+  const centroids = areas.map((polygon) => {
+    const centroid = calculateCentroid(polygon.area);
     return {
       id: polygon.id,
       position: centroid,  // position of the centroid
       name: polygon.name,
     };
   });
+  console.log('centroids', centroids)
 
   return (
     <div>
@@ -62,7 +43,7 @@ const DocumentMap = () => {
         />
         {/* Marker Clustering for Markers */}
         <MarkerClusterGroup iconCreateFunction={createClusterIcon} maxClusterRadius={50}>
-          <MapMarkers list={list} />
+          <MapMarkers list={coordinates} />
         </MarkerClusterGroup>
 
         {/* Marker Clustering for Polygons (using centroids) */}
@@ -74,10 +55,10 @@ const DocumentMap = () => {
         </MarkerClusterGroup>
 
         {/* Polygons */}
-        {polygonsData.map((polygon) => (
+        {areas.map((polygon) => (
           <Polygon
             key={polygon.id}
-            positions={polygon.coords}
+            positions={polygon.area}
             color="blue"
             fillColor="blue"
             fillOpacity={0.5}
