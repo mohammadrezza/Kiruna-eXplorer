@@ -15,6 +15,7 @@ import Document from '@/mocks/Document.mjs';
 import { showSuccess, showError } from '@/utils/notifications';
 import '../style/CreateDocument.css'
 import { CiSaveUp2 } from "react-icons/ci";
+import DocumentUploader from '../components/CreateDocument/OriginalDocumentsSelector';
 
 function FormDocument(props) {
 
@@ -470,8 +471,12 @@ function FormDocument(props) {
               <Form.Control.Feedback type="invalid">
                     {errors.description}
               </Form.Control.Feedback>
+
+              <DocumentUploader></DocumentUploader>
+
             </Col>
           </Row>
+
           <Row>
             <LocationForm
               ref={locationFormRef} 
