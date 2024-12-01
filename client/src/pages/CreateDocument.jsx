@@ -12,7 +12,7 @@ import RelatedDocumentsSelector from '@/components/CreateDocument/RelatedDocumen
 import LocationForm from '@/components/CreateDocument/LocationForm'; 
 import API from '@/services/API.mjs';
 import Document from '@/mocks/Document.mjs';
-import { showSuccess, showError } from '@/utils/notifications';
+import { showSuccess } from '@/utils/notifications';
 import '../style/CreateDocument.css'
 import { CiSaveUp2 } from "react-icons/ci";
 
@@ -135,9 +135,9 @@ function FormDocument(props) {
           setCoordinates(doc.coordinates);
           setArea(doc.area);
           const [dd, mm, yyyy] = doc.issuanceDate.split("-");
-          if(dd!='00')
+          if(dd!=='00')
             setDay(dd)
-          if(mm!='00')
+          if(mm!=='00')
             setMonth(mm)
           setYear(yyyy)
           setRelatedDocuments(doc.connections);
@@ -332,7 +332,7 @@ function FormDocument(props) {
             <Col className='col-form'>
               <Form.Group className='form-group'  controlId="title">
                 <Form.Label>Title{(props.mode === 'add' || edit) && <span>*</span>}</Form.Label>
-                <Form.Control type="text" placeholder="Enter title" minLength={2} value={title} onChange={(event) => setTitle(event.target.value)}  isInvalid={!!errors.title} readOnly={!edit && props.mode!='add'}/>
+                <Form.Control type="text" placeholder="Enter title" minLength={2} value={title} onChange={(event) => setTitle(event.target.value)}  isInvalid={!!errors.title} readOnly={!edit && props.mode!=='add'}/>
                 <Form.Control.Feedback type="invalid">
                     {errors.title}
                 </Form.Control.Feedback>
@@ -392,19 +392,19 @@ function FormDocument(props) {
                 <Form.Label>Issuance Date{(props.mode === 'add' || edit) && <span>*</span>}</Form.Label>
                 <Row>
                     <Col xs={3}>
-                      <Form.Control type="text" placeholder="DD" value={day} onChange={(event) => setDay(event.target.value)}  isInvalid={!!errors.day} readOnly={!edit && props.mode!='add'}/>
+                      <Form.Control type="text" placeholder="DD" value={day} onChange={(event) => setDay(event.target.value)}  isInvalid={!!errors.day} readOnly={!edit && props.mode!=='add'}/>
                       <Form.Control.Feedback type="invalid">
                         {errors.day}
                       </Form.Control.Feedback>
                     </Col>
                     <Col xs={3}>
-                      <Form.Control type="text" placeholder="MM" value={month} onChange={(event) => setMonth(event.target.value)}  isInvalid={!!errors.month} readOnly={!edit && props.mode!='add'}/>
+                      <Form.Control type="text" placeholder="MM" value={month} onChange={(event) => setMonth(event.target.value)}  isInvalid={!!errors.month} readOnly={!edit && props.mode!=='add'}/>
                       <Form.Control.Feedback type="invalid">
                         {errors.month}
                       </Form.Control.Feedback>
                     </Col>
                     <Col xs={5}>
-                      <Form.Control type="text" placeholder="YYYY" value={year} onChange={(event) => setYear(event.target.value)}  isInvalid={!!errors.year} readOnly={!edit && props.mode!='add'}/>
+                      <Form.Control type="text" placeholder="YYYY" value={year} onChange={(event) => setYear(event.target.value)}  isInvalid={!!errors.year} readOnly={!edit && props.mode!=='add'}/>
                     </Col>
                 </Row>
               </Form.Group>
@@ -452,7 +452,7 @@ function FormDocument(props) {
             <Col className='col-form'>
               <Form.Group  className='form-group' controlId="description">
                 <Form.Label>Description{(props.mode === 'add' || edit) && <span>*</span>}</Form.Label>
-                <Form.Control as="textarea" placeholder="Enter description" value={description} onChange={(event) => setDescription(event.target.value)}  isInvalid={!!errors.description} readOnly={!edit && props.mode!='add'}     className={!edit && props.mode === 'view' ? 'scrollable-description' : ''}
+                <Form.Control as="textarea" placeholder="Enter description" value={description} onChange={(event) => setDescription(event.target.value)}  isInvalid={!!errors.description} readOnly={!edit && props.mode!=='add'}     className={!edit && props.mode === 'view' ? 'scrollable-description' : ''}
                 />
               </Form.Group>
               <Form.Control.Feedback type="invalid">

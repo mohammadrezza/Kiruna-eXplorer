@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate, createSearchParams } from 'react-router-dom';
-import { Row, Form, Col, Button } from 'react-bootstrap';
+import { Row, Form } from 'react-bootstrap';
 import { PiFilePlus, PiMapTrifold } from 'react-icons/pi';
 import { IoLibraryOutline } from "react-icons/io5";
 import { VscSend } from "react-icons/vsc";

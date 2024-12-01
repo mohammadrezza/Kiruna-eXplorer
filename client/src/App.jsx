@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { Routes, Route, useLocation, Navigate} from 'react-router-dom';
+import React from 'react';
+import { Routes, Route, useLocation} from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import Header from './components/Header';
 import Footer from './components/Footer';

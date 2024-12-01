@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useContext } from 'react';
 import API from '@/services/API.mjs';
 import Cookies from 'js-cookie'; // Importa la libreria js-cookie
 

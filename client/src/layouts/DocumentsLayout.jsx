@@ -7,7 +7,6 @@ import { AuthContext } from '@/layouts/AuthContext';
 import FilterModal from '@/components/FilterModal';
 import API from '@/services/API.mjs';
 import '@/style/DocumentsList.css';
-import { RiArrowGoBackFill } from "react-icons/ri";
 
 function DocumentsList() {
 
