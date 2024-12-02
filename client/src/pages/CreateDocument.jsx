@@ -127,12 +127,10 @@ function FormDocument(props) {
           const st = [];
           doc.stakeholders.forEach((s) => st.push({value:s, label:s}))
           setStakeholder(st);
-          setScale(doc.scale);
+          setScale({value:doc.scale, label:doc.scale});
           setDescription(doc.description);
-          const ty = {value:doc.type, label:doc.type}
-          setType(ty);
-          const lan = {value:doc.language, label:doc.language}
-          setLanguage(lan);
+          setType({value:doc.type, label:doc.type});
+          setLanguage({value:doc.language, label:doc.language});
           setCoordinates(doc.coordinates);
           setArea(doc.area);
           const [dd, mm, yyyy] = doc.issuanceDate.split("-");
@@ -151,7 +149,7 @@ function FormDocument(props) {
         setLoading(false);
       }
     };
-
+    console.log(user)
     loadData();
   }, [props.mode, docID, id]);
 
@@ -341,7 +339,7 @@ function FormDocument(props) {
         <h2 className='form-container-title'>
           <RiArrowGoBackFill className='back-button' onClick={()=>navigate(-1)}/>
           {props.mode==='view' ? title : 'New Document'}
-          {(props.mode==='view' && edit===false && rights) && <PiNotePencilThin className='edit-button' onClick={() => handleEditChange() }/>}
+          {(props.mode==='view' && edit===false && rights) && <PiNotePencilThin className='edit-button' data-testid="edit" onClick={() => handleEditChange() }/>}
           {(props.mode==='add' || (edit===true && rights)) && <CiSaveUp2 className='edit-button' onClick={() => handleSubmit() }/>}
           </h2>
         <Form onSubmit={handleSubmit} data-testid="form-component">
