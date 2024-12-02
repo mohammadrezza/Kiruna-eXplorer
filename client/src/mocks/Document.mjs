@@ -1,4 +1,3 @@
-import dayjs from 'dayjs'
 
 function Document(id, title,stakeholder,scale,issuanceDate,type,language,description){
     this.id = id;
