@@ -56,8 +56,9 @@ function UPHomepage() {
               <button className='search-button'>
                 <VscSend className='sendIcon' onClick={handleSearch}></VscSend>
               </button>
-            
+
           </Row>
+         
         </div>
       </main>
     </div>

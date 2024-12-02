@@ -513,7 +513,7 @@ function RelatedDocumentsSelector({
           placeholder="Enter the document name to search"
           value={searchQuery}
           onChange={handleSearch}
-          className="search-input-list"
+          className="search-list"
         />
       </div>
       {filteredDocuments.length === 0 ? (
