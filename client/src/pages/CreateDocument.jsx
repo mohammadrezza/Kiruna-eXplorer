@@ -15,6 +15,7 @@ import Document from '@/mocks/Document.mjs';
 import { showSuccess } from '@/utils/notifications';
 import '../style/CreateDocument.css'
 import { CiSaveUp2 } from "react-icons/ci";
+import DocumentUploader from '../components/CreateDocument/OriginalDocumentsSelector';
 
 function FormDocument(props) {
 
@@ -28,7 +29,6 @@ function FormDocument(props) {
   const [title,setTitle] = useState('');
   const [stakeholder,setStakeholder] = useState([]);
   const [scale,setScale] = useState(null);
-  const [issuanceDate,setIssuanceDate] = useState('');
   const [type,setType] = useState(null);
   const [language,setLanguage] = useState('');
   const [description,setDescription] = useState('');
@@ -50,7 +50,8 @@ function FormDocument(props) {
   const [allStake,setAllStake] = useState([]);
   const [allScale,setAllScale] = useState([]);
   const [errors, setErrors] = useState([]);
-  const [rights, setRights] = useState(false)
+  const [rights, setRights] = useState(false);
+  const [files, setFiles] = useState([]);
 
   const customStyles = {
     control: (base) => ({
@@ -141,8 +142,8 @@ function FormDocument(props) {
             setMonth(mm)
           setYear(yyyy)
           setRelatedDocuments(doc.connections);
-          setSelectedDocuments(connectedDocumentIds)
-          
+          setSelectedDocuments(connectedDocumentIds);
+          setFiles(doc.files);
         }
       } catch (error) {
         console.error("Error loading data:", error);
@@ -166,19 +167,39 @@ function FormDocument(props) {
     if (!description.trim()) validationErrors.description = 'Description cannot be empty!';
     if(day && (!month && !year)) validationErrors.day ='Insert month and year before the day'
     if(month && !year) validationErrors.month ='Insert year before the day'
-    if (locationFormRef.current && (coordinates.lat !==  '' && coordinates.lng !== '')) {
+    if (locationFormRef.current && (Object.keys(coordinates).length && (coordinates.lat !==  '' && coordinates.lng !== ''))) {
       const isValid = locationFormRef.current.areValidCoordinates(coordinates);
       if(!isValid) validationErrors.coordinates ='Not correct format or not inside Kiruna area'
     }
+    selectedConnectionTypes.forEach(connection => {
+      const documentId = connection.id;
+      const connectionType = connection.type;
+  
+      const connectionsForDocument = selectedConnectionTypes.filter(
+        (item) => item.id === documentId
+      );
+  
+      if (connectionsForDocument.length === 1 && connectionsForDocument[0].type === "") {
+        validationErrors[documentId] = `Connection type for document with ID ${documentId} is missing!`;
+      }
+    });
     console.log(validationErrors);
     return validationErrors;
   };
 
 
 
-  const handleSubmit = () =>{
-    //event.preventDefault();
+  const handleSubmit = (event) =>{
+    if(event)
+      event.preventDefault()
+
     const validationErrors = validateForm();
+
+    //event.preventDefault();
+    const connections = selectedConnectionTypes.filter(
+      (connection) => connection.type !== ""
+    );
+  
     
     if(Object.keys(validationErrors).length>0){
       console.log("Form not submitted"); // Debugging
@@ -188,21 +209,22 @@ function FormDocument(props) {
     setErrors([]);
     const st=[];
     stakeholder.forEach((s) =>st.push(s.value))
+    let issuanceDate;
     if(!day){
       if(!month){
-        setIssuanceDate(`00-00-${year}`)
+        issuanceDate = `00-00-${year}`
       }else{
-        setIssuanceDate(`00-${month}-${year}`)
+        issuanceDate= `00-${month}-${year}`
       }
     }else{
-      setIssuanceDate(`${day}-${month}-${year}`)
+      issuanceDate = `${day}-${month}-${year}`
     }
     
-    const doc = new Document(docID, title.trim(), st, scale, issuanceDate, type.value, language.value, description);
+    const doc = new Document(docID, title.trim(), st, scale.value, issuanceDate, type.value, language.value, description);
     if(props.mode==='add'){
-      API.AddDocumentDescription(doc, selectedConnectionTypes, coordinates, area);
+      API.AddDocumentDescription(doc, connections, coordinates, area);
     } else if (props.mode === 'view') {
-      API.EditDocumentDescription(doc, selectedConnectionTypes , coordinates, area, docID );
+      API.EditDocumentDescription(doc, connections, coordinates, area, docID );
     }
     showSuccess('Action successful!')
     setTimeout(()=>{
@@ -234,42 +256,37 @@ function FormDocument(props) {
   const handleSelectScaleChange = (selectedOption) => {
     setScale(selectedOption);
   };
+
+
   const handleConnectionTypeSelect = (documentId, selectedConnectionType) => {
     console.log("Tipo selezionato:", selectedConnectionType);
   
     setSelectedConnectionTypes((prevSelected) => {
-      // Trova il documento esistente
-      const existingDocIndex = prevSelected.findIndex((item) => item.id === documentId);
+      // Trova tutte le connessioni esistenti per il documento
+      const existingConnections = prevSelected.filter(
+        (item) => item.id === documentId
+      );
+  
       console.log("Precedente stato:", prevSelected);
   
-      if (existingDocIndex !== -1) {
-        // Aggiorna tipi di connessione per un documento esistente
-        const updatedSelected = [...prevSelected];
-        const documentConnections = updatedSelected[existingDocIndex];
+      // Controlla se il tipo di connessione è già presente
+      const isConnectionPresent = existingConnections.some(
+        (item) => item.type === selectedConnectionType
+      );
   
-        // Assicurati che "type" sia un array, altrimenti inizializzalo
-        if (!Array.isArray(documentConnections.type)) {
-          documentConnections.type = [];
-        }
-  
-        // Rimuovi il tipo se già presente, altrimenti aggiungilo
-        if (documentConnections.type.includes(selectedConnectionType)) {
-          documentConnections.type = documentConnections.type.filter(
-            (type) => type !== selectedConnectionType
-          );
-        } else {
-          documentConnections.type.push(selectedConnectionType);
-        }
-  
-        console.log("Aggiornato documento esistente:", updatedSelected);
+      if (isConnectionPresent) {
+        // Se il tipo di connessione è già presente, rimuovilo
+        const updatedSelected = prevSelected.filter(
+          (item) =>
+            !(item.id === documentId && item.type === selectedConnectionType)
+        );
+        console.log("Connessione rimossa:", updatedSelected);
         return updatedSelected;
       } else {
-        // Aggiungi un nuovo documento con il tipo di connessione
-        const newState = [
-          ...prevSelected,
-          { id: documentId, type: [selectedConnectionType] },
-        ];
-        console.log("Nuovo stato aggiunto:", newState);
+        // Altrimenti, aggiungilo come nuovo oggetto
+        const newConnection = { id: documentId, type: selectedConnectionType };
+        const newState = [...prevSelected, newConnection];
+        console.log("Nuova connessione aggiunta:", newState);
         return newState;
       }
     });
@@ -458,8 +475,17 @@ function FormDocument(props) {
               <Form.Control.Feedback type="invalid">
                     {errors.description}
               </Form.Control.Feedback>
+
+              <DocumentUploader 
+                mode={props.mode}
+                edit={edit}
+                documentId={docID}
+                files={files}           
+              ></DocumentUploader>
+
             </Col>
           </Row>
+
           <Row>
             <LocationForm
               ref={locationFormRef} 

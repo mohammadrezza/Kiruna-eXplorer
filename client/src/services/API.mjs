@@ -13,7 +13,7 @@ async function getUser() {
   return await fetchRequest('/sessions/');
 }
 
-async function AddDocumentDescription(doc, selectedDocuments, coordinates) {
+async function AddDocumentDescription(doc, selectedDocuments, coordinates, area) {
   const body = {
     title: doc.title,
     description: doc.description,
@@ -23,6 +23,7 @@ async function AddDocumentDescription(doc, selectedDocuments, coordinates) {
     type: doc.type,
     language: doc.language,
     coordinates: coordinates,
+    area: area,
     connectionIds: selectedDocuments,
   };
   return await fetchRequest('/documents/', 'POST', body);
@@ -32,6 +33,7 @@ async function EditDocumentDescription(
   doc,
   selectedDocuments,
   coordinates,
+  area,
   id
 ) {
   const body = {
@@ -43,8 +45,10 @@ async function EditDocumentDescription(
     type: doc.type,
     language: doc.language,
     coordinates: coordinates,
+    area: area,
     connectionIds: selectedDocuments,
   };
+  console.log(body)
   return await fetchRequest(`/documents/${id}`, 'PUT', body);
 }
 async function getTypes() {
@@ -115,7 +119,25 @@ async function addScale(scale) {
   return await fetchRequest('/documents/scales', 'POST', { name: scale });
 }
 
-
+async function uploadDocument(documentId, file) {
+  console.log(documentId,file);
+  const formData = new FormData();
+  formData.append('file', file);
+  try {
+    const response = await fetchRequest(
+      `/documents/${documentId}/files`,
+      'POST',
+      formData,
+      {
+        'Content-Type': 'multipart/form-data',
+      }
+    );
+    return response;
+  } catch (error) {
+    console.error('File upload failed', error);
+    throw error;
+  }
+}
 
 const API = {
   login,
@@ -134,7 +156,8 @@ const API = {
   getScale,
   getSortedDocuments,
   searchDoc,
-  getFIilteredDocuments
+  getFIilteredDocuments,
+  uploadDocument
 };
 
 export default API;

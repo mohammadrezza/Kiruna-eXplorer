@@ -3,6 +3,7 @@
     background-size: cover; /* Rende l'immagine proporzionata al contenitore */
     background-position: center; /* Centra l'immagine */
     background-repeat: no-repeat; /* Evita la ripetizione dell'immagine */
+    background-attachment: fixed; /* L'immagine rimane fissa rispetto alla viewport */
     height: 100%; /* Imposta l'altezza della pagina */
     display: flex;
   }
@@ -35,7 +36,7 @@
 
   }
   
-  .search-bar button {
+  .search-bar .search-button {
     margin-left: 0px;
     height: 70px;
     width: 70px;
@@ -49,7 +50,7 @@
     cursor: unset;
   }
 
-  .search-bar button :hover {
+  .search-bar .search-button :hover {
     background-image: unset !important;
     border: 1px solid #ddd;
   }

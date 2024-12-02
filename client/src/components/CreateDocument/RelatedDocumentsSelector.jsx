@@ -189,6 +189,9 @@
 
 
 
+
+
+
 // export default RelatedDocumentsSelector;
 // import React, { useState, useEffect } from "react";
 // import { ListGroup, Row, Col, Form, Button } from "react-bootstrap";
@@ -372,6 +375,9 @@
 
 
 
+
+
+
 import React, { useState, useEffect } from "react";
 import { ListGroup, Row, Col, Form, Button } from "react-bootstrap";
 import API from "@/services/API.mjs";
@@ -433,21 +439,77 @@ function RelatedDocumentsSelector({
     setCurrentDocument(null);
   };
 
+  // const handleRowClick = (docId) => {
+  //   if (mode === "view" && !edit) {
+  //     onRelatedDocumentClick(docId); // View document details
+  //     return;
+  //   }
+  //   const isSelected = selectedDocuments.includes(docId);
+    
+  //   if (isSelected) {
+  //     // Deseleziona il documento
+  //     onDocumentSelect(docId); // Rimuove il documento da selectedDocuments
+  //     setSelectedConnectionTypes((prev) =>
+  //       prev.filter((item) => item.id !== docId) // Rimuove tutti i tipi di connessione associati a questo documento
+  //     );
+  //   } else {
+  //     // Seleziona il documento
+  //     onDocumentSelect(docId); // Aggiunge il documento a selectedDocuments
+  //     // Aggiungi un nuovo oggetto con tipo vuoto
+  //     setSelectedConnectionTypes((prev) => [
+  //       ...prev,
+  //       { id: docId, type: "" }, // Aggiungi un nuovo elemento con tipi vuoti
+  //     ]);
+  //   }
+  //   console.log(selectedConnectionTypes);
+  // };
+  
   const handleRowClick = (docId, e) => {
     if (mode === "view" && !edit) {
       onRelatedDocumentClick(docId); // View document details
       return;
     }
-
-    if (e.target.type === "checkbox") return; // Prevent checkbox click from triggering row click
+    if (e.target.type === "checkbox") return; // Don't trigger row click when clicking checkbox
 
     const isSelected = selectedDocuments.includes(docId);
     if (isSelected) {
-      onDocumentSelect(docId); // Deselect the document
+      // Deseleziona il documento
+      onDocumentSelect(docId); // Rimuove il documento da selectedDocuments
+      setSelectedConnectionTypes((prev) =>
+        prev.filter((item) => item.id !== docId) // Rimuove tutti i tipi di connessione associati a questo documento
+      );
     } else {
-      onDocumentSelect(docId); // Select the document
+      // Seleziona il documento
+      onDocumentSelect(docId); // Aggiunge il documento a selectedDocuments
+      // Aggiungi un nuovo oggetto con tipo vuoto
+      setSelectedConnectionTypes((prev) => [
+        ...prev,
+        { id: docId, type: "" }, // Aggiungi un nuovo elemento con tipi vuoti
+      ]);
     }
+    console.log(selectedConnectionTypes);
   };
+
+  const handleCheckboxChange = (docId, e) => {
+    e.stopPropagation(); // Prevent row click event
+    const isSelected = selectedDocuments.includes(docId);
+    if (isSelected) {
+      // Deseleziona il documento
+      onDocumentSelect(docId);
+      setSelectedConnectionTypes((prev) =>
+        prev.filter((item) => item.id !== docId)
+      );
+    } else {
+      // Seleziona il documento
+      onDocumentSelect(docId);
+      setSelectedConnectionTypes((prev) => [
+        ...prev,
+        { id: docId, type: "" }, // Add empty type when selecting
+      ]);
+    }
+    console.log(selectedConnectionTypes);
+  };
+
 
   const handleConnectionTypeToggle = (docId, type) => {
     setSelectedConnectionTypes((prev) =>
@@ -493,8 +555,7 @@ function RelatedDocumentsSelector({
                     id={`checkbox-${doc.id}`}
                     checked={selectedDocuments.includes(doc.id)}
                     onChange={(e) => {
-                      e.stopPropagation(); // Prevent row click event
-                      handleRowClick(doc.id, e);
+                     handleCheckboxChange(doc.id,e)
                     }}
                   />) : (num + 1)
                 }
@@ -507,10 +568,15 @@ function RelatedDocumentsSelector({
                 {(mode === "add" || edit) && selectedDocuments.includes(doc.id)
                   ? connectionTypes.map((type, index) => {
                       // Find the related document's connection types or default to an empty array
-                      const relatedDoc =
-                        selectedConnectionTypes.find((item) => item.id === doc.id) || { type: [] };
-                        console.log(selectedConnectionTypes);
-                        console.log(relatedDoc);
+                      // const relatedDoc =
+                      //   selectedConnectionTypes.find((item) => item.id === doc.id) || { type: [] };
+                      const relatedDoc = {
+                        id: doc.id,
+                        type: selectedConnectionTypes
+                          .filter((item) => item.id === doc.id)
+                          .map((item) => item.type)
+                      };
+                        // console.log(selectedConnectionTypes);
                       return (
                         <Button
                           key={type}
