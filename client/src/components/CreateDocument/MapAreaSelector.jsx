@@ -20,6 +20,7 @@ L.Marker.prototype.options.icon = DefaultIcon;
 const MapAreaSelector = ({ area, mode, edit, onAreaChange }) => {
   const [polygon, setPolygon] = useState(null); // Allow only one polygon
   const mapRef = useRef(null);
+  const featureGroupRef = useRef(null); // Reference to FeatureGroup for editing
   // Handle polygon creation
   const handleCreated = (e) => {
     if (polygon) {
@@ -36,22 +37,42 @@ const MapAreaSelector = ({ area, mode, edit, onAreaChange }) => {
     }));
     const convertedCoordinates = polygonCoords.map(coord => [coord.lat, coord.lng]);
 
-    setPolygon(polygonCoords)
-    onAreaChange(convertedCoordinates) ;
+    setPolygon(polygonCoords);
+    onAreaChange(convertedCoordinates);
   };
 
   // Handle polygon deletion
   const handleDeleted = () => {
     setPolygon(null);
-    onAreaChange([])
+    onAreaChange([]);
   };
 
-  const renderDrawingControls = (mode === 'add' || edit);
+  // Handle polygon editing
+  const handleEdited = (e) => {
+    const editedCoords = e.layers.getLayers()[0].getLatLngs()[0].map((coord) => ({
+      lat: coord.lat,
+      lng: coord.lng,
+    }));
+    onAreaChange(editedCoords);
+  };
+
+  const isEditable = mode === 'add' || edit;
+
+  // Set the initial polygon if area exists
   useEffect(() => {
     if (area && area.length) {
-      setPolygon(area);
+      setPolygon(area); // Set the polygon based on the existing area
     }
   }, [area]);
+
+  useEffect(() => {
+    if (polygon && featureGroupRef.current) {
+      // Add the polygon to the FeatureGroup as a Leaflet layer
+      const leafletPolygon = L.polygon(polygon);
+      featureGroupRef.current.clearLayers(); // Clear any existing layers
+      featureGroupRef.current.addLayer(leafletPolygon); // Add the existing polygon as a layer
+    }
+  }, [polygon, edit]);
 
   return (
     <div>
@@ -70,12 +91,13 @@ const MapAreaSelector = ({ area, mode, edit, onAreaChange }) => {
           url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
         />
 
-        {renderDrawingControls && (
-          <FeatureGroup>
+        {isEditable && (
+          <FeatureGroup ref={featureGroupRef}>
             <EditControl
               position="topright"
               onCreated={handleCreated}
               onDeleted={handleDeleted}
+              onEdited={handleEdited}
               draw={{
                 polygon: true,
                 polyline: false,
@@ -88,14 +110,14 @@ const MapAreaSelector = ({ area, mode, edit, onAreaChange }) => {
           </FeatureGroup>
         )}
 
-        {polygon && !renderDrawingControls && (
+        {/* {polygon && (
           <Polygon
             positions={polygon}
             color="blue"
             fillColor="blue"
             fillOpacity={0.5}
           />
-        )}
+        )} */}
       </MapContainer>
       {/* <div className="mt-4">
         <h3 className="font-bold mb-2">Drawn Polygon:</h3>

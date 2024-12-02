@@ -13,7 +13,7 @@ async function getUser() {
   return await fetchRequest('/sessions/');
 }
 
-async function AddDocumentDescription(doc, selectedDocuments, coordinates) {
+async function AddDocumentDescription(doc, selectedDocuments, coordinates, area) {
   const body = {
     title: doc.title,
     description: doc.description,
@@ -23,6 +23,7 @@ async function AddDocumentDescription(doc, selectedDocuments, coordinates) {
     type: doc.type,
     language: doc.language,
     coordinates: coordinates,
+    area: area,
     connectionIds: selectedDocuments,
   };
   return await fetchRequest('/documents/', 'POST', body);
@@ -32,6 +33,7 @@ async function EditDocumentDescription(
   doc,
   selectedDocuments,
   coordinates,
+  area,
   id
 ) {
   const body = {
@@ -43,8 +45,10 @@ async function EditDocumentDescription(
     type: doc.type,
     language: doc.language,
     coordinates: coordinates,
+    area: area,
     connectionIds: selectedDocuments,
   };
+  console.log(body)
   return await fetchRequest(`/documents/${id}`, 'PUT', body);
 }
 async function getTypes() {
