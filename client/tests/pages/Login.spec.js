@@ -40,7 +40,7 @@ jest.mock('../../src/layouts/AuthContext', () => ({
 
 
 
-        expect(screen.getAllByText('Login')).toHaveLength(2)
+        expect(screen.getByText('Login')).toBeInTheDocument()
         const usernameField = screen.getByPlaceholderText(/Enter your username/i);
         expect(usernameField).toBeInTheDocument();
 
