@@ -5,7 +5,8 @@ import List from '../../src/components/List';
 import API from '../../src/services/API.mjs';
 
 jest.mock('../../src/services/API.mjs', () => ({
-  getData: jest.fn()
+  getData: jest.fn(),
+  getSortedDocuments: jest.fn()
 }));
 
 jest.mock('../../src/components/DocumentDetailsModal', () => (props) => (
@@ -165,5 +166,64 @@ describe('List component', () => {
     fireEvent.click(titleElement);
 
     expect(mockNavigate).toHaveBeenCalledWith('/document/view/doc1'); // Adjust this path according to your routing logic
+  });
+
+  test('sort the list', () => {
+    useOutletContext.mockReturnValue({
+      list: [
+        {
+          id: 'doc1',
+          title: 'city',
+          stakeholders: ['KLAB'],
+          scale: 'Mock Scale',
+          issuanceDate: '2023-01-01',
+          type: 'tipo1',
+          language: 'english',
+          description: 'Mock description',
+          coordinates: { lat: '67.821', lng: '20.216' },
+          connections: '2',
+        },
+        {
+          id: 'doc2',
+          title: 'doc2',
+          stakeholders: ['Mun', 'City'],
+          scale: 'Mock Scale',
+          issuanceDate: '2023-01-02',
+          type: 'tipo2',
+          language: 'swedish',
+          description: 'Mock description',
+          coordinates: { lat: '67.821', lng: '20.216' },
+          connections: '1',
+        },
+      ],
+      loading: false,
+    });
+    render(<List />);
+
+    const title = screen.getByText(/Title/i)
+
+    fireEvent.click(title)
+
+    expect(screen.getByText(/Title ▲/i)).toBeInTheDocument()
+
+    expect(API.getSortedDocuments).toHaveBeenCalledWith('title','asc')
+
+    fireEvent.click(screen.getByText(/Title ▲/i))
+
+    expect(screen.getByText(/Title ▼/i)).toBeInTheDocument()
+
+    expect(API.getSortedDocuments).toHaveBeenCalledWith('title','desc')
+
+    fireEvent.click(screen.getByText(/Type/i))
+
+    expect(screen.getByText(/Type ▲/i)).toBeInTheDocument()
+
+    expect(API.getSortedDocuments).toHaveBeenCalledWith('type','asc')
+
+    fireEvent.click(screen.getByText(/Issuance Date/i))
+
+    expect(screen.getByText(/Issuance Date ▲/i)).toBeInTheDocument()
+
+    expect(API.getSortedDocuments).toHaveBeenCalledWith('issuanceDate','asc')
   });
 });

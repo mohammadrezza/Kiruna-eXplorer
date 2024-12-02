@@ -3,16 +3,20 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import FormDocument from '../../src/pages/CreateDocument.jsx';
 import API from '../../src/services/API.mjs';
 import { useParams, useNavigate } from 'react-router-dom';
-import { AuthProvider } from '../../src/layouts/AuthContext.jsx';
+import { useAuth, AuthContext } from '../../src/layouts/AuthContext.jsx';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';  // Importa il plugin
 
 // Estendi dayjs con il plugin customParseFormat
 
+'../components/CreateDocument/OriginalDocumentsSelector'
 
+jest.mock('../../src/components/CreateDocument/OriginalDocumentsSelector', () => (props) => (
+  <div data-testid="OriginalDocumentsSelector" {...props}></div>
+));
 
-jest.mock('../../src/components/MapPointSelector', () => (props) => (
-  <div data-testid="MapPointSelector" {...props}></div>
+jest.mock('../../src/components/CreateDocument/LocationForm', () => (props) => (
+  <div data-testid="LocationForm" {...props}></div>
 ));
 
 jest.mock('../../src/utils/convertToDecimal', () => ({
@@ -29,7 +33,8 @@ jest.mock('../../src/services/API.mjs', () => ({
   AddDocumentDescription: jest.fn(),
   getData: jest.fn(),
   EditDocumentDescription: jest.fn().mockResolvedValue({ success: true }),
-  getStake: jest.fn() 
+  getStake: jest.fn(),
+  getScale: jest.fn()
 }));
 
 
@@ -86,17 +91,70 @@ jest.mock("react-select", () => ({ options, value, onChange, placeholder, isMult
 });
 
 
-const MockAuthProvider = ({ children }) => {
-  const mockAuth = {
-    user: { username:'urban_planner', role:'Urban Planner' },  // Simuliamo un utente loggato
-    loading: false,
-    login: jest.fn(),
-    logout: jest.fn(),
-    error: null,
-  };
+jest.mock("react-select/creatable", () => {
+  return ({ options = [], value, onChange, placeholder, isMulti, onCreateOption }) => {
+    function handleChange(event) {
+      let selectedOptions = [];
+      if (isMulti) {
+        // Selezione multipla
+        const selectedValues = Array.from(event.currentTarget.selectedOptions).map(option => option.value);
+        selectedOptions = options.filter(option => selectedValues.includes(option.value));
+      } else {
+        // Selezione singola
+        const option = options.find(option => option.value === event.currentTarget.value);
+        selectedOptions = option ? [option] : [];
+      }
+      onChange(isMulti ? selectedOptions : selectedOptions[0]);
+    }
 
-  return <AuthProvider>{children}</AuthProvider>;
-};
+    function handleCreateOption(newValue) {
+      const newOption = { value: newValue, label: newValue };
+      options.push(newOption); // Simula l'aggiunta di una nuova opzione
+      onCreateOption && onCreateOption(newValue);
+      onChange(isMulti ? [...(value || []), newOption] : newOption);
+    }
+
+    return (
+      <div>
+        <select
+          id="creatable-select"
+          data-testid="select"
+          value={isMulti ? value?.map(v => v.value) : value?.value || ""}
+          onChange={handleChange}
+          multiple={isMulti}
+        >
+          <option disabled value="">
+            {placeholder}
+          </option>
+          {options.map(({ label, value }) => (
+            <option key={value} value={value}>
+              {label}
+            </option>
+          ))}
+        </select>
+        {/* Input per creare una nuova opzione */}
+        <input
+          type="text"
+          data-testid="creatable-input"
+          placeholder="Create option"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && e.target.value.trim()) {
+              handleCreateOption(e.target.value.trim());
+              e.target.value = ""; // Resetta l'input
+            }
+          }}
+        />
+      </div>
+    );
+  };
+});
+
+
+
+jest.mock('../../src/layouts/AuthContext', () => ({
+  ...jest.requireActual('../../src/layouts/AuthContext'), // Se vuoi mantenere altre funzioni esistenti
+  useAuth: jest.fn()
+}));
 
 
 
@@ -108,9 +166,12 @@ describe('CreateDocument', () => {
     jest.clearAllMocks();
     useNavigate.mockReturnValue(mockNavigate);
   });
-
+  
   it('should render the form correctly', async () => {
     useParams.mockReturnValue({ id: '' });
+    const mockContextValue = {
+      user: {username: 'urban_planner',role: 'Urban Planner'}, // Assicurati che l'utente non sia loggato
+    };
     API.getTypes.mockResolvedValue([{ value: 'type1', label: 'type1' },
       { value: 'type2', label: 'type2' },
       { value: 'type3', label: 'type3' }])
@@ -121,8 +182,11 @@ describe('CreateDocument', () => {
         { value: 'stakeholder5', label: 'Stakeholder 5' },
         { value: 'stakeholder6', label: 'Stakeholder 6' },
         { value: 'stakeholder7', label: 'Stakeholder 7' }])
+        API.getScale.mockResolvedValue([{ value: '1:200', label: '1:200' },
+          { value: '1:300', label: '1:300' },
+          { value: '1:400', label: '1:400' }])
     API.getDocuments.mockResolvedValue([])
-    render(<MockAuthProvider><FormDocument mode="add" /></MockAuthProvider>);
+    render(<AuthContext.Provider value={mockContextValue}><FormDocument mode="add" /></AuthContext.Provider>);
 
     await waitFor(() => {
     
@@ -135,7 +199,7 @@ describe('CreateDocument', () => {
     const stakeholderField = screen.getByText(/Select one or more stakeholders/i);
     expect(stakeholderField).toBeInTheDocument();
 
-    const scaleField = screen.getByPlaceholderText(/Enter scale/i);
+    const scaleField = screen.getByText(/Select scale/i);
     expect(scaleField).toBeInTheDocument();
 
     const dateField = screen.getByText(/Issuance Date/i);
@@ -149,9 +213,6 @@ describe('CreateDocument', () => {
 
     const descriptionField = screen.getByText(/Description/i);
     expect(descriptionField).toBeInTheDocument();
-
-    const coordField = screen.getByText(/Coordinates/i);
-    expect(coordField).toBeInTheDocument();
     })
   });
 
@@ -159,6 +220,9 @@ describe('CreateDocument', () => {
 
   test('submits the form and calls AddDocumentDescription', async () => {
     useParams.mockReturnValue({ id: '' });
+    const mockContextValue = {
+      user: {username: 'urban_planner',role: 'Urban Planner'}, // Assicurati che l'utente non sia loggato
+    };
     API.getDocuments.mockResolvedValue([])
     API.getTypes.mockResolvedValue([{ value: 'type1', label: 'type1' },
       { value: 'type2', label: 'type2' },
@@ -170,9 +234,14 @@ describe('CreateDocument', () => {
       { value: 'stakeholder5', label: 'stakeholder5' },
       { value: 'stakeholder6', label: 'stakeholder6' },
       { value: 'stakeholder7', label: 'stakeholder7' }])
+      API.getScale.mockResolvedValue([{ value: '1:200', label: '1:200' },
+        { value: '1:300', label: '1:300' },
+        { value: '1:400', label: '1:400' }])
     API.AddDocumentDescription.mockResolvedValue({ success: true })
+
+    jest.useFakeTimers();
   
-    render(<MockAuthProvider><FormDocument mode="add" /></MockAuthProvider>);
+    render(<AuthContext.Provider value={mockContextValue}><FormDocument mode="add" /></AuthContext.Provider>);
     
     
 
@@ -182,14 +251,14 @@ describe('CreateDocument', () => {
     const selectOptions = screen.getAllByTestId(/select/i);
     
     fireEvent.change(screen.getByPlaceholderText(/Enter title/i), { target: { value: 'Document Title' } });
-    fireEvent.change(screen.getByPlaceholderText(/Enter scale/i), { target: { value: '1:100' } });
-    fireEvent.change(screen.getByTestId(/date-input/i), { target: { value: '2024-01-01' } });
+    fireEvent.change(screen.getByPlaceholderText(/DD/i), { target: { value: '01' } });
+    fireEvent.change(screen.getByPlaceholderText(/MM/i), { target: { value: '01' } });
+    fireEvent.change(screen.getByPlaceholderText(/YYYY/i), { target: { value: '2024' } });
     fireEvent.change(selectOptions[0], {target: {value: 'stakeholder2'}})
-    fireEvent.change(selectOptions[1], { target: { value: 'type1' } });
-    fireEvent.change(selectOptions[2], { target: { value: 'swedish' } });
+    fireEvent.change(selectOptions[1], {target: {value: '1:200'}})
+    fireEvent.change(selectOptions[2], { target: { value: 'type1' } });
+    fireEvent.change(selectOptions[3], { target: { value: 'swedish' } });
     fireEvent.change(screen.getByPlaceholderText(/Enter description/i), { target: { value: 'Some description' } });
-    fireEvent.change(screen.getByPlaceholderText(/latitude/i), { target: { value: '67.821' } });
-    fireEvent.change(screen.getByPlaceholderText(/longitude/i), { target: { value: '20.216' } });
     })
 
     fireEvent.submit(screen.getByTestId('mocked-form'));
@@ -198,13 +267,21 @@ describe('CreateDocument', () => {
       expect(API.AddDocumentDescription).toHaveBeenCalledWith(
         expect.any(Object), 
         [],
-        { lat: '67.821', lng: '20.216' }
+        { lat: '', lng: '' },
+        []
       );
+      
     });
+    jest.advanceTimersByTime(2000)
+    expect(mockNavigate).toHaveBeenCalledWith('/documents');
+    
   });
 
 
   test('loads document data when in "view" mode', async () => {
+    const mockContextValue = {
+      user: {username: 'urban_planner',role: 'Urban Planner'}, // Assicurati che l'utente non sia loggato
+    };
     useParams.mockReturnValue({ id: '123' });
     API.getStake.mockResolvedValue([{ value: 'stakeholder1', label: 'stakeholder1' },
       { value: 'stakeholder2', label: 'stakeholder2' },
@@ -214,21 +291,25 @@ describe('CreateDocument', () => {
       { value: 'stakeholder6', label: 'stakeholder6' },
       { value: 'stakeholder7', label: 'stakeholder7' }])
     API.getDocuments.mockResolvedValue([])
+    API.getScale.mockResolvedValue([{ value: '1:200', label: '1:200' },
+      { value: '1:300', label: '1:300' },
+      { value: '1:400', label: '1:400' }])
     API.getTypes.mockResolvedValue([{ value: 'type1', label: 'type1' },
       { value: 'type2', label: 'type2' },
       { value: 'type3', label: 'type3' }])
     API.getData.mockResolvedValue({  
       title: 'Mock Title',
       stakeholders: ['stakeholder6'],
-      scale: '1:2000',
+      scale: '1:200',
       issuanceDate: '01-01-2014',
       type: 'type1',
-      language: 'English',
+      language: 'Italian',
       description: 'description',
       coordinates: { lat: '67.821', lng: '20.216' },
+      area:[],
       connections: []  
     })
-    render(<MockAuthProvider><FormDocument mode="view" /></MockAuthProvider>);
+    render(<AuthContext.Provider value={mockContextValue}><FormDocument mode="view" /></AuthContext.Provider>);
     
 
     
@@ -240,14 +321,87 @@ describe('CreateDocument', () => {
       const selectOptions = screen.getAllByTestId(/select/i);
       expect(screen.getByPlaceholderText(/Enter title/i)).toHaveValue('Mock Title');
       expect(selectOptions[0]).toHaveValue(['stakeholder6']);
-      expect(screen.getByPlaceholderText(/Enter scale/i)).toHaveValue('1:2000');
+      expect(selectOptions[1]).toHaveValue('1:200');
       expect(screen.getByPlaceholderText(/Enter description/i)).toHaveValue('description');
-      expect(selectOptions[1]).toHaveValue('type1');
-      //expect(selectOptions[2]).toHaveValue('English');
+      expect(selectOptions[2]).toHaveValue('type1');
+      expect(selectOptions[3]).toHaveValue('Italian');
     });
   });
 
+
+  test('edit document in "view" mode', async () => {
+    useParams.mockReturnValue({ id: '123' });
+    const mockContextValue = {
+      user: {username: 'urban_planner',role: 'Urban Planner'}, // Assicurati che l'utente non sia loggato
+    };
+    useAuth.mockReturnValue(mockContextValue);
+    API.getStake.mockResolvedValue([{ value: 'stakeholder1', label: 'stakeholder1' },
+      { value: 'stakeholder2', label: 'stakeholder2' },
+      { value: 'stakeholder3', label: 'stakeholder3' },
+      { value: 'stakeholder4', label: 'stakeholder4' },
+      { value: 'stakeholder5', label: 'stakeholder5' },
+      { value: 'stakeholder6', label: 'stakeholder6' },
+      { value: 'stakeholder7', label: 'stakeholder7' }])
+    API.getDocuments.mockResolvedValue([])
+    API.getScale.mockResolvedValue([{ value: '1:200', label: '1:200' },
+      { value: '1:300', label: '1:300' },
+      { value: '1:400', label: '1:400' }])
+    API.getTypes.mockResolvedValue([{ value: 'type1', label: 'type1' },
+      { value: 'type2', label: 'type2' },
+      { value: 'type3', label: 'type3' }])
+    API.getData.mockResolvedValue({  
+      title: 'Mock Title',
+      stakeholders: ['stakeholder6'],
+      scale: '1:200',
+      issuanceDate: '01-01-2014',
+      type: 'type1',
+      language: 'Italian',
+      description: 'description',
+      coordinates: { lat: '67.821', lng: '20.216' },
+      area:[],
+      connections: []  
+    })
+    render(<AuthContext.Provider value={mockContextValue}><FormDocument mode="view" /></AuthContext.Provider>);
+    
+
+    
+    await waitFor(() => {
+      expect(API.getData).toHaveBeenCalledWith('123')
+    });
+
+    fireEvent.click(screen.getByTestId(/edit/i))
+  
+    await waitFor(() => {
+      const selectOptions = screen.getAllByTestId(/select/i);
+      expect(screen.getByPlaceholderText(/Enter title/i)).toHaveValue('Mock Title');
+      expect(selectOptions[0]).toHaveValue(['stakeholder6']);
+      expect(selectOptions[1]).toHaveValue('1:200');
+      expect(screen.getByPlaceholderText(/Enter description/i)).toHaveValue('description');
+      expect(selectOptions[2]).toHaveValue('type1');
+      expect(selectOptions[3]).toHaveValue('Italian');
+    });
+
+    fireEvent.change(screen.getByPlaceholderText(/YYYY/i), { target: { value: '2023' } });
+
+    fireEvent.submit(screen.getByTestId('mocked-form'));
+  
+    await waitFor(() => {
+      expect(API.EditDocumentDescription).toHaveBeenCalledWith(
+        expect.any(Object), 
+        [],
+        { lat: '67.821', lng: '20.216' },
+        [],
+        '123'
+      );
+      
+    });
+
+  });
+
   test('shows error when required fields are empty', async () => {
+    const mockContextValue = {
+      user: {username: 'urban_planner',role: 'Urban Planner'}, // Assicurati che l'utente non sia loggato
+    };
     useParams.mockReturnValue({ id: '' });
     API.getTypes.mockResolvedValue([{ value: 'type1', label: 'type1' },
       { value: 'type2', label: 'type2' },
@@ -261,7 +415,7 @@ describe('CreateDocument', () => {
       { value: 'stakeholder7', label: 'Stakeholder 7' }])
     API.getDocuments.mockResolvedValue([]);
     
-    render(<MockAuthProvider><FormDocument mode="view" /></MockAuthProvider>);
+    render(<AuthContext.Provider value={mockContextValue}><FormDocument mode="view" /></AuthContext.Provider>);
   
     // Simulate submitting the form with empty fields
     fireEvent.submit(screen.getByTestId('mocked-form'));
@@ -270,9 +424,10 @@ describe('CreateDocument', () => {
     await waitFor(() => {
       // Check that the required fields show validation errors
       expect(screen.getByText(/Title cannot be empty!/i)).toBeInTheDocument();
-      //expect(screen.getByText(/Stakeholder cannot be empty!/i)).toBeInTheDocument();
+      expect(screen.getByText(/Stakeholder cannot be empty!/i)).toBeInTheDocument();
       expect(screen.getByText(/Scale cannot be empty!/i)).toBeInTheDocument();
       expect(screen.getByText(/Description cannot be empty!/i)).toBeInTheDocument();
+      expect(screen.getByText(/Type cannot be empty!/i)).toBeInTheDocument();
     });
   });
   
