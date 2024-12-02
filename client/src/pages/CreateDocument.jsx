@@ -51,7 +51,8 @@ function FormDocument(props) {
   const [allStake,setAllStake] = useState([]);
   const [allScale,setAllScale] = useState([]);
   const [errors, setErrors] = useState([]);
-  const [rights, setRights] = useState(false)
+  const [rights, setRights] = useState(false);
+  const [files, setFiles] = useState([]);
 
   const customStyles = {
     control: (base) => ({
@@ -142,8 +143,8 @@ function FormDocument(props) {
             setMonth(mm)
           setYear(yyyy)
           setRelatedDocuments(doc.connections);
-          setSelectedDocuments(connectedDocumentIds)
-          
+          setSelectedDocuments(connectedDocumentIds);
+          setFiles(doc.files);
         }
       } catch (error) {
         console.error("Error loading data:", error);
@@ -472,7 +473,12 @@ function FormDocument(props) {
                     {errors.description}
               </Form.Control.Feedback>
 
-              <DocumentUploader></DocumentUploader>
+              <DocumentUploader 
+                mode={props.mode}
+                edit={edit}
+                documentId={docID}
+                files={files}           
+              ></DocumentUploader>
 
             </Col>
           </Row>

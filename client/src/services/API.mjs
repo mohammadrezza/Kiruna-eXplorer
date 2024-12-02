@@ -115,7 +115,25 @@ async function addScale(scale) {
   return await fetchRequest('/documents/scales', 'POST', { name: scale });
 }
 
-
+async function uploadDocument(documentId, file) {
+  console.log(documentId,file);
+  const formData = new FormData();
+  formData.append('file', file);
+  try {
+    const response = await fetchRequest(
+      `/documents/${documentId}/files`,
+      'POST',
+      formData,
+      {
+        'Content-Type': 'multipart/form-data',
+      }
+    );
+    return response;
+  } catch (error) {
+    console.error('File upload failed', error);
+    throw error;
+  }
+}
 
 const API = {
   login,
@@ -134,7 +152,8 @@ const API = {
   getScale,
   getSortedDocuments,
   searchDoc,
-  getFIilteredDocuments
+  getFIilteredDocuments,
+  uploadDocument
 };
 
 export default API;
