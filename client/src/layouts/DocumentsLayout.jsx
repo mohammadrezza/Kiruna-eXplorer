@@ -115,7 +115,7 @@ function DocumentsList() {
                 Search
               </button>
         </div>
-        <div className="map-documents-button" onClick={()=>handleNavigation(isList ? "/documents/map" : "/documents")}>
+        <div className="map-documents-button" role="button" onClick={()=>handleNavigation(isList ? "/documents/map" : "/documents")}>
           {isList ? <LiaMapMarkedAltSolid /> : <LiaThListSolid/>}
           <span>{isList ? "Show On Map" : "Show List"}</span>
         </div>
