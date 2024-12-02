@@ -368,48 +368,90 @@ async function getAllDocuments(
                 countParams.push(...stakeholders);
             }
 
-            // Issuance Date Range filter
-            if (issuanceDateStart && issuanceDateEnd) {
+            if (issuanceDateStart && !issuanceDateEnd) {
                 query += ` AND (
-                    (
-                        substr(d.issuanceDate, 7, 4) BETWEEN substr(?, 7, 4) AND substr(?, 7, 4)
-                    ) AND (
-                        CASE 
-                            WHEN substr(?, 4, 2) = '00' AND substr(?, 4, 2) = '12' THEN 
-                                substr(d.issuanceDate, 4, 2) IN ('00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12')
-                            WHEN substr(?, 1, 2) = '00' AND substr(?, 1, 2) = '12' THEN 
-                                substr(d.issuanceDate, 1, 2) IN ('00', '01')
-                            ELSE 
-                                d.issuanceDate BETWEEN ? AND ?
-                        END
-                    )
-                )`;
+        (
+            substr(d.issuanceDate, 7, 4) = substr(?, 7, 4)
+        ) AND (
+            substr(d.issuanceDate, 1, 2) IN ('00', substr(?, 1, 2)) 
+            AND substr(d.issuanceDate, 4, 2) IN ('00', substr(?, 4, 2)) 
+            OR d.issuanceDate = ?
+        )
+    )`;
                 params.push(
-                    issuanceDateStart, issuanceDateEnd,
-                    issuanceDateStart, issuanceDateEnd,
-                    issuanceDateStart, issuanceDateEnd,
-                    issuanceDateStart, issuanceDateEnd
+                    issuanceDateStart,
+                    issuanceDateStart,
+                    issuanceDateStart,
+                    issuanceDateStart
                 );
 
                 countQuery += ` AND (
-                    (
-                        substr(d.issuanceDate, 7, 4) BETWEEN substr(?, 7, 4) AND substr(?, 7, 4)
-                    ) AND (
-                        CASE 
-                            WHEN substr(?, 4, 2) = '00' AND substr(?, 4, 2) = '12' THEN 
-                                substr(d.issuanceDate, 4, 2) IN ('00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12')
-                            WHEN substr(?, 1, 2) = '00' AND substr(?, 1, 2) = '12' THEN 
-                                substr(d.issuanceDate, 1, 2) IN ('00', '01')
-                            ELSE 
-                                d.issuanceDate BETWEEN ? AND ?
-                        END
-                    )
-                )`;
+        (
+            substr(d.issuanceDate, 7, 4) = substr(?, 7, 4)
+        ) AND (
+            substr(d.issuanceDate, 1, 2) IN ('00', substr(?, 1, 2)) 
+            AND substr(d.issuanceDate, 4, 2) IN ('00', substr(?, 4, 2)) 
+            OR d.issuanceDate = ?
+        )
+    )`;
                 countParams.push(
-                    issuanceDateStart, issuanceDateEnd,
-                    issuanceDateStart, issuanceDateEnd,
-                    issuanceDateStart, issuanceDateEnd,
-                    issuanceDateStart, issuanceDateEnd
+                    issuanceDateStart,
+                    issuanceDateStart,
+                    issuanceDateStart,
+                    issuanceDateStart
+                );
+            }
+
+            // Issuance Date Range filter
+            if (issuanceDateStart && issuanceDateEnd) {
+                query += ` AND (
+        -- Match documents in the exact date range
+        d.issuanceDate BETWEEN ? AND ?
+        OR
+        -- Match documents in the month range with day as '00'
+        (
+            substr(d.issuanceDate, 7, 4) BETWEEN substr(?, 7, 4) AND substr(?, 7, 4)
+            AND substr(d.issuanceDate, 1, 2) = '00'
+            AND substr(d.issuanceDate, 4, 2) BETWEEN substr(?, 4, 2) AND substr(?, 4, 2)
+        )
+        OR
+        -- Match documents in the year range with both day and month as '00'
+        (
+            substr(d.issuanceDate, 7, 4) BETWEEN substr(?, 7, 4) AND substr(?, 7, 4)
+            AND substr(d.issuanceDate, 1, 2) = '00'
+            AND substr(d.issuanceDate, 4, 2) = '00'
+        )
+    )`;
+
+                params.push(
+                    issuanceDateStart, issuanceDateEnd, // For exact date range
+                    issuanceDateStart, issuanceDateEnd, issuanceDateStart, issuanceDateEnd, // For month range with day = '00'
+                    issuanceDateStart, issuanceDateEnd // For year range with day and month = '00'
+                );
+
+                countQuery += ` AND (
+        -- Match documents in the exact date range
+        d.issuanceDate BETWEEN ? AND ?
+        OR
+        -- Match documents in the month range with day as '00'
+        (
+            substr(d.issuanceDate, 7, 4) BETWEEN substr(?, 7, 4) AND substr(?, 7, 4)
+            AND substr(d.issuanceDate, 1, 2) = '00'
+            AND substr(d.issuanceDate, 4, 2) BETWEEN substr(?, 4, 2) AND substr(?, 4, 2)
+        )
+        OR
+        -- Match documents in the year range with both day and month as '00'
+        (
+            substr(d.issuanceDate, 7, 4) BETWEEN substr(?, 7, 4) AND substr(?, 7, 4)
+            AND substr(d.issuanceDate, 1, 2) = '00'
+            AND substr(d.issuanceDate, 4, 2) = '00'
+        )
+    )`;
+
+                countParams.push(
+                    issuanceDateStart, issuanceDateEnd, // For exact date range
+                    issuanceDateStart, issuanceDateEnd, issuanceDateStart, issuanceDateEnd, // For month range with day = '00'
+                    issuanceDateStart, issuanceDateEnd // For year range with day and month = '00'
                 );
             }
 
