@@ -167,7 +167,7 @@ function FormDocument(props) {
     if (!description.trim()) validationErrors.description = 'Description cannot be empty!';
     if(day && (!month && !year)) validationErrors.day ='Insert month and year before the day'
     if(month && !year) validationErrors.month ='Insert year before the day'
-    if (locationFormRef.current && (coordinates.lat !==  '' && coordinates.lng !== '')) {
+    if (locationFormRef.current && (Object.keys(coordinates).length && (coordinates.lat !==  '' && coordinates.lng !== ''))) {
       const isValid = locationFormRef.current.areValidCoordinates(coordinates);
       if(!isValid) validationErrors.coordinates ='Not correct format or not inside Kiruna area'
     }
