@@ -120,9 +120,12 @@ async function addScale(scale) {
 }
 
 async function uploadDocument(documentId, file) {
-  console.log(documentId,file);
+  console.log(documentId,file.name);
   const formData = new FormData();
-  formData.append('file', file);
+  formData.append('file', file.name);
+  for (let pair of formData.entries()) {
+    console.log(pair[0] + ': ' + pair[1]);
+  }
   try {
     const response = await fetchRequest(
       `/documents/${documentId}/files`,
