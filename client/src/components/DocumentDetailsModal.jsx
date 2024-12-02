@@ -25,7 +25,7 @@ function DocumentDetailsModal({ show, onHide, document }) {
           </Col>
           <Col md={6}>
             <p><strong>Scale:</strong> {document.scale}</p>
-            <p><strong>Issuance Date:</strong> {dayjs(document.issuanceDate).format('DD/MM/YYYY')}</p>
+            <p><strong>Issuance Date:</strong> {document.issuanceDate}</p>
             <p><strong>Language:</strong> {document.language}</p>
           </Col>
         </Row>

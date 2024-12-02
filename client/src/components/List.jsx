@@ -102,7 +102,7 @@ function List(){
                 <Col md={2}>{doc.connections}</Col>
                 <Col>{doc.issuanceDate}</Col>
                 <Col>
-                  <span className='filesymbol' onClick={(e) => {
+                  <span className='filesymbol' role="button" onClick={(e) => {
                       e.stopPropagation(); // Prevent row click event
                       handleIconClick(doc);
                     }}>

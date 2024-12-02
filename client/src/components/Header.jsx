@@ -31,7 +31,7 @@ function Header({ className }) {
       variant="light" 
       data-testid="header-wrapper">
       <hr></hr>
-      <h3 onClick={() => navigateTo('/')}>Kiruna eXplorer</h3>
+      <h3 onClick={() => navigateTo('/')} role="button">Kiruna eXplorer</h3>
       <div className='custom-navbar-actions'>
       {user ? (
           <div className="user-info">
