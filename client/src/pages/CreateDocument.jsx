@@ -29,7 +29,6 @@ function FormDocument(props) {
   const [title,setTitle] = useState('');
   const [stakeholder,setStakeholder] = useState([]);
   const [scale,setScale] = useState(null);
-  const [issuanceDate,setIssuanceDate] = useState('');
   const [type,setType] = useState(null);
   const [language,setLanguage] = useState('');
   const [description,setDescription] = useState('');
@@ -189,7 +188,10 @@ function FormDocument(props) {
 
 
 
-  const handleSubmit = () =>{
+  const handleSubmit = (event) =>{
+    if(event)
+      event.preventDefault()
+
     const validationErrors = validateForm();
 
     //event.preventDefault();
@@ -206,17 +208,18 @@ function FormDocument(props) {
     setErrors([]);
     const st=[];
     stakeholder.forEach((s) =>st.push(s.value))
+    let issuanceDate;
     if(!day){
       if(!month){
-        setIssuanceDate(`00-00-${year}`)
+        issuanceDate = `00-00-${year}`
       }else{
-        setIssuanceDate(`00-${month}-${year}`)
+        issuanceDate= `00-${month}-${year}`
       }
     }else{
-      setIssuanceDate(`${day}-${month}-${year}`)
+      issuanceDate = `${day}-${month}-${year}`
     }
     
-    const doc = new Document(docID, title.trim(), st, scale, issuanceDate, type.value, language.value, description);
+    const doc = new Document(docID, title.trim(), st, scale.value, issuanceDate, type.value, language.value, description);
     if(props.mode==='add'){
       API.AddDocumentDescription(doc, connections, coordinates, area);
     } else if (props.mode === 'view') {

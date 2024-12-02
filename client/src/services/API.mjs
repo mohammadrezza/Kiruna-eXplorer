@@ -45,8 +45,10 @@ async function EditDocumentDescription(
     type: doc.type,
     language: doc.language,
     coordinates: coordinates,
+    area: area,
     connectionIds: selectedDocuments,
   };
+  console.log(body)
   return await fetchRequest(`/documents/${id}`, 'PUT', body);
 }
 async function getTypes() {
