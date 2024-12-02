@@ -400,6 +400,8 @@ function RelatedDocumentsSelector({
   const [connectionTypes, setConnectionTypes] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [currentDocument, setCurrentDocument] = useState(null);
+  const [filteredDocuments, setFilteredDocuments] = useState(allDocuments); // Filtered documents
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
 
   // Fetch connection types on component mount
   useEffect(() => {
@@ -414,6 +416,20 @@ function RelatedDocumentsSelector({
     };
     fetchConnectionTypes();
   }, []);
+
+  useEffect(() => {
+    // Filter documents based on the search query
+    if (!searchQuery) {
+      setFilteredDocuments(allDocuments); // Show all documents if no query
+    } else {
+      const lowerCaseQuery = searchQuery.toLowerCase();
+      setFilteredDocuments(
+        allDocuments.filter((doc) =>
+          doc.title.toLowerCase().includes(lowerCaseQuery)
+        )
+      );
+    }
+  }, [searchQuery, allDocuments]);
 
   // Initialize connection types for related documents
   useEffect(() => {
@@ -439,30 +455,9 @@ function RelatedDocumentsSelector({
     setCurrentDocument(null);
   };
 
-  // const handleRowClick = (docId) => {
-  //   if (mode === "view" && !edit) {
-  //     onRelatedDocumentClick(docId); // View document details
-  //     return;
-  //   }
-  //   const isSelected = selectedDocuments.includes(docId);
-    
-  //   if (isSelected) {
-  //     // Deseleziona il documento
-  //     onDocumentSelect(docId); // Rimuove il documento da selectedDocuments
-  //     setSelectedConnectionTypes((prev) =>
-  //       prev.filter((item) => item.id !== docId) // Rimuove tutti i tipi di connessione associati a questo documento
-  //     );
-  //   } else {
-  //     // Seleziona il documento
-  //     onDocumentSelect(docId); // Aggiunge il documento a selectedDocuments
-  //     // Aggiungi un nuovo oggetto con tipo vuoto
-  //     setSelectedConnectionTypes((prev) => [
-  //       ...prev,
-  //       { id: docId, type: "" }, // Aggiungi un nuovo elemento con tipi vuoti
-  //     ]);
-  //   }
-  //   console.log(selectedConnectionTypes);
-  // };
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value); // Update the search query
+  };
   
   const handleRowClick = (docId, e) => {
     if (mode === "view" && !edit) {
@@ -510,25 +505,22 @@ function RelatedDocumentsSelector({
     console.log(selectedConnectionTypes);
   };
 
-
-  const handleConnectionTypeToggle = (docId, type) => {
-    setSelectedConnectionTypes((prev) =>
-      prev.map((item) =>
-        item.id === docId
-          ? {
-              ...item,
-              types: item.types.includes(type)
-                ? item.types.filter((t) => t !== type) // Remove type if already selected
-                : [...item.types, type], // Add type if not selected
-            }
-          : item
-      )
-    );
-    onConnectionTypeChange(docId, type); // Notify parent of the change
-  };
-
   return (
     <div className="document-list">
+      <div className="search-bar-list">
+        <input
+          type="text"
+          placeholder="Enter the document name to search"
+          value={searchQuery}
+          onChange={handleSearch}
+          className="search-input-list"
+        />
+      </div>
+      {filteredDocuments.length === 0 ? (
+        <div className="no-doc-message">
+          <p>No documents found matching your search.</p>
+        </div>
+      ) : (
       <ListGroup className="relatedDocs">
         <ListGroup.Item className="relatedDocs-header">
           <Row>
@@ -540,7 +532,7 @@ function RelatedDocumentsSelector({
             <Col md={2}></Col>
           </Row>
         </ListGroup.Item>
-        {allDocuments.map((doc, num) => (
+        {filteredDocuments.map((doc, num) => (
           <ListGroup.Item
             key={doc.id}
             className={selectedDocuments.includes(doc.id) ? "selected" : ""}
@@ -614,7 +606,7 @@ function RelatedDocumentsSelector({
             </Row>
           </ListGroup.Item>
         ))}
-      </ListGroup>
+      </ListGroup>)}
       <DocumentDetailsModal
         show={showModal}
         onHide={handleCloseModal}

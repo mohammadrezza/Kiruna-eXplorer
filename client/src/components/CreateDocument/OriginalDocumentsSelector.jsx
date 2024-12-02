@@ -6,7 +6,7 @@ import '@/style/OriginalDocumentSelector.css';
 
 const DocumentUploader = ({ mode, edit, documentId, files, onFileRemoved }) => {
   const [selectedFile, setSelectedFile] = useState(null);
-  const [fileName, setFileName] = useState('Nessun file scelto');
+  const [fileName, setFileName] = useState('No file chosen');
   const [fileSize, setFileSize] = useState('');
   const [fileError, setFileError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -17,15 +17,15 @@ const DocumentUploader = ({ mode, edit, documentId, files, onFileRemoved }) => {
 
   const handleFile = (file) => {
     if (file.size > MAX_FILE_SIZE) {
-      setFileError('Il file non può superare i 50MB.');
-      setFileName('Nessun file scelto');
+      setFileError('The file cannot exceed 50MB.');
+      setFileName('No file chosen');
       setFileSize('');
       return;
     }
 
     setFileError('');
     setFileName(file.name);
-    setFileSize(`Dimensione: ${(file.size / 1024 / 1024).toFixed(2)} MB`);
+    setFileSize(`Size: ${(file.size / 1024 / 1024).toFixed(2)} MB`);
     setSelectedFile(file);
   };
 
@@ -61,7 +61,7 @@ const DocumentUploader = ({ mode, edit, documentId, files, onFileRemoved }) => {
       const response = await API.uploadDocument(documentId, selectedFile);
       if (response.success) {
         setSelectedFile(null);
-        setFileName('Nessun file scelto');
+        setFileName('No file chosen');
         setFileSize('');
         setFileError('');
         setShowModal(false);
@@ -134,7 +134,7 @@ const DocumentUploader = ({ mode, edit, documentId, files, onFileRemoved }) => {
 
           <Modal show={showModal} onHide={() => setShowModal(false)} centered>
             <Modal.Header closeButton>
-              <Modal.Title>Carica un Documento</Modal.Title>
+              <Modal.Title>Upload a Document</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <div
@@ -149,7 +149,7 @@ const DocumentUploader = ({ mode, edit, documentId, files, onFileRemoved }) => {
                   backgroundColor: isDragging ? '#e8e8e8' : '#fff',
                 }}
               >
-                <p>Trascina qui il tuo file o clicca per selezionarlo</p>
+                <p>Drag and drop your file here or click to select it</p>
                 <input
                   type="file"
                   accept=".pdf, .png, .jpeg"
@@ -162,10 +162,10 @@ const DocumentUploader = ({ mode, edit, documentId, files, onFileRemoved }) => {
                   onClick={() => document.querySelector('input[type="file"]').click()}
                   disabled={loading}
                 >
-                  <FaFileUpload /> Seleziona file
+                  <FaFileUpload /> Select file
                 </Button>
 
-                <p>File selezionato: <span>{fileName}</span></p>
+                <p className='selected-file-text'>Selected file: <span>{fileName}</span></p>
                 <p>{fileSize}</p>
 
                 {fileError && <div className="error-message" style={{ color: 'red' }}>{fileError}</div>}
@@ -176,14 +176,14 @@ const DocumentUploader = ({ mode, edit, documentId, files, onFileRemoved }) => {
                 variant="secondary"
                 onClick={() => setShowModal(false)}
               >
-                Annulla
+                Cancel
               </Button>
               <Button
                 variant="success"
                 onClick={handleFileUpload}
                 disabled={loading || !selectedFile}
               >
-                {loading ? 'Caricamento...' : 'Carica Documento'}
+                {loading ? 'Uploading...' : 'Upload Document'}
               </Button>
             </Modal.Footer>
           </Modal>
