@@ -86,7 +86,7 @@ const documents = [
         title: "Environmental Impact Study",
         description: "Environmental assessment of city relocation",
         scale: "1:10000",
-        issuanceDate: "01-03-2024",
+        issuanceDate: "00-02-2024",
         type: "Technical",
         language: "English",
         coordinates: {
