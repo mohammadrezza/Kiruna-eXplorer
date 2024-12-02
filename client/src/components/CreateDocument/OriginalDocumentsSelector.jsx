@@ -91,8 +91,8 @@ const DocumentUploader = ({ mode, edit, documentId, files, onFileRemoved }) => {
       setLoading(false);
     }
   };
-
   return (
+    mode ==='add' ? ("") : (
     <div className="document-uploader">
       <h4>Original Documents</h4>
 
@@ -104,7 +104,7 @@ const DocumentUploader = ({ mode, edit, documentId, files, onFileRemoved }) => {
               <FaFileUpload size={50} />
               <p>{file}</p> {/* Display file title */}
 
-              {(edit || mode === 'add' ) && (
+              {(edit) && (
                 <Button
                   variant="danger"
                   onClick={() => handleFileRemoval(file)} // Handle file removal
@@ -121,7 +121,7 @@ const DocumentUploader = ({ mode, edit, documentId, files, onFileRemoved }) => {
       </div>
 
       {/* Show file upload button and modal only in 'edit' or 'add' mode */}
-      {(mode === 'add' || edit) && (
+      {(edit) && (
         <>
           <Button
             className="upload-button"
@@ -192,7 +192,7 @@ const DocumentUploader = ({ mode, edit, documentId, files, onFileRemoved }) => {
 
       {loading && <div className="loading-spinner">Uploading...</div>}
     </div>
-  );
+  ));
 };
 
 export default DocumentUploader;
