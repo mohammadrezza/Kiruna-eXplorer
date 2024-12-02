@@ -31,6 +31,7 @@ describe('documentDAO', () => {
                 type: 'Type1',
                 language: 'English',
                 coordinates: { lat: 1.1, lng: 2.2 },
+                area: [],
                 connections: 0
             };
 
@@ -47,6 +48,7 @@ describe('documentDAO', () => {
                 document.type,
                 document.language,
                 document.coordinates,
+                document.area,
                 document.connections
             )).resolves.toBeUndefined();
 
@@ -61,11 +63,13 @@ describe('documentDAO', () => {
                     document.type,
                     document.language,
                     JSON.stringify(document.coordinates),
+                    JSON.stringify(document.area),
                     document.connections
                 ],
                 expect.any(Function)
             );
         });
+
 
         test('should handle error when inserting a new document', async () => {
             const document = {
@@ -77,6 +81,7 @@ describe('documentDAO', () => {
                 type: 'Type1',
                 language: 'English',
                 coordinates: { lat: 1.1, lng: 2.2 },
+                area: [],
                 connections: 0
             };
 
@@ -94,6 +99,7 @@ describe('documentDAO', () => {
                 document.type,
                 document.language,
                 document.coordinates,
+                document.area,
                 document.connections
             )).rejects.toThrow(errorMessage);
 
@@ -108,6 +114,7 @@ describe('documentDAO', () => {
                     document.type,
                     document.language,
                     JSON.stringify(document.coordinates),
+                    JSON.stringify(document.area),
                     document.connections
                 ],
                 expect.any(Function)
@@ -246,6 +253,7 @@ describe('documentDAO', () => {
                 type: 'Type1',
                 language: 'English',
                 coordinates: { lat: 1.1, lng: 2.2 },
+                area: [],
                 connections: 0
             };
 
@@ -262,6 +270,7 @@ describe('documentDAO', () => {
                 document.type,
                 document.language,
                 document.coordinates,
+                document.area,
                 document.connections
             )).resolves.toBeUndefined();
 
@@ -275,6 +284,7 @@ describe('documentDAO', () => {
                     document.type,
                     document.language,
                     JSON.stringify(document.coordinates),
+                    JSON.stringify(document.area),
                     document.connections,
                     document.id
                 ],
@@ -292,6 +302,7 @@ describe('documentDAO', () => {
                 type: 'Type1',
                 language: 'English',
                 coordinates: { lat: 1.1, lng: 2.2 },
+                area: [],
                 connections: 0
             };
 
@@ -309,6 +320,7 @@ describe('documentDAO', () => {
                 document.type,
                 document.language,
                 document.coordinates,
+                document.area,
                 document.connections
             )).rejects.toThrow(errorMessage);
 
@@ -322,6 +334,7 @@ describe('documentDAO', () => {
                     document.type,
                     document.language,
                     JSON.stringify(document.coordinates),
+                    JSON.stringify(document.area),
                     document.connections,
                     document.id
                 ],

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Row, Col, Form } from 'react-bootstrap';
+import React from 'react';
+import { Row } from 'react-bootstrap';
 import MapAreaSelector from "@/components/CreateDocument/MapAreaSelector"
 
 const AreaForm = ({area, mode, edit, onAreaChange}) => {
