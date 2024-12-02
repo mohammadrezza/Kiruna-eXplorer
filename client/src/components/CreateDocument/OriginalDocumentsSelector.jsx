@@ -50,6 +50,16 @@ const DocumentUploader = ({ mode, edit, documentId, files, onFileRemoved }) => {
     handleFile(file);
   };
 
+  const truncateFileName = (filePath, maxLength = 20) => {
+    const fileName = filePath.split('/').pop(); // Prende solo il nome del file
+    if (fileName.length <= maxLength) return fileName;
+    const fileExtension = fileName.slice(fileName.lastIndexOf('.'));
+    const nameWithoutExtension = fileName.slice(0, fileName.lastIndexOf('.'));
+    // Calcola la parte del nome che rimane prima del '...'
+    const truncatedName = nameWithoutExtension.slice(0, maxLength - 3) + '...';
+    return truncatedName + fileExtension;
+  };
+
   const handleFileUpload = async () => {
     if (!selectedFile) {
       setFileError('Please select a file to upload');
@@ -75,22 +85,23 @@ const DocumentUploader = ({ mode, edit, documentId, files, onFileRemoved }) => {
     }
   };
 
-  const handleFileRemoval = async (filePath) => {
-    setLoading(true);
-    try {
-      const response = await API.removeDocument(documentId, filePath);
-      if (response.success) {
-        onFileRemoved(filePath); // Notify parent to remove the file from the list
-        setFileError('');
-      } else {
-        setFileError('Error removing file');
-      }
-    } catch (error) {
-      setFileError('Error removing file');
-    } finally {
-      setLoading(false);
-    }
-  };
+//   const handleFileRemoval = async (filePath) => {
+//     setLoading(true);
+//     try {
+//       const response = await API.removeDocument(documentId, filePath);
+//       if (response.success) {
+//         onFileRemoved(filePath); // Notify parent to remove the file from the list
+//         setFileError('');
+//       } else {
+//         setFileError('Error removing file');
+//       }
+//     } catch (error) {
+//       setFileError('Error removing file');
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
   return (
     mode ==='add' ? ("") : (
     <div className="document-uploader">
@@ -102,18 +113,8 @@ const DocumentUploader = ({ mode, edit, documentId, files, onFileRemoved }) => {
           files.map((file, index) => (
             <div key={index} className="file-item">
               <FaFileUpload size={50} />
-              <p>{file}</p> {/* Display file title */}
-
-              {(edit) && (
-                <Button
-                  variant="danger"
-                  onClick={() => handleFileRemoval(file)} // Handle file removal
-                  size="sm"
-                >
-                  <FaTrash /> Remove
-                </Button>
-              )}
-            </div>
+              <p>{truncateFileName(file, 6)}</p> {/* Display truncated file title */}
+              </div>
           ))
         ) : (mode === 'view' && !edit)?(
           <p>No files available.</p>
