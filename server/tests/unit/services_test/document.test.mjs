@@ -4,7 +4,7 @@ import DocumentType from "../../../src/components/documentType.mjs";
 
 const documentService = require('../../../src/services/documentService.mjs');
 import * as documentDao from '../../../src/daos/documentDAO.mjs';
-import { getDocumentWithConnections, getDocumentStakeholders} from "../../../src/daos/documentDAO.mjs";
+import {getDocumentWithConnections, getDocumentStakeholders} from "../../../src/daos/documentDAO.mjs";
 
 jest.mock('../../../src/daos/documentDao.mjs');
 afterEach(() => {
@@ -18,11 +18,16 @@ describe('Services', () => {
             const title = 'Test Document';
             const page = 1;
             const size = 10;
+            const sort = 'title';
+            const documentTypes = []
+            const stakeholders = []
+            const issuanceDateStart = '01-01-2023'
+            const issuanceDateEnd = '01-01-2024'
 
             const mockResult = {
                 data: [
-                    { id: '1', title: 'Document 1' },
-                    { id: '2', title: 'Document 2' }
+                    {id: '1', title: 'Document 1'},
+                    {id: '2', title: 'Document 2'}
                 ],
                 pagination: {
                     total: 2,
@@ -36,9 +41,9 @@ describe('Services', () => {
 
             documentDao.getAllDocuments.mockResolvedValue(mockResult);
 
-            const result = await documentService.getDocuments(documentId, title, page, size);
+            const result = await documentService.getDocuments(documentId, title, page, size, sort, documentTypes, stakeholders, issuanceDateStart, issuanceDateEnd);
 
-            expect(documentDao.getAllDocuments).toHaveBeenCalledWith(documentId, title, page, size);
+            expect(documentDao.getAllDocuments).toHaveBeenCalledWith(documentId, title, page, size, sort, documentTypes, stakeholders, issuanceDateStart, issuanceDateEnd);
             expect(result).toEqual(mockResult);
         });
     });
@@ -54,6 +59,7 @@ describe('Services', () => {
                 type: DocumentType.DESIGN_DOCUMENT,
                 language: 'language',
                 coordinates: '{"lat": 1.1, "lng": 2.2}',
+                area: [],
                 connections: [{id: 'id', type: DocumentConnectionType.PROJECTION}]
             };
 
@@ -69,6 +75,7 @@ describe('Services', () => {
                 document.type,
                 document.language,
                 document.coordinates,
+                document.area,
                 document.connections
             )).rejects.toThrow(`Error creating document: ${errorMessage}`);
 
@@ -81,6 +88,7 @@ describe('Services', () => {
                 document.type,
                 document.language,
                 document.coordinates,
+                document.area,
                 document.connections.length
             );
         });
@@ -95,6 +103,7 @@ describe('Services', () => {
                 type: DocumentType.DESIGN_DOCUMENT,
                 language: 'language',
                 coordinates: '{"lat": 1.1, "lng": 2.2}',
+                area: [],
                 connections: [{id: 'id', type: DocumentConnectionType.PROJECTION}]
             }
             jest.spyOn(documentDao, 'addDocument').mockResolvedValue();
@@ -110,6 +119,7 @@ describe('Services', () => {
                 document.type,
                 document.language,
                 document.coordinates,
+                document.area,
                 document.connections
             )
 
@@ -137,6 +147,7 @@ describe('Services', () => {
                 type: DocumentType.DESIGN_DOCUMENT,
                 language: 'language',
                 coordinates: '{"lat": 1.1, "lng": 2.2}',
+                area: [],
                 connections: [{id: 'id', type: DocumentConnectionType.PROJECTION}]
             }
             jest.spyOn(documentDao, 'editDocument').mockResolvedValue();
@@ -155,6 +166,7 @@ describe('Services', () => {
                 document.type,
                 document.language,
                 document.coordinates,
+                document.area,
                 document.connections
             )
 
@@ -194,6 +206,7 @@ describe('Services', () => {
                 document.type,
                 document.language,
                 document.coordinates,
+                document.area,
                 document.connections
             )).rejects.toThrow(`Error updating document: ${errorMessage}`);
 
@@ -206,6 +219,7 @@ describe('Services', () => {
                 document.type,
                 document.language,
                 document.coordinates,
+                document.area,
                 document.connections.length
             );
         });
@@ -214,10 +228,10 @@ describe('Services', () => {
     })
 
     describe('getDocument', () => {
-        
+
         test('should return a document with connections', async () => {
             const documentId = '123';
-    
+
             const mockDocumentData = [
                 {
                     doc_id: '123',
@@ -238,26 +252,26 @@ describe('Services', () => {
                     conn_coordinates: '{"lat": 3.3, "lng": 4.4}'
                 }
             ];
-    
+
             const mockStakeholders = [
-                { stakeholder: 'Stakeholder1' },
-                { stakeholder: 'Stakeholder2' }
+                {stakeholder: 'Stakeholder1'},
+                {stakeholder: 'Stakeholder2'}
             ];
-    
+
             const mockConnStakeholders = [
-                { stakeholder: 'ConnStakeholder1' },
-                { stakeholder: 'ConnStakeholder2' }
+                {stakeholder: 'ConnStakeholder1'},
+                {stakeholder: 'ConnStakeholder2'}
             ];
-    
+
             getDocumentWithConnections.mockResolvedValue(mockDocumentData);
             getDocumentStakeholders.mockResolvedValueOnce(mockStakeholders).mockResolvedValueOnce(mockConnStakeholders);
-    
+
             const result = await documentService.getDocument(documentId);
-    
+
             expect(getDocumentWithConnections).toHaveBeenCalledWith(documentId);
             expect(getDocumentStakeholders).toHaveBeenCalledWith(documentId);
             expect(getDocumentStakeholders).toHaveBeenCalledWith('456');
-    
+
         });
 
         test('should handle error when fetching the document', async () => {
@@ -284,8 +298,6 @@ describe('Services', () => {
             expect(getDocumentStakeholders).toHaveBeenCalledWith(documentId);
             expect(result).toBeNull();
         });
-
-       
 
 
     });
