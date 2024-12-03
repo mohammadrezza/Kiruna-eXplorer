@@ -667,7 +667,7 @@
 							"variable": [
 								{
 									"key": "dcoumentId",
-									"value": "134689db-7f82-4408-9862-2981e3ba4003"
+									"value": "doc1"
 								}
 							]
 						}
@@ -689,20 +689,24 @@
 							"value": "Origin"
 						},
 						{
+							"key": "Access-Control-Allow-Credentials",
+							"value": "true"
+						},
+						{
 							"key": "Content-Type",
 							"value": "application/json; charset=utf-8"
 						},
 						{
 							"key": "Content-Length",
-							"value": "867"
+							"value": "1233"
 						},
 						{
 							"key": "ETag",
-							"value": "W/\"363-uZU2Qc92SoISGrreUlCJoRW+T9c\""
+							"value": "W/\"4d1-liTZ7weBOuPKjJvaBjO9D2/dEuk\""
 						},
 						{
 							"key": "Date",
-							"value": "Sat, 16 Nov 2024 18:13:26 GMT"
+							"value": "Tue, 03 Dec 2024 16:20:46 GMT"
 						},
 						{
 							"key": "Connection",
@@ -714,7 +718,7 @@
 						}
 					],
 					"cookie": [],
-					"body": "{\n    \"success\": true,\n    \"data\": {\n        \"id\": \"134689db-7f82-4408-9862-2981e3ba4003\",\n        \"title\": \"foo\",\n        \"description\": \"description\",\n        \"stakeholders\": [\n            \"LKAB\",\n            \"Municipality\"\n        ],\n        \"scale\": \"foo\",\n        \"issuanceDate\": \"21-02-1996\",\n        \"type\": \"TYPE_FOO\",\n        \"language\": \"english\",\n        \"coordinates\": {},\n        \"area\":[\n        [0.0 , 1.1],\n        [1 , 2],\n        [3 , 4],\n        [0.0 , 1.1]\n        ],\n        \"connections\": [\n            {\n                \"connectionType\": \"Direct consequence\",\n                \"id\": \"doc1\",\n                \"title\": \"City Transformation Plan 2024\",\n                \"stakeholders\": [\n                    \"Municipality\",\n                    \"LKAB\"\n                ],\n                \"scale\": \"City\",\n                \"issuanceDate\": \"2024-01-15\",\n                \"type\": \"Direct consequence\",\n                \"language\": \"English\",\n                \"coordinates\": {\n                    \"lat\": 67.8558,\n                    \"lng\": 20.2253\n                }\n            },\n            {\n                \"connectionType\": \"Collateral consequence\",\n                \"id\": \"doc2\",\n                \"title\": \"LKAB Mining Impact Assessment\",\n                \"stakeholders\": [\n                    \"LKAB\",\n                    \"Regional Authority\"\n                ],\n                \"scale\": \"Regional\",\n                \"issuanceDate\": \"2024-02-01\",\n                \"type\": \"Collateral consequence\",\n                \"language\": \"Swedish\",\n                \"coordinates\": {\n                    \"lat\": 67.8504,\n                    \"lng\": 20.1761\n                }\n            }\n        ],\n        \"files\":[\n            \"server/uploads/docId/nameOfTheFile.pdf\"\n        ]\n    }\n}"
+					"body": "{\n    \"success\": true,\n    \"data\": {\n        \"id\": \"doc1\",\n        \"title\": \"City Transformation Plan 2024\",\n        \"description\": \"Master plan for Kiruna city transformation\",\n        \"stakeholders\": [\n            \"Municipality\",\n            \"LKAB\"\n        ],\n        \"scale\": \"1:500\",\n        \"issuanceDate\": \"15-01-2024\",\n        \"type\": \"Prescriptive\",\n        \"language\": \"English\",\n        \"coordinates\": {},\n        \"area\": [\n            [\n                67.8598,\n                20.2092\n            ],\n            [\n                67.8522,\n                20.197\n            ],\n            [\n                67.8677,\n                20.2439\n            ]\n        ],\n        \"connections\": [\n            {\n                \"connectionType\": \"Direct consequence\",\n                \"id\": \"doc2\",\n                \"title\": \"LKAB Mining Impact Assessment\",\n                \"stakeholders\": [\n                    \"LKAB\",\n                    \"Regional Authority\"\n                ],\n                \"scale\": \"1:5000\",\n                \"issuanceDate\": \"01-02-2024\",\n                \"type\": \"Technical\",\n                \"language\": \"Swedish\",\n                \"connections\": 2,\n                \"coordinates\": {},\n                \"area\": [\n                    [\n                        67.8608,\n                        20.205\n                    ],\n                    [\n                        67.853,\n                        20.19\n                    ],\n                    [\n                        67.8685,\n                        20.24\n                    ]\n                ]\n            },\n            {\n                \"connectionType\": \"Projection\",\n                \"id\": \"doc5\",\n                \"title\": \"Environmental Impact Study\",\n                \"stakeholders\": [\n                    \"Regional Authority\"\n                ],\n                \"scale\": \"1:10000\",\n                \"issuanceDate\": \"00-02-2024\",\n                \"type\": \"Technical\",\n                \"language\": \"English\",\n                \"connections\": 1,\n                \"coordinates\": {\n                    \"lat\": 67.8516,\n                    \"lng\": 20.2371\n                },\n                \"area\": []\n            }\n        ],\n        \"files\": [\n            \"http://localhost:3001/documents/doc1/files/1733242540264-MohammadrezaMirhajianmoghadam.jpg\",\n            \"http://localhost:3001/documents/doc1/files/1733242748265-MohammadrezaMirhajianmoghadam.jpg\",\n            \"http://localhost:3001/documents/doc1/files/1733242749608-MohammadrezaMirhajianmoghadam.jpg\"\n        ]\n    }\n}"
 				}
 			]
 		},
@@ -826,6 +830,77 @@
 						{
 							"key": "documentId",
 							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{host}}/documents/:documentId/files/:filename",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "{{host}}/documents/:documentId/files/:filename",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"documents",
+						":documentId",
+						"files",
+						":filename"
+					],
+					"variable": [
+						{
+							"key": "documentId",
+							"value": ""
+						},
+						{
+							"key": "filename",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{host}}/documents/:documentId/files/:filename",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "{{host}}/documents/:documentId/files/:filename",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"documents",
+						":documentId",
+						"files",
+						":filename"
+					],
+					"variable": [
+						{
+							"key": "documentId",
+							"value": "doc1"
+						},
+						{
+							"key": "filename",
+							"value": "fileName.pdf"
 						}
 					]
 				}
