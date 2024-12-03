@@ -14,6 +14,7 @@ async function getUser() {
 }
 
 async function AddDocumentDescription(doc, selectedDocuments, coordinates, area) {
+  
   const body = {
     title: doc.title,
     description: doc.description,
@@ -22,7 +23,7 @@ async function AddDocumentDescription(doc, selectedDocuments, coordinates, area)
     issuanceDate: doc.issuanceDate,
     type: doc.type,
     language: doc.language,
-    coordinates: coordinates,
+    coordinates: (area.length>0?{}:coordinates),
     area: area,
     connectionIds: selectedDocuments,
   };
@@ -44,7 +45,7 @@ async function EditDocumentDescription(
     issuanceDate: doc.issuanceDate,
     type: doc.type,
     language: doc.language,
-    coordinates: coordinates,
+    coordinates: (area.length>0?{}:coordinates),
     area: area,
     connectionIds: selectedDocuments,
   };

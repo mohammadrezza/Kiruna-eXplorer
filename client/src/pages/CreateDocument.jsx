@@ -160,30 +160,85 @@ function FormDocument(props) {
     const validationErrors = {};
     if (!title.trim()) validationErrors.title = 'Title cannot be empty!';
     if (stakeholder.length === 0) validationErrors.stakeholder = 'Stakeholder cannot be empty!';
-    if (scale=== null) validationErrors.scale = 'Scale cannot be empty!';
+    if (scale === null) validationErrors.scale = 'Scale cannot be empty!';
     if (type === null) validationErrors.type = 'Type cannot be empty!';
     if (!description.trim()) validationErrors.description = 'Description cannot be empty!';
-    if(day && (!month && !year)) validationErrors.day ='Insert month and year before the day'
-    if(month && !year) validationErrors.month ='Insert year before the day'
-    if (locationFormRef.current && (Object.keys(coordinates).length && (coordinates.lat !==  '' && coordinates.lng !== ''))) {
-      const isValid = locationFormRef.current.areValidCoordinates(coordinates);
-      if(!isValid) validationErrors.coordinates ='Not correct format or not inside Kiruna area'
+    
+    if (day && (!month && !year)) {
+        validationErrors.day = 'Insert month and year before the day.';
     }
-    selectedConnectionTypes.forEach(connection => {
-      const documentId = connection.id;
-      const connectionType = connection.type;
-  
-      const connectionsForDocument = selectedConnectionTypes.filter(
-        (item) => item.id === documentId
-      );
-  
-      if (connectionsForDocument.length === 1 && connectionsForDocument[0].type === "") {
-        validationErrors[documentId] = `Connection type for document with ID ${documentId} is missing!`;
-      }
+    if (month && !year) {
+        validationErrors.month = 'Insert year before the month.';
+    }
+    if (day || month || year) {
+        const { errors, formattedDate } = validateAndFormatDate(day, month, year);
+        if (Object.keys(errors).length > 0) {
+            Object.assign(validationErrors, errors);
+        } else {
+            setDay(formattedDate.day);
+            setMonth(formattedDate.month);
+            setYear(formattedDate.year);
+        }
+    }
+
+    if (
+        locationFormRef.current &&
+        Object.keys(coordinates).length &&
+        coordinates.lat !== '' &&
+        coordinates.lng !== ''
+    ) {
+        const isValid = locationFormRef.current.areValidCoordinates(coordinates);
+        if (!isValid) validationErrors.coordinates = 'Not correct format or not inside Kiruna area';
+    }
+
+    selectedConnectionTypes.forEach((connection) => {
+        const documentId = connection.id;
+        const connectionsForDocument = selectedConnectionTypes.filter(
+            (item) => item.id === documentId
+        );
+
+        if (connectionsForDocument.length === 1 && connectionsForDocument[0].type === "") {
+            validationErrors[documentId] = `Connection type for document with ID ${documentId} is missing!`;
+        }
     });
-    console.log(validationErrors);
     return validationErrors;
   };
+
+  function validateAndFormatDate(day, month, year) {
+    const errors = {};
+
+    // Convert to numbers
+    const dayNum = day ? parseInt(day, 10) : null;
+    const monthNum = month ? parseInt(month, 10) : null;
+    const yearNum = year ? parseInt(year, 10) : null;
+
+    // Validate day if provided
+    if (day && (isNaN(dayNum) || dayNum < 1 || dayNum > 31)) {
+        errors.day = "Il giorno deve essere compreso tra 1 e 31.";
+    }
+
+    // Validate month if provided
+    if (month && (isNaN(monthNum) || monthNum < 1 || monthNum > 12)) {
+        errors.month = "Il mese deve essere compreso tra 1 e 12.";
+    }
+
+    // Validate year (mandatory)
+    if (!year || isNaN(yearNum) || yearNum.toString().length !== 4) {
+        errors.year = "L'anno deve essere composto da 4 cifre.";
+    }
+
+    // Format values
+    const formattedDay = day && dayNum < 10 ? `0${dayNum}` : day || "";
+    const formattedMonth = month && monthNum < 10 ? `0${monthNum}` : month || "";
+    const formattedYear = year ? yearNum.toString() : "";
+
+    return {
+        errors,
+        formattedDate: !Object.keys(errors).length
+            ? { day: formattedDay, month: formattedMonth, year: formattedYear }
+            : null,
+    };
+}
 
 
 
@@ -217,7 +272,6 @@ function FormDocument(props) {
     }else{
       issuanceDate = `${day}-${month}-${year}`
     }
-    
     const doc = new Document(docID, title.trim(), st, scale.value, issuanceDate, type.value, language.value, description);
     if(props.mode==='add'){
       API.AddDocumentDescription(doc, connections, coordinates, area);
