@@ -286,7 +286,7 @@ async function getScalesList(req, res) {
     })
 }
 
-async function uploadDocument(req, res) {
+async function uploadFile(req, res) {
     try {
         const {documentId} = req.params;
         const {file} = req;
@@ -313,7 +313,7 @@ async function uploadDocument(req, res) {
             success: true,
             message: 'File uploaded successfully',
             documentId: documentId,
-            filePath: filePath
+            file: "http://localhost:3001/documents/" + documentId + "/files/" + file.filename
         });
 
     } catch (error) {
@@ -324,6 +324,52 @@ async function uploadDocument(req, res) {
             error: error.message
         });
     }
+}
+
+async function downloadFile(req, res) {
+    const {documentId, fileName} = req.params;
+
+    if (!documentId || !fileName) {
+        return res.status(400).json({
+            success: false,
+            message: 'Document ID and file name are required'
+        });
+    }
+
+    const filePath = path.join(process.cwd(), 'uploads', documentId, fileName);
+    if (!fs.existsSync(filePath)) {
+        return res.status(404).json({
+            success: false,
+            message: 'File not found'
+        });
+    }
+
+    res.download(filePath, fileName);
+}
+
+async function deleteFile(req, res) {
+    const {documentId, fileName} = req.params;
+
+    if (!documentId || !fileName) {
+        return res.status(400).json({
+            success: false,
+            message: 'Document ID and file name are required'
+        });
+    }
+
+    const filePath = path.join(process.cwd(), 'uploads', documentId, fileName);
+    if (!fs.existsSync(filePath)) {
+        return res.status(404).json({
+            success: false,
+            message: 'File not found'
+        });
+    }
+
+    fs.unlinkSync(filePath);
+    return res.status(200).json({
+        success: true,
+        message: 'File deleted successfully'
+    });
 }
 
 export {
@@ -338,5 +384,7 @@ export {
     getDocumentTypesList,
     createScale,
     getScalesList,
-    uploadDocument
+    uploadFile,
+    deleteFile,
+    downloadFile
 }
