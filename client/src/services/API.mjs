@@ -150,9 +150,9 @@ async function uploadDocument(documentId, file) {
   }
 }
 
-async function deleteFile(documentId, fileName) {
+async function deleteFile(file) {
   try {
-    const response = await fetch(`http://localhost:3001/documents/${documentId}/files/${fileName}`, {
+    const response = await fetch(file, {
       method: 'DELETE',
       credentials: 'include', 
       mode: 'cors', 

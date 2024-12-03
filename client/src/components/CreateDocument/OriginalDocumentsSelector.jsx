@@ -109,11 +109,11 @@ const DocumentUploader = ({ mode, edit, documentId, files: initialFiles, onFileA
     }
   };
 
-  const handleFileDelete = async (fileName) => {
+  const handleFileDelete = async (file) => {
     try {
-      await API.deleteFile(documentId, fileName);
-      setFiles((prevFiles) => prevFiles.filter((file) => file !== fileName));
-      if (onFileRemoved) onFileRemoved(fileName);
+      await API.deleteFile(file);
+      setFiles((prevFiles) => prevFiles.filter((file) => file !== file));
+      if (onFileRemoved) onFileRemoved(file);
     } catch (error) {
       console.error('Error deleting file:', error);
     }
@@ -127,7 +127,7 @@ const DocumentUploader = ({ mode, edit, documentId, files: initialFiles, onFileA
       <div className="file-display">
         {files && files.length > 0 ? (
           files.map((file, index) => {
-            const fileUrl = `http://localhost:3001/documents/${documentId}/files/${file}`;
+            const fileUrl = file;
             console.log(file);
             return (
               <div key={index} className="file-added-container">
