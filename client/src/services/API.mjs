@@ -14,6 +14,7 @@ async function getUser() {
 }
 
 async function AddDocumentDescription(doc, selectedDocuments, coordinates, area) {
+  
   const body = {
     title: doc.title,
     description: doc.description,
@@ -22,7 +23,7 @@ async function AddDocumentDescription(doc, selectedDocuments, coordinates, area)
     issuanceDate: doc.issuanceDate,
     type: doc.type,
     language: doc.language,
-    coordinates: coordinates,
+    coordinates: (area.length>0?{}:coordinates),
     area: area,
     connectionIds: selectedDocuments,
   };
@@ -44,7 +45,7 @@ async function EditDocumentDescription(
     issuanceDate: doc.issuanceDate,
     type: doc.type,
     language: doc.language,
-    coordinates: coordinates,
+    coordinates: (area.length>0?{}:coordinates),
     area: area,
     connectionIds: selectedDocuments,
   };
@@ -121,21 +122,28 @@ async function addScale(scale) {
 
 async function uploadDocument(documentId, file) {
   console.log(documentId);
+
   const formData = new FormData();
   formData.append('file', file);
+
   for (let pair of formData.entries()) {
-    console.log(pair[0] + ': ' + pair[1]);
+    console.log(`${pair[0]}: ${pair[1]}`);
   }
+
   try {
-    const response = await fetchRequest(
-      `/documents/${documentId}/files`,
-      'POST',
-      formData,
-      {
-        'Content-Type': 'multipart/form-data',
-      }
-    );
-    return response;
+    const response = await fetch(`http://localhost:3001/documents/${documentId}/files`, {
+      method: 'POST',
+      body: formData,
+      credentials: 'include', 
+      mode: 'cors', 
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'File upload failed');
+    }
+
+    return await response.json();
   } catch (error) {
     console.error('File upload failed', error);
     throw error;

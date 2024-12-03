@@ -9,3 +9,21 @@
     height:130px;
 }
 
+.file-icon{
+    font-size: 40px;
+}
+.file-added-button {
+    margin-top: 5px;
+    color: var(--dark-grey);
+    align-items: center;
+    justify-content: flex-start;
+    background-color: var(--lily-white);
+    border: 2px solid var(--lily-white); 
+    border-radius: 8px; /* Rounded corners */
+    padding: 10px 15px;
+    margin-bottom: 10px; /* Space between file items */
+    transition: all 0.3s ease; /* Smooth transition for hover effect */
+    width: 110px;
+    height:130px;
+  }
+
