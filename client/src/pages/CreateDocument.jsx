@@ -309,6 +309,9 @@ function FormDocument(props) {
     setScale(selectedOption);
   };
 
+  const handleFileAdded = (newFileName) => {
+    setFiles((prevFiles) => [...prevFiles, newFileName]);
+  };
 
   const handleConnectionTypeSelect = (documentId, selectedConnectionType) => {
     console.log("Tipo selezionato:", selectedConnectionType);
@@ -532,7 +535,8 @@ function FormDocument(props) {
                 mode={props.mode}
                 edit={edit}
                 documentId={docID}
-                files={files}           
+                files={files}
+                onFileAdded={handleFileAdded}         
               ></DocumentUploader>
 
             </Col>

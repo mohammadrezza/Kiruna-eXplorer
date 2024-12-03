@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaFileUpload, FaTrash, FaFile } from 'react-icons/fa';
 import { FaFilePdf, FaFileImage, FaFileAlt } from 'react-icons/fa'; // Add relevant icons
 import { Button, Modal } from 'react-bootstrap';
 import API from '@/services/API.mjs';  // Import the API module
 import '@/style/OriginalDocumentSelector.css';
 
-const DocumentUploader = ({ mode, edit, documentId, files, onFileRemoved }) => {
+const DocumentUploader = ({ mode, edit, documentId, files: initialFiles, onFileAdded }) => {
+  const [files, setFiles] = useState(initialFiles || []);
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileName, setFileName] = useState('No file chosen');
   const [fileSize, setFileSize] = useState('');
@@ -15,6 +16,11 @@ const DocumentUploader = ({ mode, edit, documentId, files, onFileRemoved }) => {
   const [showModal, setShowModal] = useState(false);
 
   const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
+
+  useEffect(() => {
+    // Handle any updates to files list
+    setFiles(initialFiles || []);
+  }, [initialFiles]);
 
   const handleFile = (file) => {
     if (file.size > MAX_FILE_SIZE) {
@@ -91,6 +97,7 @@ const DocumentUploader = ({ mode, edit, documentId, files, onFileRemoved }) => {
         setFileSize('');
         setFileError('');
         setShowModal(false);
+        onFileAdded && onFileAdded(selectedFile.name);
       } else {
         setFileError('Error uploading file');
       }
@@ -123,7 +130,6 @@ const DocumentUploader = ({ mode, edit, documentId, files, onFileRemoved }) => {
     <div className="document-uploader">
       <h4>Original Documents</h4>
 
-      {/* Display files in both 'view' and 'edit' modes */}
       <div className="file-display">
         {files && files.length > 0 ? (
           files.map((file, index) => (
@@ -131,20 +137,22 @@ const DocumentUploader = ({ mode, edit, documentId, files, onFileRemoved }) => {
             //   <h1><FaFileUpload/></h1>
             //   <h5>{truncateFileName(file, 6)}</h5> {/* Display truncated file title */}
             // </div>
+            console.log(file),
             <button
                 className="file-added-button"
-                onClick={() => setShowModal(true)}
                 style={{ marginBottom: '20px' }}
+                onClick={() => window.open(file, '_blank')} 
+
             >
             <h1>{getFileIcon(file)}</h1> {truncateFileName(file, 6)}
             </button>
+            
           ))
         ) : (mode === 'view' && !edit)?(
           <p>No files available.</p>
         ):""}
       </div>
 
-      {/* Show file upload button and modal only in 'edit' or 'add' mode */}
       {(edit) && (
         <>
           <Button

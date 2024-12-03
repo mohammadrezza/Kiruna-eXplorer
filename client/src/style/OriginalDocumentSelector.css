@@ -1,3 +1,5 @@
+
+
 .selected-file-text{
     margin-top: 13px;
 
@@ -5,9 +7,11 @@
 
 .document-uploader .upload-button{
     margin-top: 10px;
-    width: 110px;
+    width: 107px;
     height:130px;
 }
+
+
 
 .file-icon{
     font-size: 40px;
@@ -22,8 +26,12 @@
     border-radius: 8px; /* Rounded corners */
     padding: 10px 15px;
     margin-bottom: 10px; /* Space between file items */
+    margin-right: 7px;
     transition: all 0.3s ease; /* Smooth transition for hover effect */
-    width: 110px;
-    height:130px;
+    width: 107px;
+    height: 130px;
   }
 
+  .file-added-button :hover {
+    border-color: var(--light-grey) !important ;
+  }
