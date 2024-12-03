@@ -9,8 +9,6 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';  // Importa il p
 
 // Estendi dayjs con il plugin customParseFormat
 
-'../components/CreateDocument/OriginalDocumentsSelector'
-
 jest.mock('../../src/components/CreateDocument/OriginalDocumentsSelector', () => (props) => (
   <div data-testid="OriginalDocumentsSelector" {...props}></div>
 ));
