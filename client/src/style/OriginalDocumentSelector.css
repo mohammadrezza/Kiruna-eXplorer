@@ -46,3 +46,10 @@
     margin-left: 55px;
     margin-top:-5px;
   }
+  .delete-file-btn :hover{
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 10px; /* Rounded corners */
+    
+  }

@@ -142,6 +142,7 @@ function FormDocument(props) {
           setRelatedDocuments(doc.connections);
           setSelectedDocuments(connectedDocumentIds);
           setFiles(doc.files);
+          console.log(doc)
         }
       } catch (error) {
         console.error("Error loading data:", error);
@@ -149,7 +150,7 @@ function FormDocument(props) {
         setLoading(false);
       }
     };
-    console.log(user)
+    
     loadData();
   }, [props.mode, docID, id]);
 

@@ -128,7 +128,7 @@ const DocumentUploader = ({ mode, edit, documentId, files: initialFiles, onFileA
         {files && files.length > 0 ? (
           files.map((file, index) => {
             const fileUrl = `http://localhost:3001/documents/${documentId}/files/${file}`;
-
+            console.log(file);
             return (
               <div key={index} className="file-added-container">
                 <button
