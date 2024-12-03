@@ -7,7 +7,7 @@
   align-items: center;
   z-index: 1;
   grid-template-columns: 1fr 1fr 1fr;
-  font-family: "Times";
+  font-family: "Times", sans-serif;;
 }
 .custom-navbar>hr {
   width: 355px;
@@ -20,7 +20,7 @@
   position: relative;
   font-size: 32px;
   font-weight: 700;
-  font-family: "Times";
+  font-family: "Times", sans-serif;;
   color: var(--demo-black); /* Text color */
   text-align: center;
   margin: 0;

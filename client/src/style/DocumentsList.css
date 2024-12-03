@@ -236,7 +236,7 @@
 
 .filter-tag {
   background-color: #438EF240;
-  font-family: 'Inter';
+  font-family: 'Inter', sans-serif;;
   border-radius: 40px;
   padding: 6px 12px;
   font-size: 14px;

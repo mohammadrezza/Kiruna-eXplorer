@@ -35,10 +35,10 @@ const MapAreaSelector = ({ area, mode, edit, onAreaChange }) => {
       lat: coord.lat,
       lng: coord.lng,
     }));
-    const convertedCoordinates = polygonCoords.map(coord => [coord.lat, coord.lng]);
+    // const convertedCoordinates = polygonCoords.map(coord => [coord.lat, coord.lng]);
 
     setPolygon(polygonCoords);
-    onAreaChange(convertedCoordinates);
+    onAreaChange(polygonCoords);
   };
 
   // Handle polygon deletion
@@ -72,7 +72,7 @@ const MapAreaSelector = ({ area, mode, edit, onAreaChange }) => {
       featureGroupRef.current.clearLayers(); // Clear any existing layers
       featureGroupRef.current.addLayer(leafletPolygon); // Add the existing polygon as a layer
     }
-  }, [polygon, edit]);
+  }, [polygon, isEditable]);
 
   return (
     <div>
@@ -99,25 +99,29 @@ const MapAreaSelector = ({ area, mode, edit, onAreaChange }) => {
               onDeleted={handleDeleted}
               onEdited={handleEdited}
               draw={{
-                polygon: true,
+                polygon: !polygon,
                 polyline: false,
                 rectangle: false,
                 circle: false,
                 circlemarker: false,
                 marker: false,
               }}
+              edit={{
+                edit: !!polygon,
+                remove: !!polygon,
+              }}
             />
           </FeatureGroup>
         )}
 
-        {/* {polygon && (
+        {polygon && mode === 'view' && !edit && (
           <Polygon
             positions={polygon}
             color="blue"
             fillColor="blue"
             fillOpacity={0.5}
           />
-        )} */}
+        )}
       </MapContainer>
       {/* <div className="mt-4">
         <h3 className="font-bold mb-2">Drawn Polygon:</h3>
