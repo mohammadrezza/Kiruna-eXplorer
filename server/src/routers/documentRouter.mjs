@@ -40,12 +40,12 @@ class DocumentRouter {
             body('stakeholders').isArray().withMessage('Stakeholders must be an array'),
             body('stakeholders.*').isString().notEmpty().withMessage('Each stakeholder must be a non-empty string'),
             body('scale').isString().notEmpty().withMessage('Scale is required'),
-            /*body('issuanceDate').custom(value => {
+            body('issuanceDate').custom(value => {
                 if (!moment(value, 'DD-MM-YYYY', true).isValid()) {
                     throw new Error('Issuance Date must be a valid date in the format DD-MM-YYYY');
                 }
                 return true;
-            }),*/
+            }),
             body('type').isString().notEmpty().withMessage('Type is required'),
             body('language').isString().notEmpty().withMessage('Language is required'),
             body('coordinates').isObject().withMessage('Coordinates must be an object'),
@@ -66,12 +66,12 @@ class DocumentRouter {
             body('stakeholders').optional().isArray().withMessage('Stakeholders must be an array'),
             body('stakeholders.*').optional().isString().notEmpty().withMessage('Each stakeholder must be a non-empty string'),
             body('scale').optional().isString().withMessage('Scale must be a string'),
-            /*body('issuanceDate').custom(value => {
+            body('issuanceDate').custom(value => {
                 if (!moment(value, 'DD-MM-YYYY', true).isValid()) {
                     throw new Error('Issuance Date must be a valid date in the format DD-MM-YYYY');
                 }
                 return true;
-            }),*/
+            }),
             body('type').optional().isString().withMessage('Type must be a string'),
             body('language').optional().isString().withMessage('Language must be a string'),
             body('coordinates').optional().isObject().withMessage('Coordinates must be an object'),
