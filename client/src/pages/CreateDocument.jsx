@@ -313,6 +313,10 @@ function FormDocument(props) {
     setFiles((prevFiles) => [...prevFiles, newFileName]);
   };
 
+  const handleFileRemoved = (fileName) => {
+    setFiles((prevFiles) => prevFiles.filter((file) => file !== fileName));
+  };
+
   const handleConnectionTypeSelect = (documentId, selectedConnectionType) => {
     console.log("Tipo selezionato:", selectedConnectionType);
   
@@ -536,7 +540,8 @@ function FormDocument(props) {
                 edit={edit}
                 documentId={docID}
                 files={files}
-                onFileAdded={handleFileAdded}         
+                onFileAdded={handleFileAdded}
+                onFileRemoved={handleFileRemoved}         
               ></DocumentUploader>
 
             </Col>

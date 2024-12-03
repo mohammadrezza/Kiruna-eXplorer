@@ -35,3 +35,14 @@
   .file-added-button :hover {
     border-color: var(--light-grey) !important ;
   }
+
+  .delete-file-btn{
+    font-size: 20px;
+    background-color: transparent;
+    color: red;
+    border: none;
+    border-radius: 2px; /* Rounded corners */
+    cursor: pointer;
+    margin-left: 55px;
+    margin-top:-5px;
+  }
