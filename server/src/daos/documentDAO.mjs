@@ -405,53 +405,100 @@ async function getAllDocuments(
             // Issuance Date Range filter
             if (issuanceDateStart && issuanceDateEnd) {
                 query += ` AND (
-        -- Match documents in the exact date range
+    (
+        -- Exact date match within the range
         d.issuanceDate BETWEEN ? AND ?
-        OR
-        -- Match documents in the month range with day as '00'
-        (
-            substr(d.issuanceDate, 7, 4) BETWEEN substr(?, 7, 4) AND substr(?, 7, 4)
-            AND substr(d.issuanceDate, 1, 2) = '00'
-            AND substr(d.issuanceDate, 4, 2) BETWEEN substr(?, 4, 2) AND substr(?, 4, 2)
-        )
-        OR
-        -- Match documents in the year range with both day and month as '00'
+    ) OR (
+        -- Match years with date and month as '00'
         (
             substr(d.issuanceDate, 7, 4) BETWEEN substr(?, 7, 4) AND substr(?, 7, 4)
             AND substr(d.issuanceDate, 1, 2) = '00'
             AND substr(d.issuanceDate, 4, 2) = '00'
         )
-    )`;
-
+    ) OR (
+        -- Match specific year and month range with date as '00'
+        (
+            substr(d.issuanceDate, 7, 4) = substr(?, 7, 4)
+            AND substr(d.issuanceDate, 1, 2) = '00'
+            AND substr(d.issuanceDate, 4, 2) BETWEEN substr(?, 4, 2) AND substr(?, 4, 2)
+        )
+    ) OR (
+        -- Match specific year and month with partial date match
+        (
+            substr(d.issuanceDate, 7, 4) = substr(?, 7, 4)
+            AND substr(d.issuanceDate, 4, 2) = substr(?, 4, 2)
+            AND (
+                substr(d.issuanceDate, 1, 2) = '00' 
+                OR substr(d.issuanceDate, 1, 2) BETWEEN substr(?, 1, 2) AND substr(?, 1, 2)
+            )
+        )
+    )
+)`;
                 params.push(
-                    issuanceDateStart, issuanceDateEnd, // For exact date range
-                    issuanceDateStart, issuanceDateEnd, issuanceDateStart, issuanceDateEnd, // For month range with day = '00'
-                    issuanceDateStart, issuanceDateEnd // For year range with day and month = '00'
+                    // Exact date range params
+                    issuanceDateStart,
+                    issuanceDateEnd,
+
+                    // Year '00' params
+                    issuanceDateStart,
+                    issuanceDateEnd,
+
+                    // Year and month '00' params
+                    issuanceDateStart,
+                    issuanceDateStart,
+                    issuanceDateEnd,
+
+                    // Year and month partial match params
+                    issuanceDateStart,
+                    issuanceDateStart,
+                    issuanceDateStart,
+                    issuanceDateEnd
                 );
 
+                // Similar modification for countQuery
                 countQuery += ` AND (
-        -- Match documents in the exact date range
+    (
+        -- Exact date match within the range
         d.issuanceDate BETWEEN ? AND ?
-        OR
-        -- Match documents in the month range with day as '00'
-        (
-            substr(d.issuanceDate, 7, 4) BETWEEN substr(?, 7, 4) AND substr(?, 7, 4)
-            AND substr(d.issuanceDate, 1, 2) = '00'
-            AND substr(d.issuanceDate, 4, 2) BETWEEN substr(?, 4, 2) AND substr(?, 4, 2)
-        )
-        OR
-        -- Match documents in the year range with both day and month as '00'
+    ) OR (
+        -- Match years with date and month as '00'
         (
             substr(d.issuanceDate, 7, 4) BETWEEN substr(?, 7, 4) AND substr(?, 7, 4)
             AND substr(d.issuanceDate, 1, 2) = '00'
             AND substr(d.issuanceDate, 4, 2) = '00'
         )
-    )`;
-
+    ) OR (
+        -- Match specific year and month range with date as '00'
+        (
+            substr(d.issuanceDate, 7, 4) = substr(?, 7, 4)
+            AND substr(d.issuanceDate, 1, 2) = '00'
+            AND substr(d.issuanceDate, 4, 2) BETWEEN substr(?, 4, 2) AND substr(?, 4, 2)
+        )
+    ) OR (
+        -- Match specific year and month with partial date match
+        (
+            substr(d.issuanceDate, 7, 4) = substr(?, 7, 4)
+            AND substr(d.issuanceDate, 4, 2) = substr(?, 4, 2)
+            AND (
+                substr(d.issuanceDate, 1, 2) = '00' 
+                OR substr(d.issuanceDate, 1, 2) BETWEEN substr(?, 1, 2) AND substr(?, 1, 2)
+            )
+        )
+    )
+)`;
                 countParams.push(
-                    issuanceDateStart, issuanceDateEnd, // For exact date range
-                    issuanceDateStart, issuanceDateEnd, issuanceDateStart, issuanceDateEnd, // For month range with day = '00'
-                    issuanceDateStart, issuanceDateEnd // For year range with day and month = '00'
+                    // Same params as above
+                    issuanceDateStart,
+                    issuanceDateEnd,
+                    issuanceDateStart,
+                    issuanceDateEnd,
+                    issuanceDateStart,
+                    issuanceDateStart,
+                    issuanceDateEnd,
+                    issuanceDateStart,
+                    issuanceDateStart,
+                    issuanceDateStart,
+                    issuanceDateEnd
                 );
             }
 
@@ -462,7 +509,14 @@ async function getAllDocuments(
                 const allowedColumns = ['title', 'issuanceDate', 'type', 'created_at'];
                 const allowedOrders = ['asc', 'desc'];
 
-                if (
+                if (sortColumn === 'issuanceDate' &&
+                    allowedOrders.includes(sortOrder.toLowerCase())) {
+                    // Custom sorting for issuanceDate
+                    query += ` ORDER BY 
+            CAST(substr(d.issuanceDate, 7, 4) AS INTEGER) ${sortOrder.toUpperCase()},
+            CAST(substr(d.issuanceDate, 4, 2) AS INTEGER) ${sortOrder.toUpperCase()},
+            CAST(substr(d.issuanceDate, 1, 2) AS INTEGER) ${sortOrder.toUpperCase()}`;
+                } else if (
                     allowedColumns.includes(sortColumn) &&
                     allowedOrders.includes(sortOrder.toLowerCase())
                 ) {
