@@ -1,5 +1,6 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle, useMemo } from 'react';
 import { Row, Col, Form } from 'react-bootstrap';
+import L from 'leaflet';
 import AreaForm from "@/components/CreateDocument/AreaForm.jsx";
 import CoordinatesForm from "@/components/CreateDocument/CoordinatesForm.jsx";
 import { kirunaBounds } from "@/utils/constants.js";
@@ -11,6 +12,7 @@ const LocationForm = forwardRef(({ coordinates, area, mode, edit, handleCoordina
   const options = [
     { label: 'Coordinates', value: 'coordinates' },
     { label: 'Geographical Area', value: 'area' },
+    { label: 'Whole municipal', value: 'municipal' },
   ];
 
   const isEditable = mode === 'add' || edit;
@@ -23,27 +25,53 @@ const LocationForm = forwardRef(({ coordinates, area, mode, edit, handleCoordina
     const selectedValue = e.target.value;
     setSelectedOption(selectedValue);
     if (selectedValue === 'area') {
-      handleCoordinatesChange({ lat: '', lng: '' });
+      handleCoordinatesChange({});
     } else if (selectedValue === 'coordinates') {
+      handleCoordinatesChange({});
+      handleAreaChange([]);
+    } else if (selectedValue === 'municipal') {
+      handleCoordinatesChange({lat: 0, lng: 0});
       handleAreaChange([]);
     }
   };
 
-  const areValidCoordinates = (coordinates) => {
-    const [sw, ne] = kirunaBounds;
-    const isValidLat = coordinates.lat >= sw[0] && coordinates.lat <= ne[0];
-    const isValidLng = coordinates.lng >= sw[1] && coordinates.lng <= ne[1];
-
-    const latIsValid = /^-?\d*\.?\d*$/.test(coordinates.lat) && isValidLat;
-    const lngIsValid = /^-?\d*\.?\d*$/.test(coordinates.lng) && isValidLng;
+  const insidePolygon = (coordinates) => {
+    if(coordinates.lat === 0 || coordinates.lng === 0) return true
+    const point = L.latLng(coordinates.lat, coordinates.lng);
     
-    setErrors({
-      lat: latIsValid ? '' : 'Invalid latitude, should be between 67.765 and 67.900',
-      lng: lngIsValid ? '' : 'Invalid longitude, should be between 20.090 and 20.420'
+    // Check if point is inside any polygon in kirunaBounds
+    const isInsidePolygon = kirunaBounds.some(polygon => {
+      const leafletPolygon = L.polygon(polygon);
+      return leafletPolygon.getBounds().contains(point);
     });
-    
-    return latIsValid && lngIsValid;
+
+    // If not inside a polygon, show error
+    if (!isInsidePolygon) {
+      setErrors({
+        lat: 'Latitude out of bounds',
+        lng: 'Longitude out of bounds',
+      });
+      return false;
+    }
+    return true;
   };
+
+  const areValidCoordinates = (coordinates) => {
+  // Regular expression to validate if coordinates are in valid format
+  const latIsValid = /^-?\d*\.?\d*$/.test(coordinates.lat);
+  const lngIsValid = /^-?\d*\.?\d*$/.test(coordinates.lng);
+
+  if (!latIsValid || !lngIsValid) {
+    setErrors({
+      lat: 'Invalid latitude format',
+      lng: 'Invalid longitude format',
+    });
+    return false;
+  }
+
+  // Check if coordinates are inside valid polygon
+  return insidePolygon(coordinates);
+};;
 
   useImperativeHandle(ref, () => ({
     areValidCoordinates,
@@ -51,7 +79,10 @@ const LocationForm = forwardRef(({ coordinates, area, mode, edit, handleCoordina
 
   useEffect(() => {
     if (mode === 'view' || edit) {
-      setSelectedOption(Array.isArray(area) && area.length === 0 ? 'coordinates' : 'area');
+      if (coordinates.lat === 0 && coordinates.lng === 0) {
+        setSelectedOption('municipal');
+      }
+      else setSelectedOption(Array.isArray(area) && area.length === 0 ? 'coordinates' : 'area');
     }
   }, [mode, edit, area]);
 

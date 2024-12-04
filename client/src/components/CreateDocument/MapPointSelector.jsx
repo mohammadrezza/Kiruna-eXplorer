@@ -30,9 +30,9 @@ function MapPointSelector({ onCoordinatesChange, coordinates, mode, edit  }) {
   })
 
   useEffect(() => {
-    if (coordinates.lat !== '' || coordinates.lng !== '') {
+    if (coordinates && coordinates.lat && coordinates.lng) {
       setMarkerPosition([coordinates.lat, coordinates.lng]);
-    } 
+    }
   }, [coordinates]);
 
   return (

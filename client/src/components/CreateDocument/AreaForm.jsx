@@ -6,9 +6,6 @@ const AreaForm = ({area, mode, edit, onAreaChange}) => {
   return (
   <Row>
     <Row>
-      Whole municipal?
-    </Row>
-    <Row>
       <MapAreaSelector mode={mode} edit={edit} area={area} onAreaChange={onAreaChange}></MapAreaSelector>
     </Row>
   </Row>

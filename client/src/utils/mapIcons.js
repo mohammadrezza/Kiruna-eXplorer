@@ -17,25 +17,25 @@ export const pointer = {
 
 export const iconData = [
   {
-    name: 'Design Document',
+    name: 'Design',
     iconUrl: designIcon,
     iconSize: [32, 32],
     iconAnchor: [16, 32],
   },
   {
-    name: 'Informative Document',
+    name: 'Informative',
     iconUrl: informativeIcon,
     iconSize: [32, 32],
     iconAnchor: [16, 32],
   },
   {
-    name: 'Prescriptive Document',
+    name: 'Prescriptive',
     iconUrl: prescriptiveIcon,
     iconSize: [32, 32],
     iconAnchor: [16, 32],
   },
   {
-    name: 'Technical Document',
+    name: 'Technical',
     iconUrl: technicalIcon,
     iconSize: [32, 32],
     iconAnchor: [16, 32],
