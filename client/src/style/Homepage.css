@@ -88,7 +88,8 @@
   }
   
   .search-section button:hover {
-    background-color: var(--light-gray);
+    border: 2px solid var(--blue);
+    color: var(--blue);
   }
 
   .search-section button > svg {
