@@ -77,18 +77,47 @@ class DocumentRouter {
             this.auth.isLoggedIn,
             this.auth.isUrbanPlanner,
             updateDocument);
-        this.router.post('/types', createDocumentType);
-        this.router.get("/types", getDocumentTypesList);
-        this.router.post("/stakeholders", createStakeholder);
-        this.router.get("/stakeholders", getStakeholdersList);
-        this.router.post("/scales", createScale);
-        this.router.get("/scales", getScalesList);
-        this.router.get("/connectionTypes", documentConnectionTypesList);
-        this.router.get('/:id', getDocumentWithId);
-        this.router.get("/", documentsList);
-        this.router.post("/:documentId/files", this.upload.single('file'), uploadFile);
-        this.router.get("/:documentId/files/:fileName", downloadFile);
-        this.router.delete("/:documentId/files/:fileName", deleteFile);
+        this.router.post('/types',
+            this.auth.isLoggedIn,
+            this.auth.isUrbanPlanner,
+            createDocumentType);
+        this.router.get("/types",
+            this.auth.isLoggedIn,
+            getDocumentTypesList);
+        this.router.post("/stakeholders",
+            this.auth.isLoggedIn,
+            this.auth.isUrbanPlanner,
+            createStakeholder);
+        this.router.get("/stakeholders",
+            this.auth.isLoggedIn,
+            getStakeholdersList);
+        this.router.post("/scales",
+            this.auth.isLoggedIn,
+            this.auth.isUrbanPlanner,
+            createScale);
+        this.router.get("/scales",
+            this.auth.isLoggedIn,
+            getScalesList);
+        this.router.get("/connectionTypes",
+            this.auth.isLoggedIn,
+            documentConnectionTypesList);
+        this.router.get('/:id',
+            this.auth.isLoggedIn,
+            getDocumentWithId);
+        this.router.get("/",
+            this.auth.isLoggedIn,
+            documentsList);
+        this.router.post("/:documentId/files",
+            this.auth.isLoggedIn,
+            this.auth.isUrbanPlanner,
+            this.upload.single('file'), uploadFile);
+        this.router.get("/:documentId/files/:fileName",
+            this.auth.isLoggedIn,
+            downloadFile);
+        this.router.delete("/:documentId/files/:fileName",
+            this.auth.isLoggedIn,
+            this.auth.isUrbanPlanner,
+            deleteFile);
     }
 }
 
