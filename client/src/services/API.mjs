@@ -199,6 +199,27 @@ async function uploadDocument(documentId, file) {
   }
 }
 
+async function deleteFile(file) {
+  try {
+    const response = await fetch(file, {
+      method: 'DELETE',
+      credentials: 'include', 
+      mode: 'cors', 
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to delete file');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('File deletion failed:', error);
+    throw error; 
+  }
+}
+
+
 const API = {
   login,
   logout,
@@ -217,7 +238,8 @@ const API = {
   getSortedDocuments,
   searchDoc,
   getFIilteredDocuments,
-  uploadDocument
+  uploadDocument,
+  deleteFile
 };
 
 export default API;

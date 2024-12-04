@@ -16,14 +16,14 @@ const DocumentMap = () => {
   const coordinates = list.filter(item => item.coordinates && Object.keys(item.coordinates).length > 0);
   const kirunaBoundsMap = L.latLngBounds(kirunaBounds);
   // Calculate centroids for each polygon
-  const centroids = areas.map((polygon) => {
-    const centroid = calculateCentroid(polygon.area);
-    return {
-      id: polygon.id,
-      position: centroid,  // position of the centroid
-      name: polygon.name,
-    };
-  });
+  // const centroids = areas.map((polygon) => {
+  //   const centroid = calculateCentroid(polygon.area);
+  //   return {
+  //     id: polygon.id,
+  //     position: centroid,  // position of the centroid
+  //     name: polygon.name,
+  //   };
+  // });
 
   return (
     <div>

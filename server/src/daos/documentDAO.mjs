@@ -402,103 +402,53 @@ async function getAllDocuments(
                 );
             }
 
+            issuanceDateStart = convertToISODate(issuanceDateStart);
+            issuanceDateEnd = convertToISODate(issuanceDateEnd);
+
             // Issuance Date Range filter
             if (issuanceDateStart && issuanceDateEnd) {
                 query += ` AND (
-    (
-        -- Exact date match within the range
-        d.issuanceDate BETWEEN ? AND ?
-    ) OR (
-        -- Match years with date and month as '00'
-        (
-            substr(d.issuanceDate, 7, 4) BETWEEN substr(?, 7, 4) AND substr(?, 7, 4)
-            AND substr(d.issuanceDate, 1, 2) = '00'
-            AND substr(d.issuanceDate, 4, 2) = '00'
-        )
-    ) OR (
-        -- Match specific year and month range with date as '00'
-        (
-            substr(d.issuanceDate, 7, 4) = substr(?, 7, 4)
-            AND substr(d.issuanceDate, 1, 2) = '00'
-            AND substr(d.issuanceDate, 4, 2) BETWEEN substr(?, 4, 2) AND substr(?, 4, 2)
-        )
-    ) OR (
-        -- Match specific year and month with partial date match
-        (
-            substr(d.issuanceDate, 7, 4) = substr(?, 7, 4)
-            AND substr(d.issuanceDate, 4, 2) = substr(?, 4, 2)
-            AND (
-                substr(d.issuanceDate, 1, 2) = '00' 
-                OR substr(d.issuanceDate, 1, 2) BETWEEN substr(?, 1, 2) AND substr(?, 1, 2)
-            )
-        )
-    )
-)`;
+                    (
+                        substr(d.issuanceDate, 1, 2) != '00' AND substr(d.issuanceDate, 4, 2) != '00' AND
+                        date(strftime('%Y-%m-%d', substr(d.issuanceDate, 7, 4) || '-' || substr(d.issuanceDate, 4, 2) || '-' || substr(d.issuanceDate, 1, 2)))
+                        BETWEEN date(?) AND date(?)
+                    ) OR (
+                        substr(d.issuanceDate, 1, 2) = '00' AND substr(d.issuanceDate, 4, 2) != '00' AND
+        date(
+            strftime('%Y-%m', substr(d.issuanceDate, 7, 4) || '-' || substr(d.issuanceDate, 4, 2))
+        ) BETWEEN date(?) AND date(?)
+                    ) OR (
+                        substr(d.issuanceDate, 1, 2) = '00' AND substr(d.issuanceDate, 4, 2) = '00' AND
+                        substr(d.issuanceDate, 7, 4) BETWEEN ? AND ?
+                    )
+                )`;
+
                 params.push(
-                    // Exact date range params
-                    issuanceDateStart,
-                    issuanceDateEnd,
-
-                    // Year '00' params
-                    issuanceDateStart,
-                    issuanceDateEnd,
-
-                    // Year and month '00' params
-                    issuanceDateStart,
-                    issuanceDateStart,
-                    issuanceDateEnd,
-
-                    // Year and month partial match params
-                    issuanceDateStart,
-                    issuanceDateStart,
-                    issuanceDateStart,
-                    issuanceDateEnd
+                    issuanceDateStart, issuanceDateEnd, // Full date comparison
+                    issuanceDateStart, issuanceDateEnd, // Year-Month comparison
+                    issuanceDateStart.substring(0, 4), issuanceDateEnd.substring(0, 4) // Year comparison
                 );
 
-                // Similar modification for countQuery
                 countQuery += ` AND (
-    (
-        -- Exact date match within the range
-        d.issuanceDate BETWEEN ? AND ?
-    ) OR (
-        -- Match years with date and month as '00'
-        (
-            substr(d.issuanceDate, 7, 4) BETWEEN substr(?, 7, 4) AND substr(?, 7, 4)
-            AND substr(d.issuanceDate, 1, 2) = '00'
-            AND substr(d.issuanceDate, 4, 2) = '00'
-        )
-    ) OR (
-        -- Match specific year and month range with date as '00'
-        (
-            substr(d.issuanceDate, 7, 4) = substr(?, 7, 4)
-            AND substr(d.issuanceDate, 1, 2) = '00'
-            AND substr(d.issuanceDate, 4, 2) BETWEEN substr(?, 4, 2) AND substr(?, 4, 2)
-        )
-    ) OR (
-        -- Match specific year and month with partial date match
-        (
-            substr(d.issuanceDate, 7, 4) = substr(?, 7, 4)
-            AND substr(d.issuanceDate, 4, 2) = substr(?, 4, 2)
-            AND (
-                substr(d.issuanceDate, 1, 2) = '00' 
-                OR substr(d.issuanceDate, 1, 2) BETWEEN substr(?, 1, 2) AND substr(?, 1, 2)
-            )
-        )
-    )
-)`;
+                    (
+                        substr(d.issuanceDate, 1, 2) != '00' AND substr(d.issuanceDate, 4, 2) != '00' AND
+                        date(strftime('%Y-%m-%d', substr(d.issuanceDate, 7, 4) || '-' || substr(d.issuanceDate, 4, 2) || '-' || substr(d.issuanceDate, 1, 2)))
+                        BETWEEN date(?) AND date(?)
+                    ) OR (
+                        substr(d.issuanceDate, 1, 2) = '00' AND substr(d.issuanceDate, 4, 2) != '00' AND
+        date(
+            strftime('%Y-%m', substr(d.issuanceDate, 7, 4) || '-' || substr(d.issuanceDate, 4, 2))
+        ) BETWEEN date(?) AND date(?)
+                    ) OR (
+                        substr(d.issuanceDate, 1, 2) = '00' AND substr(d.issuanceDate, 4, 2) = '00' AND
+                        substr(d.issuanceDate, 7, 4) BETWEEN ? AND ?
+                    )
+                )`;
+
                 countParams.push(
-                    // Same params as above
-                    issuanceDateStart,
-                    issuanceDateEnd,
-                    issuanceDateStart,
-                    issuanceDateEnd,
-                    issuanceDateStart,
-                    issuanceDateStart,
-                    issuanceDateEnd,
-                    issuanceDateStart,
-                    issuanceDateStart,
-                    issuanceDateStart,
-                    issuanceDateEnd
+                    issuanceDateStart, issuanceDateEnd,
+                    issuanceDateStart, issuanceDateEnd,
+                    issuanceDateStart.substring(0, 4), issuanceDateEnd.substring(0, 4)
                 );
             }
 
@@ -589,6 +539,11 @@ async function getAllDocuments(
     });
 }
 
+function convertToISODate(dateStr) {
+    if (!dateStr) return null;
+    const [day, month, year] = dateStr.split('-');
+    return `${year}-${month}-${day}`; // Rearrange to YYYY-MM-DD
+}
 
 async function addType(type) {
     return new Promise((resolve, reject) => {

@@ -1,383 +1,3 @@
-// import React, { useState, useEffect } from 'react';
-// import { ListGroup, Row, Col, Form } from 'react-bootstrap';
-// import API from '../services/API.mjs';
-// import '../style/RelatedDocumentSelector.css';
-// import { PiFileMagnifyingGlassLight } from 'react-icons/pi';
-// import DocumentDetailsModal from './DocumentDetailsModal';
-
-// function RelatedDocumentsSelector({
-//   mode,
-//   edit,
-//   allDocuments,
-//   relatedDocuments,
-//   selectedDocuments,
-//   selectedConnectionTypes, // Assicurati che selectedConnectionTypes venga passato come prop
-//   onDocumentSelect,
-//   onRelatedDocumentClick,
-//   onConnectionTypeChange,
-//   setSelectedConnectionTypes // Funzione per aggiornare selectedConnectionTypes
-// }) {
-//   const [connectionTypes, setConnectionTypes] = useState([]);
-//   const [showModal, setShowModal] = useState(false);
-//   const [currentDocument, setCurrentDocument] = useState(null);
-
-//   useEffect(() => {
-    
-//     const fetchConnectionTypes = async () => {
-//       try {
-//         const response = await API.getConnectionTypes();
-//         setConnectionTypes(response);
-//       } catch (error) {
-//         console.error('Error fetching connection types:', error);
-//       }
-//     };
-
-//     fetchConnectionTypes();
-//   }, []);
-
-//   useEffect(() => {
-//     // Inizializza selectedConnectionTypes con i dati di relatedDocuments
-//     const initialConnectionTypes = relatedDocuments.map(doc => ({
-//       id: doc.id,
-//       type: doc.connectionType || connectionTypes[0] // Utilizza il primo tipo di connessione come fallback
-//     }));
-//     setSelectedConnectionTypes(initialConnectionTypes);
-//     console.log(initialConnectionTypes)
-//     console.log(selectedConnectionTypes)
-//     console.log(relatedDocuments)
-//   }
-//   , [relatedDocuments, connectionTypes, setSelectedConnectionTypes]);
-
-//   // When selectedDocuments change, trigger onConnectionTypeChange for any new selected document
-//   useEffect(() => {
-//     selectedDocuments.forEach((docId) => {
-//       const relatedDoc = relatedDocuments.find((doc) => doc.id === docId);
-//       onConnectionTypeChange(docId, relatedDoc?.connectionType || connectionTypes[0]);
-//     });
-//   }, []);
-
-//   const handleIconClick = async (doc) => {
-//     try {
-//       const docData = await API.getData(doc.id);
-//       setCurrentDocument(docData);
-//       setShowModal(true);
-//     } catch (error) {
-//       console.error("Error fetching document data:", error);
-//     }
-//   };
-
-//   const handleCloseModal = () => {
-//     setShowModal(false);
-//     setCurrentDocument(null);
-//   };
-
-//   const handleCheckboxChange = (docId, checked) => {
-//     if (checked) {
-//       if (connectionTypes.length > 0) {
-//         onConnectionTypeChange(docId, connectionTypes[0]);
-//         console.log(selectedConnectionTypes);
-//       }
-//     } else {
-//       setSelectedConnectionTypes(prev => prev.filter(item => item.id !== docId));
-//       console.log(selectedConnectionTypes);
-
-//     }
-//   };
-
-//   const handleRowClick = (docId) => {
-//     const isSelected = selectedDocuments.includes(docId);
-//     // Toggle checkbox selection when row is clicked
-//     if (isSelected) {
-//       setSelectedConnectionTypes(prev => prev.filter(item => item.id !== docId));
-//       onDocumentSelect(docId);
-//     } else {
-//       setSelectedConnectionTypes(prev => [
-//         ...prev,
-//         { id: docId, type: connectionTypes[0] }
-//       ]);
-//       onDocumentSelect(docId);
-//     }
-//   };
-  
-//   return (
-//     <div className="document-list">
-//       <ListGroup className="relatedDocs">
-//         <ListGroup.Item className="relatedDocs-header">
-//           <Row>
-//             <Col md={1}></Col>
-//             <Col md={3}>Title</Col>
-//             <Col md={2}>Stakeholders</Col>
-//             <Col md={2}>Type</Col>
-//             <Col md={1}>Connected</Col>
-//             <Col md={2}>Connection type</Col>
-//           </Row>
-//         </ListGroup.Item>
-//         {allDocuments.map((doc, num) => (
-//           <ListGroup.Item
-//             key={doc.id}
-//             className={selectedDocuments.includes(doc.id) ? 'selected' : ''}
-//             onClick={() => {
-//               if (mode === 'add' || edit) {
-//                 // This will handle the selection of the document
-//                 handleRowClick(doc.id);
-//               } else {
-//                 onRelatedDocumentClick(doc.id);
-//               }
-//             }}
-//           >
-//             <Row className="align-items-center">
-//               <Col md={1} className="text-center">
-//                 {(mode === 'add' || edit) ? (
-//                   <Form.Check
-//                     type="checkbox"
-//                     id={`checkbox-${doc.id}`}
-//                     checked={selectedDocuments.includes(doc.id)}
-//                     onChange={(e) => {
-//                       e.stopPropagation(); // Prevent row click event
-//                       handleCheckboxChange(doc.id, e.target.checked);
-//                     }}
-//                   />
-//                 ) : num + 1}
-//               </Col>
-//               <Col md={3}>{doc.title}</Col>
-//               <Col md={2}>{doc.stakeholders.join(', ')}</Col>
-//               <Col md={2}>{doc.type}</Col>
-//               <Col md={1} className="text-center">{doc.connections}</Col>
-//               <Col md={2}>
-//                 {(mode === 'add' || edit) && selectedDocuments.includes(doc.id) ? (
-//                   <Form.Select
-//                     className="connectionform"
-//                     aria-label="Select connection type"
-//                     defaultValue={
-//                       selectedConnectionTypes.find((relatedDoc) => relatedDoc.id === doc.id)?.type ||
-//                       connectionTypes[0] ||
-//                       ''
-//                     }
-//                     onChange={(e) => onConnectionTypeChange(doc.id, e.target.value)} // Notify parent on change
-//                   >
-//                     <option value="" disabled>
-//                       Select connection
-//                     </option>
-//                     {connectionTypes.map((type) => (
-//                       <option key={type} value={type}>
-//                         {type}
-//                       </option>
-//                     ))}
-//                   </Form.Select>
-//                 ) : mode === 'view' ? (
-//                   doc.connectionType
-//                 ) : null}
-//               </Col>
-//               <Col>
-//                 <span className="filesymbol">
-//                   <PiFileMagnifyingGlassLight
-//                     onClick={(e) => {
-//                       e.stopPropagation(); // Prevent row click event
-//                       handleIconClick(doc);
-//                     }}
-//                   />
-//                 </span>
-//               </Col>
-//             </Row>
-//           </ListGroup.Item>
-//         ))}
-//       </ListGroup>
-//       <DocumentDetailsModal show={showModal} onHide={handleCloseModal} document={currentDocument} />
-//     </div>
-//   );
-// }
-
-
-
-
-
-
-// export default RelatedDocumentsSelector;
-// import React, { useState, useEffect } from "react";
-// import { ListGroup, Row, Col, Form, Button } from "react-bootstrap";
-// import API from "../services/API.mjs";
-// import "../style/RelatedDocumentSelector.css";
-// import { PiFileMagnifyingGlassLight } from "react-icons/pi";
-// import DocumentDetailsModal from "./DocumentDetailsModal";
-
-// function RelatedDocumentsSelector({
-//   mode,
-//   edit,
-//   allDocuments,
-//   relatedDocuments,
-//   selectedDocuments,
-//   selectedConnectionTypes,
-//   onDocumentSelect, //handleDocumentSelect
-//   onRelatedDocumentClick, //handleRelatedDocumentClick
-//   onConnectionTypeChange,
-//   setSelectedConnectionTypes, //setSelectedConnectionTypes
-// }) {
-//   const [connectionTypes, setConnectionTypes] = useState([]);
-//   const [showModal, setShowModal] = useState(false);
-//   const [currentDocument, setCurrentDocument] = useState(null);
-
-//   // Fetch connection types on component mount
-//   useEffect(() => {
-//     const fetchConnectionTypes = async () => {
-//       try {
-//         const response = await API.getConnectionTypes(); // Fetch from API
-//         setConnectionTypes(response);
-//       } catch (error) {
-//         console.error("Error fetching connection types:", error);
-//       }
-//     };
-//     fetchConnectionTypes();
-//   }, []);
-
-//   // Initialize connection types for related documents
-//   useEffect(() => {
-//     const initialConnectionTypes = relatedDocuments.map((doc) => ({
-//       id: doc.id,
-//       types: doc.connectionTypes || [],
-//     }));
-//     setSelectedConnectionTypes(initialConnectionTypes);
-//   }, [relatedDocuments, setSelectedConnectionTypes]);
-
-//   const handleIconClick = async (doc) => {
-//     try {
-//       const docData = await API.getData(doc.id);
-//       setCurrentDocument(docData);
-//       setShowModal(true);
-//     } catch (error) {
-//       console.error("Error fetching document data:", error);
-//     }
-//   };
-
-//   const handleCloseModal = () => {
-//     setShowModal(false);
-//     setCurrentDocument(null);
-//   };
-
-//   const handleRowClick = (docId, e) => {
-//     if (e.target.type === "checkbox") return; // Don't trigger on row click when clicking checkbox
-
-//     const isSelected = selectedDocuments.includes(docId);
-//     if (isSelected) {
-//       onDocumentSelect(docId); // Deselect the document
-//     } else {
-//       onDocumentSelect(docId); // Select the document
-//     }
-//   };
-
-//   const handleConnectionTypeToggle = (docId, type) => {
-//     console.log(docId);
-//     console.log(type);
-//     setSelectedConnectionTypes((prev) =>
-//       prev.map((item) =>
-//         item.id === docId
-//           ? {
-//               ...item,
-//               types: item.types.includes(type)
-//                 ? item.types.filter((t) => t !== type) // Remove type if already selected
-//                 : [...item.types, type], // Add type if not selected
-//             }
-//           : item
-//       )
-//     );
-
-//     console.log(selectedConnectionTypes);
-//   };
-
-//   return (
-//     <div className="document-list">
-//       <ListGroup className="relatedDocs">
-//         <ListGroup.Item className="relatedDocs-header">
-//           <Row>
-//             <Col md={1}></Col>
-//             <Col md={3}>Title</Col>
-//             <Col md={2}>Stakeholders</Col>
-//             <Col md={2}>Type</Col>
-//             <Col md={2}>Connection Types</Col>
-//             <Col md={2}></Col>
-//           </Row>
-//         </ListGroup.Item>
-//         {allDocuments.map((doc) => (
-//           <ListGroup.Item
-//             key={doc.id}
-//             className={selectedDocuments.includes(doc.id) ? "selected" : ""}
-//             onClick={(e) => handleRowClick(doc.id, e)}
-//           >
-//             <Row className="align-items-center">
-//               {/* Checkbox for selection */}
-//               <Col md={1} className="text-center">
-//                 <Form.Check
-//                   type="checkbox"
-//                   id={`checkbox-${doc.id}`}
-//                   checked={selectedDocuments.includes(doc.id)}
-//                   onChange={(e) => {
-//                     e.stopPropagation(); // Prevent row click event
-//                     handleRowClick(doc.id, e);
-//                   }}
-//                 />
-//               </Col>
-//               <Col md={3}>{doc.title}</Col>
-//               <Col md={2}>{doc.stakeholders.join(", ")}</Col>
-//               <Col md={2}>{doc.type}</Col>
-//               <Col md={3}>
-//                 {/* Connection Type Buttons */}
-//                 {selectedDocuments.includes(doc.id) &&
-//                   connectionTypes.map((type, index) => {
-//                     // Find the related document's connection types or default to an empty array
-//                     const relatedDoc =
-//                       selectedConnectionTypes.find((item) => item.id === doc.id) || { type: [] };
-
-//                     return (
-//                       <Button
-//                         key={type}
-//                         variant={
-//                           relatedDoc.type.includes(type)
-//                             ? ["primary", "success", "warning", "danger"][index % 4] // Rotate colors
-//                             : "outline-secondary"
-//                         }
-//                         size="sm"
-//                         className="me-1"
-//                         onClick={(e) => {
-//                           e.stopPropagation(); // Prevent row click event
-//                           onConnectionTypeChange(doc.id, type); // Toggle the type
-//                         }}
-//                       >
-//                         {type.charAt(0)} {/* Display only the first letter */}
-//                       </Button>
-//                     );
-//                   })}
-//               </Col>
-//               <Col>
-//                 {/* Preview Button */}
-//                 <span className="filesymbol">
-//                   <PiFileMagnifyingGlassLight
-//                     onClick={(e) => {
-//                       e.stopPropagation(); // Prevent row click event
-//                       handleIconClick(doc);
-//                     }}
-//                   />
-//                 </span>
-//               </Col>
-//             </Row>
-//           </ListGroup.Item>
-//         ))}
-//       </ListGroup>
-//       <DocumentDetailsModal
-//         show={showModal}
-//         onHide={handleCloseModal}
-//         document={currentDocument}
-//       />
-//     </div>
-//   );
-// }
-
-// export default RelatedDocumentsSelector;
-
-
-
-
-
-
-
 import React, { useState, useEffect } from "react";
 import { ListGroup, Row, Col, Form, Button } from "react-bootstrap";
 import API from "@/services/API.mjs";
@@ -418,18 +38,49 @@ function RelatedDocumentsSelector({
   }, []);
 
   useEffect(() => {
-    // Filter documents based on the search query
+    console.log(edit)
+    const uniqueDocuments = allDocuments.filter(
+      (doc, index, self) => self.findIndex((d) => d.id === doc.id) === index
+    );
+    console.log(filteredDocuments);
+    setFilteredDocuments(uniqueDocuments);
+    console.log(uniqueDocuments);
+  }, [allDocuments, mode, edit]);
+  
+  // useEffect(() => {
+  //   // Filter documents based on the search query
+  //   if (!searchQuery) {
+  //     console.log(allDocuments)
+  //     setFilteredDocuments(allDocuments); // Show all documents if no query
+  //   } else {
+  //     const lowerCaseQuery = searchQuery.toLowerCase();
+  //     setFilteredDocuments(
+  //       allDocuments.filter((doc) =>
+  //         doc.title.toLowerCase().includes(lowerCaseQuery)
+  //       )
+  //     );
+  //   }
+  // }, [searchQuery, allDocuments]);
+  useEffect(() => {
+    // Rimuovi duplicati dai documenti filtrati
+    const uniqueDocuments = allDocuments.reduce((acc, doc) => {
+      if (!acc.some((item) => item.id === doc.id)) {
+        acc.push(doc);
+      }
+      return acc;
+    }, []);
+  
     if (!searchQuery) {
-      setFilteredDocuments(allDocuments); // Show all documents if no query
+      setFilteredDocuments(uniqueDocuments); // Usa i documenti unici se non c'è una query di ricerca
     } else {
       const lowerCaseQuery = searchQuery.toLowerCase();
       setFilteredDocuments(
-        allDocuments.filter((doc) =>
+        uniqueDocuments.filter((doc) =>
           doc.title.toLowerCase().includes(lowerCaseQuery)
         )
       );
     }
-  }, [searchQuery, allDocuments]);
+  }, [allDocuments, searchQuery]);
 
   // Initialize connection types for related documents
   useEffect(() => {
@@ -556,41 +207,45 @@ function RelatedDocumentsSelector({
               <Col md={2}>{doc.stakeholders.join(", ")}</Col>
               <Col md={2}>{doc.type}</Col>
               <Col md={3}>
-                {/* Connection Type Buttons */}
-                {(mode === "add" || edit) && selectedDocuments.includes(doc.id)
+              {/* In modalità view, mostra solo i tipi di connessione associati al documento */}
+              {mode === "view" && !edit ? (
+                // Trova i tipi di connessione associati al documento
+                selectedConnectionTypes
+                  .filter((item) => item.id === doc.id) // Filtra per ID documento
+                  .map((item) => item.type) // Prendi i tipi di connessione
+                  .join(", ") // Concatenali con una virgola
+              ) : (
+                // In modalità add/edit, mostra i bottoni solo se il documento è selezionato
+                selectedDocuments.includes(doc.id) && connectionTypes.length > 0
                   ? connectionTypes.map((type, index) => {
-                      // Find the related document's connection types or default to an empty array
-                      // const relatedDoc =
-                      //   selectedConnectionTypes.find((item) => item.id === doc.id) || { type: [] };
                       const relatedDoc = {
                         id: doc.id,
                         type: selectedConnectionTypes
                           .filter((item) => item.id === doc.id)
-                          .map((item) => item.type)
+                          .map((item) => item.type),
                       };
-                        // console.log(selectedConnectionTypes);
+
                       return (
                         <Button
                           key={type}
                           variant={
                             relatedDoc.type.includes(type)
-                              ? ["primary", "success", "warning", "danger"][index % 4] // Rotate colors
+                              ? ["primary", "success", "warning", "danger"][index % 4] // Rotazione dei colori
                               : "outline-secondary"
                           }
                           size="sm"
                           className="me-1"
                           onClick={(e) => {
-                            e.stopPropagation(); // Prevent row click event
-                            onConnectionTypeChange(doc.id, type); // Toggle the type
+                            e.stopPropagation(); // Evita il click sulla riga
+                            onConnectionTypeChange(doc.id, type); // Cambia il tipo di connessione
                           }}
                         >
-                          {type.charAt(0)} {/* Display only the first letter */}
+                          {type.charAt(0)} {/* Mostra solo la prima lettera */}
                         </Button>
                       );
-                    }) 
-                    : doc.connectionType}
-                  {/* // : selectedConnectionTypes
-                  //      .find((item) => item.id === doc.id)?.types.join(", ") || ""}  */}
+                    })
+                  : null // Non mostrare nulla se il documento non è selezionato
+              )}
               </Col>
               <Col>
                 {/* Preview Button */}

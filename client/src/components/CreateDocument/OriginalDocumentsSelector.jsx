@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { FaFileUpload, FaTrash, FaFile } from 'react-icons/fa';
-import { FaFilePdf, FaFileImage, FaFileAlt } from 'react-icons/fa'; // Add relevant icons
+import React, { useState, useEffect } from 'react';
+import { FaFileUpload, FaTrash } from 'react-icons/fa';
+import { MdOutlineCancel } from "react-icons/md";
+import { FaFilePdf, FaFileImage, FaFileAlt } from 'react-icons/fa'; // Aggiungi icone pertinenti
 import { Button, Modal } from 'react-bootstrap';
-import API from '@/services/API.mjs';  // Import the API module
+import API from '@/services/API.mjs';  // Importa il modulo API
 import '@/style/OriginalDocumentSelector.css';
 
-const DocumentUploader = ({ mode, edit, documentId, files, onFileRemoved }) => {
+const DocumentUploader = ({ mode, edit, documentId, files: initialFiles, onFileAdded, onFileRemoved }) => {
+  const [files, setFiles] = useState(initialFiles || []);
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileName, setFileName] = useState('No file chosen');
   const [fileSize, setFileSize] = useState('');
@@ -15,6 +17,11 @@ const DocumentUploader = ({ mode, edit, documentId, files, onFileRemoved }) => {
   const [showModal, setShowModal] = useState(false);
 
   const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
+
+  useEffect(() => {
+    // Gestisce gli aggiornamenti alla lista dei file
+    setFiles(initialFiles || []);
+  }, [initialFiles]);
 
   const handleFile = (file) => {
     if (file.size > MAX_FILE_SIZE) {
@@ -61,20 +68,20 @@ const DocumentUploader = ({ mode, edit, documentId, files, onFileRemoved }) => {
     return truncatedName + fileExtension;
   };
 
-
+  // Funzione per ottenere l'icona corretta in base al tipo di file
   const getFileIcon = (fileName) => {
-  const extension = fileName.split('.').pop().toLowerCase();
-  switch (extension) {
-    case 'pdf':
-      return <FaFilePdf className="file-icon pdf-icon" />;
-    case 'jpeg':
-    case 'jpg':
-    case 'png':
-      return <FaFileImage className="file-icon image-icon" />;
-    default:
-      return <FaFileAlt className="file-icon default-icon" />;
-  }
-};
+    const extension = fileName.split('.').pop().toLowerCase();
+    switch (extension) {
+      case 'pdf':
+        return <FaFilePdf className="file-icon pdf-icon" />;
+      case 'jpeg':
+      case 'jpg':
+      case 'png':
+        return <FaFileImage className="file-icon image-icon" />;
+      default:
+        return <FaFileAlt className="file-icon default-icon" />;
+    }
+  };
 
   const handleFileUpload = async () => {
     if (!selectedFile) {
@@ -91,6 +98,7 @@ const DocumentUploader = ({ mode, edit, documentId, files, onFileRemoved }) => {
         setFileSize('');
         setFileError('');
         setShowModal(false);
+        onFileAdded && onFileAdded(selectedFile.name);
       } else {
         setFileError('Error uploading file');
       }
@@ -101,50 +109,57 @@ const DocumentUploader = ({ mode, edit, documentId, files, onFileRemoved }) => {
     }
   };
 
-//   const handleFileRemoval = async (filePath) => {
-//     setLoading(true);
-//     try {
-//       const response = await API.removeDocument(documentId, filePath);
-//       if (response.success) {
-//         onFileRemoved(filePath); // Notify parent to remove the file from the list
-//         setFileError('');
-//       } else {
-//         setFileError('Error removing file');
-//       }
-//     } catch (error) {
-//       setFileError('Error removing file');
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
+  const handleFileDelete = async (file) => {
+    try {
+      await API.deleteFile(file);
+      setFiles((prevFiles) => prevFiles.filter((file) => file !== file));
+      if (onFileRemoved) onFileRemoved(file);
+    } catch (error) {
+      console.error('Error deleting file:', error);
+    }
+  };
 
   return (
-    mode ==='add' ? ("") : (
+    mode === 'add' ? ("") : (
     <div className="document-uploader">
       <h4>Original Documents</h4>
 
-      {/* Display files in both 'view' and 'edit' modes */}
       <div className="file-display">
         {files && files.length > 0 ? (
-          files.map((file, index) => (
-            // <div key={index} className="file-item">
-            //   <h1><FaFileUpload/></h1>
-            //   <h5>{truncateFileName(file, 6)}</h5> {/* Display truncated file title */}
-            // </div>
-            <button
-                className="file-added-button"
-                onClick={() => setShowModal(true)}
-                style={{ marginBottom: '20px' }}
-            >
-            <h1>{getFileIcon(file)}</h1> {truncateFileName(file, 6)}
-            </button>
-          ))
-        ) : (mode === 'view' && !edit)?(
+          files.map((file, index) => {
+            const fileUrl = file;
+            console.log(file);
+            return (
+              <div key={index} className="file-added-container">
+                <button
+                  className="file-added-button"
+                  style={{ marginBottom: '20px' }}
+                  onClick={() => window.open(fileUrl, '_blank')}
+                >
+                  {edit && (
+                    <button
+                      className="delete-file-btn"
+                      
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleFileDelete(file)
+                      }}
+                    >
+                      <MdOutlineCancel className="delete-icon" />
+                    </button>
+                  )}
+                  <h1>{getFileIcon(file)}</h1>
+                  {truncateFileName(file, 6)} 
+                  
+                </button>
+              </div>
+            );
+          })
+        ) : (mode === 'view' && !edit) ? (
           <p>No files available.</p>
-        ):""}
+        ) : ""}
       </div>
 
-      {/* Show file upload button and modal only in 'edit' or 'add' mode */}
       {(edit) && (
         <>
           <Button

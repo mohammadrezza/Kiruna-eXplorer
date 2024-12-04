@@ -17,7 +17,9 @@ import {
     createScale,
     getScalesList,
     getDocumentTypesList,
-    uploadDocument
+    uploadFile,
+    downloadFile,
+    deleteFile
 } from "../controllers/documentController.mjs";
 
 class DocumentRouter {
@@ -25,7 +27,7 @@ class DocumentRouter {
         this.app = app;
         this.auth = new Auth(app);
         this.router = express.Router()
-        this.upload = multer({ storage: storage });
+        this.upload = multer({storage: storage});
         this.initRoutes()
     }
 
@@ -84,9 +86,10 @@ class DocumentRouter {
         this.router.get("/connectionTypes", documentConnectionTypesList);
         this.router.get('/:id', getDocumentWithId);
         this.router.get("/", documentsList);
-        this.router.post("/:documentId/files",
-            this.upload.single('file'),
-            uploadDocument);
+        this.router.post("/:documentId/files", this.upload.single('file'), uploadFile);
+        this.router.get("/:documentId/files/:fileName", downloadFile);
+        this.router.delete("/:documentId/files/:fileName", deleteFile);
     }
 }
+
 export default DocumentRouter;
