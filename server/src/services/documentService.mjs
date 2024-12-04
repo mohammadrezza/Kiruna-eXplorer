@@ -238,8 +238,8 @@ async function getDocument(id) {
         let files = []
         if (fs.existsSync(`uploads/${id}`)) {
             files = fs.readdirSync(`uploads/${id}`);
-            files.forEach((file, index) => {
-                files[index] = `server/uploads/${id}/${file}`;
+            files.forEach((fileName, index) => {
+                files[index] = `http://localhost:3001/documents/${id}/files/${fileName}`
             })
         }
 

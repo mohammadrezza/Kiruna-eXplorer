@@ -142,6 +142,7 @@ function FormDocument(props) {
           setRelatedDocuments(doc.connections);
           setSelectedDocuments(connectedDocumentIds);
           setFiles(doc.files);
+          console.log(doc)
         }
       } catch (error) {
         console.error("Error loading data:", error);
@@ -149,7 +150,7 @@ function FormDocument(props) {
         setLoading(false);
       }
     };
-    console.log(user)
+    
     loadData();
   }, [props.mode, docID, id]);
 
@@ -309,6 +310,13 @@ function FormDocument(props) {
     setScale(selectedOption);
   };
 
+  const handleFileAdded = (newFileName) => {
+    setFiles((prevFiles) => [...prevFiles, newFileName]);
+  };
+
+  const handleFileRemoved = (fileName) => {
+    setFiles((prevFiles) => prevFiles.filter((file) => file !== fileName));
+  };
 
   const handleConnectionTypeSelect = (documentId, selectedConnectionType) => {
     console.log("Tipo selezionato:", selectedConnectionType);
@@ -532,7 +540,9 @@ function FormDocument(props) {
                 mode={props.mode}
                 edit={edit}
                 documentId={docID}
-                files={files}           
+                files={files}
+                onFileAdded={handleFileAdded}
+                onFileRemoved={handleFileRemoved}         
               ></DocumentUploader>
 
             </Col>
