@@ -6,6 +6,7 @@ import L from 'leaflet';
 import { MapMarkers, MapCentroids, createClusterIcon } from '@/components/DocumentsMap/MapMarkers';
 import { MapPolygon } from '@/components/DocumentsMap/MapPolygon';
 import { MapMultiPolygon } from '@/components/DocumentsMap/MapMultiPolygon';
+import MunicipalDocuments from '@/components/DocumentsMap/MunicipalDocuments';
 import { kirunaBounds, initialMapCenter } from "@/utils/constants.js";
 import { calculateCentroid } from "@/utils/geometry"; // Import the centroid function
 import 'leaflet/dist/leaflet.css';
@@ -13,9 +14,13 @@ import '@/style/mapCustom.css';
 const DocumentMap = () => {
   const { list } = useOutletContext();
   const [selectedPolygon, setSelectedPolygon] = useState(null);
+  const [showDocuments, setShowDocuments] = useState(false);
   const areas = list.filter(item => item.area && item.area.length > 0);
   const coordinates = list.filter(item => item.coordinates && Object.keys(item.coordinates).length > 0);
   const kirunaBoundsMap = L.latLngBounds(kirunaBounds);
+  const municipalDocuments = list.filter(
+    (doc) => doc.coordinates.lat === 0 && doc.coordinates.lng === 0
+  );
   // Calculate centroids for each polygon
   const centroids = areas.map((polygon) => {
     const centroid = calculateCentroid(polygon.area);
@@ -29,6 +34,7 @@ const DocumentMap = () => {
       stakeholders: polygon.stakeholders
     };
   });
+  const toggleList = () => setShowDocuments((prev) => !prev);
   const handlePointClick = (pointId, marker) => {
     const polygon = areas.find(poly => poly.id === pointId);
     setSelectedPolygon(polygon || null);
@@ -43,6 +49,11 @@ const DocumentMap = () => {
 
   return (
     <div>
+      <MunicipalDocuments
+        municipalDocuments={municipalDocuments}
+        showDocuments={showDocuments}
+        toggleList={toggleList}
+      />
       <MapContainer
         center={initialMapCenter}
         zoom={13}

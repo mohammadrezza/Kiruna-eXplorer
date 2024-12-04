@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col, Form } from 'react-bootstrap';
 import { PiMapPinSimpleAreaFill, PiPen } from "react-icons/pi";
 import MapPointSelector from "@/components/CreateDocument/MapPointSelector"
@@ -20,10 +20,13 @@ const CoordinatesForm = ({coordinates, mode, edit, errors,  onCoordinatesChange,
   };
 
   const toggleMap = () => {
-    if ((locationData.lat ===  '' && locationData.lng === '') || areValidCoordinates(locationData)) {
+    if (Object.keys(coordinates).length === 0  || (locationData.lat ===  '' && locationData.lng === '') || areValidCoordinates(locationData)) {
       setShowMap(prev => !prev);
     }
   };
+  useEffect(() => {
+    setLocationData(coordinates);
+  }, [coordinates]);
 
   return (
     <>
