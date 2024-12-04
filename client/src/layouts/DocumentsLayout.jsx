@@ -25,7 +25,10 @@ function DocumentsList() {
   useEffect(()=>{
     const loadData = async () => {
       try {
-        console.log(searchParams.get('title'))
+        const title = searchParams.get('title');
+        if (title) {
+          setSearchQuery(title);
+        }
         const documents = (!searchParams.get('title') ? await API.getDocuments() : await API.searchDoc(searchParams.get('title')));
         setList(documents);
       } catch (error) {
@@ -38,8 +41,10 @@ function DocumentsList() {
     loadData();
   }, []);
 
-  const handleNavigation = (path) => {
+  const handleNavigation = () => {
+    let path = isList ? "/documents/map" : "/documents"
     navigate(path);
+    setFilter({ documentTypes: '', stakeholders: '', issuanceDateStart: '', issuanceDateEnd: '' })
   };
 
   const handleSearch = (e) => {
@@ -47,6 +52,11 @@ function DocumentsList() {
   };
 
   const handleClickSearch = () => {
+    //temporary solution
+    if (searchParams.has('title')) {
+      searchParams.delete('title');
+      setSearchParams(searchParams); // Update the URL without reloading the page
+    }
     const loadSearch = async () => {
       try {
         const documents = await API.searchDoc(searchQuery);
@@ -114,10 +124,11 @@ function DocumentsList() {
                 Search
               </button>
         </div>
-        <div className="map-documents-button" role="button" onClick={()=>handleNavigation(isList ? "/documents/map" : "/documents")}>
+        {user && <div className="map-documents-button" role="button" onClick={()=>handleNavigation()}>
           {isList ? <LiaMapMarkedAltSolid /> : <LiaThListSolid/>}
-          <span>{isList ? "Show On Map" : "Show List"}</span>
+          <span>{isList ? "Show Map" : "Show List"}</span>
         </div>
+        }
       </div>
       <div className="filter-container">
         <Button className="filter-button" onClick={()=>setShowModal(true)}>

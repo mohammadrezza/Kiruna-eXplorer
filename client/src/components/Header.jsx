@@ -2,14 +2,16 @@ import React, { useContext } from 'react';
 import {useLocation, useNavigate } from 'react-router-dom';
 import { FaUserCircle } from 'react-icons/fa';
 import { Navbar } from 'react-bootstrap';
-import { IoLogOutSharp } from "react-icons/io5";
+import { IoLogOutSharp, IoLibraryOutline } from "react-icons/io5";
+import { PiMapTrifold } from 'react-icons/pi';
 import { AuthContext } from '@/layouts/AuthContext';
 import '@/style/headerStyle.css'
 
 function Header({ className }) {
   const location = useLocation();
   const isLoginPage = location.pathname === '/login';
-  const isDocumentsListPage = location.pathname === '/documents';
+  const isDocumentsListPage = location.pathname === '/document/add' || 
+  location.pathname.match(/^\/document\/view\/\d+$/);
   const { logout } = useContext(AuthContext); // Access login function from AuthContext
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
@@ -30,7 +32,11 @@ function Header({ className }) {
       className={`custom-navbar ${(user ? '' : (className || ''))}`} 
       variant="light" 
       data-testid="header-wrapper">
-      <hr></hr>
+      {!isDocumentsListPage ? <hr /> : 
+      <div>
+        <IoLibraryOutline className="profile-icon" onClick={() => navigateTo('/documents')}/>
+        <PiMapTrifold className="profile-icon" onClick={() => navigateTo('/documents/map')}/>
+      </div>}
       <h3 onClick={() => navigateTo('/')} role="button">Kiruna eXplorer</h3>
       <div className='custom-navbar-actions'>
       {user ? (
