@@ -63,6 +63,13 @@ function List(){
     };
     const handleDocumentClick = (documentId) => navigate(`/document/view/${documentId}`);
 
+    const showDate = (issuanceDate) =>{
+      const [dd, mm, yyyy] = issuanceDate.split("-");
+      let realDate = '';
+      realDate = realDate.concat((dd!=='00'?`${dd}-`:''),(mm!=='00'?`${mm}-`:''),yyyy)
+      return realDate;
+    }
+
     
     return(
     <div className="document-list">
@@ -100,7 +107,7 @@ function List(){
                 </Col>
                 <Col md={2}>{doc.type}</Col>
                 <Col md={2}>{doc.connections}</Col>
-                <Col>{doc.issuanceDate}</Col>
+                <Col>{showDate(doc.issuanceDate)}</Col>
                 <Col>
                   <span className='filesymbol' role="button" onClick={(e) => {
                       e.stopPropagation(); // Prevent row click event

@@ -2,7 +2,8 @@ import React, { useState,useEffect,useContext, useRef } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useNavigate, useParams} from 'react-router-dom'
 import { PiNotePencilThin } from "react-icons/pi";
-import { RiArrowGoBackFill } from "react-icons/ri";
+import { HiArrowUturnLeft } from "react-icons/hi2";
+import { LiaCheckCircle } from "react-icons/lia";
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import Select from 'react-select'
@@ -14,7 +15,6 @@ import API from '@/services/API.mjs';
 import Document from '@/mocks/Document.mjs';
 import { showSuccess } from '@/utils/notifications';
 import '../style/CreateDocument.css'
-import { CiSaveUp2 } from "react-icons/ci";
 import DocumentUploader from '../components/CreateDocument/OriginalDocumentsSelector';
 
 function FormDocument(props) {
@@ -399,10 +399,10 @@ function FormDocument(props) {
     <div className="wrapper">
       <div className="form-container">
         <h2 className='form-container-title'>
-          <RiArrowGoBackFill className='back-button' onClick={()=>navigate(-1)}/>
+          <HiArrowUturnLeft className='back-button' onClick={()=>navigate(-1)}/>
           {props.mode==='view' ? title : 'New Document'}
           {(props.mode==='view' && edit===false && rights) && <PiNotePencilThin className='edit-button' data-testid="edit" onClick={() => handleEditChange() }/>}
-          {(props.mode==='add' || (edit===true && rights)) && <CiSaveUp2 className='edit-button' onClick={() => handleSubmit() }/>}
+          {(props.mode==='add' || (edit===true && rights)) && <LiaCheckCircle className='save-button-icon' onClick={() => handleSubmit() }/>}
           </h2>
         <Form onSubmit={handleSubmit} data-testid="form-component">
           <Row>
