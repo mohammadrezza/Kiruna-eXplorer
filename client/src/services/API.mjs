@@ -107,17 +107,66 @@ async function getScale() {
 }
 
 async function addType(type) {
-  return await fetchRequest('/documents/types', 'POST', { name: type });
+  try {
+    const response = await fetch(`http://localhost:3001/documents/types`, {
+      method: 'POST',
+      body: {name:type},
+      credentials: 'include', 
+      mode: 'cors', 
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Add type failed');
+    }
+
+    return await response;
+  } catch (error) {
+    console.error('Add type failed', error);
+    throw error;
+  }
 }
 
 async function addStakeholder(stakeholder) {
-  return await fetchRequest('/documents/stakeholders', 'POST', {
-    name: stakeholder,
-  });
+  try {
+    const response = await fetch(`http://localhost:3001/documents/stakeholders`, {
+      method: 'POST',
+      body: {name:stakeholder},
+      credentials: 'include', 
+      mode: 'cors', 
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Add stakeholder failed');
+    }
+
+    return await response;
+  } catch (error) {
+    console.error('Add stakeholder failed', error);
+    throw error;
+  }
 }
 
 async function addScale(scale) {
-  return await fetchRequest('/documents/scales', 'POST', { name: scale });
+  try {
+    const response = await fetch(`http://localhost:3001/documents/scales`, {
+      method: 'POST',
+      body: {name:scale},
+      credentials: 'include', 
+      mode: 'cors', 
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Add scale failed');
+    }
+
+    return await response;
+  } catch (error) {
+    console.error('Add scale failed', error);
+    throw error;
+  }
 }
 
 async function uploadDocument(documentId, file) {

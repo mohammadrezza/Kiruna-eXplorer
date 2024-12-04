@@ -22,6 +22,7 @@ async function fetchRequest(endpoint, method = 'GET', body = null) {
     throw new Error(errorMessage);
   }
 
+
   return response.json();
 }
 
