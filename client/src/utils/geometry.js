@@ -5,5 +5,5 @@ export const calculateCentroid = (coords) => {
     latSum += lat;
     lngSum += lng;
   });
-  return [latSum / coords.length, lngSum / coords.length];
+  return {lat: latSum / coords.length, lng: lngSum / coords.length};
 };

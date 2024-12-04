@@ -11,7 +11,12 @@
 .custom-marker-icon {
     padding: 5px !important;
     background-color: var(--white);
-    border: 1px solid var(--grey);
+    border: 1px solid var(--white);
+}
+.custom-area-icon {
+    padding: 5px !important;
+    background-color: var(--yellow);
+    border: 1px solid var(--yellow);
 }
 .custom-marker-popup-link{
     text-decoration: underline;

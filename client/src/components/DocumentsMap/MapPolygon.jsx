@@ -1,5 +1,5 @@
 import React from 'react';
-import { Polygon, Popup } from 'react-leaflet';
+import { Polygon } from 'react-leaflet';
 
 const MapPolygon = ({ list }) => {
   return list.map((doc) => {
@@ -11,7 +11,6 @@ const MapPolygon = ({ list }) => {
 
     return (
       <Polygon key={doc.id} positions={doc.area} color="blue" fillColor="blue" fillOpacity={0.5}>
-        <Popup>{doc.title}</Popup>
       </Polygon>
     );
   });

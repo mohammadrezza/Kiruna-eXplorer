@@ -35,10 +35,10 @@ const MapAreaSelector = ({ area, mode, edit, onAreaChange }) => {
       lat: coord.lat,
       lng: coord.lng,
     }));
-    // const convertedCoordinates = polygonCoords.map(coord => [coord.lat, coord.lng]);
+    const convertedCoordinates = polygonCoords.map(coord => [coord.lat, coord.lng]);
 
     setPolygon(polygonCoords);
-    onAreaChange(polygonCoords);
+    onAreaChange(convertedCoordinates);
   };
 
   // Handle polygon deletion
@@ -53,7 +53,8 @@ const MapAreaSelector = ({ area, mode, edit, onAreaChange }) => {
       lat: coord.lat,
       lng: coord.lng,
     }));
-    onAreaChange(editedCoords);
+    const convertedCoordinates = editedCoords.map(coord => [coord.lat, coord.lng]);
+    onAreaChange(convertedCoordinates);
   };
 
   const isEditable = mode === 'add' || edit;
