@@ -16,6 +16,7 @@
 .file-icon{
     font-size: 40px;
 }
+
 .file-added-button {
     margin-top: 10px;
     color: var(--dark-grey);
@@ -31,6 +32,9 @@
     position: relative;
   }
 
+  .file-added-button:hover {
+    border: 2px solid var(--dark-grey); 
+  }
 
 
   .delete-file-btn{

@@ -51,7 +51,7 @@ function UPHomepage() {
                 placeholder="Enter the document name to search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-              />
+              /> 
             
               <button className='search-button'>
                 <VscSend className='sendIcon' onClick={handleSearch}></VscSend>
