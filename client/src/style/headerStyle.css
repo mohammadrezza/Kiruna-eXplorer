@@ -98,5 +98,5 @@
   cursor: pointer;
 }
 .logout-icon:hover{
-  color: red;
+  color: var(--red);
 }

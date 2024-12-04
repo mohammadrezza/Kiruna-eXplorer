@@ -88,9 +88,17 @@ textarea.form-control {
     width: 60px;
     height: 60px;
     cursor: pointer;
-}
-.edit-button:hover{
     color: var(--blue)
+}
+/* .edit-button:hover{
+} */
+
+.save-button-icon {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    color: var(--green)
 }
 
 .back-button{
@@ -98,9 +106,6 @@ textarea.form-control {
     width: 60px;
     height: 60px;
     cursor: pointer;
-}
-.edit-button:hover{
-    color: var(--red)
 }
 
 .save-button {

@@ -39,7 +39,7 @@
   .delete-file-btn{
     font-size: 20px;
     background-color: transparent;
-    color: red;
+    color: var(--red);
     border: none;
     border-radius: 2px; /* Rounded corners */
     cursor: pointer;
@@ -47,7 +47,7 @@
     margin-top:-5px;
   }
   .delete-file-btn :hover{
-    background-color: red;
+    background-color: var(--red);
     color: white;
     border: none;
     border-radius: 10px; /* Rounded corners */
