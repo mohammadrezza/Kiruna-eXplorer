@@ -22,7 +22,7 @@ sections:
 - Total points committed vs done
   - 11/11
 - Nr of hours planned vs spent (as a team)
-  - 91.45/98.45
+  - 95.45/98.45
 
 **Remember**  a story is done ONLY if it fits the Definition of Done:
 
@@ -38,7 +38,7 @@ sections:
 
 | Story | # Tasks | Points | Hours est. | Hours actual |
 |-------|---------|--------|------------|--------------|
-| _#0_  | 23      | -      | 66.45      | 60.45        |
+| _#0_  | 23      | -      | 66.45      | 62.45        |
 | #7    | 5       | 3      | 9          | 10           |
 | #8    | 7       | 3      | 12.30      | 12.30        |
 | #9    | 7       | 5      | 10.30      | 10.30        |
