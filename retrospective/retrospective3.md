@@ -87,7 +87,7 @@ sections:
 
 
 - What caused your errors in estimation (if any)?
-<br>
+
 As an example the sonarqube task was overestimated, because it was not clear to how to use the tool.
 Also testing was underestimated, because we had to change the code too much.
 
@@ -98,18 +98,17 @@ Also testing was underestimated, because we had to change the code too much.
   - Negative: the documentation was still not used as it should.
 
 - Which improvement goals set in the previous retrospective were you able to achieve?
-<br>
+
 We achieved the 2/2 goals we set in the previous retrospective which were having additional meetings and pair programming.
 
 - Which ones you were not able to achieve? Why?
-<br>
+
 We managed to achieve all the goals we set in the previous retrospective.
 
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
-<br>
-To improve quality and reliability, fix the bugs, and apply the stakeholders feedbacks, and to read and follow the documentation
 
+To improve quality and reliability, fix the bugs, and apply the stakeholders feedbacks, and to read and follow the documentation.
   
 - One thing you are proud of as a Team!!
-<br>
+
 We don't make project problems personal and we also spend time together outside of the project. 
