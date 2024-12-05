@@ -2,15 +2,6 @@ TEMPLATE FOR RETROSPECTIVE (Team 11)
 =====================================
 
 
-The retrospective should include _at least_ the following
-sections:
-
-
-- [process measures](#process-measures)
-- [quality measures](#quality-measures)
-- [general assessment](#assessment)
-
-
 ## PROCESS MEASURES
 
 
@@ -45,7 +36,16 @@ sections:
 
 
 - Hours per task (average, standard deviation)
+  
+ average estimate: 2.27 h
+
+ average actual: 2.34 h
+
+ standard deviation estimate: 2.19 h
+
+ standard deviation actual: 2.12 h
 - Total task estimation error ratio: sum of total hours estimation / sum of total hours spent -1
+  res: -0.04
 
 
 
@@ -58,9 +58,9 @@ sections:
     - Total hours spent
       - 23
     - Nr of automated unit test cases
-      - 83 + ...
+      - 114
     - Coverage (if available)
-      - 79.35 + ...
+      - 63
 - E2E testing:
     - Total hours estimated
       - 1.30
