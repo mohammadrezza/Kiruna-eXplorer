@@ -646,4 +646,5 @@ export {
     getAllStakeHolders,
     addScale,
     getAllScales,
+    convertToISODate
 };
