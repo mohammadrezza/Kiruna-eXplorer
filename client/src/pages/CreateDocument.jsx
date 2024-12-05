@@ -280,9 +280,9 @@ function FormDocument(props) {
       API.EditDocumentDescription(doc, connections, coordinates, area, docID );
     }
     showSuccess('Action successful!')
-    setTimeout(()=>{
-      navigate('/documents');
-    }, 2000)
+    // setTimeout(()=>{
+    //   navigate('/documents');
+    // }, 2000)
   };
 
   const handleDocumentSelect = (documentId) => {
