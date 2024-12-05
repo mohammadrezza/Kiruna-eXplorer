@@ -10,7 +10,14 @@ import {
     editDocument,
     editDocumentConnection,
     deleteAllConnections,
-    deleteAllStakeholders
+    deleteAllStakeholders,
+    convertToISODate,
+    addType,
+    getAllTypes,
+    addStakeHolder,
+    getAllStakeHolders,
+    addScale,
+    getAllScales
 } from '../../../src/daos/documentDAO.mjs';
 
 jest.mock('../../../src/db/db.mjs');
@@ -597,6 +604,212 @@ describe('documentDAO', () => {
                 expect.any(Array),
                 expect.any(Function)
             );
+        });
+    });
+    describe('Document DAO', () => {
+        describe('convertToISODate', () => {
+            test('should convert date to ISO format', () => {
+                const dateStr = '31-12-2023';
+                const result = convertToISODate(dateStr);
+                expect(result).toBe('2023-12-31');
+            });
+    
+            test('should return null if dateStr is not provided', () => {
+                const result = convertToISODate(null);
+                expect(result).toBeNull();
+            });
+        });
+    
+        describe('addType', () => {
+            test('should add a type successfully', async () => {
+                const type = { id: '1', name: 'Type1' };
+    
+                db.run.mockImplementation((query, params, callback) => {
+                    callback(null);
+                });
+    
+                await expect(addType(type)).resolves.toBeUndefined();
+                expect(db.run).toHaveBeenCalledWith(
+                    'INSERT INTO Type (id, name) VALUES (?, ?)',
+                    [type.id, type.name],
+                    expect.any(Function)
+                );
+            });
+    
+            test('should handle error when adding a type', async () => {
+                const type = { id: '1', name: 'Type1' };
+                const errorMessage = 'Error adding type';
+    
+                db.run.mockImplementation((query, params, callback) => {
+                    callback(new Error(errorMessage));
+                });
+    
+                await expect(addType(type)).rejects.toThrow(errorMessage);
+                expect(db.run).toHaveBeenCalledWith(
+                    'INSERT INTO Type (id, name) VALUES (?, ?)',
+                    [type.id, type.name],
+                    expect.any(Function)
+                );
+            });
+        });
+    
+        describe('getAllTypes', () => {
+            test('should return all types', async () => {
+                const mockTypes = [{ name: 'Type1' }, { name: 'Type2' }];
+    
+                db.all.mockImplementation((query, callback) => {
+                    callback(null, mockTypes);
+                });
+    
+                const result = await getAllTypes();
+                expect(result).toEqual(mockTypes);
+                expect(db.all).toHaveBeenCalledWith(
+                    'SELECT name FROM Type',
+                    expect.any(Function)
+                );
+            });
+    
+            test('should handle error when getting all types', async () => {
+                const errorMessage = 'Error getting types';
+    
+                db.all.mockImplementation((query, callback) => {
+                    callback(new Error(errorMessage));
+                });
+    
+                await expect(getAllTypes()).rejects.toThrow(errorMessage);
+                expect(db.all).toHaveBeenCalledWith(
+                    'SELECT name FROM Type',
+                    expect.any(Function)
+                );
+            });
+        });
+    
+        describe('addStakeHolder', () => {
+            test('should add a stakeholder successfully', async () => {
+                const stakeholder = { id: '1', name: 'Stakeholder1' };
+    
+                db.run.mockImplementation((query, params, callback) => {
+                    callback(null);
+                });
+    
+                await expect(addStakeHolder(stakeholder)).resolves.toBeUndefined();
+                expect(db.run).toHaveBeenCalledWith(
+                    'INSERT INTO Stakeholder (id, name) VALUES (?, ?)',
+                    [stakeholder.id, stakeholder.name],
+                    expect.any(Function)
+                );
+            });
+    
+            test('should handle error when adding a stakeholder', async () => {
+                const stakeholder = { id: '1', name: 'Stakeholder1' };
+                const errorMessage = 'Error adding stakeholder';
+    
+                db.run.mockImplementation((query, params, callback) => {
+                    callback(new Error(errorMessage));
+                });
+    
+                await expect(addStakeHolder(stakeholder)).rejects.toThrow(errorMessage);
+                expect(db.run).toHaveBeenCalledWith(
+                    'INSERT INTO Stakeholder (id, name) VALUES (?, ?)',
+                    [stakeholder.id, stakeholder.name],
+                    expect.any(Function)
+                );
+            });
+        });
+    
+        describe('getAllStakeHolders', () => {
+            test('should return all stakeholders', async () => {
+                const mockStakeholders = [{ id: '1', name: 'Stakeholder1' }, { id: '2', name: 'Stakeholder2' }];
+    
+                db.all.mockImplementation((query, callback) => {
+                    callback(null, mockStakeholders);
+                });
+    
+                const result = await getAllStakeHolders();
+                expect(result).toEqual(mockStakeholders);
+                expect(db.all).toHaveBeenCalledWith(
+                    'SELECT * FROM Stakeholder',
+                    expect.any(Function)
+                );
+            });
+    
+            test('should handle error when getting all stakeholders', async () => {
+                const errorMessage = 'Error getting stakeholders';
+    
+                db.all.mockImplementation((query, callback) => {
+                    callback(new Error(errorMessage));
+                });
+    
+                await expect(getAllStakeHolders()).rejects.toThrow(errorMessage);
+                expect(db.all).toHaveBeenCalledWith(
+                    'SELECT * FROM Stakeholder',
+                    expect.any(Function)
+                );
+            });
+        });
+    
+        describe('addScale', () => {
+            test('should add a scale successfully', async () => {
+                const scale = { id: '1', name: 'Scale1' };
+    
+                db.run.mockImplementation((query, params, callback) => {
+                    callback(null);
+                });
+    
+                await expect(addScale(scale)).resolves.toBeUndefined();
+                expect(db.run).toHaveBeenCalledWith(
+                    'INSERT INTO Scale (id, name) VALUES (?, ?)',
+                    [scale.id, scale.name],
+                    expect.any(Function)
+                );
+            });
+    
+            test('should handle error when adding a scale', async () => {
+                const scale = { id: '1', name: 'Scale1' };
+                const errorMessage = 'Error adding scale';
+    
+                db.run.mockImplementation((query, params, callback) => {
+                    callback(new Error(errorMessage));
+                });
+    
+                await expect(addScale(scale)).rejects.toThrow(errorMessage);
+                expect(db.run).toHaveBeenCalledWith(
+                    'INSERT INTO Scale (id, name) VALUES (?, ?)',
+                    [scale.id, scale.name],
+                    expect.any(Function)
+                );
+            });
+        });
+    
+        describe('getAllScales', () => {
+            test('should return all scales', async () => {
+                const mockScales = [{ id: '1', name: 'Scale1' }, { id: '2', name: 'Scale2' }];
+    
+                db.all.mockImplementation((query, callback) => {
+                    callback(null, mockScales);
+                });
+    
+                const result = await getAllScales();
+                expect(result).toEqual(mockScales);
+                expect(db.all).toHaveBeenCalledWith(
+                    'SELECT * FROM Scale',
+                    expect.any(Function)
+                );
+            });
+    
+            test('should handle error when getting all scales', async () => {
+                const errorMessage = 'Error getting scales';
+    
+                db.all.mockImplementation((query, callback) => {
+                    callback(new Error(errorMessage));
+                });
+    
+                await expect(getAllScales()).rejects.toThrow(errorMessage);
+                expect(db.all).toHaveBeenCalledWith(
+                    'SELECT * FROM Scale',
+                    expect.any(Function)
+                );
+            });
         });
     });
 });
