@@ -120,5 +120,19 @@
   .search-section-title>h2 {
     font-size: 60px;
   }
+  .map-link{
+    margin-top: 200px;
+    cursor: pointer;
+    width:240px;
+  }
+
+  .map-link:hover{
+    text-decoration: underline;
+    cursor: pointer;
+  }
   
+  .visitor-map-link{
+    font-size: 35px;
+    margin-left: 7px;
+  }
   

@@ -279,10 +279,12 @@ function FormDocument(props) {
     } else if (props.mode === 'view') {
       API.EditDocumentDescription(doc, connections, coordinates, area, docID );
     }
-    showSuccess('Action successful!')
-    setTimeout(()=>{
-      navigate('/documents');
-    }, 2000)
+    showSuccess('Action successful!');
+    setEdit(false)
+    //temp
+    // setTimeout(()=>{
+    //   navigate('/documents');
+    // }, 2000)
   };
 
   const handleDocumentSelect = (documentId) => {

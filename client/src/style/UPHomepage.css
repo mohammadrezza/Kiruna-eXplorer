@@ -25,15 +25,20 @@
     display: flex;
   }
 
-  .search-bar input {
+  .search-bar .search {
     max-width: 1061px;
     margin-left: 45px;
     height: 70px;
     font-size: 1em;
     border: 1px solid #ddd;
-    outline: none;
+    outline: none !important;
     border-right: unset;
+  }
 
+  .form-control:focus {
+    outline: none !important;
+    border: 1px solid #ddd !important;
+    border-right: unset !important;
   }
   
   .search-bar .search-button {
@@ -50,9 +55,11 @@
     cursor: unset;
   }
 
-  .search-bar .search-button :hover {
+  .search-bar .search-button:hover {
     background-image: unset !important;
     border: 1px solid #ddd;
+    border-left: unset;
+    color: white;
   }
 
   .sendIcon{
@@ -61,5 +68,8 @@
     margin-top: 15px;
     background-color: gray;
     border-radius: 40px 40px 40px 40px;
+  }
+  .sendIcon:hover{
+    border: 2px solid #0d6efd;
   }
  

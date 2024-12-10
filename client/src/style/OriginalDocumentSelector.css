@@ -16,11 +16,10 @@
 .file-icon{
     font-size: 40px;
 }
+
 .file-added-button {
-    margin-top: 5px;
+    margin-top: 10px;
     color: var(--dark-grey);
-    align-items: center;
-    justify-content: flex-start;
     background-color: var(--lily-white);
     border: 2px solid var(--lily-white); 
     border-radius: 8px; /* Rounded corners */
@@ -30,11 +29,13 @@
     transition: all 0.3s ease; /* Smooth transition for hover effect */
     width: 107px;
     height: 130px;
+    position: relative;
   }
 
-  .file-added-button :hover {
-    border-color: var(--light-grey) !important ;
+  .file-added-button:hover {
+    border: 2px solid var(--dark-grey); 
   }
+
 
   .delete-file-btn{
     font-size: 20px;
@@ -46,10 +47,31 @@
     margin-left: 55px;
     margin-top:-5px;
   }
+
   .delete-file-btn :hover{
     background-color: var(--red);
     color: white;
     border: none;
     border-radius: 10px; /* Rounded corners */
-    
+  }
+
+  .file-display {
+    display: flex;
+    flex-wrap: wrap;  /* Per gestire i bottoni che vanno su una nuova riga se necessario */
+    justify-content: flex-start;  /* Allinea i bottoni a sinistra */
+  }
+  
+
+  .tooltip {
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    padding: 5px;
+    border-radius: 3px;
+    font-size: 14px;
+    white-space: nowrap;
+    z-index: 100;
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+    transform: translateX(-50%); /* Centra il tooltip orizzontalmente */
   }

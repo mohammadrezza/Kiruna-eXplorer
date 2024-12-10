@@ -10,8 +10,7 @@ import '@/style/headerStyle.css'
 function Header({ className }) {
   const location = useLocation();
   const isLoginPage = location.pathname === '/login';
-  const isDocumentsListPage = location.pathname === '/document/add' || 
-  location.pathname.match(/^\/document\/view\/\d+$/);
+  const isDocumentsListPage = location.pathname === '/document/add' || location.pathname.includes('document/view');
   const { logout } = useContext(AuthContext); // Access login function from AuthContext
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
