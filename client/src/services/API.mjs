@@ -72,12 +72,13 @@ async function getDocuments() {
     return response.data
 }
 
-async function getSortedDocuments(key, dir) {
-    const response = await fetchRequest(`/documents?sort=${key},${dir}`);
+async function getSortedDocuments(key, dir,page,size) {
+    console.log(page,size)
+    const response = await fetchRequest(`/documents?sort=${key},${dir}&page=${page}&size=${size}`);
     return response.data
 }
 
-async function getFIilteredDocuments(filters) {
+async function getList(filters,page,size,key,dir) {
   let query = ``;
   if(filters.stakeholders)
     query = query.concat('stakeholders=',filters.stakeholders)
@@ -87,7 +88,9 @@ async function getFIilteredDocuments(filters) {
     query = query.concat((query!==''? '&' : ''),'issuanceDateStart=',filters.issuanceDateStart)
   if(filters.issuanceDateEnd)
     query = query.concat((query!==''? '&' : ''),'issuanceDateEnd=',filters.issuanceDateEnd)
-  const response = await fetchRequest(`/documents?${query}`);
+  if(key && dir)
+    query = query.concat((query!==''? '&' : ''),'sort=',key,',',dir)
+  const response = await fetchRequest(`/documents?${query}&page=${page}&size=${size}`);
   return response.data
 }
 
@@ -237,7 +240,7 @@ const API = {
   getScale,
   getSortedDocuments,
   searchDoc,
-  getFIilteredDocuments,
+  getList,
   uploadDocument,
   deleteFile
 };

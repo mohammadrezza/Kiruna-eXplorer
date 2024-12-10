@@ -6,7 +6,15 @@ import Select from 'react-select'
 import '../style/FilterModal.css'
 
 import '../style/DocumentDetailsModal.css'
-function FilterModal({ show, onHide, handleFilter }) {
+function FilterModal({ show, onHide, handleFilter,
+  stakeholders,
+  changeStake,
+  issuanceDateEnd,
+  changeIssuanceDateEnd,
+  issuanceDateStart,
+  changeIssuanceDateStart,
+  types,
+  changeTypes }) {
     const customStyles = {
         control: (base) => ({
           ...base,
@@ -52,10 +60,6 @@ function FilterModal({ show, onHide, handleFilter }) {
       };
 
   const [loading,setLoading] = useState(true)
-  const [stakeholders,setStakeholders] = useState([])
-  const [types,setTypes] = useState([])
-  const [issuanceDateStart, setissuanceDateStart] = useState('');
-  const [issuanceDateEnd, setissuanceDateEnd] = useState('');
   const [allTypes,setAllTypes] = useState([]);
   const [allStake,setAllStake] = useState([]);
 
@@ -77,11 +81,11 @@ function FilterModal({ show, onHide, handleFilter }) {
   }, []);
 
   const handleSelectStakeChange = (selectedOptions) => {
-    setStakeholders(selectedOptions);
+    changeStake(selectedOptions);
   };
 
   const handleSelectTypeChange = (selectedOption) => {
-    setTypes(selectedOption);
+    changeTypes(selectedOption);
   };
 
   
@@ -146,7 +150,7 @@ function FilterModal({ show, onHide, handleFilter }) {
                 className="filter-modal-input"
                 value={issuanceDateStart}
                 onChange={(event) => 
-                  setissuanceDateStart(event.target.value)}
+                  changeIssuanceDateStart(event.target.value)}
                 placeholder="dd-mm-yyyy"
             />
             </div>
@@ -157,7 +161,7 @@ function FilterModal({ show, onHide, handleFilter }) {
                 type="date"
                 value={issuanceDateEnd}
                 onChange={(event) => 
-                  setissuanceDateEnd(event.target.value)}
+                  changeIssuanceDateEnd(event.target.value)}
                 className="filter-modal-input"
                 placeholder="To"
             />

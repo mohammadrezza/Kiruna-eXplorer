@@ -12,6 +12,7 @@ function DocumentsList() {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const url = new URL(window.location.href)
   let [searchParams, setSearchParams] = useSearchParams();
   const { user } = useContext(AuthContext);
   const [list, setList] = useState([]);
@@ -21,6 +22,15 @@ function DocumentsList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [filter,setFilter] = useState({ documentTypes: '', stakeholders: '', issuanceDateStart: '', issuanceDateEnd: '' })
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // Numero di documenti per pagina
+  const [sortConfig, setSortConfig] = useState({ key: '', direction: "" });
+  
+  const [stakeholders,setStakeholders] = useState([])
+  const [types,setTypes] = useState([])
+  const [issuanceDateStart, setIssuanceDateStart] = useState('');
+  const [issuanceDateEnd, setIssuanceDateEnd] = useState('');
+
 
   useEffect(()=>{
     const loadData = async () => {
@@ -29,7 +39,7 @@ function DocumentsList() {
         if (title) {
           setSearchQuery(title);
         }
-        const documents = (!searchParams.get('title') ? await API.getDocuments() : await API.searchDoc(searchParams.get('title')));
+        const documents = (!url.searchParams.get('title') ? await API.getList(filter,currentPage,itemsPerPage,sortConfig.key,sortConfig.direction) : await API.searchDoc(url.searchParams.get('title')));
         setList(documents);
       } catch (error) {
         console.error("Error loading data:", error);
@@ -59,6 +69,8 @@ function DocumentsList() {
     }
     const loadSearch = async () => {
       try {
+        url.searchParams.set('title', searchQuery);
+        window.history.pushState({}, '', url);
         const documents = await API.searchDoc(searchQuery);
         setList(documents);
       } catch (error) {
@@ -71,10 +83,39 @@ function DocumentsList() {
     loadSearch();
   }
 
+  useEffect(()=>{
+    const loadDoc = async () => {
+      try {
+        const documents = await API.getList(filter,1,itemsPerPage,sortConfig.key,sortConfig.direction);
+        setList(documents);
+      } catch (error) {
+        console.error("Error loading data:", error);
+      }
+    };
+
+    loadDoc();
+  }, [sortConfig]);
+
+  const handleSort = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const getSortIndicator = (key) => {
+    if (sortConfig.key === key) {
+      return sortConfig.direction === "asc" ? "▲" : "▼";
+    }
+    return "";
+  };
+
+
   const handleClickFilter = (filters) => {
     const loadFiltered = async () => {
       try {
-        const documents = await API.getFIilteredDocuments(filters);
+        const documents = await API.getList(filters,1,itemsPerPage,sortConfig.key,sortConfig.direction);
         setFilter(filters)
         setList(documents);
       } catch (error) {
@@ -90,11 +131,27 @@ function DocumentsList() {
   const handleDeleteFilter = (key) =>{
     const f = filter;
     f[key]='';
+    switch (key)
+{
+   case "documentTypes":
+    setTypes([])
+   case "stakeholders":
+    setStakeholders([])
+   case "issuanceDateStart": 
+    setIssuanceDateStart('')
+       break;
+   case "issuanceDateEnd": 
+    setIssuanceDateEnd('')
+}
     handleClickFilter(f)
   }
 
   const handleCloseModal = () => {
     setShowModal(false);
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
 
@@ -153,13 +210,33 @@ function DocumentsList() {
             )}
         </div>
       </div>
-      <Outlet context={{list, loading}} />
+      <Outlet context={{list, loading,getSortIndicator,sortConfig,handleSort}} />
+      <div className="pagination-container">
+    {Array.from({ length: 3 }, (_, index) => (
+      <button
+        key={index}
+        className={`pagination-button ${currentPage === index + 1 ? 'active' : ''}`}
+        onClick={() => handlePageChange(index + 1)}
+      >
+        {index + 1}
+      </button>
+    ))}
+  </div>
       </div>
       <FilterModal
           show={showModal}
           onHide={handleCloseModal}
           handleFilter={handleClickFilter}
+          stakeholders={stakeholders}
+          changeStake={setStakeholders}
+          issuanceDateEnd={issuanceDateEnd}
+          changeIssuanceDateEnd={setIssuanceDateEnd}
+          issuanceDateStart={issuanceDateStart}
+          changeIssuanceDateStart={setIssuanceDateStart}
+          types={types}
+          changeTypes={setTypes}
             />
+      
     </div>
   );
 }

@@ -8,45 +8,13 @@ import '../style/DocumentsList.css';
 
 function List(){
   const navigate = useNavigate();
-  const { list, loading } = useOutletContext();
+  const { list, loading, sortConfig,handleSort,getSortIndicator } = useOutletContext();
   const [currentDocument, setCurrentDocument] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [sortedList,setSortedList] = useState(list)
 
-  const [sortConfig, setSortConfig] = useState({ key: '', direction: "" });
+  
 
-  useEffect(()=>{
-    const loadDoc = async () => {
-      try {
-        const documents = await API.getSortedDocuments(sortConfig.key,sortConfig.direction);
-        setSortedList(documents);
-      } catch (error) {
-        console.error("Error loading data:", error);
-      }
-    };
-
-    loadDoc();
-  }, [sortConfig]);
-
-  useEffect(()=>{
-    setSortedList(list);
-  }, [list])
-
-  const handleSort = (key) => {
-    let direction = "asc";
-    if (sortConfig.key === key && sortConfig.direction === "asc") {
-      direction = "desc";
-    }
-    setSortConfig({ key, direction });
-  };
-
-  const getSortIndicator = (key) => {
-    if (sortConfig.key === key) {
-      return sortConfig.direction === "asc" ? "▲" : "▼";
-    }
-    return "";
-  };
-
+ 
     const handleIconClick = async (doc) => {
       try {
         const docData = await API.getData(doc.id); 
@@ -86,7 +54,7 @@ function List(){
               className={`sortable-column ${sortConfig.key === "issuanceDate" ? "active" : ""}`}>Issuance Date {getSortIndicator("issuanceDate")}</Col>
             </Row>
           </ListGroup.Item>
-          {!loading && sortedList.map((doc, num) => (
+          {!loading && list.map((doc, num) => (
             <ListGroup.Item 
               key={doc.id}  
               >
