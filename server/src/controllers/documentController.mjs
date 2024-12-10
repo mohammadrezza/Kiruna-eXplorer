@@ -112,23 +112,15 @@ async function documentsList(req, res) {
     try {
         const {
             documentId,
-            title,
-            page = 1,
-            size = 10,
+            keyword,
+            page,
+            size,
             sort,
             documentTypes,
             stakeholders,
             issuanceDateStart,
             issuanceDateEnd
         } = req.query;
-
-        // Validate pagination parameters
-        if (page < 1 || size < 1) {
-            return res.status(400).json({
-                success: false,
-                message: 'Invalid pagination parameters'
-            });
-        }
 
         // Convert comma-separated strings to arrays
         const processedDocumentTypes = documentTypes
@@ -140,7 +132,7 @@ async function documentsList(req, res) {
 
         const result = await getDocuments(
             documentId,
-            title,
+            keyword,
             page,
             size,
             sort,

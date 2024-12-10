@@ -26,7 +26,7 @@ import Stakeholder from "../components/stakeholder.mjs";
 
 async function getDocuments(
     documentId,
-    title,
+    keyword,
     page,
     size,
     sort,
@@ -37,7 +37,7 @@ async function getDocuments(
 ) {
     return await getAllDocuments(
         documentId,
-        title,
+        keyword,
         page,
         size,
         sort,
