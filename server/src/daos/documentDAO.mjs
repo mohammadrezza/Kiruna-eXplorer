@@ -629,6 +629,44 @@ async function getAllScales() {
     });
 }
 
+async function addFile(file) {
+    return new Promise((resolve, reject) => {
+        const query = `INSERT INTO File (id, documentId, name, numPages) VALUES (?, ?, ?, ?)`;
+        db.run(query, [file.id, file.documentId, file.name, file.numPages], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
+
+async function getDocumentFiles(documentId) {
+    return new Promise((resolve, reject) => {
+        const query = `SELECT * FROM File WHERE documentId = ?`;
+        db.all(query, [documentId], (err, rows) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
+    });
+}
+async function deleteFile(file) {
+    return new Promise((resolve, reject) => {
+        const query = `DELETE FROM File WHERE documentId = ? AND name = ?`;
+        db.run(query, [file.documentId, file.name], (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+}
+
 export {
     addDocument,
     addDocumentStakeholder,
@@ -646,5 +684,8 @@ export {
     getAllStakeHolders,
     addScale,
     getAllScales,
-    convertToISODate
+    convertToISODate,
+    addFile,
+    getDocumentFiles,
+    deleteFile
 };
