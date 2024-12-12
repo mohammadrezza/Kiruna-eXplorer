@@ -287,7 +287,7 @@ async function getDocumentWithConnections(id) {
 
 async function getAllDocuments(
     documentId,
-    title,
+    keyword,
     page,
     size,
     sort,
@@ -298,8 +298,11 @@ async function getAllDocuments(
 ) {
     return new Promise(async (resolve, reject) => {
         try {
-            // Calculate offset
-            const offset = (page - 1) * size;
+            // Check if pagination should be skipped
+            const isPaginated = page > 0 && size > 0;
+
+            // Calculate offset if pagination is used
+            const offset = isPaginated ? (page - 1) * size : 0;
 
             // Base query for total count
             let countQuery = `
@@ -341,13 +344,13 @@ async function getAllDocuments(
                 params.push(null, null, null);
             }
 
-            // Title filter
-            if (title) {
-                query += ` AND d.title LIKE ?`;
-                params.push(`%${title}%`);
+            // Keyword filter (searching in title and description)
+            if (keyword) {
+                query += ` AND (d.title LIKE ? OR d.description LIKE ?)`;
+                params.push(`%${keyword}%`, `%${keyword}%`);
 
-                countQuery += ` AND d.title LIKE ?`;
-                countParams.push(`%${title}%`);
+                countQuery += ` AND (d.title LIKE ? OR d.description LIKE ?)`;
+                countParams.push(`%${keyword}%`, `%${keyword}%`);
             }
 
             // Document Type filter
@@ -478,9 +481,11 @@ async function getAllDocuments(
                 query += ` ORDER BY d.created_at DESC`;
             }
 
-            // Add pagination
-            query += ` LIMIT ? OFFSET ?`;
-            params.push(size, offset);
+            // Conditionally add pagination
+            if (isPaginated) {
+                query += ` LIMIT ? OFFSET ?`;
+                params.push(size, offset);
+            }
 
             // Get total count
             const totalCount = await new Promise((resolveCount, rejectCount) => {
@@ -493,7 +498,7 @@ async function getAllDocuments(
                 });
             });
 
-            // Get paginated documents
+            // Get documents (paginated or all)
             const rows = await new Promise((resolveRows, rejectRows) => {
                 db.all(query, params, (err, rows) => {
                     if (err) {
@@ -516,21 +521,28 @@ async function getAllDocuments(
             // Wait for all documents to be processed
             const documents = await Promise.all(documentsPromises);
 
-            // Calculate pagination metadata
-            const totalPages = Math.ceil(totalCount / size);
-            const hasNextPage = page < totalPages;
-            const hasPreviousPage = page > 1;
+            // Prepare pagination metadata
+            const pagination = isPaginated
+                ? {
+                    total: totalCount,
+                    totalPages: Math.ceil(totalCount / size),
+                    currentPage: page,
+                    size,
+                    hasNextPage: page < Math.ceil(totalCount / size),
+                    hasPreviousPage: page > 1
+                }
+                : {
+                    total: documents.length,
+                    totalPages: 1,
+                    currentPage: 1,
+                    size: documents.length,
+                    hasNextPage: false,
+                    hasPreviousPage: false
+                };
 
             resolve({
                 data: documents,
-                pagination: {
-                    total: totalCount,
-                    totalPages,
-                    currentPage: page,
-                    size,
-                    hasNextPage,
-                    hasPreviousPage
-                }
+                pagination
             });
 
         } catch (error) {

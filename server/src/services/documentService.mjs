@@ -30,7 +30,7 @@ import File from '../components/File.mjs';
 
 async function getDocuments(
     documentId,
-    title,
+    keyword,
     page,
     size,
     sort,
@@ -41,7 +41,7 @@ async function getDocuments(
 ) {
     return await getAllDocuments(
         documentId,
-        title,
+        keyword,
         page,
         size,
         sort,
