@@ -811,7 +811,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/documents?page=1&size=10&sort=nameOfColumn,asc&name=nameOfDocument&documentTypes=foo,bar,baz&stakeholders=foo,bar,baz&issuanceDateStart=02-02-2024&issuanceDateEnd=30-12-2024",
+					"raw": "{{host}}/documents?keyword=&page=1&size=10&sort=nameOfColumn,asc&name=nameOfDocument&documentTypes=foo,bar,baz&stakeholders=foo,bar,baz&issuanceDateStart=02-02-2024&issuanceDateEnd=30-12-2024&documentId",
 					"host": [
 						"{{host}}"
 					],
@@ -820,9 +820,8 @@
 					],
 					"query": [
 						{
-							"key": "documentId",
-							"value": null,
-							"disabled": true
+							"key": "keyword",
+							"value": ""
 						},
 						{
 							"key": "page",
@@ -857,6 +856,10 @@
 							"key": "issuanceDateEnd",
 							"value": "30-12-2024",
 							"description": "00-00-1996 , 00-06-1996 , 12-06-1996"
+						},
+						{
+							"key": "documentId",
+							"value": null
 						}
 					]
 				}
