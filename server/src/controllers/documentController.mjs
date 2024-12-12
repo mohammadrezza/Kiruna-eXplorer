@@ -1,5 +1,3 @@
-import fs from 'fs';
-import path from 'path';
 import {
     getDocuments,
     getDocument,
@@ -10,7 +8,10 @@ import {
     postStakeholder,
     postScale,
     postDocument,
-    putDocument
+    putDocument,
+    postFile,
+    getFile,
+    removeFile
 } from "../services/documentService.mjs";
 import DocumentConnectionType from "../components/documentConnectionType.mjs";
 
@@ -297,15 +298,12 @@ async function uploadFile(req, res) {
             });
         }
 
-        const uploadsDirectory = path.join(process.cwd(), 'uploads', documentId);
-        fs.mkdirSync(uploadsDirectory, {recursive: true});
-        const filePath = path.join(uploadsDirectory, file.filename);
-        fs.renameSync(file.path, filePath);
+        const fileLink = await postFile(documentId, file)
         return res.status(200).json({
             success: true,
             message: 'File uploaded successfully',
             documentId: documentId,
-            file: "http://localhost:3001/documents/" + documentId + "/files/" + file.filename
+            file: fileLink
         });
 
     } catch (error) {
@@ -328,8 +326,8 @@ async function downloadFile(req, res) {
         });
     }
 
-    const filePath = path.join(process.cwd(), 'uploads', documentId, fileName);
-    if (!fs.existsSync(filePath)) {
+    const filePath = await getFile(documentId, fileName);
+    if (!filePath) {
         return res.status(404).json({
             success: false,
             message: 'File not found'
@@ -349,15 +347,12 @@ async function deleteFile(req, res) {
         });
     }
 
-    const filePath = path.join(process.cwd(), 'uploads', documentId, fileName);
-    if (!fs.existsSync(filePath)) {
+    if (await removeFile(documentId, fileName) === false) {
         return res.status(404).json({
             success: false,
             message: 'File not found'
         });
     }
-
-    fs.unlinkSync(filePath);
     return res.status(200).json({
         success: true,
         message: 'File deleted successfully'
@@ -377,6 +372,6 @@ export {
     createScale,
     getScalesList,
     uploadFile,
-    deleteFile,
-    downloadFile
+    downloadFile,
+    deleteFile
 }

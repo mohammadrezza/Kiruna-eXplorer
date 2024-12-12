@@ -14,7 +14,10 @@ import {
     addScale,
     addStakeHolder,
     getAllStakeHolders,
-    getAllScales
+    getAllScales,
+    addFile,
+    getDocumentFiles,
+    deleteFile
 } from "../daos/documentDAO.mjs";
 import fs from 'fs';
 import Document from "../components/document.mjs";
@@ -23,6 +26,7 @@ import DocumentStakeholder from "../components/documentStakeholder.mjs";
 import DocumentType from "../components/documentType.mjs";
 import Scale from "../components/scale.mjs";
 import Stakeholder from "../components/stakeholder.mjs";
+import File from '../components/File.mjs';
 
 async function getDocuments(
     documentId,
@@ -235,12 +239,11 @@ async function getDocument(id) {
             return null;
         }
 
+        let pages = []
         let files = []
-        if (fs.existsSync(`uploads/${id}`)) {
-            files = fs.readdirSync(`uploads/${id}`);
-            files.forEach((fileName, index) => {
-                files[index] = `http://localhost:3001/documents/${id}/files/${fileName}`
-            })
+        for (let file of await getDocumentFiles(id)){
+            files.push(File.BuildLink(id, file.name))
+            pages.push(file.numPages)
         }
 
         // Format the main document
@@ -256,7 +259,8 @@ async function getDocument(id) {
             coordinates: documentData[0].doc_coordinates ? JSON.parse(documentData[0].doc_coordinates) : [],
             area: documentData[0].doc_area ? JSON.parse(documentData[0].doc_area) : [],
             connections: [],
-            files: files
+            files: files,
+            pages: pages.join(', ')
         };
 
         // Add connections if they exist
@@ -344,6 +348,47 @@ async function getScales() {
 
 }
 
+async function postFile(documentId, reqFile){
+    const file = new File()
+    file.createFromObject({
+        documentId: documentId,
+        name: reqFile.filename,
+        file: reqFile
+    })
+    file.moveToDir()
+    await file.calcNumOfPages()
+    await addFile(file)
+    return file.getSelfLink()
+}
+
+async function getFile(documentId, fileName){
+    const file = new File()
+    file.createFromObject({
+        documentId: documentId,
+        name: fileName
+    })
+    const filePath = file.getFullPath()
+    if (fs.existsSync(filePath)) {
+        return filePath
+    }
+    return null
+}
+
+async function removeFile(documentId, fileName){
+    const file = new File()
+    file.createFromObject({
+        documentId: documentId,
+        name: fileName
+    })
+    const filePath = file.getFullPath()
+    if (fs.existsSync(filePath)) {
+        await deleteFile(file)
+        fs.unlinkSync(filePath);
+        return true
+    }
+    return false
+}
+
 export {
     getDocument,
     getDocuments,
@@ -354,5 +399,8 @@ export {
     postStakeholder,
     getStakeholders,
     postScale,
-    getScales
+    getScales,
+    postFile,
+    getFile,
+    removeFile
 }
