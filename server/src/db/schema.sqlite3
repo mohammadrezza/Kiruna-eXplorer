@@ -81,3 +81,12 @@ CREATE TABLE IF NOT EXISTS User
     salt       TEXT not null,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS  File
+(
+    id            TEXT PRIMARY KEY,
+    documentId    TEXT,
+    name          TEXT,
+    numPages      INTEGER,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
