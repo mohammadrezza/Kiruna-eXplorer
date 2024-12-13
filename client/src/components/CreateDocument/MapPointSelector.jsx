@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import { pointer } from '@/utils/mapIcons';
 import { kirunaBounds, initialMapCenter } from "@/utils/constants.js";
+import { MapMultiPolygon } from '@/components/DocumentsMap/MapMultiPolygon';
 import 'leaflet/dist/leaflet.css';
 import  '@/style/map.css';
 
@@ -57,6 +58,8 @@ function MapPointSelector({ onCoordinatesChange, coordinates, mode, edit  }) {
         
         <MapEvents edit={edit} mode={mode} onCoordinatesChange={onCoordinatesChange} setMarkerPosition={setMarkerPosition}/>
         {markerPosition && <Marker position={markerPosition} icon={icon}/>}
+        {(mode === 'add' || edit) && (
+        <MapMultiPolygon list={kirunaBounds}></MapMultiPolygon>)}
       </MapContainer>
     </div>
   );

@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, FeatureGroup, Polygon } from 'react-leaflet';
 import { EditControl } from 'react-leaflet-draw';
 import L from 'leaflet';
 import { kirunaBounds, initialMapCenter } from "@/utils/constants.js";
+import { MapMultiPolygon } from '@/components/DocumentsMap/MapMultiPolygon';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
 
@@ -123,6 +124,8 @@ const MapAreaSelector = ({ area, mode, edit, onAreaChange }) => {
             fillOpacity={0.5}
           />
         )}
+        {(mode === 'add' || edit) && (
+        <MapMultiPolygon list={kirunaBounds}></MapMultiPolygon>)}
       </MapContainer>
       {/* <div className="mt-4">
         <h3 className="font-bold mb-2">Drawn Polygon:</h3>

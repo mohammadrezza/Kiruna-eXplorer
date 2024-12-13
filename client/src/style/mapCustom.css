@@ -13,6 +13,9 @@
     background-color: var(--white);
     border: 1px solid var(--white);
 }
+.custom-marker-icon:hover{
+    background-color: var(--green);
+}
 .custom-area-icon {
     padding: 5px !important;
     background-color: var(--yellow);
