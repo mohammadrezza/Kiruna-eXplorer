@@ -72,12 +72,6 @@ async function getDocuments() {
     return response.data
 }
 
-async function getSortedDocuments(key, dir,page,size) {
-    console.log(page,size)
-    const response = await fetchRequest(`/documents?sort=${key},${dir}&page=${page}&size=${size}`);
-    return response.data
-}
-
 async function getList(filters,page,size,key,dir) {
   let query = ``;
   if(filters.stakeholders)
@@ -95,7 +89,7 @@ async function getList(filters,page,size,key,dir) {
 }
 
 async function searchDoc(name) {
-    const response = await fetchRequest(`/documents?title=${name}`);
+    const response = await fetchRequest(`/documents?keyword=${name}`);
     return response.data;
 }
 
@@ -238,7 +232,6 @@ const API = {
   addStakeholder,
   addScale,
   getScale,
-  getSortedDocuments,
   searchDoc,
   getList,
   uploadDocument,
