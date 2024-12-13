@@ -39,7 +39,7 @@ function DocumentsList() {
         if (title) {
           setSearchQuery(title);
         }
-        const documents = (!url.searchParams.get('title') ? await API.getList(filter,currentPage,itemsPerPage,sortConfig.key,sortConfig.direction) : await API.searchDoc(url.searchParams.get('title')));
+        const documents = (!url.searchParams.get('title') ? await API.getList(filter,isMap ? 0 : currentPage,isMap ? 100 : itemsPerPage,sortConfig.key,sortConfig.direction) : await API.searchDoc(url.searchParams.get('title')));
         setList(documents);
       } catch (error) {
         console.error("Error loading data:", error);
@@ -49,7 +49,7 @@ function DocumentsList() {
     };
 
     loadData();
-  }, []);
+  }, [isMap]);
 
   const handleNavigation = () => {
     let path = isList ? "/documents/map" : "/documents"
@@ -86,7 +86,7 @@ function DocumentsList() {
   useEffect(()=>{
     const loadDoc = async () => {
       try {
-        const documents = await API.getList(filter,1,itemsPerPage,sortConfig.key,sortConfig.direction);
+        const documents = await API.getList(filter,isMap ? 0 : 1,isMap ? 100 : itemsPerPage,sortConfig.key,sortConfig.direction);
         setList(documents);
       } catch (error) {
         console.error("Error loading data:", error);
@@ -115,7 +115,7 @@ function DocumentsList() {
   const handleClickFilter = (filters) => {
     const loadFiltered = async () => {
       try {
-        const documents = await API.getList(filters,1,itemsPerPage,sortConfig.key,sortConfig.direction);
+        const documents = await API.getList(filters,isMap ? 0 : 1, isMap ? 100 : itemsPerPage,sortConfig.key,sortConfig.direction);
         setFilter(filters)
         setList(documents);
       } catch (error) {
@@ -211,17 +211,18 @@ function DocumentsList() {
         </div>
       </div>
       <Outlet context={{list, loading,getSortIndicator,sortConfig,handleSort}} />
-      <div className="pagination-container">
-    {Array.from({ length: 3 }, (_, index) => (
-      <button
-        key={index}
-        className={`pagination-button ${currentPage === index + 1 ? 'active' : ''}`}
-        onClick={() => handlePageChange(index + 1)}
-      >
-        {index + 1}
-      </button>
-    ))}
-  </div>
+      {!isMap && <div className="pagination-container">
+      {Array.from({ length: 3 }, (_, index) => (
+        <button
+          key={index}
+          className={`pagination-button ${currentPage === index + 1 ? 'active' : ''}`}
+          onClick={() => handlePageChange(index + 1)}
+        >
+          {index + 1}
+        </button>
+      ))}
+    </div>
+      }
       </div>
       <FilterModal
           show={showModal}
