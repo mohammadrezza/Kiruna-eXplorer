@@ -7,6 +7,8 @@ import { AuthContext } from '@/layouts/AuthContext';
 import FilterModal from '@/components/FilterModal';
 import API from '@/services/API.mjs';
 import '@/style/DocumentsList.css';
+import Pagination from '@/components/Pagination';
+import dayjs from 'dayjs';
 
 function DocumentsList() {
 
@@ -24,6 +26,7 @@ function DocumentsList() {
   const [filter,setFilter] = useState({ documentTypes: '', stakeholders: '', issuanceDateStart: '', issuanceDateEnd: '' })
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5; // Numero di documenti per pagina
+  const [totalPages,setTotalPages] = useState(0)
   const [sortConfig, setSortConfig] = useState({ key: '', direction: "" });
   
   const [stakeholders,setStakeholders] = useState([])
@@ -35,12 +38,14 @@ function DocumentsList() {
   useEffect(()=>{
     const loadData = async () => {
       try {
+        console.log(filter)
         const title = searchParams.get('title');
         if (title) {
           setSearchQuery(title);
         }
         const documents = (!url.searchParams.get('title') ? await API.getList(filter,currentPage,itemsPerPage,sortConfig.key,sortConfig.direction) : await API.searchDoc(url.searchParams.get('title')));
-        setList(documents);
+        setList(documents.data);
+        setTotalPages(documents.pagination.totalPages)
       } catch (error) {
         console.error("Error loading data:", error);
       } finally {
@@ -49,7 +54,7 @@ function DocumentsList() {
     };
 
     loadData();
-  }, []);
+  }, [currentPage,sortConfig,filter]);
 
   const handleNavigation = () => {
     let path = isList ? "/documents/map" : "/documents"
@@ -73,6 +78,7 @@ function DocumentsList() {
         window.history.pushState({}, '', url);
         const documents = await API.searchDoc(searchQuery);
         setList(documents);
+        setCurrentPage(1)
       } catch (error) {
         console.error("Error loading data:", error);
       } finally {
@@ -83,18 +89,6 @@ function DocumentsList() {
     loadSearch();
   }
 
-  useEffect(()=>{
-    const loadDoc = async () => {
-      try {
-        const documents = await API.getList(filter,1,itemsPerPage,sortConfig.key,sortConfig.direction);
-        setList(documents);
-      } catch (error) {
-        console.error("Error loading data:", error);
-      }
-    };
-
-    loadDoc();
-  }, [sortConfig]);
 
   const handleSort = (key) => {
     let direction = "asc";
@@ -102,6 +96,7 @@ function DocumentsList() {
       direction = "desc";
     }
     setSortConfig({ key, direction });
+    setCurrentPage(1)
   };
 
   const getSortIndicator = (key) => {
@@ -112,38 +107,46 @@ function DocumentsList() {
   };
 
 
-  const handleClickFilter = (filters) => {
-    const loadFiltered = async () => {
-      try {
-        const documents = await API.getList(filters,1,itemsPerPage,sortConfig.key,sortConfig.direction);
-        setFilter(filters)
-        setList(documents);
-      } catch (error) {
-        console.error("Error loading data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadFiltered();
+  const handleClickFilter = () => {
+    const filters = { documentTypes: '', stakeholders: '', issuanceDateStart: '', issuanceDateEnd: '' }
+    let st = ''
+    stakeholders.forEach((s) =>{st= st.concat(s.value,',')} )
+    filters.stakeholders=st.slice(0,-1);
+    let dt = '';
+    types.forEach((t) => dt = dt.concat(t.value,','))
+    filters.documentTypes=dt.slice(0,-1);
+    filters.issuanceDateEnd=(issuanceDateEnd ? dayjs(issuanceDateEnd).format('DD-MM-YYYY') : '');
+    filters.issuanceDateStart=(issuanceDateStart ? dayjs(issuanceDateStart).format('DD-MM-YYYY'): '');
+    setFilter(filters)
+    setCurrentPage(1)
   }
 
   const handleDeleteFilter = (key) =>{
-    const f = filter;
-    f[key]='';
-    switch (key)
-{
-   case "documentTypes":
-    setTypes([])
-   case "stakeholders":
-    setStakeholders([])
-   case "issuanceDateStart": 
-    setIssuanceDateStart('')
-       break;
-   case "issuanceDateEnd": 
-    setIssuanceDateEnd('')
-}
-    handleClickFilter(f)
+    const updatedFilter = { ...filter };
+
+  switch (key) {
+    case "documentTypes":
+      setTypes([]);
+      updatedFilter.documentTypes = '';
+      break;
+    case "stakeholders":
+      setStakeholders([]);
+      updatedFilter.stakeholders = '';
+      break;
+    case "issuanceDateStart":
+      setIssuanceDateStart('');
+      updatedFilter.issuanceDateStart = '';
+      break;
+    case "issuanceDateEnd":
+      setIssuanceDateEnd('');
+      updatedFilter.issuanceDateEnd = '';
+      break;
+    default:
+      break;
+  }
+
+  setFilter(updatedFilter);
+  setCurrentPage(1); // Reset della paginazione
   }
 
   const handleCloseModal = () => {
@@ -211,17 +214,11 @@ function DocumentsList() {
         </div>
       </div>
       <Outlet context={{list, loading,getSortIndicator,sortConfig,handleSort}} />
-      <div className="pagination-container">
-    {Array.from({ length: 3 }, (_, index) => (
-      <button
-        key={index}
-        className={`pagination-button ${currentPage === index + 1 ? 'active' : ''}`}
-        onClick={() => handlePageChange(index + 1)}
-      >
-        {index + 1}
-      </button>
-    ))}
-  </div>
+      <Pagination 
+        currentPage={currentPage} 
+        totalPages={totalPages} 
+        handlePageChange={handlePageChange} 
+      />
       </div>
       <FilterModal
           show={showModal}

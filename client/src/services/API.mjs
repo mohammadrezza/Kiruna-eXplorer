@@ -85,7 +85,7 @@ async function getList(filters,page,size,key,dir) {
   if(key && dir)
     query = query.concat((query!==''? '&' : ''),'sort=',key,',',dir)
   const response = await fetchRequest(`/documents?${query}&page=${page}&size=${size}`);
-  return response.data
+  return response
 }
 
 async function searchDoc(name) {
