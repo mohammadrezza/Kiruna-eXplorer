@@ -52,5 +52,25 @@
     font-size: 18px;
 }
 
-.search-input-list{
+.legend{
+    display:flex;
+    margin-right: 40px;
+}
+
+.legend-container{
+    display:flex;
+    margin-top: 10px;
+}
+
+.legend-button{
+    cursor: unset !important;
+}
+
+.legend-text{
+    margin-left: 10px;
+    margin-top: 6.5px;
+}
+
+.legend-title{
+    margin-top: 35px;
 }

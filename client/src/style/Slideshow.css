@@ -7,3 +7,15 @@
     max-height: 626px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   }
+
+    /* Stile per schermi piccoli */
+@media (max-width: 850px) {
+  .image-container img {
+    top: 33px;
+    position: absolute;
+    margin-left: 20%;
+    max-width: 600px;
+    max-height: 426px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  }
+}

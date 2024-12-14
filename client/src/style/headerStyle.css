@@ -100,3 +100,14 @@
 .logout-icon:hover{
   color: var(--red);
 }
+
+@media (max-width: 850px) {
+  .custom-navbar { /* Background color */
+    height: 50px;
+  }
+
+  .custom-navbar > h3 {
+    font-size: 24px;
+  }
+ 
+}
