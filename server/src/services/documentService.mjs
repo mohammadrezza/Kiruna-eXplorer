@@ -26,7 +26,7 @@ import DocumentStakeholder from "../components/documentStakeholder.mjs";
 import DocumentType from "../components/documentType.mjs";
 import Scale from "../components/scale.mjs";
 import Stakeholder from "../components/stakeholder.mjs";
-import File from '../components/File.mjs';
+import File from '../components/file.mjs';
 
 async function getDocuments(
     documentId,
