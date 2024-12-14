@@ -72,30 +72,28 @@ async function getDocuments() {
     return response.data
 }
 
-async function getSortedDocuments(key, dir,page,size) {
-    console.log(page,size)
-    const response = await fetchRequest(`/documents?sort=${key},${dir}&page=${page}&size=${size}`);
-    return response.data
-}
+async function getList(filters, page, size, key, dir) {
+  let query = '';
 
-async function getList(filters,page,size,key,dir) {
-  let query = ``;
-  if(filters.stakeholders)
-    query = query.concat('stakeholders=',filters.stakeholders)
-  if(filters.documentTypes)
-    query = query.concat((query!==''? '&' : ''),'documentTypes=',filters.documentTypes)
-  if(filters.issuanceDateStart)
-    query = query.concat((query!==''? '&' : ''),'issuanceDateStart=',filters.issuanceDateStart)
-  if(filters.issuanceDateEnd)
-    query = query.concat((query!==''? '&' : ''),'issuanceDateEnd=',filters.issuanceDateEnd)
-  if(key && dir)
-    query = query.concat((query!==''? '&' : ''),'sort=',key,',',dir)
-  const response = await fetchRequest(`/documents?${query}&page=${page}&size=${size}`);
-  return response.data
+  query += `page=${page}`;
+  if (size) query += (query ? '&' : '') + `size=${size}`;
+  if (filters.stakeholders)
+    query += (query ? '&' : '') + `stakeholders=${filters.stakeholders}`;
+  if (filters.documentTypes)
+    query += (query ? '&' : '') + `documentTypes=${filters.documentTypes}`;
+  if (filters.issuanceDateStart)
+    query +=
+      (query ? '&' : '') + `issuanceDateStart=${filters.issuanceDateStart}`;
+  if (filters.issuanceDateEnd)
+    query += (query ? '&' : '') + `issuanceDateEnd=${filters.issuanceDateEnd}`;
+  if (key && dir) query += (query ? '&' : '') + `sort=${key},${dir}`;
+
+  const response = await fetchRequest(`/documents?${query}`);
+  return response.data;
 }
 
 async function searchDoc(name) {
-    const response = await fetchRequest(`/documents?title=${name}`);
+    const response = await fetchRequest(`/documents?keyword=${name}`);
     return response.data;
 }
 
@@ -238,7 +236,6 @@ const API = {
   addStakeholder,
   addScale,
   getScale,
-  getSortedDocuments,
   searchDoc,
   getList,
   uploadDocument,

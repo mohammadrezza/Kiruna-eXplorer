@@ -4,10 +4,14 @@ import L from 'leaflet';
 import AreaForm from "@/components/CreateDocument/AreaForm.jsx";
 import CoordinatesForm from "@/components/CreateDocument/CoordinatesForm.jsx";
 import { kirunaBounds } from "@/utils/constants.js";
+import API from '@/services/API.mjs';
 
 const LocationForm = forwardRef(({ coordinates, area, mode, edit, handleCoordinatesChange, handleAreaChange }, ref) => {
   const [selectedOption, setSelectedOption] = useState('coordinates');
   const [errors, setErrors] = useState({ lat: '', lng: '' });
+  const [uniqueCoordinates, setUniqueCoordinates] = useState([]);
+  const [uniqueAreas, setUniqueAreas] = useState([]);
+  
 
   const options = [
     { label: 'Coordinates', value: 'coordinates' },
@@ -77,6 +81,47 @@ const LocationForm = forwardRef(({ coordinates, area, mode, edit, handleCoordina
     areValidCoordinates,
   }));
 
+  const fetchUniqueData = async () => {
+  try {
+    const documents = await API.getList({}, 0, '', '', '');
+
+    // Filter and extract unique coordinates with validation
+    const uniqCoordinates = Array.from(
+      new Set(
+        documents
+          .filter(doc => 
+            doc.coordinates && 
+            doc.coordinates.lat && doc.coordinates.lng && 
+            doc.coordinates.lat !== '' && doc.coordinates.lng !== '' && 
+            doc.coordinates.lat !== 0 && doc.coordinates.lng !== 0
+          )
+          .map(doc => JSON.stringify(doc.coordinates)) // Serialize to string for uniqueness
+      )
+    ).map(coords => JSON.parse(coords)); // Deserialize back to object
+
+    // Filter and extract unique areas (ignoring empty areas)
+    const uniqAreas = Array.from(
+      new Set(
+        documents
+          .filter(doc => doc.area && Array.isArray(doc.area) && doc.area.length > 0) // Ensure area is not empty
+          .map(doc => JSON.stringify(doc.area)) // Serialize for uniqueness
+      )
+    ).map(area => JSON.parse(area)); // Deserialize back to object/array
+
+    // console.log("Unique Coordinates:", uniqueCoordinates);
+    // console.log("Unique Areas:", uniqueAreas);
+    setUniqueCoordinates(uniqCoordinates)
+    setUniqueAreas(uniqAreas)
+
+    return { uniqueCoordinates, uniqueAreas };
+  } catch (error) {
+    console.error("Error fetching unique data:", error);
+    return { uniqueCoordinates: [], uniqueAreas: [] };
+  }
+  };
+
+  fetchUniqueData();
+
   useEffect(() => {
     if (mode === 'view' || edit) {
       if (coordinates.lat === 0 && coordinates.lng === 0) {
@@ -113,6 +158,7 @@ const LocationForm = forwardRef(({ coordinates, area, mode, edit, handleCoordina
             mode={mode}
             edit={edit}
             coordinates={coordinates}
+            existList={uniqueCoordinates}
             errors={errors}
             areValidCoordinates={areValidCoordinates}
             onCoordinatesChange={handleCoordinatesChange}
@@ -124,6 +170,7 @@ const LocationForm = forwardRef(({ coordinates, area, mode, edit, handleCoordina
             mode={mode}
             edit={edit}
             area={area}
+            existList={uniqueAreas}
             onAreaChange={handleAreaChange}
           />
         )}

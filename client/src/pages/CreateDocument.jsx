@@ -13,7 +13,7 @@ import RelatedDocumentsSelector from '@/components/CreateDocument/RelatedDocumen
 import LocationForm from '@/components/CreateDocument/LocationForm'; 
 import API from '@/services/API.mjs';
 import Document from '@/mocks/Document.mjs';
-import { showSuccess } from '@/utils/notifications';
+import { showSuccess, showError } from '@/utils/notifications';
 import '../style/CreateDocument.css'
 import DocumentUploader from '../components/CreateDocument/OriginalDocumentsSelector';
 
@@ -32,6 +32,7 @@ function FormDocument(props) {
   const [type,setType] = useState(null);
   const [language,setLanguage] = useState('');
   const [description,setDescription] = useState('');
+  const [pages,setPages] = useState('')
   const [coordinates, setCoordinates] = useState({ lat: '', lng: '' });
   const [area, setArea] = useState([]);
   const [loading,setLoading] = useState(true);
@@ -163,14 +164,15 @@ function FormDocument(props) {
     if (stakeholder.length === 0) validationErrors.stakeholder = 'Stakeholder cannot be empty!';
     if (scale === null) validationErrors.scale = 'Scale cannot be empty!';
     if (type === null) validationErrors.type = 'Type cannot be empty!';
+    if(language === null) validationErrors.language = 'Language cannot be empty!';
     if (!description.trim()) validationErrors.description = 'Description cannot be empty!';
-    
+    if(!day && !month && !year) validationErrors.issuanceDate = 'Date cannot be empty!';
     if (day && (!month && !year)) {
         validationErrors.day = 'Insert month and year before the day.';
-    }
+    }else
     if (month && !year) {
         validationErrors.month = 'Insert year before the month.';
-    }
+    }else
     if (day || month || year) {
         const { errors, formattedDate } = validateAndFormatDate(day, month, year);
         if (Object.keys(errors).length > 0) {
@@ -181,7 +183,6 @@ function FormDocument(props) {
             setYear(formattedDate.year);
         }
     }
-
     if (
         locationFormRef.current &&
         Object.keys(coordinates).length &&
@@ -191,7 +192,6 @@ function FormDocument(props) {
         const isValid = locationFormRef.current.areValidCoordinates(coordinates);
         if (!isValid) validationErrors.coordinates = 'Not correct format or not inside Kiruna area';
     }
-
     selectedConnectionTypes.forEach((connection) => {
         const documentId = connection.id;
         const connectionsForDocument = selectedConnectionTypes.filter(
@@ -256,7 +256,7 @@ function FormDocument(props) {
   
     
     if(Object.keys(validationErrors).length>0){
-      console.log("Form not submitted"); // Debugging
+      showError('Document not created, please check the input')
       setErrors(validationErrors);
       return;
     }
@@ -486,6 +486,11 @@ function FormDocument(props) {
                       <Form.Control type="text" placeholder="YYYY" value={year} onChange={(event) => setYear(event.target.value)}  isInvalid={!!errors.year} readOnly={!edit && props.mode!=='add'}/>
                     </Col>
                 </Row>
+                {errors.issuanceDate && (
+                  <div className="invalid-feedback" style={{ display: "block" }}>
+                    {errors.issuanceDate}
+                  </div>
+                  )}
               </Form.Group>
 
               <Form.Group className='form-group' controlId="type">
@@ -525,7 +530,17 @@ function FormDocument(props) {
                   isDisabled={!edit && props.mode !== 'add'}
                 >
                 </Select>
+                {errors.language && (
+                  <div className="invalid-feedback" style={{ display: "block" }}>
+                    {errors.language}
+                  </div>
+                  )}
               </Form.Group>
+
+              {(edit && props.mode !== 'add') && <Form.Group className='form-group'  controlId="page">
+                <Form.Label>Pages</Form.Label>
+                <Form.Control type="text" value={pages} readOnly/>
+              </Form.Group>}
             </Col>
 
             <Col className='col-form'>
@@ -533,11 +548,11 @@ function FormDocument(props) {
                 <Form.Label>Description{(props.mode === 'add' || edit) && <span>*</span>}</Form.Label>
                 <Form.Control as="textarea" placeholder="Enter description" value={description} onChange={(event) => setDescription(event.target.value)}  isInvalid={!!errors.description} readOnly={!edit && props.mode!=='add'}     className={!edit && props.mode === 'view' ? 'scrollable-description' : ''}
                 />
+                <Form.Control.Feedback type="invalid">
+                  {errors.description}
+                </Form.Control.Feedback>
               </Form.Group>
-              <Form.Control.Feedback type="invalid">
-                    {errors.description}
-              </Form.Control.Feedback>
-
+              
               <DocumentUploader 
                 mode={props.mode}
                 edit={edit}
