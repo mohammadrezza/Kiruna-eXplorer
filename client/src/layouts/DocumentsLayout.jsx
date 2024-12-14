@@ -104,7 +104,7 @@ function DocumentsList() {
     if (sortConfig.key === key) {
       return sortConfig.direction === "asc" ? "▲" : "▼";
     }
-    return "";
+    return "▲"; // Default quando la colonna non è attiva
   };
 
 
