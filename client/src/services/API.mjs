@@ -72,20 +72,24 @@ async function getDocuments() {
     return response.data
 }
 
-async function getList(filters,page,size,key,dir) {
-  let query = ``;
-  if(filters.stakeholders)
-    query = query.concat('stakeholders=',filters.stakeholders)
-  if(filters.documentTypes)
-    query = query.concat((query!==''? '&' : ''),'documentTypes=',filters.documentTypes)
-  if(filters.issuanceDateStart)
-    query = query.concat((query!==''? '&' : ''),'issuanceDateStart=',filters.issuanceDateStart)
-  if(filters.issuanceDateEnd)
-    query = query.concat((query!==''? '&' : ''),'issuanceDateEnd=',filters.issuanceDateEnd)
-  if(key && dir)
-    query = query.concat((query!==''? '&' : ''),'sort=',key,',',dir)
-  const response = await fetchRequest(`/documents?${query}&page=${page}&size=${size}`);
-  return response.data
+async function getList(filters, page, size, key, dir) {
+  let query = '';
+
+  query += `page=${page}`;
+  if (size) query += (query ? '&' : '') + `size=${size}`;
+  if (filters.stakeholders)
+    query += (query ? '&' : '') + `stakeholders=${filters.stakeholders}`;
+  if (filters.documentTypes)
+    query += (query ? '&' : '') + `documentTypes=${filters.documentTypes}`;
+  if (filters.issuanceDateStart)
+    query +=
+      (query ? '&' : '') + `issuanceDateStart=${filters.issuanceDateStart}`;
+  if (filters.issuanceDateEnd)
+    query += (query ? '&' : '') + `issuanceDateEnd=${filters.issuanceDateEnd}`;
+  if (key && dir) query += (query ? '&' : '') + `sort=${key},${dir}`;
+
+  const response = await fetchRequest(`/documents?${query}`);
+  return response.data;
 }
 
 async function searchDoc(name) {

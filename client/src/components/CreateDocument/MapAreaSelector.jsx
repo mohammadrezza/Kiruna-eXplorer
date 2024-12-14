@@ -18,7 +18,7 @@ let DefaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
-const MapAreaSelector = ({ area, mode, edit, onAreaChange }) => {
+const MapAreaSelector = ({ area, xistList, mode, edit, onAreaChange }) => {
   const [polygon, setPolygon] = useState(null); // Allow only one polygon
   const mapRef = useRef(null);
   const featureGroupRef = useRef(null); // Reference to FeatureGroup for editing
