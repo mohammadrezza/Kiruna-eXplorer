@@ -297,3 +297,17 @@
   .document-list-item-header .sortable-column:hover {
     color: var(--blue);
   }
+
+  .document-list-empty {
+    background-color: var(--lily-white); /* Colore di sfondo per differenziarla */
+    color: var(--dark-grey); /* Colore del testo */
+    font-size: 16px;
+    font-weight: 300;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid var(--light-grey); /* Bordo per evidenziarla */
+  }
+  
+  .document-list-empty .text-center {
+    color: var(--grey); /* Per personalizzare il colore del messaggio */
+  }

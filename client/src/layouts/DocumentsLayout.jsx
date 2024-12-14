@@ -18,7 +18,7 @@ function DocumentsList() {
   let [searchParams, setSearchParams] = useSearchParams();
   const { user } = useContext(AuthContext);
   const [list, setList] = useState([]);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const isList = location.pathname === '/documents';
   const isMap = location.pathname === '/documents/map';
   const [searchQuery, setSearchQuery] = useState("");
@@ -38,12 +38,13 @@ function DocumentsList() {
   useEffect(()=>{
     const loadData = async () => {
       try {
-        console.log(filter)
+        
         const title = searchParams.get('title');
         if (title) {
           setSearchQuery(title);
         }
         const documents = (!url.searchParams.get('title') ? await API.getList(filter,currentPage,itemsPerPage,sortConfig.key,sortConfig.direction) : await API.searchDoc(url.searchParams.get('title')));
+        console.log(documents)
         setList(documents.data);
         setTotalPages(documents.pagination.totalPages)
       } catch (error) {
@@ -52,7 +53,6 @@ function DocumentsList() {
         setLoading(false);
       }
     };
-
     loadData();
   }, [currentPage,sortConfig,filter]);
 
@@ -77,7 +77,8 @@ function DocumentsList() {
         url.searchParams.set('title', searchQuery);
         window.history.pushState({}, '', url);
         const documents = await API.searchDoc(searchQuery);
-        setList(documents);
+        setList(documents.data);
+        setTotalPages(documents.pagination.totalPages)
         setCurrentPage(1)
       } catch (error) {
         console.error("Error loading data:", error);
@@ -214,11 +215,11 @@ function DocumentsList() {
         </div>
       </div>
       <Outlet context={{list, loading,getSortIndicator,sortConfig,handleSort}} />
-      <Pagination 
+      {isList && <Pagination 
         currentPage={currentPage} 
         totalPages={totalPages} 
         handlePageChange={handlePageChange} 
-      />
+      />}
       </div>
       <FilterModal
           show={showModal}

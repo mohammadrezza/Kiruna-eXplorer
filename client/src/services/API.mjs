@@ -90,7 +90,7 @@ async function getList(filters,page,size,key,dir) {
 
 async function searchDoc(name) {
     const response = await fetchRequest(`/documents?keyword=${name}`);
-    return response.data;
+    return response;
 }
 
 async function getData(id) {

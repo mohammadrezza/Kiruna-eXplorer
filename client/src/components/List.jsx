@@ -74,7 +74,7 @@ function List(){
               {sortConfig.key === "issuanceDate" && getSortIndicator("issuanceDate")}</Col>
             </Row>
           </ListGroup.Item>
-          {!loading && list.map((doc, num) => (
+          {!loading && Array.isArray(list) && list.map((doc, num) => (
             <ListGroup.Item 
               key={doc.id}  
               >
@@ -108,6 +108,14 @@ function List(){
               </Row>
             </ListGroup.Item>
           ))}
+          <ListGroup.Item className="document-list-empty" hidden={!loading && list.length > 0}>
+            <Row>
+              <Col className="text-center" md={12}>
+                {loading ? "Loading documents..." : "No documents available."}
+              </Col>
+            </Row>
+          </ListGroup.Item>
+
         </ListGroup>
         <DocumentDetailsModal
           show={showModal}

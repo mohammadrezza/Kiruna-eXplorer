@@ -537,7 +537,7 @@ function FormDocument(props) {
                   )}
               </Form.Group>
 
-              {(edit && props.mode !== 'add') && <Form.Group className='form-group'  controlId="page">
+              {(!edit && props.mode !== 'add') && <Form.Group className='form-group'  controlId="page">
                 <Form.Label>Pages</Form.Label>
                 <Form.Control type="text" value={pages} readOnly/>
               </Form.Group>}
