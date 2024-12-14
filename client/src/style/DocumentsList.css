@@ -281,3 +281,19 @@
     font-size: 30px;
   }
   
+  .document-list-item-header .sortable-column {
+    cursor: pointer;
+    display: inline-flex; /* Allinea testo e freccia */
+    align-items: center; /* Verticalmente centrati */
+    gap: 5px; /* Spazio tra testo e freccia */
+    color: var(--light-grey);
+  }
+  
+  .document-list-item-header .sortable-column.active {
+    color: var(--black);
+    font-weight: bold;
+  }
+  
+  .document-list-item-header .sortable-column:hover {
+    color: var(--blue);
+  }

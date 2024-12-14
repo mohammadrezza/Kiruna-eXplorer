@@ -11,7 +11,7 @@ function List(){
   const { list, loading, sortConfig,handleSort,getSortIndicator } = useOutletContext();
   const [currentDocument, setCurrentDocument] = useState('');
   const [showModal, setShowModal] = useState(false);
-
+  const [hoveredColumn, setHoveredColumn] = useState(null);
   
 
  
@@ -44,14 +44,34 @@ function List(){
         <ListGroup className='document-list-item'>
           <ListGroup.Item className='document-list-item-header'>
             <Row>
-              <Col md={2}onClick={() => handleSort("title")}
-              className={`sortable-column ${sortConfig.key === "title" ? "active" : ""}`}>Title  {getSortIndicator("title")}</Col>
+              <Col
+                md={2}
+                onClick={() => handleSort("title")}
+                className={`sortable-column ${sortConfig.key === "title" ? "active" : ""}`}
+                onMouseEnter={() => setHoveredColumn("title")} // Nuovo stato per hover
+                onMouseLeave={() => setHoveredColumn(null)} // Reset dell'hover
+              >
+              Title{" "}
+              {hoveredColumn === "title" && sortConfig.key !== "title" && "▲"}
+              {sortConfig.key === "title" && getSortIndicator("title")}
+              </Col>
               <Col md={3}>Stakeholders</Col>
               <Col md={2} onClick={() => handleSort("type")}
-              className={`sortable-column ${sortConfig.key === "type" ? "active" : ""}`}>Type {getSortIndicator("type")}</Col>
+              className={`sortable-column ${sortConfig.key === "type" ? "active" : ""}`}
+              onMouseEnter={() => setHoveredColumn("type")} // Nuovo stato per hover
+              onMouseLeave={() => setHoveredColumn(null)} // Reset dell'hover
+              >
+              Type {" "}
+              {hoveredColumn === "type" && sortConfig.key !== "type" && "▲"}
+              {sortConfig.key === "type" && getSortIndicator("type")}</Col>
               <Col md={2} >Connections</Col>
               <Col onClick={() => handleSort("issuanceDate")}
-              className={`sortable-column ${sortConfig.key === "issuanceDate" ? "active" : ""}`}>Issuance Date {getSortIndicator("issuanceDate")}</Col>
+              onMouseEnter={() => setHoveredColumn("issuanceDate")} // Nuovo stato per hover
+              onMouseLeave={() => setHoveredColumn(null)} // Reset dell'hover
+              className={`sortable-column ${sortConfig.key === "issuanceDate" ? "active" : ""}`}>
+              Issuance Date {" "}
+              {hoveredColumn === "issuanceDate" && sortConfig.key !== "issuanceDate" && "▲"}
+              {sortConfig.key === "issuanceDate" && getSortIndicator("issuanceDate")}</Col>
             </Row>
           </ListGroup.Item>
           {!loading && list.map((doc, num) => (
