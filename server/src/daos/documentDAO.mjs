@@ -679,6 +679,51 @@ async function deleteFile(file) {
     });
 }
 
+async function getDocumentGeographicInfo() {
+    return new Promise((resolve, reject) => {
+        const query = `
+            SELECT 
+                coordinates, 
+                area 
+            FROM Document 
+            WHERE 
+                coordinates IS NOT NULL OR 
+                area IS NOT NULL
+        `;
+
+        db.all(query, [], (err, rows) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+
+            const geoInfo = rows.map(row => {
+                // Convert single coordinate to area format
+                if (row.coordinates) {
+                    try {
+                        const coord = JSON.parse(row.coordinates);
+                        return [[coord.lat, coord.lng]];
+                    } catch (parseErr) {
+                        console.warn('Error parsing coordinates:', parseErr);
+                        return null;
+                    }
+                }
+
+                if (row.area) {
+                    try {
+                        return JSON.parse(row.area);
+                    } catch (parseErr) {
+                        console.warn('Error parsing area:', parseErr);
+                        return null;
+                    }
+                }
+            }).filter(item => item !== null);
+
+            resolve(geoInfo);
+        });
+    });
+}
+
 export {
     addDocument,
     addDocumentStakeholder,
@@ -699,5 +744,6 @@ export {
     convertToISODate,
     addFile,
     getDocumentFiles,
-    deleteFile
+    deleteFile,
+    getDocumentGeographicInfo
 };

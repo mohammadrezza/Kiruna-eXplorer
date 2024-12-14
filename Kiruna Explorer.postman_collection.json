@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "4dcab590-6bf8-4dfe-8dff-5975a20ed3f4",
+		"_postman_id": "52a86f32-0713-44cf-9de9-611132919fe7",
 		"name": "Kiruna Explorer",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "4016750"
+		"_exporter_id": "23502947"
 	},
 	"item": [
 		{
@@ -380,10 +380,10 @@
 							]
 						}
 					},
-					"_postman_previewlanguage": null,
-					"header": null,
+					"_postman_previewlanguage": "Text",
+					"header": [],
 					"cookie": [],
-					"body": null
+					"body": ""
 				}
 			]
 		},
@@ -941,6 +941,85 @@
 					],
 					"cookie": [],
 					"body": "{\n    \"success\": true,\n    \"data\": [\n        {\n            \"id\": \"doc1\",\n            \"title\": \"City Transformation Plan 2024\",\n            \"description\": \"Master plan for Kiruna city transformation\",\n            \"stakeholders\": [\n                \"Municipality\",\n                \"LKAB\"\n            ],\n            \"scale\": \"City\",\n            \"issuanceDate\": \"2024-01-15\",\n            \"type\": \"Prescriptive Document\",\n            \"language\": \"English\",\n            \"coordinates\": {},\n            \"area\":[\n            [0.0 , 1.1],\n            [1 , 2],\n            [3 , 4],\n            [0.0 , 1.1]\n            ],\n            \"connections\": 0,\n            \"createdAt\": \"2024-11-16 17:55:17\"\n        },\n        {\n            \"id\": \"doc2\",\n            \"title\": \"LKAB Mining Impact Assessment\",\n            \"description\": \"Analysis of mining activities impact on urban infrastructure\",\n            \"stakeholders\": [\n                \"LKAB\",\n                \"Regional Authority\"\n            ],\n            \"scale\": \"Regional\",\n            \"issuanceDate\": \"2024-02-01\",\n            \"type\": \"Technical Document\",\n            \"language\": \"Swedish\",\n            \"coordinates\": {},\n            \"area\":[\n            [0.0 , 1.1],\n            [1 , 2],\n            [3 , 4],\n            [0.0 , 1.1]\n            ],\n            \"connections\": 1,\n            \"createdAt\": \"2024-11-16 17:55:17\"\n        },\n        {\n            \"id\": \"doc3\",\n            \"title\": \"New Kiruna Center Development\",\n            \"description\": \"Detailed plans for the new city center development\",\n            \"stakeholders\": [\n                \"Municipality\",\n                \"Architecture Firms\"\n            ],\n            \"scale\": \"Neighborhood\",\n            \"issuanceDate\": \"2024-02-15\",\n            \"type\": \"Design Document\",\n            \"language\": \"English\",\n            \"coordinates\": {\n                \"lat\": 67.849,\n                \"lng\": 20.2459\n            },\n            \"area\":[],\n            \"connections\": 1,\n            \"createdAt\": \"2024-11-16 17:55:17\"\n        },\n        {\n            \"id\": \"doc4\",\n            \"title\": \"Community Consultation Results\",\n            \"description\": \"Results from community engagement sessions\",\n            \"stakeholders\": [\n                \"Citizens\",\n                \"Municipality\"\n            ],\n            \"scale\": \"Neighborhood\",\n            \"issuanceDate\": \"2024-02-20\",\n            \"type\": \"Consultation\",\n            \"language\": \"Swedish\",\n            \"coordinates\": {\n                \"lat\": 67.8575,\n                \"lng\": 20.2256\n            },\n            \"area\": [],\n            \"connections\": 1,\n            \"createdAt\": \"2024-11-16 17:55:17\"\n        },\n        {\n            \"id\": \"doc5\",\n            \"title\": \"Environmental Impact Study\",\n            \"description\": \"Environmental assessment of city relocation\",\n            \"stakeholders\": [\n                \"Regional Authority\",\n                \"Others\"\n            ],\n            \"scale\": \"Regional\",\n            \"issuanceDate\": \"2024-03-01\",\n            \"type\": \"Technical Document\",\n            \"language\": \"English\",\n            \"coordinates\": {\n                \"lat\": 67.8516,\n                \"lng\": 20.2371\n            },\n            \"area\":[],\n            \"connections\": 1,\n            \"createdAt\": \"2024-11-16 17:55:17\"\n        }\n    ],\n    \"pagination\": {\n        \"total\": 5,\n        \"totalPages\": 1,\n        \"currentPage\": 1,\n        \"size\": 10,\n        \"hasNextPage\": false,\n        \"hasPreviousPage\": false\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "{{host}}/documents/coordinates",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/documents/coordinates",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"documents",
+						"coordinates"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "{{host}}/documents/coordinates",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/documents/coordinates",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"documents",
+								"coordinates"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:3000"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1899"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"76b-ybIHP72/lqAlZRc2Kw3cGuGWDQ0\""
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 16 Nov 2024 17:55:20 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"success\": true,\n    \"data\": [\n        [\n            [0.0 , 1.1],\n            [1 , 2],\n            [3 , 4],\n            [0.0 , 1.1]\n        ],\n        [0.0 , 1.1],\n        [\n            [0.0 , 1.1],\n            [1 , 2],\n            [3 , 4],\n            [0.0 , 1.1]\n        ]\n\n    ]\n}"
 				}
 			]
 		},

@@ -19,7 +19,7 @@ import {
     getDocumentTypesList,
     uploadFile,
     downloadFile,
-    deleteFile
+    deleteFile, getDocumentGeographicInfoController
 } from "../controllers/documentController.mjs";
 
 class DocumentRouter {
@@ -118,6 +118,9 @@ class DocumentRouter {
             this.auth.isLoggedIn,
             this.auth.isUrbanPlanner,
             deleteFile);
+        this.router.get("/coordinates",
+            this.auth.isLoggedIn,
+            getDocumentGeographicInfoController);
     }
 }
 

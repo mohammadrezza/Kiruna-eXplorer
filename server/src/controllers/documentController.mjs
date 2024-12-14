@@ -11,7 +11,7 @@ import {
     putDocument,
     postFile,
     getFile,
-    removeFile
+    removeFile, getDocumentGeographicInfoService
 } from "../services/documentService.mjs";
 import DocumentConnectionType from "../components/documentConnectionType.mjs";
 
@@ -359,6 +359,16 @@ async function deleteFile(req, res) {
     });
 }
 
+async function getDocumentGeographicInfoController(req, res){
+
+    const result = await getDocumentGeographicInfoService();
+
+    return res.status(200).json({
+        success: true,
+        ...result
+    });
+}
+
 export {
     createDocument,
     updateDocument,
@@ -373,5 +383,6 @@ export {
     getScalesList,
     uploadFile,
     downloadFile,
-    deleteFile
+    deleteFile,
+    getDocumentGeographicInfoController
 }
