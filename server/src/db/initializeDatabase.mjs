@@ -3,8 +3,10 @@ import sqlite from "sqlite3";
 import crypto from "crypto";
 import UserType from "../components/userType.mjs";
 import DocumentConnectionType from "../components/documentConnectionType.mjs";
+import process from 'process';
+import path from "path";
 
-const database = new sqlite.Database('./src/db/db.db', (err) => {
+const database = new sqlite.Database('db.db', (err) => {
     if (err) throw err;
 });
 
@@ -572,4 +574,6 @@ async function initializeDatabase() {
     }
 }
 
-export default initializeDatabase;
+const dirPath = path.join(process.cwd(), 'src', 'db');
+process.chdir(dirPath);
+await initializeDatabase();
