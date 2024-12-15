@@ -682,12 +682,12 @@ async function deleteFile(file) {
 async function getDocumentGeographicInfo() {
     return new Promise((resolve, reject) => {
         const query = `
-            SELECT 
-                coordinates, 
-                area 
-            FROM Document 
-            WHERE 
-                coordinates IS NOT NULL OR 
+            SELECT
+                coordinates,
+                area
+            FROM Document
+            WHERE
+                coordinates IS NOT NULL OR
                 area IS NOT NULL
         `;
 
@@ -699,7 +699,7 @@ async function getDocumentGeographicInfo() {
 
             const geoInfo = rows.map(row => {
                 // Convert single coordinate to area format
-                if (row.coordinates) {
+                if (row.coordinates && row.coordinates !== "{}") {
                     try {
                         const coord = JSON.parse(row.coordinates);
                         return [[coord.lat, coord.lng]];

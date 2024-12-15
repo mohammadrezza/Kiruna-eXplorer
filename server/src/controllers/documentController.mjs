@@ -359,14 +359,20 @@ async function deleteFile(req, res) {
     });
 }
 
-async function getDocumentGeographicInfoController(req, res){
+async function getDocumentGeographicInfoController(req, res) {
+    try {
+        const result = await getDocumentGeographicInfoService();
 
-    const result = await getDocumentGeographicInfoService();
-
-    return res.status(200).json({
-        success: true,
-        ...result
-    });
+        return res.status(200).json({
+            success: true,
+            data: result
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
 }
 
 export {
