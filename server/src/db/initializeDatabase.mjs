@@ -22,7 +22,7 @@ const documents = [
     {
         id: "doc15",
         title: "Compilation of responses \"So what the people of Kiruna think\"",
-        description: "This document is a compilation of the responses to the survey 'What is your impression of Kiruna?' From the citizens' responses to this last part of the survey, it is evident that certain buildings, such as the Kiruna Church, the Hjalmar Lundbohmsgården, and the Town Hall, are considered of significant value to the population. The municipality views the experience of this survey positively, to the extent that over the years it will propose various consulta- tion opportunities.",
+        description: "This document is a compilation of the responses to the survey 'What is your impression of Kiruna?' From the citizens' responses to this last part of the survey, it is evident that certain buildings, such as the Kiruna Church, the Hjalmar Lundbohmsgården, and the Town Hall, are considered of significant value to the population. The municipality views the experience of this survey positively, to the extent that over the years it will propose various consultation opportunities.",
         scale: "Text",
         issuanceDate: "00-00-2007",
         type: "Informative document",
@@ -50,7 +50,7 @@ const documents = [
     },
     {
         id: "doc41",
-        title: "Developement Plan",
+        title: "Development Plan",
         description: "The development plan shapes the form of the new city. The document, unlike previous competition documents, is written entirely in Swedish, which reflects the target audience: the citizens of Kiruna. The plan obviously contains many elements of the winning masterplan from the competition, some recommended by the jury, and others that were deemed appropriate to integrate later. The docu- ment is divided into four parts, with the third part, spanning 80 pages, describing the shape the new city will take and the strategies to be implemented for its relocation through plans, sections, images, diagrams, and texts. The document also includes numerous studies aimed at demonstrating the future success of the project.",
         scale: "1:7,500",
         issuanceDate: "17-03-2014",
@@ -81,8 +81,8 @@ const documents = [
     },
     {
         id: "doc47",
-        title: "Adjusted developement plan ",
-        description: "This document is the update of the Development Plan, one year after its creation, modifications are made to the general master plan, which is publi- shed under the name 'Adjusted Development Plan91,' and still represents the version used today after 10 years. Certainly, there are no drastic differen- ces compared to the previous plan, but upon careful comparison, several modified elements stand out. For example, the central square now takes its final shape, as well as the large school complex just north of it, which appears for the first time.",
+        title: "Adjusted development plan ",
+        description: "This document is the update of the Development Plan, one year after its creation, modifications are made to the general master plan, which is published under the name 'Adjusted Development Plan91,' and still represents the version used today after 10 years. Certainly, there are no drastic differences compared to the previous plan, but upon careful comparison, several modified elements stand out. For example, the central square now takes its final shape, as well as the large school complex just north of it, which appears for the first time.",
         scale: "1:7.500",
         issuanceDate: "00-00-2015",
         type: "Design document",
@@ -97,7 +97,7 @@ const documents = [
     {
         id: "doc50",
         title: "Detail plan for square and commercial street",
-        description: "This plan, approved in July 2016, is the first detailed plan to be implemented from the new masterplan (Adjusted development plan). The document defines the entire area near the town hall, compri- sing a total of 9 blocks known for their density. Among these are the 6 buildings that will face the main square. The functions are mixed, both public and private, with residential being prominent, as well as the possibility of incorporating accommoda- tion facilities such as hotels. For all buildings in this plan, the only height limit is imposed by air traffic.",
+        description: "This plan, approved in July 2016, is the first detailed plan to be implemented from the new masterplan (Adjusted development plan). The document defines the entire area near the town hall, comprising a total of 9 blocks known for their density. Among these are the 6 buildings that will face the main square. The functions are mixed, both public and private, with residential being prominent, as well as the possibility of incorporating accommodation facilities such as hotels. For all buildings in this plan, the only height limit is imposed by air traffic.",
         scale: "1:1,000",
         issuanceDate: "22-06-2016",
         type: "Prescriptive document",
@@ -112,7 +112,7 @@ const documents = [
     {
         id: "doc63",
         title: "Construction of Skandic Horel begins",
-        description: "After two extensions of the land acquisition agree- ment, necessary because this document in Sweden is valid for only two years, construction of the hotel finally began in 2019.",
+        description: "After two extensions of the land acquisition agreement, necessary because this document in Sweden is valid for only two years, construction of the hotel finally began in 2019.",
         scale: "Blueprint/effects",
         issuanceDate: "00-04-2019",
         type: "Material effect",
