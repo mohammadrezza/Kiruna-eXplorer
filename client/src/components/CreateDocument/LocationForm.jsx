@@ -120,7 +120,9 @@ const LocationForm = forwardRef(({ coordinates, area, mode, edit, handleCoordina
   }
   };
 
-  fetchUniqueData();
+  useEffect(() => {
+    fetchUniqueData();
+  }, []);
 
   useEffect(() => {
     if (mode === 'view' || edit) {

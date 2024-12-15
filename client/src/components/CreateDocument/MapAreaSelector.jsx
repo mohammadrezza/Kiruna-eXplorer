@@ -1,9 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MapContainer, TileLayer, FeatureGroup, Polygon } from 'react-leaflet';
+import { MapContainer, TileLayer, FeatureGroup, Polygon, Popup, Marker } from 'react-leaflet';
 import { EditControl } from 'react-leaflet-draw';
+import MarkerClusterGroup from 'react-leaflet-markercluster'; // Import MarkerClusterGroup
 import L from 'leaflet';
 import { kirunaBounds, initialMapCenter } from "@/utils/constants.js";
+import { createClusterIcon } from '@/components/DocumentsMap/MapMarkers';
 import { MapMultiPolygon } from '@/components/DocumentsMap/MapMultiPolygon';
+import { calculateCentroid } from "@/utils/geometry";
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
 
@@ -18,13 +21,14 @@ let DefaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 
-const MapAreaSelector = ({ area, xistList, mode, edit, onAreaChange }) => {
-  const [polygon, setPolygon] = useState(null); // Allow only one polygon
+const MapAreaSelector = ({ area, existList, mode, edit, onAreaChange }) => {
+  const [polygon, setPolygon] = useState([]); // Current selected polygon
   const mapRef = useRef(null);
   const featureGroupRef = useRef(null); // Reference to FeatureGroup for editing
+
   // Handle polygon creation
   const handleCreated = (e) => {
-    if (polygon) {
+    if (polygon.length>0) {
       // Prevent multiple polygons
       e.target.removeLayer(e.layer);
       alert("Only one polygon can be drawn at a time.");
@@ -44,7 +48,7 @@ const MapAreaSelector = ({ area, xistList, mode, edit, onAreaChange }) => {
 
   // Handle polygon deletion
   const handleDeleted = () => {
-    setPolygon(null);
+    setPolygon([]);
     onAreaChange([]);
   };
 
@@ -58,6 +62,13 @@ const MapAreaSelector = ({ area, xistList, mode, edit, onAreaChange }) => {
     onAreaChange(convertedCoordinates);
   };
 
+  // Handle polygon selection from existing list
+  const handlePolygonClick = (selectedArea) => {
+    const convertedCoordinates = selectedArea.map(coord => [coord[0], coord[1]]);
+    setPolygon(selectedArea); // Update the current polygon
+    onAreaChange(convertedCoordinates); // Notify parent of the change
+  };
+
   const isEditable = mode === 'add' || edit;
 
   // Set the initial polygon if area exists
@@ -68,7 +79,7 @@ const MapAreaSelector = ({ area, xistList, mode, edit, onAreaChange }) => {
   }, [area]);
 
   useEffect(() => {
-    if (polygon && featureGroupRef.current) {
+    if (polygon.length>0 && featureGroupRef.current) {
       // Add the polygon to the FeatureGroup as a Leaflet layer
       const leafletPolygon = L.polygon(polygon);
       featureGroupRef.current.clearLayers(); // Clear any existing layers
@@ -101,7 +112,7 @@ const MapAreaSelector = ({ area, xistList, mode, edit, onAreaChange }) => {
               onDeleted={handleDeleted}
               onEdited={handleEdited}
               draw={{
-                polygon: !polygon,
+                polygon: polygon.length===0,
                 polyline: false,
                 rectangle: false,
                 circle: false,
@@ -109,11 +120,42 @@ const MapAreaSelector = ({ area, xistList, mode, edit, onAreaChange }) => {
                 marker: false,
               }}
               edit={{
-                edit: !!polygon,
-                remove: !!polygon,
+                edit: polygon.length>0,
+                remove: polygon.length>0,
               }}
             />
           </FeatureGroup>
+        )}
+
+        {/* Show existing areas with clustering */}
+        {existList && existList.length > 0 && (
+          <MarkerClusterGroup iconCreateFunction={createClusterIcon} maxClusterRadius={50}>
+            {existList.map((existingArea, index) => {
+              const centroid = calculateCentroid(existingArea);
+
+              return (
+                <React.Fragment key={index}>
+                  {/* Display Polygon */}
+                  <Polygon
+                    positions={existingArea}
+                    color="green"
+                    fillColor="green"
+                    fillOpacity={0.3}
+                  >
+                  </Polygon>
+
+                  {/* Display Centroid (Marker or Circle) */}
+                  <Marker
+                    position={centroid}
+                    eventHandlers={{
+                      click: () => handlePolygonClick(existingArea),
+                    }}
+                  >
+                  </Marker>
+                </React.Fragment>
+              );
+            })}
+          </MarkerClusterGroup>
         )}
 
         {polygon && mode === 'view' && !edit && (
@@ -125,23 +167,9 @@ const MapAreaSelector = ({ area, xistList, mode, edit, onAreaChange }) => {
           />
         )}
         {(mode === 'add' || edit) && (
-        <MapMultiPolygon list={kirunaBounds}></MapMultiPolygon>)}
-      </MapContainer>
-      {/* <div className="mt-4">
-        <h3 className="font-bold mb-2">Drawn Polygon:</h3>
-        {polygon ? (
-          <div className="mb-2 p-2 bg-gray-100 rounded">
-            <p>Polygon:</p>
-            {polygon.map((coord, index) => (
-              <p key={index} className="text-sm">
-                Point {index + 1}: Lat {coord.lat.toFixed(4)}, Lng {coord.lng.toFixed(4)}
-              </p>
-            ))}
-          </div>
-        ) : (
-          <p className="text-gray-500">No polygon drawn yet.</p>
+          <MapMultiPolygon list={kirunaBounds}></MapMultiPolygon>
         )}
-      </div> */}
+      </MapContainer>
     </div>
   );
 };
