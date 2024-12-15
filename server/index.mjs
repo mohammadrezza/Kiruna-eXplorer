@@ -5,7 +5,6 @@ import cors from 'cors'
 import DocumentRouter from './src/routers/documentRouter.mjs';
 import SessionRouter from "./src/routers/sessionRouter.mjs";
 import {errorHandler} from "./src/middlewares/errorhandler.mjs";
-import initializeDatabase from "./src/db/initializeDatabase.mjs";
 
 
 /*** init express and set up the middlewares ***/
@@ -26,7 +25,6 @@ const sessionRouter = new SessionRouter(app);
 app.use('/documents', documentRouter.getRouter());
 app.use('/sessions', sessionRouter.getRouter());
 errorHandler(app)
-await initializeDatabase();
 
 
 const PORT = 3001;
