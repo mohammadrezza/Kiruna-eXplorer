@@ -34,20 +34,24 @@ footer div:first-child hr {
 
 @media (max-width: 850px) {
   footer {
-    height: 51px;
-    position: absolute;
-    bottom: 0;
+    height: 100px;
+    position: relative;
+    width: 100%;
     }
 
-  footer div {
-    font-size: 20px; 
-  }
+    footer div {
+      height: 80px;
+      padding: 0 20px;
+      font-size: 24px;
+      margin: 0;
+      width: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
  
   footer div:first-child {
     border-right: 1px solid var(--white);
-    font-size: 32px;
-    font-weight: bold;
-    justify-content: flex-end;
-    text-align: right;
+    font-size: 30px;
   }
 }

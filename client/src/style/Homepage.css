@@ -138,10 +138,10 @@
   
 
   /* Stile per schermi piccoli */
-@media (max-width: 850px) {
+@media (max-width: 400px) {
   .welcome-section {
     padding: 20px;
-    height: 700px;
+    height: 100%;
   }
 
   .welcome-section h1 {
@@ -156,35 +156,12 @@
     font-size: 1.2em;
   }
 
-  .map-link {
-    margin-top: 50px;
-    width: auto;
-  }
+
 
   .visitor-map-link {
     font-size: 25px;
     margin-left: 5px;
   }
 
-  .search-section .row {
-    flex-direction: column;
-  }
 
-  .search-section button {
-    width: 90%;
-    height: 150px;
-    margin: 20px 0;
-  }
-
-  .search-section-title {
-    padding: 0 20px;
-  }
-
-  .search-section-title>h2 {
-    font-size: 2em;
-  }
-
-  .search-section-title>hr {
-    width: 100%;
-  }
 }
