@@ -9,3 +9,7 @@ services:
     build: ./server
     ports:
       - 3001:3001
+    volumes:
+      - kiruna-uploads:/app/uploads
+volumes:
+    kiruna-uploads:

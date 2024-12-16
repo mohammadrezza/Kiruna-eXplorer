@@ -1,7 +1,6 @@
 import express from "express";
 import multer from 'multer';
 import {body, param} from "express-validator";
-import moment from "moment";
 import storage from "../middlewares/storage.mjs";
 import Auth from "../auth/auth.mjs";
 import {validator} from "../middlewares/validator.mjs";
@@ -19,7 +18,7 @@ import {
     getDocumentTypesList,
     uploadFile,
     downloadFile,
-    deleteFile
+    deleteFile, getDocumentGeographicInfoController
 } from "../controllers/documentController.mjs";
 
 class DocumentRouter {
@@ -56,6 +55,9 @@ class DocumentRouter {
             this.auth.isLoggedIn,
             this.auth.isUrbanPlanner,
             createDocument);
+        this.router.get("/coordinates",
+            this.auth.isLoggedIn,
+            getDocumentGeographicInfoController);
         this.router.put("/:documentId",
             param('documentId').isString().notEmpty().withMessage('Document ID is required'),
             body('title').optional().isString().withMessage('Title must be a string'),

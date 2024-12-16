@@ -401,10 +401,10 @@ function FormDocument(props) {
     <div className="wrapper">
       <div className="form-container">
         <h2 className='form-container-title'>
-          <HiArrowUturnLeft className='back-button' onClick={()=>navigate(-1)}/>
+          <HiArrowUturnLeft className='back-button' data-testid='back' onClick={()=>navigate(-1)}/>
           {props.mode==='view' ? title : 'New Document'}
           {(props.mode==='view' && edit===false && rights) && <PiNotePencilThin className='edit-button' data-testid="edit" onClick={() => handleEditChange() }/>}
-          {(props.mode==='add' || (edit===true && rights)) && <LiaCheckCircle className='save-button-icon' onClick={() => handleSubmit() }/>}
+          {(props.mode==='add' || (edit===true && rights)) && <LiaCheckCircle className='save-button-icon' data-testid="save" onClick={() => handleSubmit() }/>}
           </h2>
         <Form onSubmit={handleSubmit} data-testid="form-component">
           <Row>
@@ -430,8 +430,6 @@ function FormDocument(props) {
                   value={stakeholder} // Valori selezionati
                   onCreateOption={handleCreateStake}
                   onChange={handleSelectStakeChange} // Funzione per aggiornare lo stato
-                  getOptionLabel={(e) => e.label} // Personalizza l'etichetta dell'opzione
-                  getOptionValue={(e) => e.value} // Personalizza il valore dell'opzione
                   placeholder="Select one or more stakeholders"
                   isDisabled={!edit && props.mode !== 'add'}
                 >
@@ -454,8 +452,6 @@ function FormDocument(props) {
                   options={allScale} // Dati da mostrare nel dropdown
                   value={scale} // Valori selezionati
                   onChange={handleSelectScaleChange} // Funzione per aggiornare lo stato
-                  getOptionLabel={(e) => e.label} // Personalizza l'etichetta dell'opzione
-                  getOptionValue={(e) => e.value} // Personalizza il valore dell'opzione
                   placeholder="Select scale"
                   isDisabled={!edit && props.mode !== 'add'}
                 >
@@ -503,8 +499,6 @@ function FormDocument(props) {
                   options={allTypes} // Dati da mostrare nel dropdown
                   value={type} // Valori selezionati
                   onChange={handleSelectTypeChange} // Funzione per aggiornare lo stato
-                  getOptionLabel={(e) => e.label} // Personalizza l'etichetta dell'opzione
-                  getOptionValue={(e) => e.value} // Personalizza il valore dell'opzione
                   placeholder="Select type"
                   isDisabled={!edit && props.mode !== 'add'}
                 >
@@ -524,8 +518,6 @@ function FormDocument(props) {
                   options={allLanguage} // Dati da mostrare nel dropdown
                   value={language} // Valori selezionati
                   onChange={handleSelectLanguageChange} // Funzione per aggiornare lo stato
-                  getOptionLabel={(e) => e.label} // Personalizza l'etichetta dell'opzione
-                  getOptionValue={(e) => e.value} // Personalizza il valore dell'opzione
                   placeholder="Select language"
                   isDisabled={!edit && props.mode !== 'add'}
                 >
@@ -537,7 +529,7 @@ function FormDocument(props) {
                   )}
               </Form.Group>
 
-              {(edit && props.mode !== 'add') && <Form.Group className='form-group'  controlId="page">
+              {(!edit && props.mode !== 'add') && <Form.Group className='form-group'  controlId="page">
                 <Form.Label>Pages</Form.Label>
                 <Form.Control type="text" value={pages} readOnly/>
               </Form.Group>}

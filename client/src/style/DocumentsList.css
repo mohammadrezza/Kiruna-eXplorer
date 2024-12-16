@@ -121,18 +121,28 @@
     background-color: #f8d775;
     border: none;
   }
+
+  .stakeholder-kiruna-kommun {
+    background-color: #75edf8;
+    border: none;
+  }
+  
+  .stakeholder-residents {
+    background-color: #75f8b7;
+    border: none;
+  }  
   
   .stakeholder-citizens {
     background-color: #b8e4f0;
     border: none;
   }
   
-  .stakeholder-municipality {
+  .stakeholder-white-arkitekter {
     background-color: #a67c52;
     border: none;
   }
   
-  .stakeholder-regional-authority {
+  .stakeholder-lkab {
     background-color: #f9c74f;
     border: none;
   }
@@ -281,24 +291,17 @@
     font-size: 30px;
   }
   
-  .pagination-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
-  
-  .pagination-button {
-    margin: 0 5px;
-    padding: 5px 10px;
-    border: 1px solid #ddd;
-    background-color: #fff;
+  .document-list-item-header .sortable-column {
     cursor: pointer;
+    display: inline-flex; /* Allinea testo e freccia */
+    align-items: center; /* Verticalmente centrati */
+    gap: 5px; /* Spazio tra testo e freccia */
+    color: var(--light-grey);
   }
   
-  .pagination-button.active {
-    background-color: #007bff;
-    color: white;
-    border-color: #007bff;
+  .document-list-item-header .sortable-column.active {
+    color: var(--black);
+    font-weight: bold;
   }
   
 
@@ -583,4 +586,20 @@ color: var(--dark-grey);
   color: white;
   border-color: #007bff;
 }
+  .document-list-item-header .sortable-column:hover {
+    color: var(--blue);
+  }
+
+  .document-list-empty {
+    background-color: var(--lily-white); /* Colore di sfondo per differenziarla */
+    color: var(--dark-grey); /* Colore del testo */
+    font-size: 16px;
+    font-weight: 300;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid var(--light-grey); /* Bordo per evidenziarla */
+  }
+  
+  .document-list-empty .text-center {
+    color: var(--grey); /* Per personalizzare il colore del messaggio */
   }

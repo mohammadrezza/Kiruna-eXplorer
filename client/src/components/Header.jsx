@@ -33,8 +33,8 @@ function Header({ className }) {
       data-testid="header-wrapper">
       {!isDocumentsListPage ? <hr /> : 
       <div>
-        <IoLibraryOutline className="profile-icon" onClick={() => navigateTo('/documents')}/>
-        <PiMapTrifold className="profile-icon" onClick={() => navigateTo('/documents/map')}/>
+        <IoLibraryOutline data-testid='lib' className="profile-icon" onClick={() => navigateTo('/documents')}/>
+        <PiMapTrifold data-testid='map' className="profile-icon" onClick={() => navigateTo('/documents/map')}/>
       </div>}
       <h3 onClick={() => navigateTo('/')} role="button">Kiruna eXplorer</h3>
       <div className='custom-navbar-actions'>
@@ -46,6 +46,7 @@ function Header({ className }) {
             </div>
             <FaUserCircle className="user-avatar" />
             <IoLogOutSharp
+              data-testid='logout'
               className="logout-icon"
               onClick={handleLogoutClick}
               title="Logout"

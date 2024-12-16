@@ -1,17 +1,15 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import Footer from '../../src/components/Footer';
+import { AuthContext } from '../../src/layouts/AuthContext'; // Adjust path as necessary
 
 describe('Footer Component', () => {
-  beforeEach(() => {
-    jest.spyOn(console, 'error').mockImplementation((message) => {
-      if (!message.includes('validateDOMNesting')) {
-        console.error(message);
-      }
-    });
-  });
+  
   test('renders footer with correct content', () => {
-    render(<Footer />);
+    render(
+    <AuthContext.Provider value={{ user: null }}>
+    <Footer />
+    </AuthContext.Provider>);
 
     const explorerText = screen.getByText(/Kiruna Explorer/i);
     expect(explorerText).toBeInTheDocument();

@@ -17,7 +17,7 @@ import {
     getAllScales,
     addFile,
     getDocumentFiles,
-    deleteFile
+    deleteFile, getDocumentGeographicInfo
 } from "../daos/documentDAO.mjs";
 import fs from 'fs';
 import Document from "../components/document.mjs";
@@ -26,7 +26,7 @@ import DocumentStakeholder from "../components/documentStakeholder.mjs";
 import DocumentType from "../components/documentType.mjs";
 import Scale from "../components/scale.mjs";
 import Stakeholder from "../components/stakeholder.mjs";
-import File from '../components/File.mjs';
+import File from '../components/file.mjs';
 
 async function getDocuments(
     documentId,
@@ -389,6 +389,10 @@ async function removeFile(documentId, fileName){
     return false
 }
 
+async function getDocumentGeographicInfoService(){
+    return await getDocumentGeographicInfo();
+}
+
 export {
     getDocument,
     getDocuments,
@@ -402,5 +406,6 @@ export {
     getScales,
     postFile,
     getFile,
-    removeFile
+    removeFile,
+    getDocumentGeographicInfoService
 }

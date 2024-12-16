@@ -29,7 +29,7 @@ function Login() {
     try {
       await login(username, password);
     } catch (err) {
-      setError(err.message || 'Login failed. Please try again.');
+      setError('Incorrect credentials. Please try again.');
     } finally {
       setIsLoading(false);
     }

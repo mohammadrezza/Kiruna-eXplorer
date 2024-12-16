@@ -84,6 +84,9 @@ describe('List component', () => {
         },
       ],
       loading: false,
+      sortConfig: {key:'',direction:''},
+      getSortIndicator: jest.fn(),
+      handleSort: jest.fn()
     });
     render(<List />);
 
@@ -121,6 +124,9 @@ describe('List component', () => {
         },
       ],
       loading: false,
+      sortConfig: {key:'',direction:''},
+      getSortIndicator: jest.fn(),
+      handleSort: jest.fn()
     });
     render(<List />);
 
@@ -159,6 +165,9 @@ describe('List component', () => {
         },
       ],
       loading: false,
+      sortConfig: {key:'',direction:''},
+      getSortIndicator: jest.fn(),
+      handleSort: jest.fn()
     });
     render(<List />);
 
@@ -168,12 +177,13 @@ describe('List component', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/document/view/doc1'); // Adjust this path according to your routing logic
   });
 
-  test('sort the list', () => {
+  test('call sort fn', () => {
+    const mockHandleSort = jest.fn()
     useOutletContext.mockReturnValue({
       list: [
         {
           id: 'doc1',
-          title: 'city',
+          title: 'doc1',
           stakeholders: ['KLAB'],
           scale: 'Mock Scale',
           issuanceDate: '2023-01-01',
@@ -197,33 +207,24 @@ describe('List component', () => {
         },
       ],
       loading: false,
+      sortConfig: {key:'',direction:''},
+      getSortIndicator: jest.fn(),
+      handleSort: mockHandleSort
     });
     render(<List />);
 
-    const title = screen.getByText(/Title/i)
-
+    const title = screen.getByText('Title');
     fireEvent.click(title)
 
-    expect(screen.getByText(/Title ▲/i)).toBeInTheDocument()
 
-    expect(API.getSortedDocuments).toHaveBeenCalledWith('title','asc')
+    const issuanceDate = screen.getByText('Issuance Date');
+    fireEvent.click(issuanceDate)
 
-    fireEvent.click(screen.getByText(/Title ▲/i))
+    const type = screen.getByText('Type');
+    fireEvent.click(type)
 
-    expect(screen.getByText(/Title ▼/i)).toBeInTheDocument()
-
-    expect(API.getSortedDocuments).toHaveBeenCalledWith('title','desc')
-
-    fireEvent.click(screen.getByText(/Type/i))
-
-    expect(screen.getByText(/Type ▲/i)).toBeInTheDocument()
-
-    expect(API.getSortedDocuments).toHaveBeenCalledWith('type','asc')
-
-    fireEvent.click(screen.getByText(/Issuance Date/i))
-
-    expect(screen.getByText(/Issuance Date ▲/i)).toBeInTheDocument()
-
-    expect(API.getSortedDocuments).toHaveBeenCalledWith('issuanceDate','asc')
+    expect(mockHandleSort).toHaveBeenCalledTimes(3);
+    
   });
+  
 });

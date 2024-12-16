@@ -25,7 +25,7 @@ docker build -t kiruna-explorer-client .
 docker run -p 3000:80 kiruna-explorer-client
 cd Kiruna-eXplorer/server
 docker build -t kiruna-explorer-server .
-docker run -p 3001:3001 kiruna-explorer-server
+docker run -p 3001:3001 -v kiruna-uploads:/app/uploads kiruna-explorer-server 
 ```
 
 ---

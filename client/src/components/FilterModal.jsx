@@ -90,16 +90,7 @@ function FilterModal({ show, onHide, handleFilter,
 
   
   const handleSubmitFilter = () => {
-    const filters = { documentTypes: '', stakeholders: '', issuanceDateStart: '', issuanceDateEnd: '' }
-    let st = ''
-    stakeholders.forEach((s) =>{st= st.concat(s.value,',')} )
-    filters.stakeholders=st.slice(0,-1);
-    let dt = '';
-    types.forEach((t) => dt = dt.concat(t.value,','))
-    filters.documentTypes=dt.slice(0,-1);
-    filters.issuanceDateEnd=(issuanceDateEnd ? dayjs(issuanceDateEnd).format('DD-MM-YYYY') : '');
-    filters.issuanceDateStart=(issuanceDateStart ? dayjs(issuanceDateStart).format('DD-MM-YYYY'): '');
-    handleFilter(filters)
+    handleFilter()
     onHide()
   };
   
