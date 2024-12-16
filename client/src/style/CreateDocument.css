@@ -208,6 +208,18 @@ textarea.form-control {
         line-height: 20px;
         margin-bottom: 6px;
     }
+  
+    .form-control, .form-select {
+        font-size: 20px; 
+    }
+
+    .form-control::placeholder,
+    .form-select::placeholder{
+        color: var(--light-grey);
+        font-size: 20px;
+    }
+ 
+    
     .form-label > span{
         font-size: 9px;
         color: var(--red);

@@ -23,8 +23,7 @@ function RelatedDocumentsSelector({
   const [currentDocument, setCurrentDocument] = useState(null);
   const [filteredDocuments, setFilteredDocuments] = useState(allDocuments); // Filtered documents
   const [searchQuery, setSearchQuery] = useState(""); // State for search query
-  const [currentPage, setCurrentPage] = useState(1);
-  const documentsPerPage = 10; // Documenti per pagina
+
   // Fetch connection types on component mount
   useEffect(() => {
     console.log(selectedConnectionTypes);
@@ -106,50 +105,6 @@ function RelatedDocumentsSelector({
   const handleCloseModal = () => {
     setShowModal(false);
     setCurrentDocument(null);
-  };
-
-  const indexOfLastDocument = currentPage * documentsPerPage;
-  const indexOfFirstDocument = indexOfLastDocument - documentsPerPage;
-  const currentDocuments = filteredDocuments.slice(
-    indexOfFirstDocument,
-    indexOfLastDocument
-  );
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  const totalPages = Math.ceil(filteredDocuments.length / documentsPerPage);
-
-  const renderPagination = () => {
-    if (totalPages <= 1) return null;
-
-    return (
-      <Pagination className="justify-content-center mt-3">
-        <Pagination.First onClick={() => setCurrentPage(1)} disabled={currentPage === 1} />
-        <Pagination.Prev
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-        />
-        {[...Array(totalPages).keys()].map((page) => (
-          <Pagination.Item
-            key={page + 1}
-            active={currentPage === page + 1}
-            onClick={() => handlePageChange(page + 1)}
-          >
-            {page + 1}
-          </Pagination.Item>
-        ))}
-        <Pagination.Next
-          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-          disabled={currentPage === totalPages}
-        />
-        <Pagination.Last
-          onClick={() => setCurrentPage(totalPages)}
-          disabled={currentPage === totalPages}
-        />
-      </Pagination>
-    );
   };
 
   const handleSearch = (e) => {
@@ -334,7 +289,6 @@ function RelatedDocumentsSelector({
         </div>
         </div>
       </ListGroup>)}
-      {renderPagination()}
       <DocumentDetailsModal
         show={showModal}
         onHide={handleCloseModal}
