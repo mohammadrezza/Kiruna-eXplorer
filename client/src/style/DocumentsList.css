@@ -121,18 +121,28 @@
     background-color: #f8d775;
     border: none;
   }
+
+  .stakeholder-kiruna-kommun {
+    background-color: #75edf8;
+    border: none;
+  }
+  
+  .stakeholder-residents {
+    background-color: #75f8b7;
+    border: none;
+  }  
   
   .stakeholder-citizens {
     background-color: #b8e4f0;
     border: none;
   }
   
-  .stakeholder-municipality {
+  .stakeholder-white-arkitekter {
     background-color: #a67c52;
     border: none;
   }
   
-  .stakeholder-regional-authority {
+  .stakeholder-lkab {
     background-color: #f9c74f;
     border: none;
   }

@@ -100,6 +100,49 @@ describe('Header Component', () => {
     expect(navbarElement).toHaveClass('test-class');
   });
 
+  it('call logout fn', () => {
+    render(
+      <AuthContext.Provider value={{ logout: mockLogout, user: { name: 'resident' } }}>
+        <Header className="test-class" />
+      </AuthContext.Provider>
+    );
+
+    const logoutButton = screen.getByTestId('logout');
+    fireEvent.click(logoutButton)
+
+    expect(mockLogout).toHaveBeenCalled();
+  });
+
+  it('navigate to map', () => {
+    useLocation.mockReturnValue({ pathname: '/document/add' });
+    render(
+      <AuthContext.Provider value={{ logout: mockLogout, user: { name: 'resident', role: 'Urban Planner' } }}>
+        <Header className="test-class" />
+      </AuthContext.Provider>
+    );
+
+    const mapButton = screen.getByTestId('map');
+    fireEvent.click(mapButton)
+
+    expect(mockNavigate).toHaveBeenCalledWith('/documents/map');
+  });
+
+  it('navigate to list', () => {
+    useLocation.mockReturnValue({ pathname: '/document/add' });
+    render(
+      <AuthContext.Provider value={{ logout: mockLogout, user: { name: 'resident', role: 'Urban Planner' } }}>
+        <Header className="test-class" />
+      </AuthContext.Provider>
+    );
+
+    const listButton = screen.getByTestId('lib');
+    fireEvent.click(listButton)
+
+    expect(mockNavigate).toHaveBeenCalledWith('/documents');
+  });
+
+
+
   // it('renders the logout icon when user is logged in', () => {
   //   render(
   //     <AuthContext.Provider

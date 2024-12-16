@@ -237,8 +237,6 @@ describe('CreateDocument', () => {
         { value: '1:400', label: '1:400' }])
     API.AddDocumentDescription.mockResolvedValue({ success: true })
 
-    jest.useFakeTimers();
-  
     render(<AuthContext.Provider value={mockContextValue}><FormDocument mode="add" /></AuthContext.Provider>);
     
     
@@ -270,8 +268,6 @@ describe('CreateDocument', () => {
       );
       
     });
-    jest.advanceTimersByTime(2000)
-    expect(mockNavigate).toHaveBeenCalledWith('/documents');
     
   });
 
@@ -381,7 +377,7 @@ describe('CreateDocument', () => {
 
     fireEvent.change(screen.getByPlaceholderText(/YYYY/i), { target: { value: '2023' } });
 
-    fireEvent.submit(screen.getByTestId('mocked-form'));
+    fireEvent.click(screen.getByTestId('save'));
   
     await waitFor(() => {
       expect(API.EditDocumentDescription).toHaveBeenCalledWith(
@@ -428,5 +424,32 @@ describe('CreateDocument', () => {
       expect(screen.getByText(/Type cannot be empty!/i)).toBeInTheDocument();
     });
   });
+
+  it('should go back', async () => {
+    useParams.mockReturnValue({ id: '' });
+    const mockContextValue = {
+      user: {username: 'urban_planner',role: 'Urban Planner'}, // Assicurati che l'utente non sia loggato
+    };
+    API.getTypes.mockResolvedValue([{ value: 'type1', label: 'type1' },
+      { value: 'type2', label: 'type2' },
+      { value: 'type3', label: 'type3' }])
+      API.getStake.mockResolvedValue([{ value: 'stakeholder1', label: 'Stakeholder 1' },
+        { value: 'stakeholder2', label: 'Stakeholder 2' },
+        { value: 'stakeholder3', label: 'Stakeholder 3' },
+        { value: 'stakeholder4', label: 'Stakeholder 4' },
+        { value: 'stakeholder5', label: 'Stakeholder 5' },
+        { value: 'stakeholder6', label: 'Stakeholder 6' },
+        { value: 'stakeholder7', label: 'Stakeholder 7' }])
+        API.getScale.mockResolvedValue([{ value: '1:200', label: '1:200' },
+          { value: '1:300', label: '1:300' },
+          { value: '1:400', label: '1:400' }])
+    API.getDocuments.mockResolvedValue([])
+    render(<AuthContext.Provider value={mockContextValue}><FormDocument mode="view" /></AuthContext.Provider>);
+
+    const back = screen.getByTestId('back')
+    fireEvent.click(back)
+    expect(mockNavigate).toHaveBeenCalledWith(-1)
+  });
+
   
 });

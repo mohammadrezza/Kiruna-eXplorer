@@ -99,7 +99,7 @@ jest.mock('../../src/layouts/AuthContext', () => ({
 
     it('should retrieve error if user/pass wrong',async () =>{
         const mockLoginWrong = jest.fn().mockImplementation(() => {
-            throw new Error('Invalid credentials');
+            throw new Error('Incorrect credentials. Please try again.');
           });
         const mockContextValue = {
             login: mockLoginWrong,
@@ -120,7 +120,7 @@ jest.mock('../../src/layouts/AuthContext', () => ({
         fireEvent.click(screen.getByTestId('submit-button'));
 
         await waitFor(() => {
-            expect(screen.getByText('Invalid credentials')).toBeInTheDocument()
+            expect(screen.getByText('Incorrect credentials. Please try again.')).toBeInTheDocument()
           });
     })
   })

@@ -48,22 +48,16 @@ function List(){
                 md={2}
                 onClick={() => handleSort("title")}
                 className={`sortable-column ${sortConfig.key === "title" ? "active" : ""}`}
-                onMouseEnter={() => setHoveredColumn("title")} // Nuovo stato per hover
-                onMouseLeave={() => setHoveredColumn(null)} // Reset dell'hover
               >
               Title{getSortIndicator("title")}
               </Col>
               <Col md={3}>Stakeholders</Col>
               <Col md={2} onClick={() => handleSort("type")}
               className={`sortable-column ${sortConfig.key === "type" ? "active" : ""}`}
-              onMouseEnter={() => setHoveredColumn("type")} // Nuovo stato per hover
-              onMouseLeave={() => setHoveredColumn(null)} // Reset dell'hover
               >
               Type{getSortIndicator("type")}</Col>
               <Col md={2} >Connections</Col>
               <Col onClick={() => handleSort("issuanceDate")}
-              onMouseEnter={() => setHoveredColumn("issuanceDate")} // Nuovo stato per hover
-              onMouseLeave={() => setHoveredColumn(null)} // Reset dell'hover
               className={`sortable-column ${sortConfig.key === "issuanceDate" ? "active" : ""}`}>
               Issuance Date{getSortIndicator("issuanceDate")}</Col>
             </Row>

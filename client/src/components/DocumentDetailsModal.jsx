@@ -31,6 +31,13 @@ function DocumentDetailsModal({ show, onHide, document }) {
 
   if (!document) return null;
 
+  const showDate = (issuanceDate) =>{
+    const [dd, mm, yyyy] = issuanceDate.split("-");
+    let realDate = '';
+    realDate = realDate.concat((dd!=='00'?`${dd}-`:''),(mm!=='00'?`${mm}-`:''),yyyy)
+    return realDate;
+  }
+
   return (
     <Modal show={show} onHide={onHide} size="lg">
       <Modal.Header>
@@ -46,7 +53,7 @@ function DocumentDetailsModal({ show, onHide, document }) {
           </Col>
           <Col md={6}>
             <p><strong>Scale:</strong> {document.scale}</p>
-            <p><strong>Issuance Date:</strong> {document.issuanceDate}</p>
+            <p><strong>Issuance Date:</strong> {showDate(document.issuanceDate)}</p>
             <p><strong>Language:</strong> {document.language}</p>
           </Col>
         </Row>
