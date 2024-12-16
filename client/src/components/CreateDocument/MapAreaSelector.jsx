@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MapContainer, TileLayer, FeatureGroup, Polygon, Popup, Marker } from 'react-leaflet';
+import { MapContainer, TileLayer, FeatureGroup, Polygon, Marker } from 'react-leaflet';
 import { EditControl } from 'react-leaflet-draw';
-import MarkerClusterGroup from 'react-leaflet-markercluster'; // Import MarkerClusterGroup
+import MarkerClusterGroup from 'react-leaflet-markercluster';
 import L from 'leaflet';
 import { kirunaBounds, initialMapCenter } from "@/utils/constants.js";
 import { createClusterIcon } from '@/components/DocumentsMap/MapMarkers';
@@ -28,7 +28,7 @@ const MapAreaSelector = ({ area, existList, mode, edit, onAreaChange }) => {
 
   // Handle polygon creation
   const handleCreated = (e) => {
-    if (polygon.length>0) {
+    if (polygon.length > 0) {
       // Prevent multiple polygons
       e.target.removeLayer(e.layer);
       alert("Only one polygon can be drawn at a time.");
@@ -48,8 +48,11 @@ const MapAreaSelector = ({ area, existList, mode, edit, onAreaChange }) => {
 
   // Handle polygon deletion
   const handleDeleted = () => {
-    setPolygon([]);
-    onAreaChange([]);
+    if (featureGroupRef.current) {
+      featureGroupRef.current.clearLayers(); // Clears all layers in the FeatureGroup
+    }
+    setPolygon([]); // Clear polygon
+    onAreaChange([]); // Notify parent to reset area
   };
 
   // Handle polygon editing
@@ -79,13 +82,16 @@ const MapAreaSelector = ({ area, existList, mode, edit, onAreaChange }) => {
   }, [area]);
 
   useEffect(() => {
-    if (polygon.length>0 && featureGroupRef.current) {
+    if (polygon.length > 0 && featureGroupRef.current) {
       // Add the polygon to the FeatureGroup as a Leaflet layer
       const leafletPolygon = L.polygon(polygon);
       featureGroupRef.current.clearLayers(); // Clear any existing layers
       featureGroupRef.current.addLayer(leafletPolygon); // Add the existing polygon as a layer
     }
   }, [polygon, isEditable]);
+
+  // Add a key prop to force EditControl to re-render when polygon changes
+  const editControlKey = polygon.length ? 'editable' : 'draw';
 
   return (
     <div>
@@ -107,12 +113,13 @@ const MapAreaSelector = ({ area, existList, mode, edit, onAreaChange }) => {
         {isEditable && (
           <FeatureGroup ref={featureGroupRef}>
             <EditControl
+              key={editControlKey} // This forces the EditControl to re-render
               position="topright"
               onCreated={handleCreated}
               onDeleted={handleDeleted}
               onEdited={handleEdited}
               draw={{
-                polygon: polygon.length===0,
+                polygon: polygon.length === 0, // Allow drawing if no polygon exists
                 polyline: false,
                 rectangle: false,
                 circle: false,
@@ -120,8 +127,8 @@ const MapAreaSelector = ({ area, existList, mode, edit, onAreaChange }) => {
                 marker: false,
               }}
               edit={{
-                edit: polygon.length>0,
-                remove: polygon.length>0,
+                edit: polygon.length > 0, // Allow editing if a polygon exists
+                remove: polygon.length > 0, // Allow removal if a polygon exists
               }}
             />
           </FeatureGroup>
