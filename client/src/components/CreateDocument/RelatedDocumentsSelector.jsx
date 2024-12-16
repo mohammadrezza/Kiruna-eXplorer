@@ -4,7 +4,7 @@ import API from "@/services/API.mjs";
 import "@/style/RelatedDocumentSelector.css";
 import { PiFileMagnifyingGlassLight } from "react-icons/pi";
 import DocumentDetailsModal from "@/components/DocumentDetailsModal";
-import { Pagination } from "react-bootstrap";
+import Pagination from '@/components/Pagination';
 
 function RelatedDocumentsSelector({
   mode,
@@ -23,6 +23,9 @@ function RelatedDocumentsSelector({
   const [currentDocument, setCurrentDocument] = useState(null);
   const [filteredDocuments, setFilteredDocuments] = useState(allDocuments); // Filtered documents
   const [searchQuery, setSearchQuery] = useState(""); // State for search query
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const itemsPerPage = 5;  // Numero di documenti per pagina
+  // const [totalPages, setTotalPages] = useState(0);
 
   // Fetch connection types on component mount
   useEffect(() => {
@@ -37,6 +40,15 @@ function RelatedDocumentsSelector({
     };
     fetchConnectionTypes();
   }, []);
+
+  // useEffect(() => {
+  //   const paginatedDocuments = filteredDocuments.slice(
+  //     (currentPage - 1) * itemsPerPage,
+  //     currentPage * itemsPerPage
+  //   );
+  //   setTotalPages(Math.ceil(filteredDocuments.length / itemsPerPage));
+  //   setFilteredDocuments(paginatedDocuments);
+  // }, [currentPage]);
 
   useEffect(() => {
     console.log(edit)
@@ -101,6 +113,10 @@ function RelatedDocumentsSelector({
       console.error("Error fetching document data:", error);
     }
   };
+  
+  // const handlePageChange = (pageNumber) => {
+  //   setCurrentPage(pageNumber);
+  // };
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -173,6 +189,8 @@ function RelatedDocumentsSelector({
           <p>No documents found matching your search.</p>
         </div>
       ) : (
+        <>
+
       <ListGroup className="relatedDocs">
         <ListGroup.Item className="relatedDocs-header">
           <Row>
@@ -207,7 +225,7 @@ function RelatedDocumentsSelector({
                   />) : (num + 1)
                 }
               </Col>
-              <Col md={3}>{doc.title}</Col>
+              <Col md={3} className="doc-title">{doc.title}</Col>
               <Col md={2}>{doc.stakeholders.join(", ")}</Col>
               <Col md={2}>{doc.type}</Col>
               <Col md={3}>
@@ -264,7 +282,21 @@ function RelatedDocumentsSelector({
               </Col>
             </Row>
           </ListGroup.Item>
+          
         ))}
+              {/* <Pagination>
+      {[...Array(totalPages)].map((_, index) => (
+        <Pagination.Item
+          key={index}
+          active={index + 1 === currentPage}
+          onClick={() => handlePageChange(index + 1)}
+        >
+          {index + 1}
+        </Pagination.Item>
+      ))}
+    </Pagination> */}
+    {!(mode === "view" && !edit) ? ( 
+      <>
         <h5 className="legend-title"> Connection types legend</h5>
         <div className="legend-container">
         <div className="legend">
@@ -288,7 +320,14 @@ function RelatedDocumentsSelector({
         </Button> <div className="legend-text"> Update </div>
         </div>
         </div>
-      </ListGroup>)}
+      </>
+        ) : ("")}
+      </ListGroup>
+
+
+    </>
+
+    )}
       <DocumentDetailsModal
         show={showModal}
         onHide={handleCloseModal}

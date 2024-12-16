@@ -90,6 +90,12 @@
         border-radius: 0;
     
     }
-  
+    #username.form-control{
+        width: 160%;
+    }
+
+    #password.form-control{
+        width: 160%;
+    }
   
   }

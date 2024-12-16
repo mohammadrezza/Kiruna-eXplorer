@@ -196,6 +196,21 @@ textarea.form-control {
             padding-bottom: 160px;
           
     }
+    .form-container>h2 {
+        font-family: 'Open Sans';
+        font-size: 20px;
+        font-weight: 400;
+        color: var(--demo-black);
+        position: relative;
+        justify-content: space-between;
+        margin-bottom: 105px;
+    }
+    .form-container-title{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
     .form-group{
         margin-left: -8%;
         width: 70%;
