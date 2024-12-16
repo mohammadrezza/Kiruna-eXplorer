@@ -164,4 +164,24 @@
   }
 
 
+
+}
+
+@media (max-width: 850px) {
+  .search-section button {
+    margin-top: -1%;
+    width: 50%;
+    height: 110px;
+  }
+  .search-section-title>h2 {
+    font-size: 50px;
+    margin-top: -40%;
+    margin-left: auto;
+    margin-right: auto;
+
+  }
+  .search-section button > svg {
+    font-size: 50px;
+    margin-bottom: 5px;
+  }
 }
