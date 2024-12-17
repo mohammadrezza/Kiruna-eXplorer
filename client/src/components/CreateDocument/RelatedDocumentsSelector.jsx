@@ -183,6 +183,33 @@ function RelatedDocumentsSelector({
           onChange={handleSearch}
           className="search-input-list"
         />
+        {!(mode === "view" && !edit) ? ( 
+      <>
+        <h5 className="legend-title"> Connection types legend</h5>
+        <div className="legend-container">
+        <div className="legend">
+        <Button variant="primary" className="legend-button">
+          D
+        </Button> <div className="legend-text"> Direct Consequence </div>
+        </div>
+        <div className="legend">
+        <Button variant="success" className="legend-button">
+          C
+        </Button> <div className="legend-text"> Collateral Consequence </div>
+        </div>
+        <div className="legend">
+        <Button variant="warning" className="legend-button">
+          P
+        </Button> <div className="legend-text"> Projection </div>
+        </div>
+        <div className="legend">
+        <Button variant="danger" className="legend-button">
+          U
+        </Button> <div className="legend-text"> Update </div>
+        </div>
+        </div>
+      </>
+        ) : ("")}
       </div>
       {filteredDocuments.length === 0 ? (
         <div className="no-doc-message">
@@ -295,33 +322,7 @@ function RelatedDocumentsSelector({
         </Pagination.Item>
       ))}
     </Pagination> */}
-    {!(mode === "view" && !edit) ? ( 
-      <>
-        <h5 className="legend-title"> Connection types legend</h5>
-        <div className="legend-container">
-        <div className="legend">
-        <Button variant="primary" className="legend-button">
-          D
-        </Button> <div className="legend-text"> Direct Consequence </div>
-        </div>
-        <div className="legend">
-        <Button variant="success" className="legend-button">
-          C
-        </Button> <div className="legend-text"> Collateral Consequence </div>
-        </div>
-        <div className="legend">
-        <Button variant="warning" className="legend-button">
-          P
-        </Button> <div className="legend-text"> Projection </div>
-        </div>
-        <div className="legend">
-        <Button variant="danger" className="legend-button">
-          U
-        </Button> <div className="legend-text"> Update </div>
-        </div>
-        </div>
-      </>
-        ) : ("")}
+    
       </ListGroup>
 
 

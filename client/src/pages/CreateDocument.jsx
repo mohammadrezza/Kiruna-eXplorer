@@ -531,7 +531,7 @@ function FormDocument(props) {
 
               {(!edit && props.mode !== 'add') && <Form.Group className='form-group'  controlId="page">
                 <Form.Label>Pages</Form.Label>
-                <Form.Control type="text" value={pages} readOnly/>
+                <Form.Control type="text" value={pages || "-"} readOnly/>
               </Form.Group>}
             </Col>
 
@@ -572,9 +572,14 @@ function FormDocument(props) {
             <Row>
               <Col md={4}>
                 <Form.Group  className='form-group' controlId="description">
+                  {errors[docID] && (
+                  <div className="invalid-feedback" style={{ display: "block" }}>
+                    {errors[docID]}
+                  </div>
+                  )}
                   <Form.Label>{(props.mode === 'add' || edit) ? 'Connect to the documents' : 'Connections'}</Form.Label>
-                  </Form.Group>
-                </Col>
+                </Form.Group>
+              </Col>
             </Row>
             {!loading && <RelatedDocumentsSelector 
               mode={props.mode}
