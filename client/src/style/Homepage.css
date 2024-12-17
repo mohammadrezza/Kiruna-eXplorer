@@ -108,7 +108,7 @@
     display: flex;
     align-items: center;
     z-index: 1;
-    font-family: "Times";
+    font-family: "Times", sans-serif;
     margin: 50px 0;
   }
 

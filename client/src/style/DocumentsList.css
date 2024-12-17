@@ -15,7 +15,7 @@
 }
 
 .layout-container>h2 {
-    font-family: 'Open Sans';
+    font-family: 'Open Sans', sans-serif;
     font-size: 60px;
     font-weight: 400;
     color: var(--demo-black);
@@ -98,7 +98,6 @@
 }
 .document-list .filesymbol:hover{
     background-color: unset;
-    color: unset;
     border-radius: unset;
     color: var(--blue);
     border-bottom: 1px solid var(--blue);
@@ -168,7 +167,6 @@
   }
   
   .search-input-list {
-    width: 100%;
     padding: 10px 10px 10px 40px; /* Spazio riservato per il pulsante */
     font-size: 20px;
     border: 1px solid var(--light-grey);
@@ -190,7 +188,7 @@
     right: 10px; /* Pulsante all'interno del campo */
     transform: translateY(-50%);
     background: var(--light-grey);
-    font-family: Times;
+    font-family: Times, sans-serif;
     font-size: 20px;
     font-weight: 400;
     line-height: 23px;
@@ -420,7 +418,6 @@
 }
 .document-list .filesymbol:hover{
   background-color: unset;
-  color: unset;
   border-radius: unset;
   color: var(--blue);
   border-bottom: 1px solid var(--blue);

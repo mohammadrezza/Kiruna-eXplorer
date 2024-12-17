@@ -388,6 +388,10 @@ function FormDocument(props) {
   };
 
   const handleCreateScale = (inputValue) => {
+    const regex = /^1:\d+$/;
+    if (!regex.test(inputValue)) {
+      setErrors({scale:'Invalid scale format. Please use the format 1:n.'});
+    } else {
     setIsLoadingScale(true);
     setTimeout(() => {
       const newOption = createOption(inputValue);
@@ -395,7 +399,9 @@ function FormDocument(props) {
       setIsLoadingScale(false);
       setAllScale((prev) => [...prev, newOption]);
       setScale(newOption);
+    
     }, 1000);
+  }
   };
 
   return  (

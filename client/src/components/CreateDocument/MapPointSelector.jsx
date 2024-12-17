@@ -21,6 +21,14 @@ function MapEvents({ onCoordinatesChange, setMarkerPosition, mode, edit }) {
   return null;
 }
 
+MapEvents.propTypes = {
+  onCoordinatesChange: PropTypes.func.isRequired,    // Funzione per cambiare le coordinate
+  setMarkerPosition: PropTypes.func.isRequired,
+  mode: PropTypes.oneOf(['add', 'edit', 'view']).isRequired, // Modalità del componente
+  edit: PropTypes.bool.isRequired,                    // Flag per la modalità di modifica
+};
+
+
 function MapPointSelector({ onCoordinatesChange, coordinates, existList, mode, edit }) {
   const [markerPosition, setMarkerPosition] = useState(null); 
   const kirunaBoundsMap = L.latLngBounds(kirunaBounds);

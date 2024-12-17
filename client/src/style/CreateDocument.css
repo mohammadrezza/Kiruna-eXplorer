@@ -17,7 +17,7 @@
 }
 
 .form-container>h2 {
-    font-family: 'Open Sans';
+    font-family: 'Open Sans', sans-serif;
     font-size: 60px;
     font-weight: 400;
     color: var(--demo-black);
@@ -37,7 +37,7 @@
 }
 
 .form-label {
-    font-family: 'Open Sans';
+    font-family: 'Open Sans', sans-serif;
     font-weight: 400;
     color: var(--demo-black);
     font-size: 24px;
@@ -50,7 +50,7 @@
     vertical-align: super;
 }
 .form-control, .form-select {
-    font-family: 'Open Sans';
+    font-family: 'Open Sans', sans-serif;
     font-size: 24px;
     color: var(--demo-black);
     max-width: 450px;
@@ -197,7 +197,7 @@ textarea.form-control {
           
     }
     .form-container>h2 {
-        font-family: 'Open Sans';
+        font-family: 'Open Sans', sans-serif;
         font-size: 20px;
         font-weight: 400;
         color: var(--demo-black);
