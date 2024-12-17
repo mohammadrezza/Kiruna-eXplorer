@@ -6,6 +6,7 @@ import { kirunaBounds, initialMapCenter } from "@/utils/constants.js";
 import { MapMultiPolygon } from '@/components/DocumentsMap/MapMultiPolygon';
 import 'leaflet/dist/leaflet.css';
 import '@/style/map.css';
+import PropTypes from 'prop-types';
 
 function MapEvents({ onCoordinatesChange, setMarkerPosition, mode, edit }) {
   useMapEvents({
@@ -95,5 +96,22 @@ function MapPointSelector({ onCoordinatesChange, coordinates, existList, mode, e
     </div>
   );
 }
+
+MapPointSelector.propTypes = {
+  onCoordinatesChange: PropTypes.func.isRequired,    // Funzione per cambiare le coordinate
+  coordinates: PropTypes.shape({                      // Coordinate selezionate
+    lat: PropTypes.number.isRequired,
+    lng: PropTypes.number.isRequired,
+  }).isRequired,
+  existList: PropTypes.arrayOf(                      // Lista di coordinate esistenti
+    PropTypes.shape({
+      lat: PropTypes.number.isRequired,
+      lng: PropTypes.number.isRequired,
+    })
+  ).isRequired,
+  mode: PropTypes.oneOf(['add', 'edit', 'view']).isRequired, // Modalità del componente
+  edit: PropTypes.bool.isRequired,                    // Flag per la modalità di modifica
+};
+
 
 export default MapPointSelector;

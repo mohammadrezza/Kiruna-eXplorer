@@ -1,8 +1,8 @@
 import React from 'react';
-import { Modal, Button, Row, Col } from 'react-bootstrap';
+import { Modal, Button, Row, Col, ListGroup } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { ListGroup } from 'react-bootstrap';
 import '../style/DocumentDetailsModal.css';
+import PropTypes from 'prop-types';
 
 function DocumentDetailsModal({ show, onHide, document }) {
   const navigate = useNavigate();
@@ -97,5 +97,31 @@ function DocumentDetailsModal({ show, onHide, document }) {
     </Modal>
   );
 }
+
+DocumentDetailsModal.propTypes = {
+  show: PropTypes.bool.isRequired,                  // Mostra o nasconde il modal
+  onHide: PropTypes.func.isRequired,                // Funzione per chiudere il modal
+  document: PropTypes.shape({                       // Oggetto documenti
+    id: PropTypes.string.isRequired,                // ID del documento
+    title: PropTypes.string.isRequired,             // Titolo del documento
+    stakeholders: PropTypes.arrayOf(PropTypes.string).isRequired, // Stakeholders
+    type: PropTypes.string.isRequired,              // Tipo del documento
+    pages: PropTypes.string,                        // Numero di pagine
+    scale: PropTypes.string,                        // Scala del documento
+    issuanceDate: PropTypes.string.isRequired,      // Data di emissione
+    language: PropTypes.string.isRequired,          // Lingua del documento
+    description: PropTypes.string.isRequired,       // Descrizione del documento
+    connections: PropTypes.arrayOf(                 // Documenti correlati
+      PropTypes.shape({
+        id: PropTypes.string.isRequired,            // ID del documento collegato
+        title: PropTypes.string.isRequired,         // Titolo del documento collegato
+        stakeholders: PropTypes.arrayOf(PropTypes.string).isRequired, // Stakeholders del documento collegato
+        type: PropTypes.string.isRequired,          // Tipo del documento collegato
+        connectionType: PropTypes.string.isRequired, // Tipo di connessione
+      })
+    ).isRequired, 
+  }).isRequired,
+};
+
 
 export default DocumentDetailsModal;

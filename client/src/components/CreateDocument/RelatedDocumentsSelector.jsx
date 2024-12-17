@@ -4,7 +4,8 @@ import API from "@/services/API.mjs";
 import "@/style/RelatedDocumentSelector.css";
 import { PiFileMagnifyingGlassLight } from "react-icons/pi";
 import DocumentDetailsModal from "@/components/DocumentDetailsModal";
-import Pagination from '@/components/Pagination';
+import PropTypes from "prop-types";
+import Pagination from '@/components/Pagination'; 
 
 function RelatedDocumentsSelector({
   mode,
@@ -336,5 +337,38 @@ function RelatedDocumentsSelector({
     </div>
   );
 }
+
+RelatedDocumentsSelector.propTypes = {
+  mode: PropTypes.oneOf(['add', 'edit', 'view']).isRequired, // Modalità del componente
+  edit: PropTypes.bool.isRequired,                         // Flag per la modalità modifica
+  allDocuments: PropTypes.arrayOf(                         // Lista di documenti
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,                     // ID del documento
+      title: PropTypes.string.isRequired,                  // Titolo del documento
+      stakeholders: PropTypes.arrayOf(PropTypes.string).isRequired, // Stakeholder
+      type: PropTypes.string.isRequired,                   // Tipo del documento
+    })
+  ).isRequired,
+  relatedDocuments: PropTypes.arrayOf(                     // Lista di documenti correlati
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      connectionType: PropTypes.arrayOf(PropTypes.string),
+    })
+  ).isRequired,
+  selectedDocuments: PropTypes.arrayOf(                    // Lista dei documenti selezionati
+    PropTypes.string.isRequired
+  ).isRequired,
+  selectedConnectionTypes: PropTypes.arrayOf(              // Tipi di connessione
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      type: PropTypes.arrayOf(PropTypes.string),
+    })
+  ).isRequired,
+  onDocumentSelect: PropTypes.func.isRequired,             // Funzione per selezionare il documento
+  onRelatedDocumentClick: PropTypes.func.isRequired,       // Funzione per visualizzare il documento
+  onConnectionTypeChange: PropTypes.func.isRequired,       // Funzione per cambiare tipo di connessione
+  setSelectedConnectionTypes: PropTypes.func.isRequired,  // Funzione per settare i tipi di connessione
+};
+
 
 export default RelatedDocumentsSelector;

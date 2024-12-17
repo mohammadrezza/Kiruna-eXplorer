@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState} from 'react';
 import {Row, Col,ListGroup } from 'react-bootstrap';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { PiFileMagnifyingGlassLight } from 'react-icons/pi';
@@ -11,7 +11,6 @@ function List(){
   const { list, loading, sortConfig,handleSort,getSortIndicator } = useOutletContext();
   const [currentDocument, setCurrentDocument] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [hoveredColumn, setHoveredColumn] = useState(null);
   
 
  
