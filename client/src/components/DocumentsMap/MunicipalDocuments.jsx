@@ -1,6 +1,8 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
 
 const MunicipalDocuments = ({ municipalDocuments, showDocuments, toggleList }) => {
   const navigate = useNavigate();
@@ -29,5 +31,20 @@ const MunicipalDocuments = ({ municipalDocuments, showDocuments, toggleList }) =
     </div>
   );
 };
+
+MunicipalDocuments.propTypes = {
+  municipalDocuments: PropTypes.arrayOf(  // Array di documenti
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,    // ID del documento
+      title: PropTypes.string.isRequired, // Titolo del documento
+      type: PropTypes.string.isRequired,  // Tipo del documento
+      stakeholders: PropTypes.string.isRequired, // Stakeholders del documento
+      issuanceDate: PropTypes.string.isRequired, // Data di emissione del documento
+    })
+  ).isRequired,
+  showDocuments: PropTypes.bool.isRequired,    // Flag per mostrare/nascondere i documenti
+  toggleList: PropTypes.func.isRequired,       // Funzione per alternare la visibilità dei documenti
+};
+
 
 export default MunicipalDocuments;

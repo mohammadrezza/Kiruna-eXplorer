@@ -16,6 +16,7 @@ import Document from '@/mocks/Document.mjs';
 import { showSuccess, showError } from '@/utils/notifications';
 import '../style/CreateDocument.css'
 import DocumentUploader from '../components/CreateDocument/OriginalDocumentsSelector';
+import PropTypes from 'prop-types';
 
 function FormDocument(props) {
 
@@ -387,6 +388,10 @@ function FormDocument(props) {
   };
 
   const handleCreateScale = (inputValue) => {
+    const regex = /^1:\d+$/;
+    if (!regex.test(inputValue)) {
+      setErrors({scale:'Invalid scale format. Please use the format 1:n.'});
+    } else {
     setIsLoadingScale(true);
     setTimeout(() => {
       const newOption = createOption(inputValue);
@@ -394,7 +399,9 @@ function FormDocument(props) {
       setIsLoadingScale(false);
       setAllScale((prev) => [...prev, newOption]);
       setScale(newOption);
+    
     }, 1000);
+  }
   };
 
   return  (
@@ -610,6 +617,74 @@ function FormDocument(props) {
     </div>
   );
 }
+
+
+FormDocument.propTypes = {
+  mode: PropTypes.oneOf(['add', 'view']).isRequired, // 'add' o 'view'
+  user: PropTypes.shape({                           // Oggetto user
+    role: PropTypes.string.isRequired,              // Ruolo obbligatorio
+  }),
+  docID: PropTypes.string,                          // ID del documento (opzionale)
+  coordinates: PropTypes.shape({                    // Coordinate
+    lat: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    lng: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  }).isRequired,
+  area: PropTypes.arrayOf(                          // Array di aree
+    PropTypes.shape({
+      lat: PropTypes.number,
+      lng: PropTypes.number,
+    })
+  ).isRequired,
+  errors: PropTypes.object,                         // Oggetto errori
+  title: PropTypes.string.isRequired,               // Titolo obbligatorio
+  stakeholder: PropTypes.arrayOf(                   // Stakeholders
+    PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  scale: PropTypes.shape({                          // Scala
+    value: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+  }),
+  type: PropTypes.shape({                           // Tipo
+    value: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+  }),
+  language: PropTypes.oneOfType([                   // Lingua
+    PropTypes.string,
+    PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+    }),
+  ]),
+  files: PropTypes.arrayOf(PropTypes.string),       // File associati
+  onFileAdded: PropTypes.func,                      // Funzione per aggiungere file
+  onFileRemoved: PropTypes.func,                    // Funzione per rimuovere file
+  relatedDocuments: PropTypes.arrayOf(              // Documenti correlati
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      title: PropTypes.string,
+    })
+  ),
+  selectedDocuments: PropTypes.arrayOf(PropTypes.string),
+  selectedConnectionTypes: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      type: PropTypes.string,
+    })
+  ),
+};
+
+FormDocument.defaultProps = {
+  mode: 'view',             // Default: modalità "view"
+  errors: {},               // Nessun errore per default
+  files: [],                // Nessun file per default
+  relatedDocuments: [],     // Nessun documento correlato
+  selectedDocuments: [],    // Nessun documento selezionato
+  selectedConnectionTypes: [], // Nessuna connessione selezionata
+};
+
 
 
 export default FormDocument;

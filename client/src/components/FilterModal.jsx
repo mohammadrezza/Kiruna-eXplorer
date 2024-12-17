@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import dayjs from 'dayjs';
 import API from '../services/API.mjs';
 import Select from 'react-select'
 import '../style/FilterModal.css'
-
+import PropTypes from 'prop-types';
 import '../style/DocumentDetailsModal.css'
+
+
 function FilterModal({ show, onHide, handleFilter,
   stakeholders,
   changeStake,
@@ -201,5 +202,30 @@ function FilterModal({ show, onHide, handleFilter,
         </Modal>
   );
 }
+
+FilterModal.propTypes = {
+  show: PropTypes.bool.isRequired, // Indica se il modal è visibile
+  onHide: PropTypes.func.isRequired, // Funzione per chiudere il modal
+  handleFilter: PropTypes.func.isRequired, // Funzione da chiamare per applicare i filtri
+  stakeholders: PropTypes.arrayOf(       // Array di opzioni selezionate
+    PropTypes.shape({
+      value: PropTypes.string.isRequired, // Valore dell'opzione
+      label: PropTypes.string.isRequired, // Etichetta visibile
+    })
+  ).isRequired,
+  changeStake: PropTypes.func.isRequired, // Funzione per cambiare i valori dei stakeholders
+  issuanceDateEnd: PropTypes.string, // Data di fine in formato stringa
+  changeIssuanceDateEnd: PropTypes.func.isRequired, // Funzione per cambiare la data di fine
+  issuanceDateStart: PropTypes.string, // Data di inizio in formato stringa
+  changeIssuanceDateStart: PropTypes.func.isRequired, // Funzione per cambiare la data di inizio
+  types: PropTypes.arrayOf(            // Array di opzioni selezionate
+    PropTypes.shape({
+      value: PropTypes.string.isRequired, // Valore dell'opzione
+      label: PropTypes.string.isRequired, // Etichetta visibile
+    })
+  ).isRequired,
+  changeTypes: PropTypes.func.isRequired, // Funzione per cambiare i tipi selezionati
+};
+
 
 export default FilterModal;

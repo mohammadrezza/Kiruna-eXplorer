@@ -2,6 +2,7 @@ import React, { createContext, useState, useContext } from 'react';
 import API from '@/services/API.mjs';
 import Cookies from 'js-cookie'; // Importa la libreria js-cookie
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 export const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
@@ -38,4 +39,9 @@ export const AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
+};
+
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired, // children deve essere un nodo React
 };

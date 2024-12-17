@@ -9,6 +9,7 @@ import { MapMultiPolygon } from '@/components/DocumentsMap/MapMultiPolygon';
 import { calculateCentroid } from "@/utils/geometry";
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
+import PropTypes from 'prop-types';
 
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
@@ -180,5 +181,20 @@ const MapAreaSelector = ({ area, existList, mode, edit, onAreaChange }) => {
     </div>
   );
 };
+
+MapAreaSelector.propTypes = {
+  area: PropTypes.arrayOf(                        // Area corrente
+    PropTypes.arrayOf(PropTypes.number.isRequired) // Ogni punto è un array [lat, lng]
+  ).isRequired,
+  existList: PropTypes.arrayOf(                   // Lista di aree esistenti
+    PropTypes.arrayOf(
+      PropTypes.arrayOf(PropTypes.number.isRequired)
+    )
+  ).isRequired,
+  mode: PropTypes.oneOf(['add', 'edit', 'view']).isRequired, // Modalità del componente
+  edit: PropTypes.bool.isRequired,                // Flag per la modalità di modifica
+  onAreaChange: PropTypes.func.isRequired,        // Callback per aggiornare l'area
+};
+
 
 export default MapAreaSelector;

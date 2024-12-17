@@ -24,7 +24,7 @@ function App() {
   ].filter(Boolean).join(' ');
 
   return (
-    <>
+  
     <AuthProvider>
     <Header className={headerClasses}></Header>
     <ScrollToTop />
@@ -55,7 +55,6 @@ function App() {
       pauseOnHover
     />
    </AuthProvider>
-   </>
   );
 }
 

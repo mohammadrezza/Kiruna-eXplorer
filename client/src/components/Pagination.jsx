@@ -1,4 +1,6 @@
 import '@/style/Pagination.css';
+import PropTypes from 'prop-types';
+
 
 function Pagination({ currentPage, totalPages, handlePageChange }) {
     return (
@@ -29,6 +31,13 @@ function Pagination({ currentPage, totalPages, handlePageChange }) {
             </div>
     );
   }
+
+  Pagination.propTypes = {
+    currentPage: PropTypes.number.isRequired,   // La pagina corrente (numero)
+    totalPages: PropTypes.number.isRequired,    // Il numero totale di pagine (numero)
+    handlePageChange: PropTypes.func.isRequired, // Funzione per cambiare pagina
+  };
+  
 
   export default Pagination
   

@@ -5,6 +5,7 @@ import { Navbar } from 'react-bootstrap';
 import { IoLogOutSharp, IoLibraryOutline } from "react-icons/io5";
 import { PiMapTrifold } from 'react-icons/pi';
 import { AuthContext } from '@/layouts/AuthContext';
+import PropTypes from 'prop-types';
 import '@/style/headerStyle.css'
 
 function Header({ className }) {
@@ -66,5 +67,10 @@ function Header({ className }) {
     </Navbar>
   );
 }
+
+Header.propTypes = {
+  className: PropTypes.string,  // 'className' è opzionale (stringa)
+};
+
 
 export default Header;

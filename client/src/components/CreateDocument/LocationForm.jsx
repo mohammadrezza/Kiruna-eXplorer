@@ -5,6 +5,8 @@ import AreaForm from "@/components/CreateDocument/AreaForm.jsx";
 import CoordinatesForm from "@/components/CreateDocument/CoordinatesForm.jsx";
 import { kirunaBounds } from "@/utils/constants.js";
 import API from '@/services/API.mjs';
+import PropTypes from 'prop-types';
+
 
 const LocationForm = forwardRef(({ coordinates, area, mode, edit, handleCoordinatesChange, handleAreaChange }, ref) => {
   const [selectedOption, setSelectedOption] = useState('coordinates');
@@ -180,5 +182,23 @@ const LocationForm = forwardRef(({ coordinates, area, mode, edit, handleCoordina
     </Row>
   );
 });
+
+LocationForm.propTypes = {
+  coordinates: PropTypes.shape({                  // Oggetto coordinate
+    lat: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    lng: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  }).isRequired,
+  area: PropTypes.arrayOf(                        // Array di coordinate per l'area
+    PropTypes.shape({
+      lat: PropTypes.number.isRequired,
+      lng: PropTypes.number.isRequired,
+    })
+  ).isRequired,
+  mode: PropTypes.oneOf(['add', 'edit', 'view']).isRequired, // Modalità del form
+  edit: PropTypes.bool.isRequired,                // Flag per la modalità modifica
+  handleCoordinatesChange: PropTypes.func.isRequired, // Funzione per aggiornare le coordinate
+  handleAreaChange: PropTypes.func.isRequired,    // Funzione per aggiornare l'area
+};
+
 
 export default LocationForm;
