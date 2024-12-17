@@ -389,7 +389,7 @@ const DocumentUploader = ({ mode, edit, documentId, files: initialFiles, onFileA
   const handleFileDelete = async (file) => {
     try {
       await API.deleteFile(file);
-      setFiles((prevFiles) => prevFiles.filter((file) => file !== file));
+      setFiles((prevFiles) => prevFiles.filter((f) => f !== file));
       if (onFileRemoved) onFileRemoved(file);
     } catch (error) {
       console.error('Error deleting file:', error);

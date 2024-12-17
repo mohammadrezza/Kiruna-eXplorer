@@ -1,5 +1,5 @@
 import React from 'react';
-import { Marker, Popup } from 'react-leaflet';
+import { Marker, Popup, Tooltip } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import L from 'leaflet';
 import { iconData } from '@/utils/mapIcons';
@@ -34,6 +34,9 @@ const MapMarkers = ({ list }) => {
           <p><strong>Issuance Date:</strong> {doc.issuanceDate}</p>
           <p className="custom-marker-popup-link" onClick={() => handleDocumentClick(doc.id)}>Open the document</p>
         </Popup>
+        <Tooltip direction="top" offset={[0, -32]} opacity={1}>
+          <span>{doc.title}</span>
+        </Tooltip>
       </Marker>
     );
   });
@@ -63,6 +66,9 @@ const MapCentroids = ({ list, handlePointClick, handlePopupClose }) => {
           <p className="custom-marker-popup-link" onClick={() => handleDocumentClick(doc.id)}>Open the document</p>
           <p className="custom-marker-popup-link" onClick={() => handlePointClick(doc.id)}>Show the area</p>
         </Popup>
+        <Tooltip direction="top" offset={[0, -32]} opacity={1}>
+          <span>{doc.title}</span>
+        </Tooltip>
       </Marker>
     );
   });

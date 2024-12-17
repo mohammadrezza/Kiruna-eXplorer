@@ -52,5 +52,110 @@
     font-size: 18px;
 }
 
-.search-input-list{
+.legend{
+    display:flex;
+    margin-right: 40px;
 }
+
+.legend-container{
+    display:flex;
+    margin-top: 10px;
+}
+
+.legend-button{
+    cursor: unset !important;
+}
+
+.legend-text{
+    margin-left: 10px;
+    margin-top: 6.5px;
+}
+
+.legend-title{
+    margin-top: 35px;
+}
+
+@media (max-width: 850px) {
+
+    .doc-title{
+        font-size: 15px;
+    }
+    .relatedDocs{
+        margin-top: 20px;
+    }
+    .relatedDocs .list-group-item{
+        border-left: none;
+        border-right: none;
+        border-top: none;
+        padding: 0px 0px;
+        color: var(--dark-grey);
+        font-size: 16px ;
+        cursor: pointer;
+        align-content: center;
+    }
+    .relatedDocs .list-group-item:hover,
+    .relatedDocs .list-group-item.selected {
+        background-color: var(--lily-white);
+        color: var(--demo-black);
+        cursor: pointer;
+    }
+    .relatedDocs .relatedDocs-header{
+        background-color: unset;
+        cursor: unset ;
+        font-size: 14px;
+        color: var(--light-grey);
+    }
+    .relatedDocs .relatedDocs-header:hover{
+        background-color: unset;
+        cursor: unset ;
+        font-size: 14px;
+        color: var(--light-grey);
+    }
+    
+    .connectionform{
+        font-family: 'Open Sans';
+        font-size: 16px !important;
+        padding-left: 15px !important;
+        border: 1px solid !important;
+        border-color: darkgray !important;
+        border-radius: 13px !important;
+        background-color: white !important;
+        
+    }
+    
+    .relatedDocs .filesymbol{
+        padding: 0;
+        font-size: 24px !important;
+        border-bottom: unset !important;
+        
+    }
+    .no-doc-message{
+        margin-top: 20px;
+        font-size: 18px;
+    }
+    
+    .legend{
+        display:flex;
+        margin-right: 40px;
+    }
+    
+    .legend-container{
+        display:flex;
+        margin-top: 10px;
+    }
+    
+    .legend-button{
+        cursor: unset !important;
+    }
+    
+    .legend-text{
+        margin-left: 10px;
+        margin-top: 6.5px;
+    }
+    
+    .legend-title{
+        margin-top: 35px;
+    }
+ 
+  }
+  

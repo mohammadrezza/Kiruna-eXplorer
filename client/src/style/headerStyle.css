@@ -100,3 +100,55 @@
 .logout-icon:hover{
   color: var(--red);
 }
+
+@media (max-width: 850px) {
+  .custom-navbar { /* Background color */
+    height: 100px;
+    width: 100%;
+  }
+  
+
+  .custom-navbar > h3 {
+    position: relative;
+    font-size: 25px;
+  }
+
+  .custom-navbar>hr {
+    width: 70%;
+    height: 1px;
+    opacity: 1;
+    color: var(--demo-black);
+  }
+
+  .profile-icon {
+    height: 40px;
+    width: 40px;
+  }
+  .user-avatar {
+    font-size: 2.3rem;
+    color: var(--blue);
+  
+  }
+  .logout-icon {
+    margin-left: 10px;
+    margin-right: -35px;
+    height: 40px;
+    width: 40px;
+    color: var(--demo-black);
+    cursor: pointer;
+  }
+  .dark-header h3, .dark-header .profile-icon, .dark-header hr {
+    color: var(--white)
+  }
+
+  .username {
+    font-size: 0rem;
+    font-weight: bold;
+    color: var(--demo-black);
+  }
+  
+  .role {
+    font-size: 0rem;
+    color: var(--demo-black);
+  }
+}

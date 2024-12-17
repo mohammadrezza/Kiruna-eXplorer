@@ -5,7 +5,6 @@ import { useOutletContext } from 'react-router-dom';
 import L from 'leaflet';
 import { MapMarkers, MapCentroids, createClusterIcon } from '@/components/DocumentsMap/MapMarkers';
 import { MapPolygon } from '@/components/DocumentsMap/MapPolygon';
-import { MapMultiPolygon } from '@/components/DocumentsMap/MapMultiPolygon';
 import MunicipalDocuments from '@/components/DocumentsMap/MunicipalDocuments';
 import { kirunaBounds, initialMapCenter } from "@/utils/constants.js";
 import { calculateCentroid } from "@/utils/geometry"; // Import the centroid function
@@ -80,7 +79,6 @@ const DocumentMap = () => {
             list={[selectedPolygon]}
           />
         )}
-        <MapMultiPolygon list={kirunaBounds}></MapMultiPolygon>
       </MapContainer>
     </div>
   );

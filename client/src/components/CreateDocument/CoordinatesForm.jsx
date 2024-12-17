@@ -10,10 +10,10 @@ const SelectTypeBtn = () => (
   <><PiPen /><span>Type coordinates</span></>
 );
 
-const CoordinatesForm = ({coordinates, mode, edit, errors,  onCoordinatesChange, areValidCoordinates}) => {
+const CoordinatesForm = ({coordinates,existList,  mode, edit, errors,  onCoordinatesChange, areValidCoordinates}) => {
   const [showMap, setShowMap] = useState(false);
   const [locationData, setLocationData] = useState(coordinates);
-  
+
   const handleCoordinatesChange = (newCoordinates) => {
     setLocationData(newCoordinates);
     onCoordinatesChange(newCoordinates);
@@ -77,6 +77,7 @@ const CoordinatesForm = ({coordinates, mode, edit, errors,  onCoordinatesChange,
             coordinates={locationData}
             mode={mode}
             edit={edit}
+            existList={existList}
             onCoordinatesChange={handleCoordinatesChange} 
           />
         }

@@ -31,3 +31,27 @@ footer div:first-child hr {
   max-width: 160px;
   width: 30em;
 }
+
+@media (max-width: 850px) {
+  footer {
+    height: 100px;
+    position: relative;
+    width: 100%;
+    }
+
+    footer div {
+      height: 80px;
+      padding: 0 20px;
+      font-size: 24px;
+      margin: 0;
+      width: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+ 
+  footer div:first-child {
+    border-right: 1px solid var(--white);
+    font-size: 30px;
+  }
+}

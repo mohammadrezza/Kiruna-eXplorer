@@ -185,3 +185,71 @@ textarea.form-control {
     color: var(--blue);
 }
 
+
+@media (max-width: 850px) {
+    .wrapper{
+        width: 100%;
+
+    }
+    .form-container {
+            width: 100%;   
+            padding-bottom: 160px;
+          
+    }
+    .form-container>h2 {
+        font-family: 'Open Sans';
+        font-size: 20px;
+        font-weight: 400;
+        color: var(--demo-black);
+        position: relative;
+        justify-content: space-between;
+        margin-bottom: 105px;
+    }
+    .form-container-title{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .form-group{
+        margin-left: -8%;
+        width: 70%;
+        font-size: 9px;
+    }
+    .form-label {
+        font-weight: 400;
+        color: var(--demo-black);
+        font-size: 20px;
+        line-height: 20px;
+        margin-bottom: 6px;
+    }
+  
+    .form-control, .form-select {
+        font-size: 20px; 
+    }
+
+    .form-control::placeholder,
+    .form-select::placeholder{
+        color: var(--light-grey);
+        font-size: 20px;
+    }
+ 
+    
+    .form-label > span{
+        font-size: 9px;
+        color: var(--red);
+        vertical-align: super;
+    }
+    .react-select{
+        font-size: 9px;
+    }
+    .edit-button{
+        width: 50px;
+        height: 50px;
+    }
+    .back-button{
+        width: 50px;
+        height: 50px;
+    }
+  }
+  
