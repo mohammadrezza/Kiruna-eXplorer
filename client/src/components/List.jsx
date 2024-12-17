@@ -93,6 +93,7 @@ function List(){
                       e.stopPropagation(); // Prevent row click event
                       handleIconClick(doc);
                     }}
+                    tabIndex='0'
                     >
                       Preview
                       <PiFileMagnifyingGlassLight size={22}></PiFileMagnifyingGlassLight>
