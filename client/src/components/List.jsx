@@ -88,7 +88,12 @@ function List(){
                   <span className='filesymbol' role="button" onClick={(e) => {
                       e.stopPropagation(); // Prevent row click event
                       handleIconClick(doc);
-                    }}>
+                    }}
+                    onKeyDown={(e) => {
+                      e.stopPropagation(); // Prevent row click event
+                      handleIconClick(doc);
+                    }}
+                    >
                       Preview
                       <PiFileMagnifyingGlassLight size={22}></PiFileMagnifyingGlassLight>
                   </span>

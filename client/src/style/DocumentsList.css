@@ -265,6 +265,7 @@
   cursor: pointer;
   color: var(--blue);
   font-size: 16px;
+  border: none;
 }
 
 .filter-tag .remove-filter:hover {
