@@ -168,7 +168,7 @@ const customComponents = {
           setRelatedDocuments(doc.connections);
           setSelectedDocuments(connectedDocumentIds);
           setFiles(doc.files);
-          console.log(doc)
+          setPages(doc.pages)
         }
       } catch (error) {
         console.error("Error loading data:", error);
