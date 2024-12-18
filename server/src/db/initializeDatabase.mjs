@@ -349,69 +349,9 @@ async function populateDocumentConnectionTable() {
     await run("DELETE FROM DocumentConnection");
     const connections = [
         {
-            id: "conn1",
-            documentId: "doc15",
-            connectionId: "doc12",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn2",
-            documentId: "doc15",
-            connectionId: "doc26",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
             id: "conn3",
             documentId: "doc15",
             connectionId: "doc41",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn4",
-            documentId: "doc18",
-            connectionId: "doc1",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn5",
-            documentId: "doc18",
-            connectionId: "doc30",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn6",
-            documentId: "doc18",
-            connectionId: "doc46",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn7",
-            documentId: "doc18",
-            connectionId: "doc53",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn8",
-            documentId: "doc18",
-            connectionId: "doc54",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn9",
-            documentId: "doc18",
-            connectionId: "doc55",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn10",
-            documentId: "doc18",
-            connectionId: "doc57",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn11",
-            documentId: "doc18",
-            connectionId: "doc64",
             type: DocumentConnectionType.DIRECT_CONSEQUENCE
         },
         {
@@ -421,28 +361,10 @@ async function populateDocumentConnectionTable() {
             type: DocumentConnectionType.DIRECT_CONSEQUENCE
         },
         {
-            id: "conn13",
-            documentId: "doc41",
-            connectionId: "doc31",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn14",
-            documentId: "doc41",
-            connectionId: "doc40",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
             id: "conn15",
             documentId: "doc41",
             connectionId: "doc44",
             type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn16",
-            documentId: "doc41",
-            connectionId: "doc29",
-            type: DocumentConnectionType.COLLATERAL_CONSEQUENCE
         },
         {
             id: "conn17",
@@ -451,33 +373,9 @@ async function populateDocumentConnectionTable() {
             type: DocumentConnectionType.COLLATERAL_CONSEQUENCE
         },
         {
-            id: "conn18",
-            documentId: "doc45",
-            connectionId: "doc1",
-            type: DocumentConnectionType.UPDATE
-        },
-        {
-            id: "conn19",
-            documentId: "doc45",
-            connectionId: "do52",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn20",
-            documentId: "doc45",
-            connectionId: "doc56",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
             id: "conn21",
             documentId: "doc45",
             connectionId: "doc58",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn22",
-            documentId: "doc45",
-            connectionId: "doc49",
             type: DocumentConnectionType.DIRECT_CONSEQUENCE
         },
         {
@@ -487,79 +385,13 @@ async function populateDocumentConnectionTable() {
             type: DocumentConnectionType.DIRECT_CONSEQUENCE
         },
         {
-            id: "conn24",
-            documentId: "doc45",
-            connectionId: "doc62",
-            type: DocumentConnectionType.UPDATE
-        },
-        {
             id: "conn25",
             documentId: "doc47",
             connectionId: "doc50",
             type: DocumentConnectionType.DIRECT_CONSEQUENCE
         },
         {
-            id: "conn26",
-            documentId: "doc47",
-            connectionId: "doc89",
-            type: DocumentConnectionType.COLLATERAL_CONSEQUENCE
-        },
-        {
-            id: "conn27",
-            documentId: "doc47",
-            connectionId: "doc75",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn45",
-            documentId: "doc47",
-            connectionId: "doc98",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn28",
-            documentId: "doc47",
-            connectionId: "doc91",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn29",
-            documentId: "doc47",
-            connectionId: "doc93",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn30",
-            documentId: "doc47",
-            connectionId: "doc72",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn31",
-            documentId: "doc47",
-            connectionId: "doc71",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn32",
-            documentId: "doc47",
-            connectionId: "doc66",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn33",
-            documentId: "doc47",
-            connectionId: "doc61",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
             id: "conn34",
-            documentId: "doc50",
-            connectionId: "doc44",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn35",
             documentId: "doc50",
             connectionId: "doc44",
             type: DocumentConnectionType.DIRECT_CONSEQUENCE
@@ -583,57 +415,9 @@ async function populateDocumentConnectionTable() {
             type: DocumentConnectionType.DIRECT_CONSEQUENCE
         },
         {
-            id: "conn39",
-            documentId: "doc50",
-            connectionId: "doc101",
-            type: DocumentConnectionType.UPDATE
-        },
-        {
-            id: "conn40",
-            documentId: "doc63",
-            connectionId: "doc85",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn41",
-            documentId: "doc69",
-            connectionId: "doc87",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn42",
-            documentId: "doc64",
-            connectionId: "doc61",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
             id: "conn43",
             documentId: "doc64",
             connectionId: "doc76",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn44",
-            documentId: "doc65",
-            connectionId: "doc86",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn46",
-            documentId: "doc44",
-            connectionId: "doc41",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn47",
-            documentId: "doc44",
-            connectionId: "doc50",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
-        },
-        {
-            id: "conn48",
-            documentId: "doc58",
-            connectionId: "doc45",
             type: DocumentConnectionType.DIRECT_CONSEQUENCE
         },
         {
@@ -641,12 +425,6 @@ async function populateDocumentConnectionTable() {
             documentId: "doc62",
             connectionId: "doc45",
             type: DocumentConnectionType.UPDATE
-        },
-        {
-            id: "conn50",
-            documentId: "doc62",
-            connectionId: "doc81",
-            type: DocumentConnectionType.DIRECT_CONSEQUENCE
         },
         {
             id: "conn51",
@@ -726,7 +504,7 @@ async function populateTypeTable() {
 
 async function populateScaleTable() {
     await run("DELETE FROM Scale");
-    const Scales = ["1:500", "1:5000", "1:50000", "1:1000", "1:10000", "1:30000", "1:1500", "1:12000", "1:2000", "Text", "Blueprint/effects", "Concept", "Plan"];
+    const Scales = ["1:500", "1:5000", "1:50000", "1:1000", "1:10000", "1:30000", "1:1500", "1:12000", "1:2000", "1:7500", "1:8000", "Text", "Blueprint/effects", "Concept", "Plan"];
     for (const name of Scales) {
         await run(
             `INSERT INTO Scale (id, name) VALUES (?,?)`,
