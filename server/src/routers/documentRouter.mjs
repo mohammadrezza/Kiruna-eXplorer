@@ -107,7 +107,6 @@ class DocumentRouter {
             this.auth.isLoggedIn,
             getDocumentWithId);
         this.router.get("/",
-            this.auth.isLoggedIn,
             documentsList);
         this.router.post("/:documentId/files",
             this.auth.isLoggedIn,
