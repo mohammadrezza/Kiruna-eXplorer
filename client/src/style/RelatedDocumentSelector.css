@@ -1,6 +1,15 @@
 .relatedDocs{
     margin-top: 20px;
 }
+.relatedDocs-edit{
+    max-height: 400px;
+    overflow-y: auto;
+}
+.relatedDocs-edit .relatedDocs-header{
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
 .relatedDocs .list-group-item{
     border-left: none;
     border-right: none;
@@ -17,7 +26,6 @@
     cursor: pointer;
 }
 .relatedDocs .relatedDocs-header{
-    background-color: unset;
     cursor: unset ;
     font-size: 14px;
     color: var(--light-grey);

@@ -176,7 +176,7 @@ function RelatedDocumentsSelector({
 
   return (
     <div className="document-list">
-      <div className="search-bar-list">
+      {(mode === "add" || edit) && <div className="search-bar-list">
         <input
           type="text"
           placeholder="Enter the document name to search"
@@ -211,15 +211,15 @@ function RelatedDocumentsSelector({
         </div>
       </>
         ) : ("")}
-      </div>
-      {filteredDocuments.length === 0 ? (
+      </div>}
+      {(mode === "add" || edit) && filteredDocuments.length === 0 ? (
         <div className="no-doc-message">
           <p>No documents found matching your search.</p>
         </div>
       ) : (
         <>
 
-      <ListGroup className="relatedDocs">
+      <ListGroup className={(mode === "add" || edit) ? "relatedDocs relatedDocs-edit" : "relatedDocs"}>
         <ListGroup.Item className="relatedDocs-header">
           <Row>
             <Col md={1}></Col>
