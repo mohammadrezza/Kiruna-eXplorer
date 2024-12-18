@@ -49,7 +49,7 @@ function DocumentDetailsModal({ show, onHide, document }) {
           <Col md={6}>
             <p><strong>Stakeholders:</strong> {document.stakeholders.join(', ')}</p>
             <p><strong>Type:</strong> {document.type}</p>
-            <p><strong>Pages:</strong> {document.pages}</p>
+            <p><strong>Pages:</strong> {document.pages || "-"}</p>
           </Col>
           <Col md={6}>
             <p><strong>Scale:</strong> {document.scale}</p>

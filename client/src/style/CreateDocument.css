@@ -219,21 +219,20 @@ textarea.form-control {
     .form-label {
         font-weight: 400;
         color: var(--demo-black);
-        font-size: 20px;
+        font-size: 25px;
         line-height: 20px;
         margin-bottom: 6px;
     }
   
     .form-control, .form-select {
         font-size: 20px; 
+        
     }
 
-    .form-control::placeholder,
-    .form-select::placeholder{
-        color: var(--light-grey);
-        font-size: 20px;
+    
+    .css-i6uzms-placeholder{
+        font-size: 20px !important;
     }
- 
     
     .form-label > span{
         font-size: 9px;

@@ -91,7 +91,8 @@
         color: var(--dark-grey);
         font-size: 16px ;
         cursor: pointer;
-        align-content: center;
+        display:inline-flex;
+        
     }
     .relatedDocs .list-group-item:hover,
     .relatedDocs .list-group-item.selected {
@@ -124,9 +125,10 @@
     }
     
     .relatedDocs .filesymbol{
-        padding: 0;
+        margin-right: 200px;
         font-size: 24px !important;
         border-bottom: unset !important;
+
         
     }
     .no-doc-message{
@@ -135,13 +137,16 @@
     }
     
     .legend{
-        display:flex;
-        margin-right: 40px;
+        display:list-item;
+        margin-right: 60px;
+        font-size: 13px;
+        width: 10%;
     }
     
     .legend-container{
         display:flex;
         margin-top: 10px;
+        margin-right: 20px;
     }
     
     .legend-button{
@@ -149,7 +154,7 @@
     }
     
     .legend-text{
-        margin-left: 10px;
+        margin-left: 7px;
         margin-top: 6.5px;
     }
     

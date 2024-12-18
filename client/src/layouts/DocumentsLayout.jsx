@@ -28,7 +28,6 @@ function DocumentsList() {
   const itemsPerPage = 5; // Numero di documenti per pagina
   const [totalPages,setTotalPages] = useState(0)
   const [sortConfig, setSortConfig] = useState({ key: '', direction: "" });
-  
   const [stakeholders,setStakeholders] = useState([])
   const [types,setTypes] = useState([])
   const [issuanceDateStart, setIssuanceDateStart] = useState('');
@@ -43,7 +42,7 @@ function DocumentsList() {
         if (title) {
           setSearchQuery(title);
         }
-        const documents = (!url.searchParams.get('title') ? await API.getList(filter,currentPage,itemsPerPage,sortConfig.key,sortConfig.direction) : await API.searchDoc(url.searchParams.get('title')));
+        const documents = await API.getList(filter,currentPage,itemsPerPage,sortConfig.key,sortConfig.direction,url.searchParams.get('title'));
         console.log(documents)
         setList(documents.data);
         setTotalPages(documents.pagination.totalPages)
@@ -76,7 +75,7 @@ function DocumentsList() {
       try {
         url.searchParams.set('title', searchQuery);
         window.history.pushState({}, '', url);
-        const documents = await API.searchDoc(searchQuery);
+        const documents = await API.getList(filter,currentPage,itemsPerPage,sortConfig.key,sortConfig.direction,searchQuery);
         setList(documents.data);
         setTotalPages(documents.pagination.totalPages)
         setCurrentPage(1)
