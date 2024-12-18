@@ -5,6 +5,7 @@ import DocumentMap from '../../src/components/DocumentsMap'; // Adjust the impor
 import '@testing-library/jest-dom';
 import { useOutletContext } from 'react-router-dom';
 import { mockDocuments } from '../__mocks__/document';
+import { useAuth } from '../../src/layouts/AuthContext.jsx';
 
 // Mock the necessary parts of react-leaflet and other dependencies
 jest.mock('react-leaflet', () => ({
@@ -27,13 +28,21 @@ jest.mock('react-router-dom', () => ({
   useOutletContext: jest.fn(),
 }));
 
+// Correct mock for useAuth
+jest.mock('../../src/layouts/AuthContext', () => ({
+  useAuth: jest.fn(),
+}));
+
 describe('DocumentMap', () => {
   const mockList = mockDocuments;
 
-  it('renders MunicipalDocuments and MapContainer correctly', async () => {
-    // Mock the context for useOutletContext
+  beforeEach(() => {
+    // Mocking useOutletContext and useAuth
     useOutletContext.mockReturnValue({ list: mockList });
+    useAuth.mockReturnValue({ user: { name: 'Test User', role: 'admin' } }); // Mock user object
+  });
 
+  it('renders MunicipalDocuments and MapContainer correctly', async () => {
     render(
       <BrowserRouter>
         <DocumentMap />
@@ -59,4 +68,28 @@ describe('DocumentMap', () => {
     // Check if MapMarkers is rendered
     expect(screen.getByText('MapMarkers Mock')).toBeInTheDocument();
   });
+
+  it('handles map layer switching correctly', () => {
+    render(
+      <BrowserRouter>
+        <DocumentMap />
+      </BrowserRouter>
+    );
+
+    // Verify default layer is Satellite
+    expect(screen.getByText('Satellite View')).toBeInTheDocument();
+
+    // Simulate layer switch to Streets
+    fireEvent.click(screen.getByText('Satellite View'));
+
+    // Verify Streets layer is activated
+    expect(screen.getByText('Street View')).toBeInTheDocument();
+
+    // Switch back to Satellite
+    fireEvent.click(screen.getByText('Street View'));
+
+    // Verify Satellite layer is re-activated
+    expect(screen.getByText('Satellite View')).toBeInTheDocument();
+  });
+
 });

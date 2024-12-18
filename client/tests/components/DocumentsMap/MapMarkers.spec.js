@@ -1,21 +1,13 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { MapMarkers } from '../../../src/components/DocumentsMap/MapMarkers';
-import { Marker, Popup } from 'react-leaflet';
+import { render, screen, fireEvent } from '@testing-library/react';
+import {
+  MapMarkers,
+  MapCentroids,
+} from '../../../src/components/DocumentsMap/MapMarkers';
 import L from 'leaflet';
 import { mockDocuments } from '../../__mocks__/document';
-jest.mock('../../../src/utils/mapIcons');
 
-jest.mock('react-leaflet', () => ({
-  Marker: ({ children }) => <div>{children}</div>, // Mock Marker
-  Popup: ({ children }) => <div>{children}</div>, // Mock Popup
-}));
-
-jest.mock('leaflet', () => ({
-  icon: jest.fn(() => ({ mockIcon: true })), // Mock L.icon function
-}));
-
-// Mock iconData import
+// Mock dependencies
 jest.mock('../../../src/utils/mapIcons', () => ({
   iconData: [
     {
@@ -30,25 +22,44 @@ jest.mock('../../../src/utils/mapIcons', () => ({
       iconSize: [32, 32],
       iconAnchor: [16, 32],
     },
+    {
+      name: 'default',
+      iconUrl: 'path/to/default-icon.png',
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+    },
   ],
 }));
 
+jest.mock('react-leaflet', () => ({
+  Marker: ({ children }) => <div>{children}</div>, // Mock Marker
+  Popup: ({ children }) => <div>{children}</div>, // Mock Popup
+  Tooltip: ({ children }) => <div>{children}</div>, // Mock Tooltip
+}));
+
+jest.mock('leaflet', () => ({
+  icon: jest.fn(() => ({ mockIcon: true })), // Mock L.icon function
+}));
+
+const mockNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+}));
+
 describe('MapMarkers Component', () => {
-
   it('renders the correct number of markers based on the document list', () => {
-    render(<MapMarkers list={mockDocuments} />);
+    render(<MapMarkers list={mockDocuments} user={{}} />);
 
-    const markers = screen.getAllByText(/Document/i);
-    expect(markers).toHaveLength(2); // Only two valid documents should render markers
+    const markers = screen.getAllByText(/Stakeholders/i);
+    expect(markers).toHaveLength(2);
   });
 
   it('assigns the correct icon based on document type', () => {
-    render(<MapMarkers list={mockDocuments} />);
+    render(<MapMarkers list={mockDocuments} user={{}} />);
 
-    // Check that L.icon was called twice (for each document with valid coordinates)
-    expect(L.icon).toHaveBeenCalledTimes(2);
+    expect(L.icon).toHaveBeenCalledTimes(3);
 
-    // Check for icon assignment based on document type
     expect(L.icon).toHaveBeenCalledWith({
       iconUrl: 'path/to/icon1.png',
       iconSize: [32, 32],
@@ -57,27 +68,92 @@ describe('MapMarkers Component', () => {
     });
   });
 
-//   it('displays the correct popup content for each marker', () => {
-//     render(<MapMarkers list={mockDocuments} />);
+  it('renders "Open the document" link if user is present', () => {
+    render(<MapMarkers list={mockDocuments} user={{ name: 'Test User' }} />);
 
-//     // Check popup content for the first valid document
-//     expect(screen.getByText(/Document 1/)).toBeInTheDocument();
-//     expect(screen.getByText(/Material Effect/)).toBeInTheDocument();
-//     expect(screen.getByText(/Stakeholder A/)).toBeInTheDocument();
-//     expect(screen.getByText(/2024-11-20/)).toBeInTheDocument();
+    const openLinks = screen.getAllByText(/Open the document/i);
+    expect(openLinks).toHaveLength(2); // One for each valid document
+  });
 
-//     // Check popup content for the second valid document
-//     expect(screen.getByText(/Document 3/)).toBeInTheDocument();
-//     expect(screen.getByText(/Material Effect/)).toBeInTheDocument();
-//     expect(screen.getByText(/Stakeholder C/)).toBeInTheDocument();
-//     expect(screen.getByText(/2024-11-22/)).toBeInTheDocument();
-//   });
+  it('calls handleDocumentClick when "Open the document" link is clicked', () => {
+    render(<MapMarkers list={mockDocuments} user={{ name: 'Test User' }} />);
+
+    const openLinks = screen.getAllByText(/Open the document/i);
+    fireEvent.click(openLinks[0]);
+    expect(mockNavigate).toHaveBeenCalledWith('/document/view/1');
+
+    fireEvent.click(openLinks[1]);
+    expect(mockNavigate).toHaveBeenCalledWith('/document/view/3');
+  });
 
   it('does not render markers for documents with invalid coordinates', () => {
-    render(<MapMarkers list={mockDocuments} />);
+    render(<MapMarkers list={mockDocuments} user={{}} />);
 
-    // Document 2 has invalid coordinates, so no marker should be rendered
     const markers = screen.queryAllByText(/Document 2/);
-    expect(markers).toHaveLength(0); // No marker for invalid coordinates
+    expect(markers).toHaveLength(0);
+  });
+});
+
+describe('MapCentroids Component', () => {
+  it('renders the correct number of centroid markers based on the list', () => {
+    render(
+      <MapCentroids
+        list={mockDocuments}
+        user={{}}
+        handlePointClick={() => {}}
+        handlePopupClose={() => {}}
+      />
+    );
+
+    const markers = screen.getAllByText(/Stakeholders/i);
+    expect(markers).toHaveLength(2);
+  });
+
+  it('assigns the correct icon to centroids based on document type', () => {
+    render(
+      <MapCentroids
+        list={mockDocuments}
+        user={{}}
+        handlePointClick={() => {}}
+        handlePopupClose={() => {}}
+      />
+    );
+
+    expect(L.icon).toHaveBeenCalledTimes(3);
+
+    expect(L.icon).toHaveBeenCalledWith({
+      iconUrl: 'path/to/icon1.png',
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+      className: 'custom-area-icon',
+    });
+  });
+
+  it('renders "Open the document" link in centroids if user is present', () => {
+    render(
+      <MapCentroids
+        list={mockDocuments}
+        user={{ name: 'Test User' }}
+        handlePointClick={() => {}}
+        handlePopupClose={() => {}}
+      />
+    );
+
+    const openLinks = screen.getAllByText(/Open the document/i);
+    expect(openLinks).toHaveLength(2);
+  });
+
+  it('does not render centroids for documents with invalid coordinates', () => {
+    render(
+      <MapCentroids
+        list={mockDocuments}
+        user={{}}
+        handlePointClick={() => {}}
+        handlePopupClose={() => {}}
+      />
+    );
+
+    const markers = screen.queryAllByText(/Document 2/);
+    expect(markers).toHaveLength(0);
   });
 });
