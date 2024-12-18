@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import { Navigate } from 'react-router-dom';
-import { AuthContext, useAuth } from '../layouts/AuthContext'; // Import AuthContext
+import { AuthContext, useAuth } from '@/layouts/AuthContext'; // Import AuthContext
 import '../style/Login.css';
 
 function Login() {

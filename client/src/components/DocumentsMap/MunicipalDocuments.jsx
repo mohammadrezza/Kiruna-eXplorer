@@ -2,9 +2,10 @@ import React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import {showDate} from "@/utils/formatDate.js"
 
 
-const MunicipalDocuments = ({ municipalDocuments, showDocuments, toggleList }) => {
+const MunicipalDocuments = ({ municipalDocuments, showDocuments, toggleList, user }) => {
   const navigate = useNavigate();
   const handleDocumentClick = (documentId) => navigate(`/document/view/${documentId}`);
   return (
@@ -18,13 +19,14 @@ const MunicipalDocuments = ({ municipalDocuments, showDocuments, toggleList }) =
       )}
       <div className="map-municipal-list">
         {municipalDocuments.length > 0 && showDocuments &&
-          municipalDocuments.map((doc) => (
-            <Row key={doc.id}>
+          municipalDocuments.map((doc, index) => (
+            <Row key={doc.id} className='map-municipal-list-item'>
+              <Col>{index+1}</Col>
               <Col>{doc.title}</Col>
               <Col>Type: {doc.type}</Col>
               <Col>Stakeholders: {doc.stakeholders}</Col>
-              <Col>Issuance Date: {doc.issuanceDate}</Col>
-              <Col className="custom-marker-popup-link" onClick={() => handleDocumentClick(doc.id)}>Open the document</Col>
+              <Col>Issuance Date: {showDate(doc.issuanceDate)}</Col>
+              {user && <Col className="custom-marker-popup-link" onClick={() => handleDocumentClick(doc.id)}>Open the document</Col>}
             </Row>
           ))}
       </div>
@@ -42,6 +44,13 @@ MunicipalDocuments.propTypes = {
       issuanceDate: PropTypes.string.isRequired, // Data di emissione del documento
     })
   ).isRequired,
+  user: PropTypes.oneOfType([
+    PropTypes.shape({
+      username: PropTypes.string.isRequired,        // Nome dell'utente
+      role: PropTypes.string.isRequired,        // Ruolo dell'utente
+    }).isRequired,
+    PropTypes.oneOf([null]),                   // Permette che `user` possa essere null
+  ]),
   showDocuments: PropTypes.bool.isRequired,    // Flag per mostrare/nascondere i documenti
   toggleList: PropTypes.func.isRequired,       // Funzione per alternare la visibilità dei documenti
 };

@@ -1,9 +1,9 @@
-import React, { useState,useEffect, useContext } from 'react';
+import React, { useState,useEffect } from 'react';
 import {Button} from 'react-bootstrap';
 import { useNavigate, Outlet, useLocation, useSearchParams } from 'react-router-dom';
 import { LiaThListSolid, LiaMapMarkedAltSolid } from "react-icons/lia";
 import { VscSettings } from "react-icons/vsc";
-import { AuthContext } from '@/layouts/AuthContext';
+import { useAuth } from '@/layouts/AuthContext';
 import FilterModal from '@/components/FilterModal';
 import API from '@/services/API.mjs';
 import '@/style/DocumentsList.css';
@@ -16,7 +16,7 @@ function DocumentsList() {
   const location = useLocation();
   const url = new URL(window.location.href)
   let [searchParams, setSearchParams] = useSearchParams();
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth(); 
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true)
   const isList = location.pathname === '/documents';
@@ -168,7 +168,7 @@ function DocumentsList() {
           }
       </h2>
       <div className='layout-container-subtitle'>
-        <div className="search-bar-list">
+        {user &&<div className="search-bar-list">
             <input
               type="text"
               placeholder="Enter the document name to search"
@@ -184,13 +184,14 @@ function DocumentsList() {
                 Search
               </button>
         </div>
+        }
         {user && <div className="map-documents-button" role="button" onClick={()=>handleNavigation()} onKeyDown={()=>handleNavigation()}>
           {isList ? <LiaMapMarkedAltSolid /> : <LiaThListSolid/>}
           <span>{isList ? "Show Map" : "Show List"}</span>
         </div>
         }
       </div>
-      <div className="filter-container">
+      {user && <div className="filter-container">
         <Button className="filter-button" onClick={()=>setShowModal(true)}>
           <VscSettings />
           Filters
@@ -216,7 +217,7 @@ function DocumentsList() {
               ) : null
             )}
         </div>
-      </div>
+      </div>}
       <Outlet context={{list, loading,getSortIndicator,sortConfig,handleSort}} />
       {isList && <Pagination 
         currentPage={currentPage} 

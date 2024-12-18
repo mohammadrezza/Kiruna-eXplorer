@@ -117,17 +117,17 @@
   }
   
   .stakeholder-architecture-firms {
-    background-color: #f8d775;
+    background-color: #FBF5C4;
     border: none;
   }
 
   .stakeholder-kiruna-kommun {
-    background-color: #75edf8;
+    background-color: #D0F4FF;
     border: none;
   }
   
   .stakeholder-residents {
-    background-color: #75f8b7;
+    background-color: rgba(0, 186, 52, 0.1);
     border: none;
   }  
   
@@ -137,7 +137,7 @@
   }
   
   .stakeholder-white-arkitekter {
-    background-color: #a67c52;
+    background-color: rgba(137, 81, 41, 0.4);
     border: none;
   }
   

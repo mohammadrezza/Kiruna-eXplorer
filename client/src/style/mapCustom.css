@@ -26,11 +26,26 @@
     cursor: pointer;
 }
 .custom-marker-popup-link:hover {
-    color: var(--blue)
+    color: var(--blue);
 }
-.map-municipal-title{
-
+.map-municipal-title span{
+    cursor: pointer;
+    text-decoration: underline;
+}
+.map-municipal-title span:hover{
+    color: var(--blue);
 }
 .map-municipal-list{
-    
+    margin-bottom: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+.map-municipal-list-item{
+    border-top: 1px solid var(--demo-black);
+    border-radius: unset;
+    padding: 15px 16px;
+    color: var(--dark-grey);
+    font-size: 14px;
+    font-weight: 300;
+    cursor: unset;
 }

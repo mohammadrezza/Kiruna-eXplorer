@@ -6,12 +6,14 @@ import L from 'leaflet';
 import { MapMarkers, MapCentroids, createClusterIcon } from '@/components/DocumentsMap/MapMarkers';
 import { MapPolygon } from '@/components/DocumentsMap/MapPolygon';
 import MunicipalDocuments from '@/components/DocumentsMap/MunicipalDocuments';
+import { useAuth } from '@/layouts/AuthContext';
 import { kirunaBounds, initialMapCenter } from "@/utils/constants.js";
 import { calculateCentroid } from "@/utils/geometry"; // Import the centroid function
 import 'leaflet/dist/leaflet.css';
 import '@/style/mapCustom.css';
 const DocumentMap = () => {
   const { list } = useOutletContext();
+  const { user } = useAuth(); 
   const [selectedPolygon, setSelectedPolygon] = useState(null);
   const [showDocuments, setShowDocuments] = useState(false);
   const areas = list.filter(item => item.area && item.area.length > 0);
@@ -50,6 +52,7 @@ const DocumentMap = () => {
     <div>
       <MunicipalDocuments
         municipalDocuments={municipalDocuments}
+        user={user}
         showDocuments={showDocuments}
         toggleList={toggleList}
       />
@@ -68,9 +71,10 @@ const DocumentMap = () => {
           url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}"
         />
         <MarkerClusterGroup iconCreateFunction={createClusterIcon} maxClusterRadius={50}>
-          <MapMarkers list={coordinates} />
+          <MapMarkers list={coordinates} user={user} />
           <MapCentroids 
-            list={centroids} 
+            list={centroids}
+            user={user}
             handlePointClick={handlePointClick} 
             handlePopupClose={handlePopupClose}/>
         </MarkerClusterGroup>

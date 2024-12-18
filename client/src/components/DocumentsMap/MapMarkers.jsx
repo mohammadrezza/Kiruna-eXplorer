@@ -3,6 +3,7 @@ import { Marker, Popup, Tooltip } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import L from 'leaflet';
 import { iconData } from '@/utils/mapIcons';
+import {showDate} from "@/utils/formatDate.js"
 
 const getIcons = (type = 'coordinates') => {
   const icons = {};
@@ -17,7 +18,7 @@ const getIcons = (type = 'coordinates') => {
   return icons;
 };
 
-const MapMarkers = ({ list }) => {
+const MapMarkers = ({ list, user }) => {
   const icons = getIcons();
   const navigate = useNavigate();
   const handleDocumentClick = (documentId) => navigate(`/document/view/${documentId}`);
@@ -31,8 +32,8 @@ const MapMarkers = ({ list }) => {
           <strong>{doc.title}</strong>
           <p><strong>Type:</strong> {doc.type}</p>
           <p><strong>Stakeholders:</strong> {doc.stakeholders}</p>
-          <p><strong>Issuance Date:</strong> {doc.issuanceDate}</p>
-          <p className="custom-marker-popup-link" onClick={() => handleDocumentClick(doc.id)}>Open the document</p>
+          <p><strong>Issuance Date:</strong> {showDate(doc.issuanceDate)}</p>
+          {user && <p className="custom-marker-popup-link" onClick={() => handleDocumentClick(doc.id)}>Open the document</p>}
         </Popup>
         <Tooltip direction="top" offset={[0, -32]} opacity={1}>
           <span>{doc.title}</span>
@@ -42,7 +43,7 @@ const MapMarkers = ({ list }) => {
   });
 };
 
-const MapCentroids = ({ list, handlePointClick, handlePopupClose }) => {
+const MapCentroids = ({ list, user, handlePointClick, handlePopupClose }) => {
   const icons = getIcons('area');
   const navigate = useNavigate();
   const handleDocumentClick = (documentId) => navigate(`/document/view/${documentId}`);
@@ -62,8 +63,8 @@ const MapCentroids = ({ list, handlePointClick, handlePopupClose }) => {
           <strong>{doc.title}</strong>
           <p><strong>Type:</strong> {doc.type}</p>
           <p><strong>Stakeholders:</strong> {doc.stakeholders}</p>
-          <p><strong>Issuance Date:</strong> {doc.issuanceDate}</p>
-          <p className="custom-marker-popup-link" onClick={() => handleDocumentClick(doc.id)}>Open the document</p>
+          <p><strong>Issuance Date:</strong> {showDate(doc.issuanceDate)}</p>
+          {user && <p className="custom-marker-popup-link" onClick={() => handleDocumentClick(doc.id)}>Open the document</p>}
           <p className="custom-marker-popup-link" onClick={() => handlePointClick(doc.id)}>Show the area</p>
         </Popup>
         <Tooltip direction="top" offset={[0, -32]} opacity={1}>
