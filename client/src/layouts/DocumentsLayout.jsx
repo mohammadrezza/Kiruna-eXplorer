@@ -42,8 +42,8 @@ function DocumentsList() {
         if (title) {
           setSearchQuery(title);
         }
-        const documents = await API.getList(filter,currentPage,itemsPerPage,sortConfig.key,sortConfig.direction,url.searchParams.get('title'));
-        console.log(documents)
+        const documents = await API.getList(filter,isMap ? 0 : currentPage,itemsPerPage,sortConfig.key,sortConfig.direction,url.searchParams.get('title'));
+        // console.log(documents)
         setList(documents.data);
         setTotalPages(documents.pagination.totalPages)
       } catch (error) {
@@ -53,7 +53,7 @@ function DocumentsList() {
       }
     };
     loadData();
-  }, [currentPage,sortConfig,filter]);
+  }, [currentPage,sortConfig,filter, isMap]);
 
   const handleNavigation = () => {
     let path = isList ? "/documents/map" : "/documents"
@@ -75,7 +75,7 @@ function DocumentsList() {
       try {
         url.searchParams.set('title', searchQuery);
         window.history.pushState({}, '', url);
-        const documents = await API.getList(filter,currentPage,itemsPerPage,sortConfig.key,sortConfig.direction,searchQuery);
+        const documents = await API.getList(filter,isMap ? 0 : currentPage,itemsPerPage,sortConfig.key,sortConfig.direction,searchQuery);
         setList(documents.data);
         setTotalPages(documents.pagination.totalPages)
         setCurrentPage(1)
