@@ -39,7 +39,7 @@ const documents = [
         id: "doc18",
         title: "Detail plan for Bolagsomradet Gruvstad- spark",
         description: "This is the first of 8 detailed plans located in the old center of Kiruna, aimed at transforming the residential areas into mining industry zones to allow the demolition of buildings. The area includes the town hall, the Ullspiran district, and the A10 highway, and it will be the first to be dismantled. The plan consists, like all detailed plans, of two documents: the area map that regulates it, and a text explaining the reasons that led to the drafting of the plan with these characteristics. The plan gained legal validity in 2012.",
-        scale: "1:8.000",
+        scale: "1:8000",
         issuanceDate: "20-10-2010",
         type: "Prescriptive document",
         language: "Swedish",//controlla come si fa a non mettelo
@@ -54,16 +54,12 @@ const documents = [
         id: "doc41",
         title: "Development Plan",
         description: "The development plan shapes the form of the new city. The document, unlike previous competition documents, is written entirely in Swedish, which reflects the target audience: the citizens of Kiruna. The plan obviously contains many elements of the winning masterplan from the competition, some recommended by the jury, and others that were deemed appropriate to integrate later. The docu- ment is divided into four parts, with the third part, spanning 80 pages, describing the shape the new city will take and the strategies to be implemented for its relocation through plans, sections, images, diagrams, and texts. The document also includes numerous studies aimed at demonstrating the future success of the project.",
-        scale: "1:7,500",
+        scale: "1:7500",
         issuanceDate: "17-03-2014",
         type: "Design document",
         language: "Swedish",
         coordinates: {},
-        area: [
-            [67.8608, 20.2050],//boh
-            [67.8530, 20.1900],
-            [67.8685, 20.2400],
-        ],
+        area: [[67.85670714492417,20.27286529541016],[67.85670714492417,20.27904510498047],[67.85185388979453,20.287284851074222],[67.85178917290216,20.290889739990238],[67.85593069198048,20.292949676513675],[67.85114199410121,20.302906036376957],[67.85153030353688,20.306682586669925],[67.85424828856463,20.303764343261722],[67.85547774915585,20.30702590942383],[67.84868255086553,20.31784057617188],[67.84816474029503,20.299816131591797],[67.84525184164289,20.288658142089847],[67.84602865018206,20.285396575927738],[67.84842364701716,20.29380798339844],[67.85004174892283,20.291748046875004],[67.84997702700186,20.279216766357425]],
         stakeholders: ["Kiruna kommun"]
     },
     {
@@ -85,7 +81,7 @@ const documents = [
         id: "doc47",
         title: "Adjusted development plan ",
         description: "This document is the update of the Development Plan, one year after its creation, modifications are made to the general master plan, which is published under the name 'Adjusted Development Plan91,' and still represents the version used today after 10 years. Certainly, there are no drastic differences compared to the previous plan, but upon careful comparison, several modified elements stand out. For example, the central square now takes its final shape, as well as the large school complex just north of it, which appears for the first time.",
-        scale: "1:7.500",
+        scale: "1:7500",
         issuanceDate: "00-00-2015",
         type: "Design document",
         language: "Swedish",
@@ -100,15 +96,12 @@ const documents = [
         id: "doc50",
         title: "Detail plan for square and commercial street",
         description: "This plan, approved in July 2016, is the first detailed plan to be implemented from the new masterplan (Adjusted development plan). The document defines the entire area near the town hall, comprising a total of 9 blocks known for their density. Among these are the 6 buildings that will face the main square. The functions are mixed, both public and private, with residential being prominent, as well as the possibility of incorporating accommodation facilities such as hotels. For all buildings in this plan, the only height limit is imposed by air traffic.",
-        scale: "1:1,000",
+        scale: "1:1000",
         issuanceDate: "22-06-2016",
         type: "Prescriptive document",
         language: "Swedish",
-        coordinates: {
-            lat: 67.8516,
-            lng: 20.2371
-        },
-        area: [],
+        coordinates: {},
+        area: [[67.84933637142461,20.297670364379886],[67.84849494699652,20.297927856445316],[67.84810658702276,20.311403274536136],[67.84927164754622,20.311231613159183],[67.8489480254603,20.30633926391602],[67.85043664987779,20.30359268188477]],
         stakeholders: ["Kiruna kommun"]
     },
     {
@@ -203,7 +196,7 @@ const documents = [
         issuanceDate: "00-03-2014",
         type: "Prescriptive document",
         language: "Swedish",
-        coordinates: {  lat: 0 ,lng: 0}, //todo add exact lat lng
+        coordinates: {  lat: 67.8481323767527 ,lng: 20.304193496704105},
         area: [],
         stakeholders: ["Kiruna kommun"]
     },
@@ -216,7 +209,7 @@ const documents = [
         type: "Prescriptive document",
         language: "Swedish",
         coordinates: {},
-        area: [], //todo add exact area
+        area: [[67.87745453560382,20.18943786621094],[67.87499786737666,20.223770141601566],[67.86633281140574,20.234756469726566],[67.85649989113432,20.276985168457035],[67.84277862657102,20.339126586914066],[67.8309662947656,20.37277221679688],[67.80556077586365,20.319900512695316],[67.81360020330105,20.29106140136719],[67.8123037085041,20.24986267089844],[67.81411878107825,20.21896362304688],[67.84417660693644,20.209350585937504]],
         stakeholders: ["Kiruna kommun"]
     },
     {
@@ -227,7 +220,7 @@ const documents = [
         issuanceDate: "00-00-2015",
         type: "Material effect",
         language: "-",
-        coordinates: {}, //todo add exact lat lng
+        coordinates: { lat: 67.84696093799775, lng: 20.303635597229007},
         area: [],
         stakeholders: ["LKAB"]
     },
@@ -240,7 +233,7 @@ const documents = [
         type: "Prescriptive document",
         language: "Swedish",
         coordinates: {},
-        area: [], //todo add exact area
+        area: [[67.86208347317175,20.204715728759766],[67.86227753760771,20.207033157348636],[67.86108078118005,20.208835601806644],[67.86098374418224,20.21072387695313],[67.86011039302417,20.2119255065918],[67.86001335198685,20.213985443115238],[67.85878413054918,20.215444564819336],[67.85765189556754,20.218791961669925],[67.85603432163545,20.21767616271973],[67.85690782549679,20.214328765869144],[67.85833124315488,20.212268829345707],[67.85939874936975,20.209693908691406],[67.8604985531339,20.207118988037113],[67.86062793840087,20.204715728759766]],
         stakeholders: ["Kiruna kommun"]
     },
     {
@@ -252,7 +245,7 @@ const documents = [
         type: "Technical document",
         language: "Swedish",
         coordinates: {},
-        area: [], //todo add exact area
+        area: [[67.86156596011021,20.19716262817383],[67.86386233669279,20.19896507263184],[67.86363594342066,20.205745697021488],[67.8628920643292,20.209608078002933],[67.8628920643292,20.21415710449219],[67.86072497687984,20.21716117858887],[67.85865473504853,20.223083496093754],[67.85752249378272,20.22917747497559],[67.85470125527172,20.233039855957035],[67.8522421873773,20.239219665527347],[67.84842364701716,20.242481231689457],[67.84790583069912,20.236816406250004],[67.84576971687638,20.23767471313477],[67.84505763546643,20.232009887695316],[67.84324496652452,20.23269653320313],[67.84084943797149,20.2313232421875],[67.8382594006985,20.237503051757816],[67.83715854780628,20.23338317871094],[67.83845366346563,20.220680236816406],[67.84408658033365,20.223770141601566],[67.84434553232104,20.2174186706543],[67.84803528585631,20.220508575439453],[67.85567186858664,20.218276977539066],[67.85748357201166,20.212097167968754],[67.8577423752951,20.19870758056641],[67.85845406951184,20.196647644042972]],
         stakeholders: ["LKAB"]
     },
     {
@@ -264,7 +257,7 @@ const documents = [
         type: "Prescriptive document",
         language: "Swedish",
         coordinates: {},
-        area: [], //todo add exact area
+        area: [[67.84933637142461,20.297670364379886],[67.84849494699652,20.297927856445316],[67.84810658702276,20.311403274536136],[67.84927164754622,20.311231613159183],[67.8489480254603,20.30633926391602],[67.85043664987779,20.30359268188477]],
         stakeholders: ["Kiruna kommun"]
     },
     {
@@ -276,8 +269,8 @@ const documents = [
         type: "Material effect",
         language: "-",
         coordinates: {
-            lat: 67.8485,
-            lng: 20.3003
+            lat: 67.85185388979453,
+            lng: 20.233211517333988
         },
         area: [],
         stakeholders: ["LKAB"]
@@ -306,7 +299,7 @@ const documents = [
         type: "Prescriptive document",
         language: "-",
         coordinates: {},
-        area: [], //todo add exact area
+        area: [[67.85257233635637,20.23012161254883],[67.8525076214577,20.23441314697266],[67.85302533561872,20.237245559692386],[67.85211932829442,20.238275527954105],[67.84982179478752,20.235786437988285],[67.85046901022301,20.234756469726566],[67.8508249710572,20.229864120483402],[67.85224876006718,20.22994995117188]],
         stakeholders: ["Kiruna kommun"]
     },
 
