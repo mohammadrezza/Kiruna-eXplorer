@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import DocumentUploader from '../../src/components/CreateDocument/OriginalDocumentsSelector';
+import DocumentUploader from '@/components/CreateDocument/OriginalDocumentsSelector';
 import API from '@/services/API.mjs';
 
 jest.mock('@/services/API.mjs', () => ({

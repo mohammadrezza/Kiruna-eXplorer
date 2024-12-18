@@ -23,3 +23,19 @@
     background-color: unset;
     color: var(--light-grey);
 }
+
+@media (max-width: 850px) {
+    .related .related-header{
+        background-color: unset;
+        cursor: unset;
+        font-size: 0px;
+        color: var(--light-grey);
+    }
+    #typecol{
+        font-size: 0px;
+
+    }
+
+ 
+  }
+  

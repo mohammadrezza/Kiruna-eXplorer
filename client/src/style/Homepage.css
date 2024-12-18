@@ -165,6 +165,7 @@
 
 
 
+
 }
 
 @media (max-width: 850px) {
@@ -183,5 +184,9 @@
   .search-section button > svg {
     font-size: 50px;
     margin-bottom: 5px;
+  }
+  .map-link{
+    margin-top: 77%;
+    
   }
 }

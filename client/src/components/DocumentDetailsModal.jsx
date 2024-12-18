@@ -80,7 +80,7 @@ function DocumentDetailsModal({ show, onHide, document }) {
                       <Col md={3} className="doc-title" onClick={() => handleDocumentClick(doc.id)}>{doc.title}</Col>
                       <Col md={3}>{doc.stakeholders.join(', ')}</Col>
                       <Col md={2}>{doc.type}</Col>
-                      <Col>
+                      <Col id={"typecol"}>
                         {/* Visualizza i tipi di connessione separati da virgola */}
                         {doc.connectionTypes.join(', ')}
                       </Col>
