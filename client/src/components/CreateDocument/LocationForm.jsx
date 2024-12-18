@@ -92,8 +92,8 @@ const LocationForm = forwardRef(({ coordinates, area, mode, edit, handleCoordina
       new Set(
         documents.data
           .filter(doc => 
-            doc.coordinates && 
-            doc.coordinates.lat && doc.coordinates.lng && 
+            doc.coordinates?.lat && 
+            doc.coordinates?.lng && 
             doc.coordinates.lat !== '' && doc.coordinates.lng !== '' && 
             doc.coordinates.lat !== 0 && doc.coordinates.lng !== 0
           )
@@ -110,8 +110,6 @@ const LocationForm = forwardRef(({ coordinates, area, mode, edit, handleCoordina
       )
     ).map(area => JSON.parse(area)); // Deserialize back to object/array
 
-    // console.log("Unique Coordinates:", uniqueCoordinates);
-    // console.log("Unique Areas:", uniqueAreas);
     setUniqueCoordinates(uniqCoordinates)
     setUniqueAreas(uniqAreas)
     return { uniqueCoordinates, uniqueAreas };

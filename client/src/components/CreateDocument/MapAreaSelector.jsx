@@ -77,7 +77,7 @@ const MapAreaSelector = ({ area, existList, mode, edit, onAreaChange }) => {
 
   // Set the initial polygon if area exists
   useEffect(() => {
-    if (area && area.length) {
+    if (area?.length) {
       setPolygon(area); // Set the polygon based on the existing area
     }
   }, [area]);

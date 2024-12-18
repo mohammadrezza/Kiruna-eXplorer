@@ -46,7 +46,7 @@ function MapPointSelector({ onCoordinatesChange, coordinates, existList, mode, e
   const isEditable = mode === 'add' || edit;
 
   useEffect(() => {
-    if (coordinates && coordinates.lat && coordinates.lng) {
+    if (coordinates?.lat && coordinates?.lng) {
       setMarkerPosition([coordinates.lat, coordinates.lng]);
     }
   }, [coordinates]);

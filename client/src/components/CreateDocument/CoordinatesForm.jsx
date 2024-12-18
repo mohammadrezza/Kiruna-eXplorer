@@ -66,7 +66,7 @@ const CoordinatesForm = ({coordinates,existList,  mode, edit, errors,  onCoordin
         </Col>
         <Col md={4}>
           {(mode === 'add' || edit) && (
-            <div className="map-view-trigger" onClick={toggleMap}>
+            <div className="map-view-trigger" role="button" tabIndex="0"  onClick={toggleMap}>
               {showMap ? <SelectTypeBtn /> : <SelectMapBtn />}
             </div>
           )}

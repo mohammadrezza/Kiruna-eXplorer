@@ -21,7 +21,7 @@ import PropTypes from 'prop-types';
 function FormDocument(props) {
 
   dayjs.extend(customParseFormat);
-
+  const isViewMode = props.mode === 'view';
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
@@ -127,7 +127,7 @@ const customComponents = {
     { value: 'English', label: 'English' }]
 
   useEffect(() => {
-    if (props.mode === 'view') {
+    if (isViewMode) {
       setDocID(id); // Update docID whenever id changes
     }
   }, [id, props.mode]); // Only run when `id` or `props.mode` changes
@@ -139,10 +139,10 @@ const customComponents = {
         setAllTypes(types);
         setAllStake(stake);
         setAllScale(sca);
-        const filteredDocuments = props.mode === 'view' ? documents.filter(doc => doc.id !== id) : documents;
+        const filteredDocuments = isViewMode ? documents.filter(doc => doc.id !== id) : documents;
         setAllDocuments(filteredDocuments);
 
-        if (props.mode === 'view') {
+        if (isViewMode) {
           if(user){
             if(user.role==='Urban Planner')
               setRights(true)
@@ -215,7 +215,14 @@ const customComponents = {
         coordinates.lng !== ''
     ) {
         const isValid = locationFormRef.current.areValidCoordinates(coordinates);
-        if (!isValid) validationErrors.coordinates = 'Not correct format or not inside Kiruna area';
+        if (!isValid) validationErrors.coordinates = 'Not correct format of coordinates or not inside Kiruna area';
+    }
+    if (
+        (Object.keys(coordinates).length === 0  ||
+        (coordinates?.lat === '' || coordinates?.lng === '')) &&
+        area.length === 0
+      ){
+      validationErrors.coordinates = 'Coordinates cannot be empty!';
     }
     selectedConnectionTypes.forEach((connection) => {
         const documentId = connection.id;
@@ -281,7 +288,8 @@ const customComponents = {
   
     
     if(Object.keys(validationErrors).length>0){
-      showError('Document not created, please check the input')
+      if(validationErrors.coordinates) showError(validationErrors.coordinates)
+      else showError('Document not created, please check the input')
       setErrors(validationErrors);
       return;
     }
@@ -301,15 +309,11 @@ const customComponents = {
     const doc = new Document(docID, title.trim(), st, scale.value, issuanceDate, type.value, language.value, description);
     if(props.mode==='add'){
       API.AddDocumentDescription(doc, connections, coordinates, area);
-    } else if (props.mode === 'view') {
+    } else if (isViewMode) {
       API.EditDocumentDescription(doc, connections, coordinates, area, docID );
     }
     showSuccess('Action successful!');
     setEdit(false)
-    //temp
-    // setTimeout(()=>{
-    //   navigate('/documents');
-    // }, 2000)
   };
 
   const handleDocumentSelect = (documentId) => {
@@ -573,7 +577,7 @@ const customComponents = {
             <Col className='col-form'>
               <Form.Group  className='form-group' controlId="description">
                 <Form.Label>Description{(props.mode === 'add' || edit) && <span>*</span>}</Form.Label>
-                <Form.Control as="textarea" placeholder="Enter description" value={description} onChange={(event) => setDescription(event.target.value)}  isInvalid={!!errors.description} readOnly={!edit && props.mode!=='add'}     className={!edit && props.mode === 'view' ? 'scrollable-description' : ''}
+                <Form.Control as="textarea" placeholder="Enter description" value={description} onChange={(event) => setDescription(event.target.value)}  isInvalid={!!errors.description} readOnly={!edit && props.mode!=='add'}     className={!edit && isViewMode ? 'scrollable-description' : ''}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.description}

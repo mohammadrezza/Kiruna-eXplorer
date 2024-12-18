@@ -182,7 +182,6 @@ textarea.form-control {
 }
 .convert-btn svg{
     margin-right: 10px;
-    /* width: 15px; */
 }
 .convert-btn:hover{
     color: var(--blue);
