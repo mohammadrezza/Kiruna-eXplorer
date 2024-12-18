@@ -146,9 +146,11 @@ const MapAreaSelector = ({ area, existList, mode, edit, onAreaChange }) => {
                   {/* Display Polygon */}
                   <Polygon
                     positions={existingArea}
-                    color="green"
-                    fillColor="green"
-                    fillOpacity={0.3}
+                    color="white"
+                    fillColor="white"
+                    fillOpacity={0.1}
+                    weight={1}
+                    dashArray="5, 5"
                   >
                   </Polygon>
 
@@ -171,7 +173,7 @@ const MapAreaSelector = ({ area, existList, mode, edit, onAreaChange }) => {
             positions={polygon}
             color="blue"
             fillColor="blue"
-            fillOpacity={0.5}
+            fillOpacity={0.3}
           />
         )}
         {(mode === 'add' || edit) && (

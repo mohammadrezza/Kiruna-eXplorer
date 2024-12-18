@@ -10,7 +10,7 @@ const MapPolygon = ({ list }) => {
     }
 
     return (
-      <Polygon key={doc.id} positions={doc.area} color="blue" fillColor="blue" fillOpacity={0.5}>
+      <Polygon key={doc.id} positions={doc.area} color="blue" fillColor="blue" fillOpacity={0.3}>
       </Polygon>
     );
   });
