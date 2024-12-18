@@ -13,23 +13,23 @@ const AreaForm = ({area, existList, mode, edit, onAreaChange}) => {
   </Row>
 )};
 
-AreaForm.propTypes = {
-  area: PropTypes.arrayOf(                           // L'area deve essere un array di coordinate
-    PropTypes.shape({
-      lat: PropTypes.number.isRequired,             // Latitudine obbligatoria
-      lng: PropTypes.number.isRequired,             // Longitudine obbligatoria
-    })
-  ).isRequired,
-  existList: PropTypes.arrayOf(                      // Lista di aree esistenti
-    PropTypes.shape({
-      lat: PropTypes.number.isRequired,
-      lng: PropTypes.number.isRequired,
-    })
-  ).isRequired,
-  mode: PropTypes.oneOf(['add', 'edit', 'view']).isRequired, // Modalità: 'add', 'edit', o 'view'
-  edit: PropTypes.bool.isRequired,                  // Flag per indicare se è in modalità modifica
-  onAreaChange: PropTypes.func.isRequired,          // Funzione per gestire il cambio dell'area
-};
+// AreaForm.propTypes = {
+//   area: PropTypes.arrayOf(                           // L'area deve essere un array di coordinate
+//     PropTypes.shape({
+//       lat: PropTypes.number.isRequired,             // Latitudine obbligatoria
+//       lng: PropTypes.number.isRequired,             // Longitudine obbligatoria
+//     })
+//   ).isRequired,
+//   existList: PropTypes.arrayOf(                      // Lista di aree esistenti
+//     PropTypes.shape({
+//       lat: PropTypes.number.isRequired,
+//       lng: PropTypes.number.isRequired,
+//     })
+//   ).isRequired,
+//   mode: PropTypes.oneOf(['add', 'edit', 'view']).isRequired, // Modalità: 'add', 'edit', o 'view'
+//   edit: PropTypes.bool.isRequired,                  // Flag per indicare se è in modalità modifica
+//   onAreaChange: PropTypes.func.isRequired,          // Funzione per gestire il cambio dell'area
+// };
 
 
 export default AreaForm;
