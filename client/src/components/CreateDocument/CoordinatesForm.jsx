@@ -87,26 +87,34 @@ const CoordinatesForm = ({coordinates,existList,  mode, edit, errors,  onCoordin
   );
 };
 
-// CoordinatesForm.propTypes = {
-//   coordinates: PropTypes.shape({                   // Coordinate
-//     lat: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-//     lng: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-//   }).isRequired,
-//   existList: PropTypes.arrayOf(                    // Lista di coordinate già esistenti
-//     PropTypes.shape({
-//       lat: PropTypes.number.isRequired,
-//       lng: PropTypes.number.isRequired,
-//     })
-//   ).isRequired,
-//   mode: PropTypes.oneOf(['add', 'edit', 'view']).isRequired, // Modalità del form
-//   edit: PropTypes.bool.isRequired,                 // Flag per indicare se il form è in modalità modifica
-//   errors: PropTypes.shape({                        // Oggetto errori
-//     lat: PropTypes.string,
-//     lng: PropTypes.string,
-//   }),
-//   onCoordinatesChange: PropTypes.func.isRequired,  // Callback per il cambio delle coordinate
-//   areValidCoordinates: PropTypes.func.isRequired,  // Funzione per validare le coordinate
-// };
+CoordinatesForm.propTypes = {
+  coordinates: PropTypes.oneOfType([
+    PropTypes.shape({
+      lat: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      lng: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    }),
+    PropTypes.object, // Allows an empty object {}
+  ]), // Coordinates can be a lat/lng object or an empty object
+  existList: PropTypes.oneOfType([
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        lat: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+        lng: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      })
+    ),
+    PropTypes.array, // Allow an empty array
+  ]).isRequired, // Array of existing coordinates or empty array
+  mode: PropTypes.oneOf(['add', 'view']).isRequired, // Mode can be 'add' or 'view'
+  edit: PropTypes.bool, // Boolean to specify if the component is in edit mode
+  errors: PropTypes.shape({
+    lat: PropTypes.string, // Latitude error message, if any
+    lng: PropTypes.string, // Longitude error message, if any
+  }).isRequired, // Errors object for validation feedback
+  onCoordinatesChange: PropTypes.func.isRequired, // Function to handle changes to the coordinates
+  areValidCoordinates: PropTypes.func.isRequired, // Function to validate coordinates
+};
+
+
 
 
 export default CoordinatesForm;

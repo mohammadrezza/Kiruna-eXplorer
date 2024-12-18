@@ -43,6 +43,7 @@ function MapPointSelector({ onCoordinatesChange, coordinates, existList, mode, e
     iconAnchor: pointer.iconAnchor,
     className: 'custom-marker-icon',
   });
+  const isEditable = mode === 'add' || edit;
 
   useEffect(() => {
     if (coordinates && coordinates.lat && coordinates.lng) {
@@ -57,7 +58,7 @@ function MapPointSelector({ onCoordinatesChange, coordinates, existList, mode, e
 
   return (
     <div>
-      {(mode === 'add' || edit) && (
+      {(isEditable) && (
         <h5 className='map-view-text' data-testid="map-info">Click on the map to select a point</h5>
       )}
       <MapContainer
@@ -82,7 +83,7 @@ function MapPointSelector({ onCoordinatesChange, coordinates, existList, mode, e
           setMarkerPosition={setMarkerPosition} 
         />
         
-        {existList?.map((coord, index) => (
+        {isEditable && existList && existList.length > 0 && existList.map((coord, index) => (
           coord.lat && coord.lng && (
             <Marker
               key={index} 
@@ -97,7 +98,7 @@ function MapPointSelector({ onCoordinatesChange, coordinates, existList, mode, e
 
         {markerPosition && <Marker position={markerPosition} icon={iconSelected} />}
         
-        {(mode === 'add' || edit) && (
+        {(isEditable) && (
           <MapMultiPolygon list={kirunaBounds}></MapMultiPolygon>
         )}
       </MapContainer>
@@ -106,20 +107,25 @@ function MapPointSelector({ onCoordinatesChange, coordinates, existList, mode, e
 }
 
 MapPointSelector.propTypes = {
-  onCoordinatesChange: PropTypes.func.isRequired,    // Funzione per cambiare le coordinate
-  coordinates: PropTypes.shape({                      // Coordinate selezionate
-    lat: PropTypes.number.isRequired,
-    lng: PropTypes.number.isRequired,
-  }).isRequired,
-  existList: PropTypes.arrayOf(                      // Lista di coordinate esistenti
+  coordinates: PropTypes.oneOfType([
     PropTypes.shape({
-      lat: PropTypes.number.isRequired,
-      lng: PropTypes.number.isRequired,
-    })
-  ).isRequired,
-  mode: PropTypes.oneOf(['add', 'edit', 'view']).isRequired, // Modalità del componente
-  edit: PropTypes.bool.isRequired,                    // Flag per la modalità di modifica
+      lat: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      lng: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    }),
+    PropTypes.object, // Allows an empty object {}
+  ]), // Coordinates can be a lat/lng object or an empty object
+  existList: PropTypes.oneOfType([
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        lat: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+        lng: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      })
+    ),
+    PropTypes.array, // Allow an empty array
+  ]).isRequired, // Array of existing coordinates or empty array
+  mode: PropTypes.oneOf(['add', 'view']).isRequired, // Mode can be 'add' or 'view'
+  edit: PropTypes.bool, // Boolean to specify if the component is in edit mode
+  onCoordinatesChange: PropTypes.func.isRequired, // Function to handle changes to the coordinates
 };
-
 
 export default MapPointSelector;

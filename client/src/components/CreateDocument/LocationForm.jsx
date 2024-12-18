@@ -182,22 +182,27 @@ const LocationForm = forwardRef(({ coordinates, area, mode, edit, handleCoordina
   );
 });
 
-// LocationForm.propTypes = {
-//   coordinates: PropTypes.shape({                  // Oggetto coordinate
-//     lat: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-//     lng: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-//   }).isRequired,
-//   area: PropTypes.arrayOf(                        // Array di coordinate per l'area
-//     PropTypes.shape({
-//       lat: PropTypes.number.isRequired,
-//       lng: PropTypes.number.isRequired,
-//     })
-//   ).isRequired,
-//   mode: PropTypes.oneOf(['add', 'edit', 'view']).isRequired, // Modalità del form
-//   edit: PropTypes.bool.isRequired,                // Flag per la modalità modifica
-//   handleCoordinatesChange: PropTypes.func.isRequired, // Funzione per aggiornare le coordinate
-//   handleAreaChange: PropTypes.func.isRequired,    // Funzione per aggiornare l'area
-// };
+LocationForm.propTypes = {
+  coordinates: PropTypes.oneOfType([
+    PropTypes.shape({
+      lat: PropTypes.number,
+      lng: PropTypes.number,
+    }),
+    PropTypes.object, // Allow an empty object
+  ]), // Object containing latitude and longitude or an empty object
+  area: PropTypes.oneOfType([
+    PropTypes.arrayOf(
+      PropTypes.arrayOf(
+        PropTypes.arrayOf(PropTypes.number)
+      )
+    ),
+    PropTypes.array, // Allow an empty array
+  ]), // Multi-dimensional array for polygon coordinates or an empty array
+  mode: PropTypes.oneOf(['add', 'view']).isRequired, // Mode can only be 'add' or 'view'
+  edit: PropTypes.bool, // Boolean to specify if the component is in edit mode
+  handleCoordinatesChange: PropTypes.func.isRequired, // Function to handle changes to coordinates
+  handleAreaChange: PropTypes.func.isRequired, // Function to handle changes to the area
+};
 
 
 export default LocationForm;

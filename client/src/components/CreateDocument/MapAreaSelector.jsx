@@ -136,7 +136,7 @@ const MapAreaSelector = ({ area, existList, mode, edit, onAreaChange }) => {
         )}
 
         {/* Show existing areas with clustering */}
-        {existList && existList.length > 0 && (
+        {isEditable && existList && existList.length > 0 && (
           <MarkerClusterGroup iconCreateFunction={createClusterIcon} maxClusterRadius={50}>
             {existList.map((existingArea, index) => {
               const centroid = calculateCentroid(existingArea);
@@ -183,17 +183,25 @@ const MapAreaSelector = ({ area, existList, mode, edit, onAreaChange }) => {
 };
 
 MapAreaSelector.propTypes = {
-  area: PropTypes.arrayOf(                        // Area corrente
-    PropTypes.arrayOf(PropTypes.number.isRequired) // Ogni punto è un array [lat, lng]
-  ).isRequired,
-  existList: PropTypes.arrayOf(                   // Lista di aree esistenti
+  area: PropTypes.oneOfType([
     PropTypes.arrayOf(
-      PropTypes.arrayOf(PropTypes.number.isRequired)
-    )
-  ).isRequired,
-  mode: PropTypes.oneOf(['add', 'edit', 'view']).isRequired, // Modalità del componente
-  edit: PropTypes.bool.isRequired,                // Flag per la modalità di modifica
-  onAreaChange: PropTypes.func.isRequired,        // Callback per aggiornare l'area
+      PropTypes.arrayOf(
+        PropTypes.arrayOf(PropTypes.number)
+      )
+    ),
+    PropTypes.array, // Allow an empty array
+  ]).isRequired, // Multi-dimensional array for polygon coordinates or an empty array
+  existList: PropTypes.oneOfType([
+    PropTypes.arrayOf(
+      PropTypes.arrayOf(
+        PropTypes.arrayOf(PropTypes.number)
+      )
+    ),
+    PropTypes.array, // Allow an empty array
+  ]).isRequired, // Array of existing areas (nested coordinate arrays or empty array)
+  mode: PropTypes.oneOf(['add', 'view']).isRequired, // Mode can only be 'add' or 'view'
+  edit: PropTypes.bool, // Boolean to specify if the component is in edit mode
+  onAreaChange: PropTypes.func.isRequired, // Function to handle changes to the area
 };
 
 

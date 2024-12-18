@@ -13,23 +13,27 @@ const AreaForm = ({area, existList, mode, edit, onAreaChange}) => {
   </Row>
 )};
 
-// AreaForm.propTypes = {
-//   area: PropTypes.arrayOf(                           // L'area deve essere un array di coordinate
-//     PropTypes.shape({
-//       lat: PropTypes.number.isRequired,             // Latitudine obbligatoria
-//       lng: PropTypes.number.isRequired,             // Longitudine obbligatoria
-//     })
-//   ).isRequired,
-//   existList: PropTypes.arrayOf(                      // Lista di aree esistenti
-//     PropTypes.shape({
-//       lat: PropTypes.number.isRequired,
-//       lng: PropTypes.number.isRequired,
-//     })
-//   ).isRequired,
-//   mode: PropTypes.oneOf(['add', 'edit', 'view']).isRequired, // Modalità: 'add', 'edit', o 'view'
-//   edit: PropTypes.bool.isRequired,                  // Flag per indicare se è in modalità modifica
-//   onAreaChange: PropTypes.func.isRequired,          // Funzione per gestire il cambio dell'area
-// };
+AreaForm.propTypes = {
+  area: PropTypes.oneOfType([
+    PropTypes.arrayOf(
+      PropTypes.arrayOf(
+        PropTypes.arrayOf(PropTypes.number)
+      )
+    ),
+    PropTypes.array, // Allow an empty array
+  ]).isRequired, // Multi-dimensional array for polygon coordinates or an empty array
+  existList: PropTypes.oneOfType([
+    PropTypes.arrayOf(
+      PropTypes.arrayOf(
+        PropTypes.arrayOf(PropTypes.number)
+      )
+    ),
+    PropTypes.array, // Allow an empty array
+  ]).isRequired, // Array of existing areas (nested coordinate arrays or empty array)
+  mode: PropTypes.oneOf(['add', 'view']).isRequired, // Mode can only be 'add' or 'view'
+  edit: PropTypes.bool, // Boolean to specify if the component is in edit mode
+  onAreaChange: PropTypes.func.isRequired, // Function to handle changes to the area
+};
 
 
 export default AreaForm;
