@@ -72,7 +72,7 @@ async function getDocuments() {
     return response.data
 }
 
-async function getList(filters,page,size,key,dir) {
+async function getList(filters,page,size,key,dir,title) {
   let query = ``;
   if(filters.stakeholders)
     query = query.concat('stakeholders=',filters.stakeholders)
@@ -84,6 +84,8 @@ async function getList(filters,page,size,key,dir) {
     query = query.concat((query!==''? '&' : ''),'issuanceDateEnd=',filters.issuanceDateEnd)
   if(key && dir)
     query = query.concat((query!==''? '&' : ''),'sort=',key,',',dir)
+  if(title)
+    query = query.concat((query!==''? '&' : ''),'keyword=',title)
   const response = await fetchRequest(`/documents?${query}&page=${page}&size=${size}`);
   return response
 }

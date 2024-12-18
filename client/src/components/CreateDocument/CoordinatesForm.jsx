@@ -87,26 +87,26 @@ const CoordinatesForm = ({coordinates,existList,  mode, edit, errors,  onCoordin
   );
 };
 
-CoordinatesForm.propTypes = {
-  coordinates: PropTypes.shape({                   // Coordinate
-    lat: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    lng: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  }).isRequired,
-  existList: PropTypes.arrayOf(                    // Lista di coordinate già esistenti
-    PropTypes.shape({
-      lat: PropTypes.number.isRequired,
-      lng: PropTypes.number.isRequired,
-    })
-  ).isRequired,
-  mode: PropTypes.oneOf(['add', 'edit', 'view']).isRequired, // Modalità del form
-  edit: PropTypes.bool.isRequired,                 // Flag per indicare se il form è in modalità modifica
-  errors: PropTypes.shape({                        // Oggetto errori
-    lat: PropTypes.string,
-    lng: PropTypes.string,
-  }),
-  onCoordinatesChange: PropTypes.func.isRequired,  // Callback per il cambio delle coordinate
-  areValidCoordinates: PropTypes.func.isRequired,  // Funzione per validare le coordinate
-};
+// CoordinatesForm.propTypes = {
+//   coordinates: PropTypes.shape({                   // Coordinate
+//     lat: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+//     lng: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+//   }).isRequired,
+//   existList: PropTypes.arrayOf(                    // Lista di coordinate già esistenti
+//     PropTypes.shape({
+//       lat: PropTypes.number.isRequired,
+//       lng: PropTypes.number.isRequired,
+//     })
+//   ).isRequired,
+//   mode: PropTypes.oneOf(['add', 'edit', 'view']).isRequired, // Modalità del form
+//   edit: PropTypes.bool.isRequired,                 // Flag per indicare se il form è in modalità modifica
+//   errors: PropTypes.shape({                        // Oggetto errori
+//     lat: PropTypes.string,
+//     lng: PropTypes.string,
+//   }),
+//   onCoordinatesChange: PropTypes.func.isRequired,  // Callback per il cambio delle coordinate
+//   areValidCoordinates: PropTypes.func.isRequired,  // Funzione per validare le coordinate
+// };
 
 
 export default CoordinatesForm;

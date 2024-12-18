@@ -6,7 +6,7 @@ import { HiArrowUturnLeft } from "react-icons/hi2";
 import { LiaCheckCircle } from "react-icons/lia";
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import Select from 'react-select'
+import Select, { components }from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 import { AuthContext } from '@/layouts/AuthContext';
 import RelatedDocumentsSelector from '@/components/CreateDocument/RelatedDocumentsSelector';
@@ -98,6 +98,30 @@ function FormDocument(props) {
     }),
   };
 
+  // Componente personalizzato per rimuovere la "x" dei valori selezionati
+const MultiValueRemove = (props) => {
+  // Nasconde la "x" solo se isDisabled è true
+  return props.selectProps.isDisabled ? null : <components.MultiValueRemove {...props} />;
+};
+
+// Componente personalizzato per nascondere la freccia
+const DropdownIndicator = (props) => {
+  // Nasconde la freccia solo se isDisabled è true
+  return props.selectProps.isDisabled ? null : <components.DropdownIndicator {...props} />;
+};
+
+// Componente personalizzato per nascondere il Clear Indicator (x globale in alto a destra)
+const ClearIndicator = (props) => {
+  return props.selectProps.isDisabled ? null : <components.ClearIndicator {...props} />;
+};
+
+// Componenti personalizzati per react-select
+const customComponents = {
+  MultiValueRemove,    // Nasconde le "x" accanto ai valori selezionati
+  DropdownIndicator,   // Nasconde la freccia
+  ClearIndicator,      // Nasconde la "x" globale
+};
+
   const allLanguage = [{ value: 'Italian', label: 'Italian' },
     { value: 'Swedish', label: 'Swedish' },
     { value: 'English', label: 'English' }]
@@ -144,7 +168,7 @@ function FormDocument(props) {
           setRelatedDocuments(doc.connections);
           setSelectedDocuments(connectedDocumentIds);
           setFiles(doc.files);
-          console.log(doc)
+          setPages(doc.pages)
         }
       } catch (error) {
         console.error("Error loading data:", error);
@@ -439,6 +463,7 @@ function FormDocument(props) {
                   onChange={handleSelectStakeChange} // Funzione per aggiornare lo stato
                   placeholder="Select one or more stakeholders"
                   isDisabled={!edit && props.mode !== 'add'}
+                  components={customComponents}
                 >
                 </CreatableSelect>
                 }
@@ -461,6 +486,7 @@ function FormDocument(props) {
                   onChange={handleSelectScaleChange} // Funzione per aggiornare lo stato
                   placeholder="Select scale"
                   isDisabled={!edit && props.mode !== 'add'}
+                  components={customComponents}
                 >
                 </CreatableSelect>}
                 {errors.scale && (
@@ -508,6 +534,7 @@ function FormDocument(props) {
                   onChange={handleSelectTypeChange} // Funzione per aggiornare lo stato
                   placeholder="Select type"
                   isDisabled={!edit && props.mode !== 'add'}
+                  components={customComponents}
                 >
                 </CreatableSelect>}
                 {errors.type && (
@@ -527,6 +554,7 @@ function FormDocument(props) {
                   onChange={handleSelectLanguageChange} // Funzione per aggiornare lo stato
                   placeholder="Select language"
                   isDisabled={!edit && props.mode !== 'add'}
+                  components={customComponents}
                 >
                 </Select>
                 {errors.language && (

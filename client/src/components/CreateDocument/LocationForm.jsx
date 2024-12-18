@@ -90,7 +90,7 @@ const LocationForm = forwardRef(({ coordinates, area, mode, edit, handleCoordina
     // Filter and extract unique coordinates with validation
     const uniqCoordinates = Array.from(
       new Set(
-        documents
+        documents.data
           .filter(doc => 
             doc.coordinates && 
             doc.coordinates.lat && doc.coordinates.lng && 
@@ -104,7 +104,7 @@ const LocationForm = forwardRef(({ coordinates, area, mode, edit, handleCoordina
     // Filter and extract unique areas (ignoring empty areas)
     const uniqAreas = Array.from(
       new Set(
-        documents
+        documents.data
           .filter(doc => doc.area && Array.isArray(doc.area) && doc.area.length > 0) // Ensure area is not empty
           .map(doc => JSON.stringify(doc.area)) // Serialize for uniqueness
       )
@@ -114,7 +114,6 @@ const LocationForm = forwardRef(({ coordinates, area, mode, edit, handleCoordina
     // console.log("Unique Areas:", uniqueAreas);
     setUniqueCoordinates(uniqCoordinates)
     setUniqueAreas(uniqAreas)
-
     return { uniqueCoordinates, uniqueAreas };
   } catch (error) {
     console.error("Error fetching unique data:", error);
@@ -183,22 +182,22 @@ const LocationForm = forwardRef(({ coordinates, area, mode, edit, handleCoordina
   );
 });
 
-LocationForm.propTypes = {
-  coordinates: PropTypes.shape({                  // Oggetto coordinate
-    lat: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    lng: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  }).isRequired,
-  area: PropTypes.arrayOf(                        // Array di coordinate per l'area
-    PropTypes.shape({
-      lat: PropTypes.number.isRequired,
-      lng: PropTypes.number.isRequired,
-    })
-  ).isRequired,
-  mode: PropTypes.oneOf(['add', 'edit', 'view']).isRequired, // Modalità del form
-  edit: PropTypes.bool.isRequired,                // Flag per la modalità modifica
-  handleCoordinatesChange: PropTypes.func.isRequired, // Funzione per aggiornare le coordinate
-  handleAreaChange: PropTypes.func.isRequired,    // Funzione per aggiornare l'area
-};
+// LocationForm.propTypes = {
+//   coordinates: PropTypes.shape({                  // Oggetto coordinate
+//     lat: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+//     lng: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+//   }).isRequired,
+//   area: PropTypes.arrayOf(                        // Array di coordinate per l'area
+//     PropTypes.shape({
+//       lat: PropTypes.number.isRequired,
+//       lng: PropTypes.number.isRequired,
+//     })
+//   ).isRequired,
+//   mode: PropTypes.oneOf(['add', 'edit', 'view']).isRequired, // Modalità del form
+//   edit: PropTypes.bool.isRequired,                // Flag per la modalità modifica
+//   handleCoordinatesChange: PropTypes.func.isRequired, // Funzione per aggiornare le coordinate
+//   handleAreaChange: PropTypes.func.isRequired,    // Funzione per aggiornare l'area
+// };
 
 
 export default LocationForm;
