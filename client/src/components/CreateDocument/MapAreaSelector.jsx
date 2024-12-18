@@ -98,7 +98,7 @@ const MapAreaSelector = ({ area, existList, mode, edit, onAreaChange }) => {
     <div>
       <MapContainer
         center={initialMapCenter}
-        zoom={13}
+        zoom={12}
         style={{ height: '500px', width: '100%' }}
         bounds={kirunaBounds}
         maxBounds={L.latLngBounds(kirunaBounds)}
