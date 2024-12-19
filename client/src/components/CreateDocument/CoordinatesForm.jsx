@@ -66,7 +66,17 @@ const CoordinatesForm = ({coordinates,existList,  mode, edit, errors,  onCoordin
         </Col>
         <Col md={4}>
           {(mode === 'add' || edit) && (
-            <div className="map-view-trigger" role="button" tabIndex="0"  onClick={toggleMap}>
+            <div
+            className="map-view-trigger"
+            role="button"
+            tabIndex="0"
+            onClick={toggleMap}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault(); // Prevent scrolling for the spacebar
+                toggleMap();
+              }
+            }}>
               {showMap ? <SelectTypeBtn /> : <SelectMapBtn />}
             </div>
           )}

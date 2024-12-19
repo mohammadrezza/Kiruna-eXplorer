@@ -12,7 +12,18 @@ const MunicipalDocuments = ({ municipalDocuments, showDocuments, toggleList, use
     <div>
       {municipalDocuments.length > 0 && (
         <div className="map-municipal-title">
-          There are documents for the whole municipal. <span onClick={toggleList}>
+          There are documents for the whole municipal. 
+          <span 
+            onClick={toggleList} // Handles mouse clicks
+            role="button" // Indicates that this is an interactive element
+            tabIndex={0} // Makes the element focusable
+            
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                toggleList(); // Handles keyboard interactions
+              }
+            }}
+          >
             {!showDocuments ? 'Show them' : 'Hide'}
           </span>
         </div>

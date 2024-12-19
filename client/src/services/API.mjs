@@ -119,7 +119,7 @@ async function addType(type) {
       throw new Error(errorData.message || 'Add type failed');
     }
 
-    return await response;
+    return response;
   } catch (error) {
     console.error('Add type failed', error);
     throw error;
@@ -140,7 +140,7 @@ async function addStakeholder(stakeholder) {
       throw new Error(errorData.message || 'Add stakeholder failed');
     }
 
-    return await response;
+    return response;
   } catch (error) {
     console.error('Add stakeholder failed', error);
     throw error;
@@ -161,7 +161,7 @@ async function addScale(scale) {
       throw new Error(errorData.message || 'Add scale failed');
     }
 
-    return await response;
+    return response;
   } catch (error) {
     console.error('Add scale failed', error);
     throw error;

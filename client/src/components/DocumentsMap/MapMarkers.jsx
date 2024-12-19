@@ -33,7 +33,18 @@ const MapMarkers = ({ list, user }) => {
           <p><strong>Type:</strong> {doc.type}</p>
           <p><strong>Stakeholders:</strong> {doc.stakeholders}</p>
           <p><strong>Issuance Date:</strong> {showDate(doc.issuanceDate)}</p>
-          {user && <p className="custom-marker-popup-link" onClick={() => handleDocumentClick(doc.id)}>Open the document</p>}
+          {user && <p
+            className="custom-marker-popup-link"
+            role="button"
+            tabIndex={0}
+            onClick={() => handleDocumentClick(doc.id)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                handleDocumentClick(doc.id);
+                e.preventDefault(); // Prevent scrolling for space key
+              }
+            }}
+          >Open the document</p>}
         </Popup>
         <Tooltip direction="top" offset={[0, -32]} opacity={1}>
           <span>{doc.title}</span>
@@ -64,8 +75,30 @@ const MapCentroids = ({ list, user, handlePointClick, handlePopupClose }) => {
           <p><strong>Type:</strong> {doc.type}</p>
           <p><strong>Stakeholders:</strong> {doc.stakeholders}</p>
           <p><strong>Issuance Date:</strong> {showDate(doc.issuanceDate)}</p>
-          {user && <p className="custom-marker-popup-link" onClick={() => handleDocumentClick(doc.id)}>Open the document</p>}
-          <p className="custom-marker-popup-link" onClick={() => handlePointClick(doc.id)}>Show the area</p>
+          {user && <p
+            className="custom-marker-popup-link"
+            role="button"
+            tabIndex={0}
+            onClick={() => handleDocumentClick(doc.id)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                handleDocumentClick(doc.id);
+                e.preventDefault(); // Prevent scrolling for space key
+              }
+            }}
+          >Open the document</p>}
+          <p
+            className="custom-marker-popup-link"
+            role="button"
+            tabIndex={0}
+            onClick={() => handlePointClick(doc.id)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                handlePointClick(doc.id);
+                e.preventDefault(); // Prevent scrolling for space key
+              }
+            }}
+          >Show the area</p>
         </Popup>
         <Tooltip direction="top" offset={[0, -32]} opacity={1}>
           <span>{doc.title}</span>
