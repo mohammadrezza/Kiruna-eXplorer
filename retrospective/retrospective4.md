@@ -86,21 +86,22 @@ TEMPLATE FOR RETROSPECTIVE (Team 11)
 
 - What caused your errors in estimation (if any)?
 
-The stakeholder added the real data late so we cannot expect that we have to spent so much time at the end of the sprint.
+The primary error in our estimation was related to the task of document addition. Firstly, the process of inserting the areas took longer than anticipated. Secondly, a significant number of documents were added in an unexpected moment, which was not accounted for in the initial plan. As a result, the time spent on this task was effectively doubled.
 
 
 - What lessons did you learn (both positive and negative) in this sprint?
-  - Positive: we follow the documentation.
-  - Negative: we could possibly do one more story.
+  - Positive: following documentation is beneficial
+  - Negative: To be more productive, we should have had more interchangeable roles, which might have given us the opportunity to complete an additional story.
 
 - Which improvement goals set in the previous retrospective were you able to achieve?
 
-We achieved all the goals we set in the previous retrospective which were improving the quality of the code.
+We achieved all the goals:
+to improve quality and reliability, fix the bugs,  apply the stakeholders feedbacks, and to read and follow the documentation.
 
 - Which ones you were not able to achieve? Why?
 
-We managed to achieve all the goals we set in the previous retrospective.
+Considering the quality improvement goal, We definitely improved quality by focusing heavily on SonarCloud. However, we had to sacrifice the planned hours for fixing old tests due to the unexpected workload caused by the addition of original documents.
   
 - One thing you are proud of as a Team!!
 
-We manage to create an application following the suggestions that stakeholders gave to us. 
+As a team, we achieved our planned goals while successfully staying attentive to and incorporating the stakeholders' requests throughout the process.
