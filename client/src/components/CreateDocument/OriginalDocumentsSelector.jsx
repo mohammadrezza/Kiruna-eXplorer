@@ -176,6 +176,7 @@ const DocumentUploader = ({ mode, edit, documentId, files: initialFiles, onFileA
             <Modal.Body>
               <div
               role='button'
+               tabIndex="0"
                 className="upload-section"
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
