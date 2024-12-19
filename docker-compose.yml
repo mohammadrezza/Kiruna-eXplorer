@@ -1,4 +1,13 @@
 services:
+  init-db:
+    build: ./server
+    entrypoint:
+      - npm
+    command:
+      - run
+      - init-db
+    volumes:
+      - ./kiruna-database:/app/src/database
   client:
     build: ./client
     depends_on:
@@ -6,10 +15,11 @@ services:
     ports:
       - 3000:80
   server:
+    depends_on:
+      - init-db
     build: ./server
     ports:
       - 3001:3001
     volumes:
-      - kiruna-uploads:/app/uploads
-volumes:
-    kiruna-uploads:
+      - ./kiruna-uploads:/app/uploads
+      - ./kiruna-database:/app/src/database

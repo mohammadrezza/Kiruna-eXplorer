@@ -6,6 +6,8 @@ import DocumentConnectionType from "../components/documentConnectionType.mjs";
 import process from 'process';
 import path from "path";
 
+const dirPath = path.join(process.cwd(), 'src', 'database');
+process.chdir(dirPath);
 const database = new sqlite.Database('db.db', (err) => {
     if (err) throw err;
 });
@@ -521,8 +523,105 @@ async function setConnectionCount() {
         `);
 }
 
+async function createTables(){
+    await run(`CREATE TABLE IF NOT EXISTS Document
+    (
+        id           TEXT PRIMARY KEY,
+        title        TEXT,
+        description  TEXT,
+        scale        TEXT,
+        issuanceDate TEXT,
+        type         TEXT,
+        language     TEXT,
+        coordinates  TEXT,
+        area         TEXT,
+        connections  INTEGER   DEFAULT 0,
+        created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );`)
+
+    await run(`CREATE TABLE IF NOT EXISTS Stakeholder
+    (
+        id         TEXT PRIMARY KEY,
+        name       TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );`)
+
+    await run(`CREATE TABLE IF NOT EXISTS Scale
+    (
+        id         TEXT PRIMARY KEY,
+        name       TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );`)
+
+    await run(`CREATE TABLE IF NOT EXISTS Type
+    (
+        id         TEXT PRIMARY KEY,
+        name       TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );`)
+
+    await run(`CREATE TABLE IF NOT EXISTS DocumentStakeholder
+    (
+        id          TEXT PRIMARY KEY,
+        documentId  TEXT,
+        stakeholder TEXT,
+        created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );`)
+
+    await run(`CREATE TABLE IF NOT EXISTS DocumentConnection
+    (
+        id           TEXT PRIMARY KEY,
+        documentId   TEXT,
+        connectionId TEXT,
+        type         TEXT,
+        created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );`)
+
+    await run(`
+    CREATE TRIGGER IF NOT EXISTS after_delete_document_connection
+        AFTER DELETE
+        ON DocumentConnection
+        FOR EACH ROW
+    BEGIN
+        UPDATE Document
+        SET connections = connections - 1
+        WHERE id = OLD.connectionId;
+    END;`)
+
+    await run(`
+    CREATE TRIGGER IF NOT EXISTS after_insert_document_connection
+        AFTER INSERT
+        ON DocumentConnection
+        FOR EACH ROW
+    BEGIN
+        UPDATE Document
+        SET connections = connections + 1
+        WHERE id = NEW.connectionId;
+    END;`)
+
+    await run(`CREATE TABLE IF NOT EXISTS User
+    (
+        id         TEXT PRIMARY KEY,
+        username   TEXT not null,
+        password   TEXT not null,
+        role       TEXT not null,
+        salt       TEXT not null,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );`)
+
+    await run(`CREATE TABLE IF NOT EXISTS  File
+    (
+        id            TEXT PRIMARY KEY,
+        documentId    TEXT,
+        name          TEXT,
+        numPages      INTEGER,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );`)
+}
+
 async function initializeDatabase() {
     try {
+        await createTables();
         await populateUserTable();
         await populateDocumentTable();
         await populateDocumentConnectionTable();
@@ -540,6 +639,4 @@ async function initializeDatabase() {
     }
 }
 
-const dirPath = path.join(process.cwd(), 'src', 'db');
-process.chdir(dirPath);
 await initializeDatabase();

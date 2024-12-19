@@ -5,7 +5,7 @@
   "scripts": {
     "test": "jest --coverage",
     "start": "node index.mjs",
-    "init-db": "node src/db/initializeDatabase.mjs"
+    "init-db": "node ./src/db/initializeDatabase.mjs"
   },
   "author": "",
   "license": "ISC",
