@@ -25,7 +25,8 @@ docker build -t kiruna-explorer-client .
 docker run -p 3000:80 kiruna-explorer-client
 cd Kiruna-eXplorer/server
 docker build -t kiruna-explorer-server .
-docker run -p 3001:3001 -v kiruna-uploads:/app/uploads kiruna-explorer-server 
+docker run  --rm -v ./kiruna-database:/app/src/database kiruna-explorer-server npm run init-db
+docker run -p 3001:3001 -v ./kiruna-uploads:/app/uploads -v ./kiruna-database:/app/src/database kiruna-explorer-server 
 ```
 
 ---
@@ -55,4 +56,7 @@ cd Kiruna-eXplorer/client
 npm start
 ```
 ---
-
+Test credentials:
+- Urban Planner:
+  - username: `MarioRossi`
+  - password: `708090`
