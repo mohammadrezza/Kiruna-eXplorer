@@ -296,7 +296,7 @@ async function getAllDocuments(
     issuanceDateStart,
     issuanceDateEnd
 ) {
-    return new Promise(async (resolve, reject) => {
+    
         try {
             // Check if pagination should be skipped
             const isPaginated = page > 0 && size > 0;
@@ -540,16 +540,14 @@ async function getAllDocuments(
                     hasPreviousPage: false
                 };
 
-            resolve({
-                data: documents,
-                pagination
-            });
-
-        } catch (error) {
-            reject(error);
+                return {
+                    data: documents,
+                    pagination
+                };
+            } catch (error) {
+                throw error;
+            }
         }
-    });
-}
 
 function convertToISODate(dateStr) {
     if (!dateStr) return null;
