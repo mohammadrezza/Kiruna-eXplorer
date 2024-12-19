@@ -37,7 +37,7 @@ function Header({ className }) {
         <IoLibraryOutline data-testid='lib' className="profile-icon" onClick={() => navigateTo('/documents')}/>
         <PiMapTrifold data-testid='map' className="profile-icon" onClick={() => navigateTo('/documents/map')}/>
       </div>}
-      <h3 onClick={() => navigateTo('/')} role="button">Kiruna eXplorer</h3>
+      <h3 onClick={() => navigateTo('/')} role="button" onKeyDown={() => navigateTo('/')}>Kiruna eXplorer</h3>
       <div className='custom-navbar-actions'>
       {user ? (
           <div className="user-info">

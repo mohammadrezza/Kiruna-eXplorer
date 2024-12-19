@@ -98,10 +98,16 @@ function FormDocument(props) {
     }),
   };
 
-  // Componente personalizzato per rimuovere la "x" dei valori selezionati
+// Componente personalizzato per rimuovere la "x" dei valori selezionati
 const MultiValueRemove = (props) => {
   // Nasconde la "x" solo se isDisabled è true
   return props.selectProps.isDisabled ? null : <components.MultiValueRemove {...props} />;
+};
+
+MultiValueRemove.propTypes = {
+  selectProps: PropTypes.shape({
+    isDisabled: PropTypes.bool.isRequired, // Deve essere un booleano
+  }).isRequired,
 };
 
 // Componente personalizzato per nascondere la freccia
@@ -110,9 +116,21 @@ const DropdownIndicator = (props) => {
   return props.selectProps.isDisabled ? null : <components.DropdownIndicator {...props} />;
 };
 
+DropdownIndicator.propTypes = {
+  selectProps: PropTypes.shape({
+    isDisabled: PropTypes.bool.isRequired, // Deve essere un booleano
+  }).isRequired,
+};
+
 // Componente personalizzato per nascondere il Clear Indicator (x globale in alto a destra)
 const ClearIndicator = (props) => {
   return props.selectProps.isDisabled ? null : <components.ClearIndicator {...props} />;
+};
+
+ClearIndicator.propTypes = {
+  selectProps: PropTypes.shape({
+    isDisabled: PropTypes.bool.isRequired, // Deve essere un booleano
+  }).isRequired,
 };
 
 // Componenti personalizzati per react-select

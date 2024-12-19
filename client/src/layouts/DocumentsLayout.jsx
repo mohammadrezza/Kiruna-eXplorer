@@ -185,7 +185,7 @@ function DocumentsList() {
               </button>
         </div>
         }
-        {user && <div className="map-documents-button" role="button" onClick={()=>handleNavigation()} onKeyDown={()=>handleNavigation()}>
+        {user && <div className="map-documents-button" tabIndex="0" role="button" onClick={()=>handleNavigation()} onKeyDown={()=>handleNavigation()}>
           {isList ? <LiaMapMarkedAltSolid /> : <LiaThListSolid/>}
           <span>{isList ? "Show Map" : "Show List"}</span>
         </div>
@@ -202,6 +202,7 @@ function DocumentsList() {
                 <div key={key} className="filter-tag">
                   <span>{key}: {value}</span>
                   <span
+                  role='button'
                     className="remove-filter"
                     onClick={() => {
                       handleDeleteFilter(key)

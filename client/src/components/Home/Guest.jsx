@@ -21,6 +21,7 @@ function Homepage() {
         <p 
           className="map-link" 
           onClick={() => navigateTo('/documents/map')}
+          onKeyDown={() => navigateTo('/documents/map')}
         >
           Explore the map<PiMapTrifold className='visitor-map-link'></PiMapTrifold>
         </p>
