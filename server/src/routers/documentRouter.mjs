@@ -26,7 +26,9 @@ class DocumentRouter {
         this.app = app;
         this.auth = new Auth(app);
         this.router = express.Router()
-        this.upload = multer({storage: storage});
+        this.upload = multer({storage: storage,
+            limits: { fileSize: 1024 * 1024 * 10 } // 50MB
+        });
         this.initRoutes()
     }
 
