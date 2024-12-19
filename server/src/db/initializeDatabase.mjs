@@ -43,11 +43,8 @@ const documents = [
         issuanceDate: "20-10-2010",
         type: "Prescriptive document",
         language: "Swedish",//controlla come si fa a non mettelo
-        coordinates: {
-            lat: 67.5054,
-            lng: 20.1817
-        },
-        area: [],
+        coordinates: {},
+        area: [[67.86208347317175,20.204715728759766],[67.86227753760771,20.207033157348636],[67.86108078118005,20.208835601806644],[67.86098374418224,20.21072387695313],[67.86011039302417,20.2119255065918],[67.86001335198685,20.213985443115238],[67.85878413054918,20.215444564819336],[67.85765189556754,20.218791961669925],[67.85603432163545,20.21767616271973],[67.85690782549679,20.214328765869144],[67.85833124315488,20.212268829345707],[67.85939874936975,20.209693908691406],[67.8604985531339,20.207118988037113],[67.86062793840087,20.204715728759766]],
         stakeholders: ["Kiruna kommun"]
     },
     {
@@ -113,23 +110,23 @@ const documents = [
         type: "Material effect",
         language: "-",//controlla come si fa a non mettelo
         coordinates: {
-            lat: 67.5054,
-            lng: 20.1817
+            lat: 67.8483566450649,
+            lng: 20.3063178062439
         },
         area: [],
         stakeholders: ["LKAB"]
     },
     {
         id: "doc69",
-        title: "Construction of Block 1 begins",
+        title: "Construction of Block 1 begins (69)",
         description: "Simultaneously with the start of construction on the Aurora Center, work also began on Block 1, another mixed-use building overlooking the main square and the road leading to old Kiruna. These are the first residential buildings in the new town.",
         scale: "Blueprint/effects",
         issuanceDate: "00-06-2019",
         type: "Material effect",
         language: "-",//controlla come si fa a non mettelo
         coordinates: {
-            lat: 67.5054,
-            lng: 20.1817
+            lat: 67.84881857536868,
+            lng: 20.296425819396976
         },
         area: [],
         stakeholders: ["LKAB"]
@@ -143,8 +140,8 @@ const documents = [
         type: "Material effect",
         language: "-",//controlla come si fa a non mettelo
         coordinates: {
-            lat: 67.5109,
-            lng: 20.1320
+            lat: 67.85185388979453,
+            lng: 20.233211517333988
         },
         area: [],
         stakeholders: ["LKAB"]
@@ -158,8 +155,8 @@ const documents = [
         type: "Material effect",
         language: "-",//controlla come si fa a non mettelo
         coordinates: {
-            lat: 67.5057,
-            lng: 20.1815
+            lat: 67.8491,
+            lng: 20.30439
         },
         area: [],
         stakeholders: ["LKAB"]
