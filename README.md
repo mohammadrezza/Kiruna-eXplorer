@@ -45,12 +45,19 @@ npm install
 cd Kiruna-eXplorer/server
 npm install
 ```
-3. Run the server
+
+3. Populate the database
+```sh
+cd Kiruna-eXplorer/server
+npm run init-db
+```
+
+4. Run the server
 ```sh
 cd Kiruna-eXplorer/server
 npm start
 ```
-4. Run the client
+5. Run the client
 ```sh
 cd Kiruna-eXplorer/client
 npm start
