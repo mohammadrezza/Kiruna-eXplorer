@@ -203,6 +203,7 @@ function DocumentsList() {
                   <span>{key}: {value}</span>
                   <span
                   role='button'
+                  tabIndex="0"
                     className="remove-filter"
                     onClick={() => {
                       handleDeleteFilter(key)

@@ -35,15 +35,15 @@ TEMPLATE FOR RETROSPECTIVE (Team 11)
 
 - Hours per task (average, standard deviation)
   
- average estimate: 2.27 h
+ average estimate: 2.89 h
 
  average actual: 2.34 h
 
- standard deviation estimate: 2.19 h
+ standard deviation estimate: 2.83 h
 
  standard deviation actual: 2.12 h
 - Total task estimation error ratio: sum of total hours estimation / sum of total hours spent -1
-  res: -0.04
+  res: -0.02
 
 
 
