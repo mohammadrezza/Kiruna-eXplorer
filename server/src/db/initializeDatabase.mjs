@@ -51,7 +51,7 @@ const documents = [
     },
     {
         id: "doc41",
-        title: "Development Plan",
+        title: "Development Plan (41)",
         description: "The development plan shapes the form of the new city. The document, unlike previous competition documents, is written entirely in Swedish, which reflects the target audience: the citizens of Kiruna. The plan obviously contains many elements of the winning masterplan from the competition, some recommended by the jury, and others that were deemed appropriate to integrate later. The docu- ment is divided into four parts, with the third part, spanning 80 pages, describing the shape the new city will take and the strategies to be implemented for its relocation through plans, sections, images, diagrams, and texts. The document also includes numerous studies aimed at demonstrating the future success of the project.",
         scale: "1:7500",
         issuanceDate: "17-03-2014",
@@ -308,8 +308,8 @@ async function populateUserTable() {
     await run("DELETE FROM User");
     const users = [
         {username: "resident", password: "102030", role: UserType.RESIDENT},
-        {username: "visitor", password: "405060", role: UserType.VISITOR},
-        {username: "MarioRossi", password: "708090", role: UserType.URBAN_PLANNER},
+        {username: "Sven Andersson", password: "405060", role: UserType.VISITOR},
+        {username: "Freja Johansson", password: "708090", role: UserType.URBAN_PLANNER},
     ];
 
     for (const user of users) {
